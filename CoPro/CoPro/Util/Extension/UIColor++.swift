@@ -7,8 +7,25 @@
 
 import UIKit
 
-extension UIColor {
+enum AssetsColor {
+  // placeHolderBackgroundColor
+  case placeHolderBackgroundColor
     
+  // placeHolderColor
+  case placeHolderColor
+  
+}
+
+extension UIColor {
+    // 두 가지 방법 사용 가능, 나중에 보고 편한거로 결정
+    static func appColor(_ name: AssetsColor) -> UIColor {
+      switch name {
+      case .placeHolderBackgroundColor:
+        return #colorLiteral(red: 0.937, green: 0.937, blue: 0.937, alpha: 1)
+      case .placeHolderColor:
+        return #colorLiteral(red: 0.45, green: 0.45, blue: 0.45, alpha: 1)
+      }
+    }
     /// Color Picker 에서 UIColor 를 고르면 Hex String 으로 변환한다.
     func toHexString() -> String {
         var r:CGFloat = 0
