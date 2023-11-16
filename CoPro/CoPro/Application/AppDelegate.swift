@@ -6,35 +6,51 @@
 //
 
 import UIKit
+import Firebase
 import FirebaseCore
 import GoogleSignIn
+import OAuthSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+      
         return true
     }
-    func application(
-        _ app: UIApplication,
-        open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]
-    ) -> Bool {
-        var handled: Bool
-        
-        handled = GIDSignIn.sharedInstance.handle(url)
-        if handled {
-            // Handle other custom URL types.
+    //소셜 로그인 관련
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if GIDSignIn.sharedInstance.handle(url) {
+            return true
+        } else if let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+                  sourceApplication == "com.apple.SafariViewService" {
+            let provider = OAuthProvider(providerID: "github.com")
+            provider.getCredentialWith(nil) { credential, error in
+                print("github Login")
+                if let error = error {
+                    print("깃허브 로그인 에러: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let credential = credential else {
+                    print("Credential is nil")
+                    return
+                }
+                
+                Auth.auth().signIn(with: credential) { authResult, error in
+                    if let error = error {
+                        print("파이어베이스에 로그인 정보 추가 에러: \(error.localizedDescription)")
+                    } else {
+                        print("Login Successful")
+                    }
+                }
+            }
             return true
         }
-        
-        
-        // If not handled by this app, return false.
         return false
     }
+
     // MARK: UISceneSession Lifecycle
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

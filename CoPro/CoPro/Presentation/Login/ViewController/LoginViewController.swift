@@ -9,6 +9,11 @@ import UIKit
 import Firebase
 import GoogleSignIn
 import AuthenticationServices
+import OAuthSwift
+import SnapKit
+import SafariServices
+import Alamofire
+import KeychainSwift
 
 class LoginViewController: UIViewController {
     
@@ -30,6 +35,24 @@ class LoginViewController: UIViewController {
         
         // GitHub 로그인 버튼
         loginView.githubSignInButton.addTarget(self, action: #selector(handleGitHubSignIn), for: .touchUpInside)
+        
+        loginView.signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
+    }
+    @objc func signOut() {
+        if Auth.auth().currentUser != nil{
+            do {
+                try Auth.auth().signOut()
+                // 로그아웃이 성공적으로 처리된 후의 코드를 여기에 작성합니다.
+                // 예를 들어, 로그인 화면으로 돌아가는 등의 처리를 할 수 있습니다.
+                print("로그아웃")
+                self.navigationController?.popToRootViewController(animated: true)
+            } catch let signOutError as NSError {
+                print("Error signing out: %@", signOutError)
+            }
+        }
+        else{
+            print("로그인 된 계정없음")
+        }
     }
     
     @objc func handleGoogleSignIn() {
@@ -67,9 +90,24 @@ class LoginViewController: UIViewController {
                     print(error.localizedDescription)
                 } else {
                     print("Login Successful")
+                    
+                    Auth.auth().currentUser?.getIDTokenResult { idTokenResult, error in
+                        if let error = error {
+                            print("Error fetching ID token: \(error)")
+                            return
+                        }
+                        guard let idToken = idTokenResult?.token else {
+                            print("User doesn't have an ID token.")
+                            return
+                        }
+                        print("User ID token: \(idToken)!!!")
+                    }
                 }
             }
+            
+            
         }
+        
     }
     
     @objc func handleAppleSignIn() {
@@ -82,10 +120,57 @@ class LoginViewController: UIViewController {
         authorizationController.performRequests()
     }
     
-    @objc func handleGitHubSignIn() {
-        let url = URL(string: "https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&scope=read:user")!
-        UIApplication.shared.open(url)
+    class gitHubLoginManager {
+        
+        static let shared = gitHubLoginManager()
+        
+        private init() {}
+        
+        private let client_id = "e0abaf8660ab93c1bfe3"
+        private let client_secret = "5cb9c1c6cc62951b4b266f9fc725d9fff78871c8"
+        
+        func requestCode() {
+            let scope = "read:user"
+            let urlString = "https://github.com/login/oauth/authorize?client_id=\(client_id)&scope=\(scope)"
+            if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+                print(urlString)
+            }
+//            let safariViewController = SFSafariViewController(url: urlString)
+//            self.present(safariViewController, animated: true, completion: nil)
+        }
+        
+        func requestAccessToken(with code: String) {
+            let url = "https://github.com/login/oauth/access_token"
+            
+            let parameters = ["client_id": client_id,
+                              "client_secret": client_secret,
+                              "code": code]
+            
+            let headers: HTTPHeaders = ["Accept": "application/json"]
+            
+            AF.request(url, method: .post, parameters: parameters, headers: headers).responseJSON { (response) in
+                switch response.result {
+                case let .success(json):
+                    if let dic = json as? [String: String] {
+                        let accessToken = dic["access_token"] ?? ""
+                        KeychainSwift().set(accessToken, forKey: "accessToken")
+                    }
+                case let .failure(error):
+                    print(error)
+                }
+            }
+        }
+        
+        func logout() {
+            KeychainSwift().clear()
+        }
     }
+    @objc func handleGitHubSignIn() {
+        gitHubLoginManager.shared.requestCode()
+    }
+    
+    
 }
 
 extension LoginViewController: ASAuthorizationControllerDelegate {

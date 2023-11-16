@@ -22,6 +22,7 @@ class LoginView: UIView {
     let googleSignInButton = UIButton()
     let appleSignInButton = UIButton()
     let githubSignInButton = UIButton()
+    let signOutButton = UIButton()
     
     
     
@@ -31,6 +32,7 @@ class LoginView: UIView {
         addSubview(googleSignInButton)
         addSubview(appleSignInButton)
         addSubview(githubSignInButton)
+        addSubviews(signOutButton)
         
         //Button Design
         appleSignInButton.snp.makeConstraints { (make) in
@@ -64,6 +66,16 @@ class LoginView: UIView {
         githubSignInButton.backgroundColor = UIColor.black
         githubSignInButton.layer.cornerRadius = 12
         githubSignInButton.setAttributedTitle(NSAttributedString(string: "Sign in with GitHub", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .medium),NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        
+        signOutButton.snp.makeConstraints { (make) in
+            make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
+            make.top.equalTo(githubSignInButton.snp.bottom).offset(20)
+            make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
+            make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
+        }
+        signOutButton.backgroundColor = UIColor.black
+        signOutButton.layer.cornerRadius = 12
+        signOutButton.setAttributedTitle(NSAttributedString(string: "Sign out", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .medium),NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
         
     }
     
