@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "apple_SignInButton.png",
+      "filename" : "google_SignInButton.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "apple_SignInButton 1.png",
+      "filename" : "google_SignInButton 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "apple_SignInButton 2.png",
+      "filename" : "google_SignInButton 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
