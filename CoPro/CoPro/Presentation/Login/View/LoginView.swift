@@ -57,7 +57,24 @@ class LoginView: UIView {
             make.height.equalTo(177)
         }
         
-        //Button Design
+        //AppleSignInButton Design
+        let appleLogo = UIImageView(image:Image.apple_SignInButton)
+        let appleSignInTitle = UILabel()
+        appleSignInTitle.attributedText = NSAttributedString(string: "Sign in with Apple", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
+        appleSignInButton.addSubview(appleLogo)
+        appleSignInButton.addSubview(appleSignInTitle)
+        appleLogo.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(24)
+            make.width.equalTo(17)
+            make.height.equalTo(20)
+        }
+
+        appleSignInTitle.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+
         appleSignInButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
             make.top.equalTo(coproLogo.snp.bottom).offset(42)
@@ -65,10 +82,35 @@ class LoginView: UIView {
             make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
             make.height.equalTo(48)
         }
+        
         appleSignInButton.backgroundColor = UIColor.black
         appleSignInButton.layer.cornerRadius = 12
-        appleSignInButton.setAttributedTitle(NSAttributedString(string: "Sign in with Apple", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25]), for: .normal)
 
+        //GoogleSignInButton Design
+        let googleLogo = UIImageView(image:Image.google_SignInButton)
+        let googleLogoBackGround = UIView()
+        let googleSignInTitle = UILabel()
+        googleSignInTitle.attributedText = NSAttributedString(string: "Sign in with Google", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
+        googleSignInButton.addSubview(googleLogoBackGround)
+        googleLogoBackGround.addSubview(googleLogo)
+        googleSignInButton.addSubview(googleSignInTitle)
+        googleLogo.snp.makeConstraints { (make) in
+            make.width.height.equalTo(17)
+            make.centerX.centerY.equalToSuperview()
+        }
+        googleLogoBackGround.snp.makeConstraints{(make) in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(24)
+            make.width.height.equalTo(20)
+        }
+        googleLogoBackGround.backgroundColor = .white
+        googleLogoBackGround.layer.cornerRadius = 10
+        googleLogoBackGround.clipsToBounds = true
+
+        googleSignInTitle.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
         googleSignInButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
             make.top.equalTo(appleSignInButton.snp.bottom).offset(20)
@@ -78,11 +120,25 @@ class LoginView: UIView {
         }
         googleSignInButton.backgroundColor = UIColor(red: 0.25, green: 0.52, blue: 0.95, alpha: 1.0)
         googleSignInButton.layer.cornerRadius = 12
-        googleSignInButton.setAttributedTitle(NSAttributedString(string: "Sign in with Google", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25]), for: .normal)
+        
+        //GitHubSignInButton Design
+        let githubLogo = UIImageView(image:Image.github_SignInButton)
+        let githubSignInTitle = UILabel()
+        githubSignInTitle.attributedText = NSAttributedString(string: "Sign in with GitHub", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
+        githubSignInButton.addSubview(githubLogo)
+        githubSignInButton.addSubview(githubSignInTitle)
+        githubLogo.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(24)
+            make.width.height.equalTo(20)
+        }
+//        githubLogo.backgroundColor = .white
+        githubLogo.layer.cornerRadius = 10
+        githubLogo.clipsToBounds = true
 
-        
-        
-        
+        githubSignInTitle.snp.makeConstraints { (make) in
+            make.centerX.centerY.equalToSuperview()
+        }
         githubSignInButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
             make.top.equalTo(googleSignInButton.snp.bottom).offset(20)
@@ -94,16 +150,6 @@ class LoginView: UIView {
         githubSignInButton.layer.cornerRadius = 12
         githubSignInButton.setAttributedTitle(NSAttributedString(string: "Sign in with GitHub", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25]), for: .normal)
 
-        
-//        signOutButton.snp.makeConstraints { (make) in
-//            make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
-//            make.top.equalTo(githubSignInButton.snp.bottom).offset(20)
-//            make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
-//            make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
-//        }
-//        signOutButton.backgroundColor = UIColor.black
-//        signOutButton.layer.cornerRadius = 12
-//        signOutButton.setAttributedTitle(NSAttributedString(string: "Sign out", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .medium),NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
         
     }
     
