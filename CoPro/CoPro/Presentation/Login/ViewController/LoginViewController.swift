@@ -38,6 +38,35 @@ class LoginViewController: UIViewController {
         
         loginView.signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
     }
+    let keychain = KeychainSwift()
+    func sendTokenToServer(token: String) {
+        // 요청을 보낼 서버의 URL을 생성합니다.
+        guard let url = URL(string: "server Url") else {
+            print("Invalid URL")
+            return
+        }
+        
+        // URL 쿼리 파라미터에 토큰을 추가합니다.
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+        ]
+        
+        
+        // Alamofire를 사용하여 GET 요청을 보냅니다.
+        AF.request(url, method: .get, headers: headers).response { response in
+            switch response.result {
+            case .success(let data):
+                // 서버로부터 받은 응답을 처리합니다.
+                // 이 예시에서는 응답을 그대로 출력합니다.
+                if let data = data {
+                    let str = String(data: data, encoding: .utf8)
+                    print("Received data:\n\(str ?? "")")
+                }
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
     @objc func signOut() {
         if Auth.auth().currentUser != nil{
             do {
@@ -101,6 +130,8 @@ class LoginViewController: UIViewController {
                             return
                         }
                         print("User ID token: \(idToken)!!!")
+                        self.keychain.set(idToken, forKey: "idToken")
+                        self.sendTokenToServer(token: idToken)
                     }
                 }
             }
@@ -126,8 +157,8 @@ class LoginViewController: UIViewController {
         
         private init() {}
         
-        private let client_id = "e0abaf8660ab93c1bfe3"
-        private let client_secret = "5cb9c1c6cc62951b4b266f9fc725d9fff78871c8"
+        private let client_id = ""
+        private let client_secret = ""
         
         func requestCode() {
             let scope = "read:user"
@@ -136,8 +167,8 @@ class LoginViewController: UIViewController {
                 UIApplication.shared.open(url)
                 print(urlString)
             }
-//            let safariViewController = SFSafariViewController(url: urlString)
-//            self.present(safariViewController, animated: true, completion: nil)
+            //            let safariViewController = SFSafariViewController(url: urlString)
+            //            self.present(safariViewController, animated: true, completion: nil)
         }
         
         func requestAccessToken(with code: String) {
