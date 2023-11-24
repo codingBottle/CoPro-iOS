@@ -37,6 +37,7 @@
 		E3B15DBB2B0F7F370045B9D9 /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */; };
 		E3B15DBD2B0F7F4C0045B9D9 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBC2B0F7F4C0045B9D9 /* RadioButton.swift */; };
 		E3B15DBF2B1057290045B9D9 /* noticeBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */; };
+		E3B15DC12B1057D30045B9D9 /* noticeBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DC02B1057D30045B9D9 /* noticeBoardTableViewCell.swift */; };
 		E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1552AEFACA3003269FF /* URLConst.swift */; };
 		E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1572AEFACB6003269FF /* NetworkResult.swift */; };
 		E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */; };
@@ -72,6 +73,7 @@
 		E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
 		E3B15DBC2B0F7F4C0045B9D9 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardDataModel.swift; sourceTree = "<group>"; };
+		E3B15DC02B1057D30045B9D9 /* noticeBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardTableViewCell.swift; sourceTree = "<group>"; };
 		E3D6D1552AEFACA3003269FF /* URLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConst.swift; sourceTree = "<group>"; };
 		E3D6D1572AEFACB6003269FF /* NetworkResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResult.swift; sourceTree = "<group>"; };
 		E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 		E38451D12B020A2A00C4232E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E3B15DC02B1057D30045B9D9 /* noticeBoardTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3B15DBD2B0F7F4C0045B9D9 /* RadioButton.swift in Sources */,
+				E3B15DC12B1057D30045B9D9 /* noticeBoardTableViewCell.swift in Sources */,
 				E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */,
 				E3B15DBF2B1057290045B9D9 /* noticeBoardDataModel.swift in Sources */,
 				9E05D2F02AD5222300F4CA43 /* UIStackView++.swift in Sources */,
