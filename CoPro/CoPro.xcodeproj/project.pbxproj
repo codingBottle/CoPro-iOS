@@ -36,6 +36,7 @@
 		E386CE6E2B0F4552006FC894 /* UISegmentControl++.swift in Sources */ = {isa = PBXBuildFile; fileRef = E386CE6D2B0F4552006FC894 /* UISegmentControl++.swift */; };
 		E3B15DBB2B0F7F370045B9D9 /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */; };
 		E3B15DBD2B0F7F4C0045B9D9 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBC2B0F7F4C0045B9D9 /* RadioButton.swift */; };
+		E3B15DBF2B1057290045B9D9 /* noticeBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */; };
 		E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1552AEFACA3003269FF /* URLConst.swift */; };
 		E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1572AEFACB6003269FF /* NetworkResult.swift */; };
 		E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */; };
@@ -70,6 +71,7 @@
 		E386CE6D2B0F4552006FC894 /* UISegmentControl++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentControl++.swift"; sourceTree = "<group>"; };
 		E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
 		E3B15DBC2B0F7F4C0045B9D9 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
+		E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardDataModel.swift; sourceTree = "<group>"; };
 		E3D6D1552AEFACA3003269FF /* URLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConst.swift; sourceTree = "<group>"; };
 		E3D6D1572AEFACB6003269FF /* NetworkResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResult.swift; sourceTree = "<group>"; };
 		E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 		E38451D72B0CDB2C00C4232E /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -415,6 +418,7 @@
 			files = (
 				E3B15DBD2B0F7F4C0045B9D9 /* RadioButton.swift in Sources */,
 				E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */,
+				E3B15DBF2B1057290045B9D9 /* noticeBoardDataModel.swift in Sources */,
 				9E05D2F02AD5222300F4CA43 /* UIStackView++.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
