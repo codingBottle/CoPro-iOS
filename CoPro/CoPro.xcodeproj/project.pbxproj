@@ -32,6 +32,7 @@
 		9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2F92AD5227500F4CA43 /* UIColor++.swift */; };
 		9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2FB2AD5228300F4CA43 /* Image.swift */; };
 		9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */; };
+		E36AFEF42B1070C100089F2C /* recruitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AFEF32B1070C100089F2C /* recruitViewController.swift */; };
 		E38451D42B020C4E00C4232E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38451D32B020C4E00C4232E /* MainViewController.swift */; };
 		E386CE6E2B0F4552006FC894 /* UISegmentControl++.swift in Sources */ = {isa = PBXBuildFile; fileRef = E386CE6D2B0F4552006FC894 /* UISegmentControl++.swift */; };
 		E3B15DBB2B0F7F370045B9D9 /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */; };
@@ -68,6 +69,7 @@
 		9E05D2F92AD5227500F4CA43 /* UIColor++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor++.swift"; sourceTree = "<group>"; };
 		9E05D2FB2AD5228300F4CA43 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
+		E36AFEF32B1070C100089F2C /* recruitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recruitViewController.swift; sourceTree = "<group>"; };
 		E38451D32B020C4E00C4232E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		E386CE6D2B0F4552006FC894 /* UISegmentControl++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentControl++.swift"; sourceTree = "<group>"; };
 		E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				E38451D32B020C4E00C4232E /* MainViewController.swift */,
+				E36AFEF32B1070C100089F2C /* recruitViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */,
 				9E05D2B02AD508B200F4CA43 /* SceneDelegate.swift in Sources */,
 				9E05D2CF2AD5098200F4CA43 /* API.swift in Sources */,
+				E36AFEF42B1070C100089F2C /* recruitViewController.swift in Sources */,
 				E386CE6E2B0F4552006FC894 /* UISegmentControl++.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,
 				9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */,

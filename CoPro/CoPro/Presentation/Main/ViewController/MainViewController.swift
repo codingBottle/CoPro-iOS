@@ -21,7 +21,7 @@ final class MainViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let pageControl = UIPageControl()
     var images: [UIImage] = [UIImage(named: "bird")!, UIImage(named: "plant")!, UIImage(named: "fruit")!] // 사용할 이미지들
-    var dataViewControllers: [UIViewController] = [recruitViewController(), freeViewController(), notiViewController()]
+    var dataViewControllers: [UIViewController] = [recruitViewController(), recruitViewController(), recruitViewController()]
     var currentPage: Int = 0 {
       didSet {
         // from segmentedControl -> pageViewController 업데이트
@@ -58,6 +58,9 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
 
     private func setUI() {
         self.view.backgroundColor = .white
+        scrollView.do {
+            $0.showsHorizontalScrollIndicator = false
+        }
         segmentedControl.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.selectedSegmentIndex = 0
@@ -90,7 +93,6 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.centerX.equalTo(self.view.snp.centerX)
             $0.height.equalTo(361)
             $0.width.equalTo(345)
-            
         }
         pageControl.snp.makeConstraints {
             $0.top.equalTo(scrollView.snp.bottom)
@@ -110,6 +112,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     }
     private func setDelegate() {
         pageViewController.delegate = self
+        scrollView.delegate = self
     }
     private func setRegister() {
 
@@ -122,22 +125,24 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         self.segmentedControl.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
         self.changeValue(control: self.segmentedControl)
     }
-    private func setupScrollView() {
-        scrollView.frame = self.view.bounds
-        scrollView.delegate = self
+    func setupScrollView() {
+        scrollView.frame = CGRect(x: 0, y: 0, width: 345, height: 361) // ScrollView의 크기를 설정
         scrollView.isPagingEnabled = true
 
-        for i in 0..<images.count {
-            let imageView = UIImageView()
-            imageView.image = images[i]
-            imageView.contentMode = .scaleToFill
-            let xPos = self.view.frame.width * CGFloat(i)
-            imageView.frame = CGRect(x: xPos, y: 0, width: 345, height: 361)
-            scrollView.contentSize.width = scrollView.frame.width * CGFloat(i + 1)
-            scrollView.addSubview(imageView)
-        }
+            for i in 0..<images.count {
+                let imageView = UIImageView()
+                imageView.image = images[i]
+                imageView.contentMode = .scaleAspectFit // 이미지의 비율을 유지하면서 이미지 뷰에 맞게 조절
+                imageView.backgroundColor = .white
+                let xPos = scrollView.frame.width * CGFloat(i)
+                imageView.frame = CGRect(x: xPos, y: 0, width: scrollView.frame.width, height: scrollView.frame.height)
+                scrollView.contentSize.width = scrollView.frame.width * CGFloat(i + 1)
+                scrollView.addSubview(imageView)
+            }
+        self.view.addSubview(scrollView)
     }
-    private func setupPageControl() {
+
+    func setupPageControl() {
         pageControl.frame = CGRect(x: 0, y: self.view.frame.height - 50, width: self.view.frame.width, height: 50)
         pageControl.numberOfPages = images.count
         pageControl.currentPage = 0
