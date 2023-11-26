@@ -36,7 +36,7 @@ final class MainViewController: UIViewController {
 //      }
 //    }
     private let segmentedControl: UISegmentedControl = {
-      let segmentedControl = UnderlineSegmentedControl(items: ["전체", "웹툰", "베스트도전"])
+        let segmentedControl = UnderlineSegmentedControl(items: ["모집", "자유", "공지사항"])
       segmentedControl.translatesAutoresizingMaskIntoConstraints = false
       return segmentedControl
     }()
@@ -95,33 +95,6 @@ final class MainViewController: UIViewController {
         setAddTarget()
         setupScrollView()
         setupPageControl()
-        self.noticeBoardView.addSubview(self.segmentedControl)
-        self.noticeBoardView.addSubview(self.pageViewController.view)
-        
-        NSLayoutConstraint.activate([
-          self.segmentedControl.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-          self.segmentedControl.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-          self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80),
-          self.segmentedControl.heightAnchor.constraint(equalToConstant: 50),
-        ])
-        NSLayoutConstraint.activate([
-          self.pageViewController.view.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 4),
-          self.pageViewController.view.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -4),
-          self.pageViewController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -4),
-          self.pageViewController.view.topAnchor.constraint(equalTo: self.segmentedControl.bottomAnchor, constant: 5),
-        ])
-        
-        self.segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
-        self.segmentedControl.setTitleTextAttributes(
-          [
-            NSAttributedString.Key.foregroundColor: UIColor.green,
-            .font: UIFont.systemFont(ofSize: 13, weight: .semibold)
-          ],
-          for: .selected
-        )
-//        self.segmentedControl.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
-        self.segmentedControl.selectedSegmentIndex = 0
-//        self.changeValue(control: self.segmentedControl)
     }
 }
 
@@ -174,11 +147,39 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         noticeBoardView.snp.makeConstraints {
             $0.top.equalTo(pageControl.snp.bottom).offset(30)
         }
-        noticeBoardView.addSubviews(pageViewController.view)
-
-        pageViewController.view.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+//        noticeBoardView.addSubviews(pageViewController.view)
+//
+//        pageViewController.view.snp.makeConstraints {
+//            $0.edges.equalToSuperview()
+//        }
+        noticeBoardView.addSubviews(segmentedControl, pageViewController.view)
+        
+        NSLayoutConstraint.activate([
+            self.noticeBoardView.heightAnchor.constraint(equalToConstant: 500),
+            self.noticeBoardView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width),
+            self.segmentedControl.leftAnchor.constraint(equalTo: self.noticeBoardView.leftAnchor),
+            self.segmentedControl.rightAnchor.constraint(equalTo: self.noticeBoardView.rightAnchor),
+            self.segmentedControl.topAnchor.constraint(equalTo: self.noticeBoardView.topAnchor, constant: 10), // Adjust this as needed
+            self.segmentedControl.heightAnchor.constraint(equalToConstant: 50),
+        ])
+        NSLayoutConstraint.activate([
+            self.pageViewController.view.leftAnchor.constraint(equalTo: self.noticeBoardView.leftAnchor, constant: 4),
+            self.pageViewController.view.rightAnchor.constraint(equalTo: self.noticeBoardView.rightAnchor, constant: -4),
+            self.pageViewController.view.bottomAnchor.constraint(equalTo: self.noticeBoardView.bottomAnchor, constant: -4),
+            self.pageViewController.view.topAnchor.constraint(equalTo: self.segmentedControl.bottomAnchor, constant: 5),
+        ])
+        
+        self.segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
+        self.segmentedControl.setTitleTextAttributes(
+          [
+            NSAttributedString.Key.foregroundColor: UIColor.green,
+            .font: UIFont.systemFont(ofSize: 13, weight: .semibold)
+          ],
+          for: .selected
+        )
+//        self.segmentedControl.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
+        self.segmentedControl.selectedSegmentIndex = 0
+//        self.changeValue(control: self.segmentedControl)
     }
     private func setDelegate() {
         pageViewController.delegate = self
