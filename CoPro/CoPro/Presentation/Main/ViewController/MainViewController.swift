@@ -157,8 +157,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         NSLayoutConstraint.activate([
             self.noticeBoardView.heightAnchor.constraint(equalToConstant: 500),
             self.noticeBoardView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width),
-            self.segmentedControl.leftAnchor.constraint(equalTo: self.noticeBoardView.leftAnchor),
-            self.segmentedControl.rightAnchor.constraint(equalTo: self.noticeBoardView.rightAnchor),
+            self.segmentedControl.leftAnchor.constraint(equalTo: self.noticeBoardView.leftAnchor, constant: 16),
+            self.segmentedControl.rightAnchor.constraint(equalTo: self.noticeBoardView.rightAnchor, constant: -16),
             self.segmentedControl.topAnchor.constraint(equalTo: self.noticeBoardView.topAnchor, constant: 10), // Adjust this as needed
             self.segmentedControl.heightAnchor.constraint(equalToConstant: 50),
         ])
