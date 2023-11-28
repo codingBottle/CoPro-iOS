@@ -43,18 +43,18 @@ class LoginView: UIView {
 
         coproLogoLabel.attributedText = attributedString
         coproLogoLabel.textAlignment = .center
-        coproLogoLabel.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
-            make.bottom.equalTo(coproLogo.snp.top).offset(-20)  // logo 위에 위치
-            make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
-            make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
+        coproLogoLabel.snp.makeConstraints {
+            $0.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
+            $0.bottom.equalTo(coproLogo.snp.top).offset(-20)  // logo 위에 위치
+            $0.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
+            $0.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
         }
         //Logo Design
-        coproLogo.snp.makeConstraints{(make) in
-            make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
-            make.centerY.equalTo(self.safeAreaLayoutGuide.snp.centerY).offset(-82)
-            make.width.equalTo(192)
-            make.height.equalTo(177)
+        coproLogo.snp.makeConstraints{
+            $0.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
+            $0.centerY.equalTo(self.safeAreaLayoutGuide.snp.centerY).offset(-82)
+            $0.width.equalTo(192)
+            $0.height.equalTo(177)
         }
         
         //AppleSignInButton Design
@@ -63,24 +63,24 @@ class LoginView: UIView {
         appleSignInTitle.attributedText = NSAttributedString(string: "Sign in with Apple", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
         appleSignInButton.addSubview(appleLogo)
         appleSignInButton.addSubview(appleSignInTitle)
-        appleLogo.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(24)
-            make.width.equalTo(17)
-            make.height.equalTo(20)
+        appleLogo.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(24)
+            $0.width.equalTo(17)
+            $0.height.equalTo(20)
         }
 
-        appleSignInTitle.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
+        appleSignInTitle.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.centerX.equalToSuperview()
         }
 
-        appleSignInButton.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
-            make.top.equalTo(coproLogo.snp.bottom).offset(42)
-            make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
-            make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
-            make.height.equalTo(48)
+        appleSignInButton.snp.makeConstraints {
+            $0.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
+            $0.top.equalTo(coproLogo.snp.bottom).offset(42)
+            $0.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
+            $0.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
+            $0.height.equalTo(48)
         }
         
         appleSignInButton.backgroundColor = UIColor.black
@@ -94,29 +94,29 @@ class LoginView: UIView {
         googleSignInButton.addSubview(googleLogoBackGround)
         googleLogoBackGround.addSubview(googleLogo)
         googleSignInButton.addSubview(googleSignInTitle)
-        googleLogo.snp.makeConstraints { (make) in
-            make.width.height.equalTo(17)
-            make.centerX.centerY.equalToSuperview()
+        googleLogo.snp.makeConstraints {
+            $0.width.height.equalTo(17)
+            $0.centerX.centerY.equalToSuperview()
         }
-        googleLogoBackGround.snp.makeConstraints{(make) in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(24)
-            make.width.height.equalTo(20)
+        googleLogoBackGround.snp.makeConstraints{
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(24)
+            $0.width.height.equalTo(20)
         }
         googleLogoBackGround.backgroundColor = .white
         googleLogoBackGround.layer.cornerRadius = 10
         googleLogoBackGround.clipsToBounds = true
 
-        googleSignInTitle.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
+        googleSignInTitle.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.centerX.equalToSuperview()
         }
-        googleSignInButton.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
-            make.top.equalTo(appleSignInButton.snp.bottom).offset(20)
-            make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
-            make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
-            make.height.equalTo(48)
+        googleSignInButton.snp.makeConstraints {
+            $0.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
+            $0.top.equalTo(appleSignInButton.snp.bottom).offset(20)
+            $0.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
+            $0.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
+            $0.height.equalTo(48)
         }
         googleSignInButton.backgroundColor = UIColor(red: 0.25, green: 0.52, blue: 0.95, alpha: 1.0)
         googleSignInButton.layer.cornerRadius = 12
@@ -127,24 +127,24 @@ class LoginView: UIView {
         githubSignInTitle.attributedText = NSAttributedString(string: "Sign in with GitHub", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
         githubSignInButton.addSubview(githubLogo)
         githubSignInButton.addSubview(githubSignInTitle)
-        githubLogo.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(24)
-            make.width.height.equalTo(20)
+        githubLogo.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(24)
+            $0.width.height.equalTo(20)
         }
 //        githubLogo.backgroundColor = .white
         githubLogo.layer.cornerRadius = 10
         githubLogo.clipsToBounds = true
 
-        githubSignInTitle.snp.makeConstraints { (make) in
-            make.centerX.centerY.equalToSuperview()
+        githubSignInTitle.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
         }
-        githubSignInButton.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
-            make.top.equalTo(googleSignInButton.snp.bottom).offset(20)
-            make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
-            make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
-            make.height.equalTo(48)
+        githubSignInButton.snp.makeConstraints {
+            $0.centerX.equalTo(self.safeAreaLayoutGuide.snp.centerX)
+            $0.top.equalTo(googleSignInButton.snp.bottom).offset(20)
+            $0.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).offset(20)
+            $0.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-20)
+            $0.height.equalTo(48)
         }
         githubSignInButton.backgroundColor = UIColor.black
         githubSignInButton.layer.cornerRadius = 12
