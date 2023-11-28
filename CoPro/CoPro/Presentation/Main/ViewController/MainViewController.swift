@@ -13,7 +13,7 @@ import Then
 final class MainViewController: UIViewController {
     
     //MARK: - UI Components
-
+    private let recruitVC = recruitViewController()
     let grabberView = UIView()
     private lazy var noticeBoardView = UIView()
     let halfHeight = UIScreen.main.bounds.height / 2
@@ -48,7 +48,7 @@ final class MainViewController: UIViewController {
     }()
       
     var dataViewControllers: [UIViewController] {
-        [recruitViewController(), self.vc2, self.vc3]
+        [recruitVC, self.vc2, self.vc3]
     }
     var currentPage: Int = 0 {
       didSet {
@@ -118,7 +118,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         self.changeValue(control: self.segmentedControl)
     }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(popToWriteViewController))
+        let logoImage = UIImage(named: "logo")?.withRenderingMode(.alwaysOriginal)
+        let leftButton = UIBarButtonItem(image: logoImage, style: .plain, target: self, action: #selector(popToWriteViewController))
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(button2Tapped))
         self.navigationItem.rightBarButtonItem = rightButton
         self.navigationItem.leftBarButtonItem = leftButton
@@ -146,7 +147,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         grabberView.snp.makeConstraints {
             $0.top.equalTo(noticeBoardView.snp.top)
             $0.height.equalTo(5)
-            $0.width.equalTo(50)
+            $0.width.equalTo(UIScreen.main.bounds.width - 30)
+            $0.centerX.equalToSuperview()
         }
         segmentedControl.snp.makeConstraints {
             $0.leading.equalTo(noticeBoardView.snp.leading).offset(16)

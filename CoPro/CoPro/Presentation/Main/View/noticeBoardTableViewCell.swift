@@ -19,11 +19,11 @@ class noticeBoardTableViewCell: UITableViewCell {
     private let postTitleLabel = UILabel()
     private let writerNameLabel = UILabel()
     private let postTimeLabel = UILabel()
-    private let likeCountIcon = UILabel()
+    private let likeCountIcon = UIImageView()
     private let likeCountLabel = UILabel()
-    private let sawPostIcon = UILabel()
+    private let sawPostIcon = UIImageView()
     private let sawPostLabel = UILabel()
-    private let commentCountIcon = UILabel()
+    private let commentCountIcon = UIImageView()
     private let commentCountLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -56,20 +56,19 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         likeCountIcon.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.image = UIImage(named: "empathy")
         }
         likeCountLabel.do {
             $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         sawPostIcon.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
-
+            $0.image = UIImage(named: "watchingicon")
         }
         sawPostLabel.do {
             $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         commentCountIcon.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.image = UIImage(named: "commenticon")
         }
         commentCountLabel.do {
             $0.font = UIFont(name: "Pretendard-Regular", size: 13)
@@ -93,6 +92,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         }
         postTimeLabel.snp.makeConstraints {
             $0.leading.equalTo(writerNameLabel.snp.trailing).offset(14)
+            $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
         }
         likeCountIcon.snp.makeConstraints {
             $0.leading.equalTo(postTitleLabel.snp.leading)
