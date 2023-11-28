@@ -64,20 +64,17 @@ final class UnderlineSegmentedControl: UISegmentedControl {
     let yPosition = self.bounds.size.height - 1.0
     let frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
     let view = UIView(frame: frame)
-    view.backgroundColor = .green
+    view.backgroundColor = UIColor(hex: "#2577FE")
     self.addSubview(view)
     return view
   }()
-  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.removeBackgroundAndDivider()
-//    self.addCustomDesign()
   }
   override init(items: [Any]?) {
     super.init(items: items)
     self.removeBackgroundAndDivider()
-//    self.addCustomDesign()
   }
   required init?(coder: NSCoder) {
     fatalError()
@@ -85,28 +82,21 @@ final class UnderlineSegmentedControl: UISegmentedControl {
   
   private func removeBackgroundAndDivider() {
     let image = UIImage()
-//    self.setBackgroundImage(image, for: .normal, barMetrics: .default)
+    self.setBackgroundImage(image, for: .normal, barMetrics: .default)
     self.setBackgroundImage(image, for: .selected, barMetrics: .default)
-//    self.setBackgroundImage(image, for: .highlighted, barMetrics: .default)
+    self.setBackgroundImage(image, for: .highlighted, barMetrics: .default)
     
     self.setDividerImage(image, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
   }
   
-//  private func addCustomDesign() {
-//    self.layer.cornerRadius = 100
-//    self.layer.backgroundColor = UIColor.gray.cgColor
-//    self.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-//    self.setTitleTextAttributes([.foregroundColor: UIColor.gray], for: .normal)
-//  }
   
   override func layoutSubviews() {
     super.layoutSubviews()
-    
     let underlineFinalXPosition = (self.bounds.width / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
     UIView.animate(
       withDuration: 0.1,
       animations: {
-        self.underlineView.frame.origin.x = underlineFinalXPosition
+                  self.underlineView.frame.origin.x = underlineFinalXPosition
       }
     )
   }

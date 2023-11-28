@@ -25,6 +25,7 @@ final class recruitViewController: UIViewController {
         setUI()
         setLayout()
         setDelegate()
+        setRegister()
 //        setAddTarget()
     }
 }
@@ -43,21 +44,28 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    private func setRegister() {
+        tableView.register(noticeBoardTableViewCell.self,
+                           forCellReuseIdentifier:"noticeBoardTableViewCell")
+    }
+    
     private func setLayout() {
         view.addSubviews(sortButton,tableView)
         
         sortButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(10)
         }
         tableView.snp.makeConstraints {
+            $0.top.equalTo(sortButton.snp.bottom)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
 
     private func setDelegate() {
         tableView.delegate = self
-        tableView.dataSource = self
+        tableView.dataSource = self  // 추가: tableView의 dataSource를 설정
     }
     
 //    private func setAddTarget() {
@@ -75,30 +83,10 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
                 return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 20
+        return 90
     }
     
     // MARK: - @objc Method
-//    @objc func sortButtonPressed() {
-//        let bottomSheetVC = SortingViewController()
-//        present(bottomSheetVC, animated: true, completion: nil)
-//    }
-    @objc func showSortActionSheet() {
-        let actionSheet = UIAlertController(title: nil, message: "Select Sort Type", preferredStyle: .actionSheet)
-        
-        let sortType1Action = UIAlertAction(title: "Sort Type 1", style: .default) { _ in
-            // Sort Type 1 선택시 처리 로직
-        }
-        let sortType2Action = UIAlertAction(title: "Sort Type 2", style: .default) { _ in
-            // Sort Type 2 선택시 처리 로직
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        actionSheet.addAction(sortType1Action)
-        actionSheet.addAction(sortType2Action)
-        actionSheet.addAction(cancelAction)
-        
-        self.present(actionSheet, animated: true, completion: nil)
-    }
+
 }
 

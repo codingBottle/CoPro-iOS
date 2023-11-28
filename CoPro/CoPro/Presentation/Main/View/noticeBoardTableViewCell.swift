@@ -47,32 +47,32 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.roundCorners(cornerRadius: 6, maskedCorners: .layerMaxXMaxYCorner)
         }
         postTitleLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.font = UIFont.systemFont(ofSize: 15)
         }
         writerNameLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         postTimeLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         likeCountIcon.do {
             $0.font = UIFont.systemFont(ofSize: 16)
         }
         likeCountLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         sawPostIcon.do {
             $0.font = UIFont.systemFont(ofSize: 16)
 
         }
         sawPostLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         commentCountIcon.do {
             $0.font = UIFont.systemFont(ofSize: 16)
         }
         commentCountLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 16)
+            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
     }
     private func setLayout() {
@@ -81,7 +81,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         postImage.snp.makeConstraints {
             $0.height.width.equalTo(72)
             $0.top.bottom.equalToSuperview().inset(8)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview()
         }
         postTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
@@ -100,18 +100,23 @@ class noticeBoardTableViewCell: UITableViewCell {
         }
         likeCountLabel.snp.makeConstraints {
             $0.leading.equalTo(likeCountIcon.snp.trailing).offset(4)
+            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
         sawPostIcon.snp.makeConstraints {
             $0.leading.equalTo(likeCountLabel.snp.trailing).offset(16)
+            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
         sawPostLabel.snp.makeConstraints {
             $0.leading.equalTo(sawPostIcon.snp.trailing).offset(4)
+            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
         commentCountIcon.snp.makeConstraints {
             $0.leading.equalTo(sawPostLabel.snp.trailing).offset(16)
+            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
         commentCountLabel.snp.makeConstraints {
             $0.leading.equalTo(commentCountIcon.snp.trailing).offset(4)
+            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
     }
     
@@ -122,7 +127,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         postTimeLabel.text = "\(data.timestamp)"
         likeCountLabel.text = "\(data.likes)"
         sawPostLabel.text = "\(data.views)"
-        commentCountIcon.text = "\(data.commentCount)"
+        commentCountLabel.text = "\(data.commentCount)"
         }
     
     override func awakeFromNib() {
