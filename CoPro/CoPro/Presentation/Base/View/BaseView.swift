@@ -10,38 +10,20 @@ import Then
 import SnapKit
 
 class BaseView: UIView {
-    
-    // MARK: - Properties
-    
-    
-    // MARK: - UI Components
-    
-    
     // MARK: - Initializer
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    init() {
+        super.init(frame: .zero)
+        setUI()
+        setLayout()
+        setDelegate()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     // MARK: - UI Components Property
-    
-    private func setUI(){
-    }
-    
-    
+    func setUI(){}
     // MARK: - Layout Helper
-    
-    private func setLayout() {}
-    
-    // MARK: - Methods
-    
-    private func setAddTarget() {}
-    
-    // MARK: - @objc Methods
-    
+    func setLayout(){}
+    // MARK: - Delegate Helper
+    func setDelegate(){}
 }

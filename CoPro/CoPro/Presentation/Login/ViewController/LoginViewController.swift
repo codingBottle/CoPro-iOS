@@ -15,28 +15,34 @@ import SafariServices
 import Alamofire
 import KeychainSwift
 
-class LoginViewController: UIViewController {
+class LoginViewController: BaseViewController {
     
     var loginView: LoginView!
+    override func loadView() {
+        // LoginView를 생성하고 뷰에 추가합니다.
+        view = LoginView()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //view.signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
+    }
+    override func setUI() {
         
-        // LoginView를 생성하고 뷰에 추가합니다.
-        loginView = LoginView(frame: view.bounds)
-        view.backgroundColor = .white
-        view.addSubview(loginView)
+    }
+    override func setLayout() {
         
-        // Google 로그인 버튼
-        loginView.googleSignInButton.addTarget(self, action: #selector(handleGoogleSignIn), for: .touchUpInside)
-        
-        // Apple 로그인 버튼
-        loginView.appleSignInButton.addTarget(self, action: #selector(handleAppleSignIn), for: .touchUpInside)
-        
-        // GitHub 로그인 버튼
-        loginView.githubSignInButton.addTarget(self, action: #selector(handleGitHubSignIn), for: .touchUpInside)
-        
-        loginView.signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
+    }
+    override func setAddTarget() {
+        if let loginView = view as? LoginView {
+            // Apple 로그인 버튼
+            loginView.appleSignInButton.addTarget(self, action: #selector(handleAppleSignIn), for: .touchUpInside)
+            // Google 로그인 버튼
+            loginView.googleSignInButton.addTarget(self, action: #selector(handleGoogleSignIn), for: .touchUpInside)
+            // GitHub 로그인 버튼
+            loginView.githubSignInButton.addTarget(self, action: #selector(handleGitHubSignIn), for: .touchUpInside)
+        }
     }
     let keychain = KeychainSwift()
     func sendTokenToServer(token: String) {
@@ -67,7 +73,7 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    @objc func signOut() {
+    @objc private func signOut() {
         if Auth.auth().currentUser != nil{
             do {
                 try Auth.auth().signOut()
@@ -84,7 +90,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @objc func handleGoogleSignIn() {
+    @objc private func handleGoogleSignIn() {
         print("Google Sign in button tapped")
         
         
@@ -141,7 +147,7 @@ class LoginViewController: UIViewController {
         
     }
     
-    @objc func handleAppleSignIn() {
+    @objc private func handleAppleSignIn() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -197,7 +203,7 @@ class LoginViewController: UIViewController {
             KeychainSwift().clear()
         }
     }
-    @objc func handleGitHubSignIn() {
+    @objc private func handleGitHubSignIn() {
         gitHubLoginManager.shared.requestCode()
     }
     
