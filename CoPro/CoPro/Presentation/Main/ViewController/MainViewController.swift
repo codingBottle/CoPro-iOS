@@ -15,6 +15,7 @@ final class MainViewController: UIViewController {
     //MARK: - UI Components
     private let recruitVC = recruitViewController()
     let grabberView = UIView()
+    private var backgroundView = UIView()
     private lazy var noticeBoardView = UIView()
     let halfHeight = UIScreen.main.bounds.height / 2
     let fullHeight = UIScreen.main.bounds.height
@@ -77,6 +78,7 @@ final class MainViewController: UIViewController {
         setAddTarget()
         setupScrollView()
         setupPageControl()
+        view.bringSubviewToFront(noticeBoardView)
     }
 }
 
@@ -100,6 +102,9 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
               ],
               for: .selected
             )
+        }
+        noticeBoardView.do {
+            $0.backgroundColor = .white
         }
         grabberView.do {
             $0.backgroundColor = .red
@@ -297,3 +302,4 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         // 'Button 2'이 눌렸을 때의 동작을 여기에 작성합니다.
     }
 }
+    
