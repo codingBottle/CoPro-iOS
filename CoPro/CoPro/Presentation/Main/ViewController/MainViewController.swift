@@ -15,8 +15,13 @@ final class MainViewController: UIViewController {
     //MARK: - UI Components
     private let recruitVC = recruitViewController()
     let grabberView = UIView()
-    private var backgroundView = UIView()
-    private lazy var noticeBoardView = UIView()
+//    private lazy var noticeBoardView = UIView()
+    private let bottomSheetView: BottomSheetView = {
+      let view = BottomSheetView()
+      view.bottomSheetColor = .white
+      view.barViewColor = .darkGray
+      return view
+    }()
     let halfHeight = UIScreen.main.bounds.height / 2
     let fullHeight = UIScreen.main.bounds.height
     var panGesture = UIPanGestureRecognizer()
@@ -72,13 +77,13 @@ final class MainViewController: UIViewController {
         setUI()
         setLayout()
         setRegister()
-        setGesture()
+//        setGesture()
         setDelegate()
         setNavigate()
         setAddTarget()
         setupScrollView()
         setupPageControl()
-        view.bringSubviewToFront(noticeBoardView)
+        view.bringSubviewToFront(bottomSheetView)
     }
 }
 
@@ -103,13 +108,6 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
               for: .selected
             )
         }
-        noticeBoardView.do {
-            $0.backgroundColor = .white
-        }
-        grabberView.do {
-            $0.backgroundColor = .red
-            $0.layer.cornerRadius = 2.5
-        }
         pageViewController.do {
             $0.setViewControllers([self.dataViewControllers[0]], direction: .forward, animated: true)
             $0.dataSource = self
@@ -130,7 +128,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         self.navigationItem.leftBarButtonItem = leftButton
     }   
     private func setLayout() {
-        view.addSubviews(noticeBoardView, scrollView, pageControl)
+        view.addSubviews(bottomSheetView, scrollView, pageControl)
         
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
@@ -142,25 +140,22 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.top.equalTo(scrollView.snp.bottom)
             $0.centerX.equalTo(self.view.snp.centerX)
         }
-        noticeBoardView.snp.makeConstraints {
-            $0.top.equalTo(pageControl.snp.bottom)
-            $0.height.equalTo(300)
-            $0.width.equalTo(UIScreen.main.bounds.width)
-        }
+//        noticeBoardView.snp.makeConstraints {
+//            $0.top.equalTo(pageControl.snp.bottom)
+//            $0.height.equalTo(300)
+//            $0.width.equalTo(UIScreen.main.bounds.width)
+//        }
 
-        noticeBoardView.addSubviews(grabberView ,segmentedControl, pageViewController.view)
-        grabberView.snp.makeConstraints {
-            $0.top.equalTo(noticeBoardView.snp.top)
-            $0.height.equalTo(5)
-            $0.width.equalTo(UIScreen.main.bounds.width - 30)
-            $0.centerX.equalToSuperview()
+        bottomSheetView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
+        bottomSheetView.addSubviews(segmentedControl, pageViewController.view)
+
         segmentedControl.snp.makeConstraints {
-            $0.leading.equalTo(noticeBoardView.snp.leading).offset(16)
-            $0.trailing.equalTo(noticeBoardView.snp.trailing).offset(-16)
-            $0.top.equalTo(noticeBoardView.snp.top).offset(10)
+            $0.leading.equalTo(bottomSheetView.bottomSheetView.snp.leading).offset(16)
+            $0.trailing.equalTo(bottomSheetView.bottomSheetView.snp.trailing).offset(-16)
+            $0.top.equalTo(bottomSheetView.bottomSheetView.snp.top).offset(10)
             $0.height.equalTo(50)
-
         }
         pageViewController.view.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(4)
@@ -176,10 +171,10 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     private func setRegister() {
 
     }
-    private func setGesture(){
-        panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGestureHandler))
-        self.grabberView.addGestureRecognizer(panGesture)
-    }
+//    private func setGesture(){
+//        panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGestureHandler))
+//        self.grabberView.addGestureRecognizer(panGesture)
+//    }
     private func setAddTarget() {
         self.segmentedControl.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
         self.changeValue(control: self.segmentedControl)
@@ -251,44 +246,39 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     }
 
 //    // MARK: - @objc Method
+//    @objc func panGestureHandler(recognizer: UIPanGestureRecognizer) {
+//        let translation = recognizer.translation(in: noticeBoardView)
+//        let maxHeight = view.frame.size.height - navigationController!.navigationBar.frame.size.height - UIApplication.shared.statusBarFrame.height
+//        if recognizer.state == .changed {
+//            let newY = max(self.noticeBoardView.frame.origin.y + translation.y, 0)
+//            self.noticeBoardView.frame.origin.y = newY
+//            recognizer.setTranslation(CGPoint.zero, in: self.view)
+//        }
+//        else if recognizer.state == .ended {
+////            if self.noticeBoardView.frame.origin.y < halfHeight {
+////                openDrawer(maxHeight: maxHeight)
+////            }
+////            else {
+////                closeDrawer(halfHeight: halfHeight)
+////            }
+//            openDrawer(maxHeight: maxHeight)
+//        }
+//    }
+//
+//    func openDrawer(maxHeight: CGFloat) {
+//        noticeBoardView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: maxHeight)
+//        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
+//            self.view.layoutIfNeeded()
+//        }, completion: nil)
+//    }
+//
+//    func closeDrawer(halfHeight: CGFloat) {
+//        noticeBoardView.frame = CGRect(x: 0, y: halfHeight, width: view.frame.width, height: halfHeight)
+//        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
+//            self.view.layoutIfNeeded()
+//        }, completion: nil)
+//    }
 
-    @objc func panGestureHandler(recognizer: UIPanGestureRecognizer) {
-        let translation = recognizer.translation(in: self.view)
-        let maxHeight = view.frame.size.height - navigationController!.navigationBar.frame.size.height - UIApplication.shared.statusBarFrame.height
-
-        if recognizer.state == .changed {
-            let newY = max(self.noticeBoardView.frame.origin.y + translation.y, 0)
-            self.noticeBoardView.frame.origin.y = newY
-            recognizer.setTranslation(CGPoint.zero, in: self.view)
-        }
-        else if recognizer.state == .ended {
-            if self.noticeBoardView.frame.origin.y < halfHeight {
-                openDrawer()
-            }
-            else {
-                closeDrawer()
-            }
-        }
-    }
-    func openDrawer() {
-            // 뷰의 높이를 전체 높이로 설정
-        noticeBoardView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: fullHeight)
-            
-            // 애니메이션 적용
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-        }
-        
-        func closeDrawer() {
-            // 뷰의 높이를 절반 높이로 설정
-            noticeBoardView.frame = CGRect(x: 0, y: halfHeight, width: view.frame.width, height: halfHeight)
-            
-            // 애니메이션 적용
-            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-        }
     @objc private func changeValue(control: UISegmentedControl) {
       // 코드로 값을 변경하면 해당 메소드 호출 x
       self.currentPage = control.selectedSegmentIndex

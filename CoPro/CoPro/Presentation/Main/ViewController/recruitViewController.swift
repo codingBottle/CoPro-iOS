@@ -26,7 +26,7 @@ final class recruitViewController: UIViewController {
         setLayout()
         setDelegate()
         setRegister()
-//        setAddTarget()
+        setAddTarget()
     }
 }
 
@@ -36,7 +36,8 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     private func setUI() {
         self.view.backgroundColor = .white
         sortButton.do {
-            $0.titleLabel?.text = "최신순"
+            $0.setTitle("최신순", for: .normal)
+            $0.setTitleColor(.black, for: .normal)
         }
         tableView.do {
             $0.showsVerticalScrollIndicator = false
@@ -53,9 +54,9 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         view.addSubviews(sortButton,tableView)
         
         sortButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
+            $0.top.equalToSuperview().offset(10)
             $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(10)
+            $0.height.equalTo(20)
         }
         tableView.snp.makeConstraints {
             $0.top.equalTo(sortButton.snp.bottom)
@@ -68,9 +69,9 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self  // 추가: tableView의 dataSource를 설정
     }
     
-//    private func setAddTarget() {
-//        sortButton.addTarget(self, action: #selector(sortButtonPressed()), for: .touchUpInside)
-//    }
+    private func setAddTarget() {
+        sortButton.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dummy.count
     }
@@ -87,6 +88,10 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - @objc Method
+    
+    @objc func sortButtonPressed() {
+        
+    }
 
 }
 

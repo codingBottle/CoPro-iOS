@@ -79,7 +79,6 @@ class noticeBoardTableViewCell: UITableViewCell {
         
         postImage.snp.makeConstraints {
             $0.height.width.equalTo(72)
-            $0.top.bottom.equalToSuperview().inset(8)
             $0.trailing.equalToSuperview()
         }
         postTitleLabel.snp.makeConstraints {
