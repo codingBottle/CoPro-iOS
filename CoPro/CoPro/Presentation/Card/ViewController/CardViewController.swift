@@ -12,7 +12,9 @@ import DropDown
 
 
 class CardViewController: BaseViewController {
-    let dropDown = DropDown()
+    let partDropDown = DropDown()
+    let langDropDown = DropDown()
+    let oldDropDown = DropDown()
     let cardView = CardView()
     
     override func loadView() {
@@ -23,20 +25,11 @@ class CardViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
         // DropDown 설정
-        dropDown.anchorView = CardView().partContainerView  // DropDown 메뉴를 연결
-        dropDown.dataSource = ["Mobile", "Server", "Web"]  // DropDown 메뉴의 항목 설정
+        setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["Mobile", "Server", "Web"])
+        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["Swift", "Java", "Flutter"])
+        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["1 year", "2 years", "3 years"])
         
-        // 항목 선택시 동작 설정
-        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-            self.cardView.partLabel.text = item
-        }
-        
-        // 버튼 클릭시 DropDown 메뉴 표시
-        cardView.partButton.addTarget(self, action: #selector(showDropDown), for: .touchUpInside)
     }
     override func setUI() {
         
@@ -47,7 +40,31 @@ class CardViewController: BaseViewController {
     override func setAddTarget() {
         
     }
-    @objc func showDropDown() {
-        dropDown.show()
+    //button동작 설정
+    func setupDropDown(dropDown: DropDown, anchorView: UIView, button: UIButton, items: [String]) {
+        dropDown.anchorView = anchorView
+        dropDown.dataSource = items
+        
+        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+            if dropDown == self.partDropDown {
+                self.cardView.partLabel.text = item
+            } else if dropDown == self.langDropDown {
+                self.cardView.langLabel.text = item
+            } else if dropDown == self.oldDropDown {
+                self.cardView.oldLabel.text = item
+            }
+        }
+        
+        button.addTarget(self, action: #selector(showDropDown(sender:)), for: .touchUpInside)
+    }
+    //Dropdown show function
+    @objc func showDropDown(sender: UIButton) {
+        if sender == cardView.partButton {
+            partDropDown.show()
+        } else if sender == cardView.langButton {
+            langDropDown.show()
+        } else if sender == cardView.oldButton {
+            oldDropDown.show()
+        }
     }
 }

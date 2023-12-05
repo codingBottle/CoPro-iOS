@@ -81,7 +81,8 @@ class CardView: BaseView {
             $0.height.equalTo(40)
         }
         partLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
+            $0.centerY.equalToSuperview()
         }
         
         partButton.snp.makeConstraints {
@@ -90,7 +91,8 @@ class CardView: BaseView {
             $0.centerY.equalToSuperview()
         }
         langLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
+            $0.centerY.equalToSuperview()
         }
         
         langButton.snp.makeConstraints {
@@ -99,7 +101,8 @@ class CardView: BaseView {
             $0.centerY.equalToSuperview()
         }
         oldLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
+            $0.centerY.equalToSuperview()
         }
         
         oldButton.snp.makeConstraints {
