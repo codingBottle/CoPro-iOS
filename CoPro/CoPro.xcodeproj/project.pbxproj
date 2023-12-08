@@ -66,6 +66,9 @@
 		B5D3E54C2AFF9F8D0021DDA0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54B2AFF9F8D0021DDA0 /* SnapKit */; };
 		B5D3E54F2B0213370021DDA0 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54E2B0213370021DDA0 /* KeychainSwift */; };
 		B5D3E5512B06127C0021DDA0 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D3E5502B06127C0021DDA0 /* Image.xcassets */; };
+		B5D3E5692B1718B60021DDA0 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D3E5682B1718B60021DDA0 /* CardViewController.swift */; };
+		B5D3E56B2B1718C40021DDA0 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D3E56A2B1718C40021DDA0 /* CardView.swift */; };
+		B5D3E56F2B172A150021DDA0 /* DropDown in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E56E2B172A150021DDA0 /* DropDown */; };
 		E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1552AEFACA3003269FF /* URLConst.swift */; };
 		E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1572AEFACB6003269FF /* NetworkResult.swift */; };
 		E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */; };
@@ -113,6 +116,8 @@
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B5D3E5502B06127C0021DDA0 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
+		B5D3E5682B1718B60021DDA0 /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
+		B5D3E56A2B1718C40021DDA0 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		E3D6D1552AEFACA3003269FF /* URLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConst.swift; sourceTree = "<group>"; };
 		E3D6D1572AEFACB6003269FF /* NetworkResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResult.swift; sourceTree = "<group>"; };
 		E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
@@ -150,6 +155,7 @@
 				B5D3E50B2AFB76250021DDA0 /* FirebaseDatabaseSwift in Frameworks */,
 				9E05D2DF2AD509FF00F4CA43 /* Then in Frameworks */,
 				B5D3E5252AFB76250021DDA0 /* FirebaseRemoteConfig in Frameworks */,
+				B5D3E56F2B172A150021DDA0 /* DropDown in Frameworks */,
 				B5D3E5032AFB76250021DDA0 /* FirebaseAuth in Frameworks */,
 				B5D3E5152AFB76250021DDA0 /* FirebaseFunctions in Frameworks */,
 				B5D3E51D2AFB76250021DDA0 /* FirebaseInstallations in Frameworks */,
@@ -222,6 +228,7 @@
 		9E05D2C32AD5090A00F4CA43 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				B5D3E5652B1718830021DDA0 /* Card */,
 				B543E5252AFB71AF00937662 /* Login */,
 				9E9A10992AF8EF6600AA7C96 /* Base */,
 			);
@@ -403,6 +410,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B5D3E5652B1718830021DDA0 /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				B5D3E5672B17188E0021DDA0 /* ViewController */,
+				B5D3E5662B1718890021DDA0 /* View */,
+			);
+			path = Card;
+			sourceTree = "<group>";
+		};
+		B5D3E5662B1718890021DDA0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B5D3E56A2B1718C40021DDA0 /* CardView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B5D3E5672B17188E0021DDA0 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B5D3E5682B1718B60021DDA0 /* CardViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -456,6 +488,7 @@
 				B5D3E5382AFE71DB0021DDA0 /* OAuthSwift */,
 				B5D3E54B2AFF9F8D0021DDA0 /* SnapKit */,
 				B5D3E54E2B0213370021DDA0 /* KeychainSwift */,
+				B5D3E56E2B172A150021DDA0 /* DropDown */,
 			);
 			productName = CoPro;
 			productReference = 9E05D2AA2AD508B200F4CA43 /* CoPro.app */;
@@ -494,6 +527,7 @@
 				B5D3E5372AFE71DB0021DDA0 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
 				B5D3E54A2AFF9F8D0021DDA0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				B5D3E54D2B0213370021DDA0 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				B5D3E56D2B172A150021DDA0 /* XCRemoteSwiftPackageReference "DropDown" */,
 			);
 			productRefGroup = 9E05D2AB2AD508B200F4CA43 /* Products */;
 			projectDirPath = "";
@@ -524,6 +558,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */,
+				B5D3E56B2B1718C40021DDA0 /* CardView.swift in Sources */,
 				9E05D2F02AD5222300F4CA43 /* UIStackView++.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
@@ -533,6 +568,7 @@
 				9E05D2AE2AD508B200F4CA43 /* AppDelegate.swift in Sources */,
 				9E05D2F22AD5223300F4CA43 /* UIResponder++.swift in Sources */,
 				E3D6D15C2AEFACE6003269FF /* BaseAPI.swift in Sources */,
+				B5D3E5692B1718B60021DDA0 /* CardViewController.swift in Sources */,
 				9E05D2D12AD5098D00F4CA43 /* DTO.swift in Sources */,
 				9E05D2F62AD5225600F4CA43 /* UITextField++.swift in Sources */,
 				9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */,
@@ -826,6 +862,14 @@
 				minimumVersion = 20.0.0;
 			};
 		};
+		B5D3E56D2B172A150021DDA0 /* XCRemoteSwiftPackageReference "DropDown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AssistoLab/DropDown";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1003,6 +1047,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B5D3E54D2B0213370021DDA0 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		B5D3E56E2B172A150021DDA0 /* DropDown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5D3E56D2B172A150021DDA0 /* XCRemoteSwiftPackageReference "DropDown" */;
+			productName = DropDown;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
