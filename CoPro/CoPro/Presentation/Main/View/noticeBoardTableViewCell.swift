@@ -47,31 +47,39 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.roundCorners(cornerRadius: 6, maskedCorners: .layerMaxXMaxYCorner)
         }
         postTitleLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 15)
+            $0.font = UIFont.boldSystemFont(ofSize: 15)
         }
         writerNameLabel.do {
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.textColor = UIColor(hex: "6D6E71")
         }
         postTimeLabel.do {
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.textColor = UIColor(hex: "6D6E71")
         }
         likeCountIcon.do {
-            $0.image = UIImage(named: "empathy")
+            $0.image = UIImage(systemName: "heart")
+            $0.tintColor = UIColor(hex: "6D6E71")
         }
         likeCountLabel.do {
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.textColor = UIColor(hex: "6D6E71")
         }
         sawPostIcon.do {
-            $0.image = UIImage(named: "watchingicon")
+            $0.image = UIImage(systemName: "eye")
+            $0.tintColor = UIColor(hex: "6D6E71")
         }
         sawPostLabel.do {
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.textColor = UIColor(hex: "6D6E71")
         }
         commentCountIcon.do {
-            $0.image = UIImage(named: "commenticon")
+            $0.image = UIImage(systemName: "text.bubble")
+            $0.tintColor = UIColor(hex: "6D6E71")
         }
         commentCountLabel.do {
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.textColor = UIColor(hex: "6D6E71")
         }
     }
     private func setLayout() {
@@ -99,7 +107,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         }
         likeCountLabel.snp.makeConstraints {
             $0.leading.equalTo(likeCountIcon.snp.trailing).offset(4)
-            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
+            $0.centerY.equalTo(likeCountIcon.snp.centerY)
         }
         sawPostIcon.snp.makeConstraints {
             $0.leading.equalTo(likeCountLabel.snp.trailing).offset(16)
@@ -107,7 +115,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         }
         sawPostLabel.snp.makeConstraints {
             $0.leading.equalTo(sawPostIcon.snp.trailing).offset(4)
-            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
+            $0.centerY.equalTo(likeCountIcon.snp.centerY)
         }
         commentCountIcon.snp.makeConstraints {
             $0.leading.equalTo(sawPostLabel.snp.trailing).offset(16)
@@ -115,7 +123,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         }
         commentCountLabel.snp.makeConstraints {
             $0.leading.equalTo(commentCountIcon.snp.trailing).offset(4)
-            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
+            $0.centerY.equalTo(likeCountIcon.snp.centerY)
         }
     }
     
