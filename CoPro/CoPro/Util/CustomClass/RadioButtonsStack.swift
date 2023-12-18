@@ -96,6 +96,8 @@ class RadioButtonsStack: UIView {
             radioButton.translatesAutoresizingMaskIntoConstraints = false
             return radioButton
         }()
+        
+        let emptyView = UIView()
 
         let label: UILabel = {
             let label = UILabel()
@@ -128,8 +130,8 @@ class RadioButtonsStack: UIView {
 
         func setup() {
             addSubview(stackView)
-            stackView.addArrangedSubview(radioButton)
             stackView.addArrangedSubview(label)
+            stackView.addArrangedSubview(radioButton)
             NSLayoutConstraint.activate([
                 stackView.topAnchor.constraint(equalTo: topAnchor),
                 stackView.leadingAnchor.constraint(equalTo: leadingAnchor),

@@ -36,8 +36,12 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     private func setUI() {
         self.view.backgroundColor = .white
         sortButton.do {
+            $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
             $0.setTitle("최신순", for: .normal)
+            $0.titleLabel?.font = UIFont.systemFont(ofSize: 15)
             $0.setTitleColor(.black, for: .normal)
+            $0.semanticContentAttribute = .forceRightToLeft  // 오른쪽에서 왼쪽으로 컨텐츠를 정렬
+            $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         }
         tableView.do {
             $0.showsVerticalScrollIndicator = false
@@ -54,12 +58,12 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         view.addSubviews(sortButton,tableView)
         
         sortButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(5)
             $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(20)
+            $0.height.equalTo(25)
         }
         tableView.snp.makeConstraints {
-            $0.top.equalTo(sortButton.snp.bottom)
+            $0.top.equalTo(sortButton.snp.bottom).offset(5)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
@@ -90,7 +94,8 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     // MARK: - @objc Method
     
     @objc func sortButtonPressed() {
-        
+        let bottomSheetVC = SortBottomSheetViewController()
+        present(bottomSheetVC, animated: true, completion: nil)
     }
 
 }

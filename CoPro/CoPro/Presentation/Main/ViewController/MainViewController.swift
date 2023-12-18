@@ -22,8 +22,6 @@ final class MainViewController: UIViewController {
       view.barViewColor = .darkGray
       return view
     }()
-    let halfHeight = UIScreen.main.bounds.height / 2
-    let fullHeight = UIScreen.main.bounds.height
     var panGesture = UIPanGestureRecognizer()
     private let scrollView = UIScrollView()
     private let pageControl = UIPageControl()
@@ -124,6 +122,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         let logoImage = UIImage(named: "logo")?.withRenderingMode(.alwaysOriginal)
         let leftButton = UIBarButtonItem(image: logoImage, style: .plain, target: self, action: #selector(popToWriteViewController))
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(button2Tapped))
+        rightButton.tintColor = UIColor(hex: "212121")
         self.navigationItem.rightBarButtonItem = rightButton
         self.navigationItem.leftBarButtonItem = leftButton
     }   

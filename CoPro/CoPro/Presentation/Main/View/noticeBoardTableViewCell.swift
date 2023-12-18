@@ -88,6 +88,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         postImage.snp.makeConstraints {
             $0.height.width.equalTo(72)
             $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
         }
         postTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
@@ -126,7 +127,6 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.centerY.equalTo(likeCountIcon.snp.centerY)
         }
     }
-    
     func configureCell(_ data: noticeBoardDataModel) {
         postImage.image = data.empathy.image
         postTitleLabel.text = data.title

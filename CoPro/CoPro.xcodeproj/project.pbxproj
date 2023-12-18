@@ -32,6 +32,7 @@
 		9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2F92AD5227500F4CA43 /* UIColor++.swift */; };
 		9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2FB2AD5228300F4CA43 /* Image.swift */; };
 		9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */; };
+		E337FF052B2893BA00FE0A96 /* SortBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E337FF042B2893BA00FE0A96 /* SortBottomSheetViewController.swift */; };
 		E36AFEF42B1070C100089F2C /* recruitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AFEF32B1070C100089F2C /* recruitViewController.swift */; };
 		E36AFEFA2B1989D700089F2C /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AFEF92B1989D700089F2C /* BottomSheetViewController.swift */; };
 		E36AFEFC2B1989F600089F2C /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AFEFB2B1989F600089F2C /* PassThroughView.swift */; };
@@ -71,6 +72,7 @@
 		9E05D2F92AD5227500F4CA43 /* UIColor++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor++.swift"; sourceTree = "<group>"; };
 		9E05D2FB2AD5228300F4CA43 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
+		E337FF042B2893BA00FE0A96 /* SortBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBottomSheetViewController.swift; sourceTree = "<group>"; };
 		E36AFEF32B1070C100089F2C /* recruitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recruitViewController.swift; sourceTree = "<group>"; };
 		E36AFEF92B1989D700089F2C /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		E36AFEFB2B1989F600089F2C /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 				E38451D32B020C4E00C4232E /* MainViewController.swift */,
 				E36AFEF32B1070C100089F2C /* recruitViewController.swift */,
 				E36AFEF92B1989D700089F2C /* BottomSheetViewController.swift */,
+				E337FF042B2893BA00FE0A96 /* SortBottomSheetViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -460,6 +463,7 @@
 				9E05D2D72AD509D100F4CA43 /* BaseView.swift in Sources */,
 				E36AFEFA2B1989D700089F2C /* BottomSheetViewController.swift in Sources */,
 				E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */,
+				E337FF052B2893BA00FE0A96 /* SortBottomSheetViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
