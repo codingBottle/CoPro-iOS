@@ -6,11 +6,3 @@
 //
 
 import Foundation
-import UIKit
-
-public enum Image{
-    static let coproLogo = UIImage(named: "Logo")
-    static let github_SignInButton = UIImage(named: "github_SignInButton")
-    static let apple_SignInButton = UIImage(named: "apple_SignInButton")
-    static let google_SignInButton = UIImage(named: "google_SignInButton")
-}
