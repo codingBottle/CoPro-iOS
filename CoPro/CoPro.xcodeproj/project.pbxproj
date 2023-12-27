@@ -30,6 +30,16 @@
 		9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2F92AD5227500F4CA43 /* UIColor++.swift */; };
 		9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2FB2AD5228300F4CA43 /* Image.swift */; };
 		9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */; };
+		E337FF052B2893BA00FE0A96 /* SortBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E337FF042B2893BA00FE0A96 /* SortBottomSheetViewController.swift */; };
+		E36AFEF42B1070C100089F2C /* recruitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AFEF32B1070C100089F2C /* recruitViewController.swift */; };
+		E36AFEFA2B1989D700089F2C /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AFEF92B1989D700089F2C /* BottomSheetViewController.swift */; };
+		E36AFEFC2B1989F600089F2C /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36AFEFB2B1989F600089F2C /* PassThroughView.swift */; };
+		E38451D42B020C4E00C4232E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38451D32B020C4E00C4232E /* MainViewController.swift */; };
+		E386CE6E2B0F4552006FC894 /* UISegmentControl++.swift in Sources */ = {isa = PBXBuildFile; fileRef = E386CE6D2B0F4552006FC894 /* UISegmentControl++.swift */; };
+		E3B15DBB2B0F7F370045B9D9 /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */; };
+		E3B15DBD2B0F7F4C0045B9D9 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBC2B0F7F4C0045B9D9 /* RadioButton.swift */; };
+		E3B15DBF2B1057290045B9D9 /* noticeBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */; };
+		E3B15DC12B1057D30045B9D9 /* noticeBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B15DC02B1057D30045B9D9 /* noticeBoardTableViewCell.swift */; };
 		B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D3E4F32AFB73B00021DDA0 /* LoginView.swift */; };
 		B5D3E4F72AFB76250021DDA0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E4F62AFB76250021DDA0 /* FirebaseAnalytics */; };
 		B5D3E4F92AFB76250021DDA0 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E4F82AFB76250021DDA0 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -109,6 +119,16 @@
 		9E05D2F92AD5227500F4CA43 /* UIColor++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor++.swift"; sourceTree = "<group>"; };
 		9E05D2FB2AD5228300F4CA43 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
+		E337FF042B2893BA00FE0A96 /* SortBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBottomSheetViewController.swift; sourceTree = "<group>"; };
+		E36AFEF32B1070C100089F2C /* recruitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recruitViewController.swift; sourceTree = "<group>"; };
+		E36AFEF92B1989D700089F2C /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		E36AFEFB2B1989F600089F2C /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
+		E38451D32B020C4E00C4232E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		E386CE6D2B0F4552006FC894 /* UISegmentControl++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentControl++.swift"; sourceTree = "<group>"; };
+		E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
+		E3B15DBC2B0F7F4C0045B9D9 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
+		E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardDataModel.swift; sourceTree = "<group>"; };
+		E3B15DC02B1057D30045B9D9 /* noticeBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardTableViewCell.swift; sourceTree = "<group>"; };
 		B5D3E4F32AFB73B00021DDA0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -202,7 +222,6 @@
 			children = (
 				9E05D2AD2AD508B200F4CA43 /* AppDelegate.swift */,
 				9E05D2AF2AD508B200F4CA43 /* SceneDelegate.swift */,
-				9E05D2BB2AD508B300F4CA43 /* Info.plist */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -222,6 +241,7 @@
 		9E05D2C32AD5090A00F4CA43 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				E38451D02B020A2200C4232E /* Home */,
 				B543E5252AFB71AF00937662 /* Login */,
 				9E9A10992AF8EF6600AA7C96 /* Base */,
 			);
@@ -240,6 +260,7 @@
 		9E05D2C62AD5091F00F4CA43 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				E3B15DB92B0F7F230045B9D9 /* CustomClass */,
 				9E05D2EB2AD521FC00F4CA43 /* Extension */,
 				9E05D2EC2AD5220300F4CA43 /* NameSpace */,
 			);
@@ -326,6 +347,7 @@
 				9E05D2F52AD5225600F4CA43 /* UITextField++.swift */,
 				9E05D2F72AD5226300F4CA43 /* UIButton++.swift */,
 				9E05D2F92AD5227500F4CA43 /* UIColor++.swift */,
+				E386CE6D2B0F4552006FC894 /* UISegmentControl++.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -363,6 +385,21 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
+		E38451D02B020A2200C4232E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				E38451D72B0CDB2C00C4232E /* DataModel */,
+				E38451D22B020A2E00C4232E /* ViewController */,
+				E38451D12B020A2A00C4232E /* View */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		E38451D12B020A2A00C4232E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E3B15DC02B1057D30045B9D9 /* noticeBoardTableViewCell.swift */,
+				E36AFEFB2B1989F600089F2C /* PassThroughView.swift */,
 		B543E5252AFB71AF00937662 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -388,6 +425,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		E38451D22B020A2E00C4232E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E38451D32B020C4E00C4232E /* MainViewController.swift */,
+				E36AFEF32B1070C100089F2C /* recruitViewController.swift */,
+				E36AFEF92B1989D700089F2C /* BottomSheetViewController.swift */,
+				E337FF042B2893BA00FE0A96 /* SortBottomSheetViewController.swift */,
 		B5D3E4F22AFB72D60021DDA0 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -396,6 +440,21 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		E38451D72B0CDB2C00C4232E /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				E3B15DBE2B1057290045B9D9 /* noticeBoardDataModel.swift */,
+			);
+			path = DataModel;
+			sourceTree = "<group>";
+		};
+		E3B15DB92B0F7F230045B9D9 /* CustomClass */ = {
+			isa = PBXGroup;
+			children = (
+				E3B15DBA2B0F7F370045B9D9 /* RadioButtonsStack.swift */,
+				E3B15DBC2B0F7F4C0045B9D9 /* RadioButton.swift */,
+			);
+			path = CustomClass;
 		B5D3E5422AFF98760021DDA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -523,12 +582,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3B15DBD2B0F7F4C0045B9D9 /* RadioButton.swift in Sources */,
+				E3B15DC12B1057D30045B9D9 /* noticeBoardTableViewCell.swift in Sources */,
 				E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */,
+				E36AFEFC2B1989F600089F2C /* PassThroughView.swift in Sources */,
+				E3B15DBF2B1057290045B9D9 /* noticeBoardDataModel.swift in Sources */,
 				9E05D2F02AD5222300F4CA43 /* UIStackView++.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
 				9E05D2CD2AD5097800F4CA43 /* Config.swift in Sources */,
+				E3B15DBB2B0F7F370045B9D9 /* RadioButtonsStack.swift in Sources */,
 				B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */,
 				9E05D2AE2AD508B200F4CA43 /* AppDelegate.swift in Sources */,
 				9E05D2F22AD5223300F4CA43 /* UIResponder++.swift in Sources */,
@@ -540,14 +604,19 @@
 				9E05D2D32AD5099E00F4CA43 /* BaseResponse.swift in Sources */,
 				9E05D2EA2AD521CB00F4CA43 /* Font.swift in Sources */,
 				E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */,
+				E38451D42B020C4E00C4232E /* MainViewController.swift in Sources */,
 				9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */,
 				9E05D2B02AD508B200F4CA43 /* SceneDelegate.swift in Sources */,
 				9E05D2CF2AD5098200F4CA43 /* API.swift in Sources */,
+				E36AFEF42B1070C100089F2C /* recruitViewController.swift in Sources */,
+				E386CE6E2B0F4552006FC894 /* UISegmentControl++.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,
 				9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */,
 				9E05D2EE2AD5221500F4CA43 /* UIView++.swift in Sources */,
 				9E05D2D72AD509D100F4CA43 /* BaseView.swift in Sources */,
+				E36AFEFA2B1989D700089F2C /* BottomSheetViewController.swift in Sources */,
 				E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */,
+				E337FF052B2893BA00FE0A96 /* SortBottomSheetViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
