@@ -159,7 +159,7 @@
 		9E05D2C32AD5090A00F4CA43 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				E38451D02B020A2200C4232E /* Main */,
+				E38451D02B020A2200C4232E /* Home */,
 				9E9A10992AF8EF6600AA7C96 /* Base */,
 			);
 			path = Presentation;
@@ -301,14 +301,14 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		E38451D02B020A2200C4232E /* Main */ = {
+		E38451D02B020A2200C4232E /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				E38451D72B0CDB2C00C4232E /* DataModel */,
 				E38451D22B020A2E00C4232E /* ViewController */,
 				E38451D12B020A2A00C4232E /* View */,
 			);
-			path = Main;
+			path = Home;
 			sourceTree = "<group>";
 		};
 		E38451D12B020A2A00C4232E /* View */ = {
