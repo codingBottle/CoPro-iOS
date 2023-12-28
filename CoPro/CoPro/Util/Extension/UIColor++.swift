@@ -26,6 +26,11 @@ extension UIColor {
         return #colorLiteral(red: 0.45, green: 0.45, blue: 0.45, alpha: 1)
       }
     }
+    
+    static var primary = UIColor(red: 91/255, green: 156/255, blue: 203/255, alpha: 1)
+    /// 연한 회색
+    static var incomingMessageBackground = UIColor(red: 98/255, green: 98/255, blue: 98/255, alpha: 1)
+    
     /// Color Picker 에서 UIColor 를 고르면 Hex String 으로 변환한다.
     func toHexString() -> String {
         var r:CGFloat = 0
