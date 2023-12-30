@@ -39,18 +39,12 @@ final class AppController {
 
     @objc func checkSignIn() {
         if let user = Auth.auth().currentUser {
-            print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥")
             setCahnnelScene(with: user)
         } else {
             setLoginScene()
         }
     }
     
-//    private func setCahnnelScene(with user: User) {
-//        let channelVC = ChannelVC(currentUser: user)
-//        rootViewController = BaseNavigationController(rootViewController: channelVC)
-//        print("🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
-//    }
     private func setCahnnelScene(with user: User) {
         let channelVC = ChannelVC(currentUser: user)
         let navigationController = BaseNavigationController(rootViewController: channelVC)
@@ -60,8 +54,6 @@ final class AppController {
             sceneDelegate.window?.rootViewController = navigationController
             sceneDelegate.window?.makeKeyAndVisible()
         }
-        
-        print("🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
     }
     
     private func setLoginScene() {
