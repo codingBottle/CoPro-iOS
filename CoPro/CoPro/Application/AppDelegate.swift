@@ -13,13 +13,20 @@ import OAuthSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        FirebaseApp.configure()
-      
+
+        FirebaseApp.configure() // 여기에서 Firebase를 설정합니다.
+
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        AppController.shared.show(in: window)
+        
         return true
     }
+    
     //소셜 로그인 관련
+    
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         if GIDSignIn.sharedInstance.handle(url) {
             return true
@@ -43,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         print("파이어베이스에 로그인 정보 추가 에러: \(error.localizedDescription)")
                     } else {
                         print("Login Successful")
+                        AppController.shared.checkSignIn() // 로그인 성공 후 checkSignIn 메서드를 호출합니다.
                     }
                 }
             }
