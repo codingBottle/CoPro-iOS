@@ -119,9 +119,9 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         self.changeValue(control: self.segmentedControl)
     }
     private func setNavigate() {
-        let logoImage = UIImage(named: "logo")?.withRenderingMode(.alwaysOriginal)
+        let logoImage = UIImage(named: "logo_navigation")?.withRenderingMode(.alwaysOriginal)
         let leftButton = UIBarButtonItem(image: logoImage, style: .plain, target: self, action: #selector(popToWriteViewController))
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(button2Tapped))
+        let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(pushToSearchBarViewController))
         rightButton.tintColor = UIColor(hex: "212121")
         self.navigationItem.rightBarButtonItem = rightButton
         self.navigationItem.leftBarButtonItem = leftButton
@@ -287,8 +287,9 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         // 'Button 1'이 눌렸을 때의 동작을 여기에 작성합니다.
     }
 
-    @objc func button2Tapped() {
-        // 'Button 2'이 눌렸을 때의 동작을 여기에 작성합니다.
+    @objc func pushToSearchBarViewController() {
+        let secondViewController = SearchBarViewController()
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
 }
     
