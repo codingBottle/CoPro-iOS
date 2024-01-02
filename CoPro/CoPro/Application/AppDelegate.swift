@@ -49,8 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     if let error = error {
                         print("파이어베이스에 로그인 정보 추가 에러: \(error.localizedDescription)")
                     } else {
-                        print("Login Successful")
-                        AppController.shared.checkSignIn() // 로그인 성공 후 checkSignIn 메서드를 호출합니다.
+                        print("Login Successful \n이후 네비게이션은 추후 한 번에 진행")
+//                        AppController.shared.checkSignIn() // 로그인 성공 후 checkSignIn 메서드를 호출합니다.
                     }
                 }
             }
