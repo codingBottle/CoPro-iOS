@@ -66,6 +66,10 @@
 		B5D3E54C2AFF9F8D0021DDA0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54B2AFF9F8D0021DDA0 /* SnapKit */; };
 		B5D3E54F2B0213370021DDA0 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54E2B0213370021DDA0 /* KeychainSwift */; };
 		B5D3E5512B06127C0021DDA0 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D3E5502B06127C0021DDA0 /* Image.xcassets */; };
+		E33379A52B4402DA0097ED0D /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */; };
+		E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */; };
+		E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */; };
+		E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */; };
 		E37AE7F02B3C25BD002ABDCD /* UISegmented++.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7EF2B3C25BD002ABDCD /* UISegmented++.swift */; };
 		E37AE7F62B3C272A002ABDCD /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7F52B3C272A002ABDCD /* PassThroughView.swift */; };
 		E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */; };
@@ -123,6 +127,10 @@
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B5D3E5502B06127C0021DDA0 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
+		E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarViewController.swift; sourceTree = "<group>"; };
+		E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recentSearchTableViewCell.swift; sourceTree = "<group>"; };
+		E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchTableViewCell.swift; sourceTree = "<group>"; };
+		E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		E37AE7EF2B3C25BD002ABDCD /* UISegmented++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmented++.swift"; sourceTree = "<group>"; };
 		E37AE7F52B3C272A002ABDCD /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardTableViewCell.swift; sourceTree = "<group>"; };
@@ -441,6 +449,9 @@
 			children = (
 				E37AE7F52B3C272A002ABDCD /* PassThroughView.swift */,
 				E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */,
+				E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */,
+				E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */,
+				E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */,
 				E37AE7FB2B3C2785002ABDCD /* BottomSheetView.swift */,
 			);
 			path = View;
@@ -452,6 +463,7 @@
 				E37AE7F92B3C2766002ABDCD /* SortBottomSheetViewController.swift */,
 				E37AE7FD2B3C27B1002ABDCD /* recruitViewController.swift */,
 				E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */,
+				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -599,6 +611,7 @@
 				E37AE7FE2B3C27B1002ABDCD /* recruitViewController.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				E37AE7F62B3C272A002ABDCD /* PassThroughView.swift in Sources */,
+				E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
 				9E05D2CD2AD5097800F4CA43 /* Config.swift in Sources */,
@@ -607,10 +620,12 @@
 				9E05D2AE2AD508B200F4CA43 /* AppDelegate.swift in Sources */,
 				9E05D2F22AD5223300F4CA43 /* UIResponder++.swift in Sources */,
 				E37AE7FC2B3C2785002ABDCD /* BottomSheetView.swift in Sources */,
+				E33379A52B4402DA0097ED0D /* SearchBarViewController.swift in Sources */,
 				E3D6D15C2AEFACE6003269FF /* BaseAPI.swift in Sources */,
 				9E05D2D12AD5098D00F4CA43 /* DTO.swift in Sources */,
 				9E05D2F62AD5225600F4CA43 /* UITextField++.swift in Sources */,
 				9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */,
+				E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */,
 				B5D3E5322AFB7C2E0021DDA0 /* LoginViewController.swift in Sources */,
 				E37AE8082B3C289B002ABDCD /* RadioButtonsStack.swift in Sources */,
 				E37AE7FA2B3C2766002ABDCD /* SortBottomSheetViewController.swift in Sources */,
@@ -621,6 +636,7 @@
 				E37AE8002B3C27D0002ABDCD /* MainViewController.swift in Sources */,
 				9E05D2B02AD508B200F4CA43 /* SceneDelegate.swift in Sources */,
 				9E05D2CF2AD5098200F4CA43 /* API.swift in Sources */,
+				E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */,
 				E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */,
 				E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,

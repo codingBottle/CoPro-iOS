@@ -70,7 +70,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
 
     private func setDelegate() {
         tableView.delegate = self
-        tableView.dataSource = self  // 추가: tableView의 dataSource를 설정
+        tableView.dataSource = self
     }
     
     private func setAddTarget() {
