@@ -69,11 +69,11 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
         recentSearchTableView.do {
             $0.showsVerticalScrollIndicator = false
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.separatorStyle = .singleLine
+            $0.separatorStyle = .none
             $0.delegate = self
             $0.dataSource = self
-            $0.register(popularSearchTableViewCell.self,
-                        forCellReuseIdentifier: popularSearchTableViewCell.id)
+            $0.register(recentSearchTableViewCell.self,
+                        forCellReuseIdentifier: recentSearchTableViewCell.id)
         }
         popularLabel.do {
             $0.text = "인기 검색"
@@ -128,7 +128,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             }
             recentSearchTableView.snp.makeConstraints {
                 $0.top.equalTo(recentSearchStackView.snp.bottom).offset(16)
-                $0.leading.trailing.bottom.equalToSuperview()
+                $0.leading.trailing.bottom.equalToSuperview().inset(16)
             }
         
     }
@@ -140,15 +140,32 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      1
+        if tableView == popularSearchTableView {
+            return 1
+        }
+            else {
+                return items.count
+            }
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: popularSearchTableViewCell.id, for: indexPath) as! popularSearchTableViewCell
+        if tableView == popularSearchTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: popularSearchTableViewCell.id, for: indexPath) as! popularSearchTableViewCell
         cell.prepare(items: items)
         return cell
+        }
+            else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: recentSearchTableViewCell.id, for: indexPath) as! recentSearchTableViewCell
+                cell.prepare(text: items.first)
+            return cell
+            }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return popularSearchTableViewCell.cellHeight
+        if tableView == popularSearchTableView {
+            return popularSearchTableViewCell.cellHeight
+        }
+        else {
+            return 41
+        }
     }
 
     // MARK: - @objc Method

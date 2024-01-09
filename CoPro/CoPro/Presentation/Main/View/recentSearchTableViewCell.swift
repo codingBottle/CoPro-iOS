@@ -14,17 +14,12 @@ class recentSearchTableViewCell: UITableViewCell {
     
     //MARK: - UI Components
 
-    static let identifier = "recentSearchTableViewCell"
-    private let postImage = UIImageView()
-    private let postTitleLabel = UILabel()
-    private let writerNameLabel = UILabel()
-    private let postTimeLabel = UILabel()
-    private let likeCountIcon = UIImageView()
-    private let likeCountLabel = UILabel()
-    private let sawPostIcon = UIImageView()
-    private let sawPostLabel = UILabel()
-    private let commentCountIcon = UIImageView()
-    private let commentCountLabel = UILabel()
+    static let id = "recentSearchTableViewCell"
+    private let circleView = UIView()
+    private let clockImageView = UIImageView()
+    private let searchLabel = UILabel()
+    private let deleteButton = UIButton()
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,98 +38,51 @@ class recentSearchTableViewCell: UITableViewCell {
     private func setStyle() {
         separatorInset.left = 0
         selectionStyle = .none
-        postImage.do {
-            $0.roundCorners(cornerRadius: 6, maskedCorners: .layerMaxXMaxYCorner)
+        circleView.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.backgroundColor = .clear
+            $0.layer.cornerRadius = 24 / 2
         }
-        postTitleLabel.do {
-            $0.font = UIFont.boldSystemFont(ofSize: 15)
+        clockImageView.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.image = UIImage(systemName: "clock")
+            $0.tintColor = UIColor(hex: "6D6E72")
         }
-        writerNameLabel.do {
+        searchLabel.do {
             $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+            $0.textColor = .black
         }
-        postTimeLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
-        }
-        likeCountIcon.do {
-            $0.image = UIImage(systemName: "heart")
-            $0.tintColor = UIColor(hex: "6D6E71")
-        }
-        likeCountLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
-        }
-        sawPostIcon.do {
-            $0.image = UIImage(systemName: "eye")
-            $0.tintColor = UIColor(hex: "6D6E71")
-        }
-        sawPostLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
-        }
-        commentCountIcon.do {
-            $0.image = UIImage(systemName: "text.bubble")
-            $0.tintColor = UIColor(hex: "6D6E71")
-        }
-        commentCountLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+        deleteButton.do {
+            $0.setImage(UIImage(systemName: "xmark"), for: .normal)
+            $0.tintColor = UIColor(hex: "6D6E72")
         }
     }
     private func setLayout() {
-        addSubviews(postImage, postTitleLabel, writerNameLabel, postTimeLabel, likeCountIcon ,likeCountLabel,sawPostIcon ,sawPostLabel, commentCountIcon, commentCountLabel)
+        addSubviews(circleView, clockImageView, searchLabel, deleteButton)
         
-        postImage.snp.makeConstraints {
-            $0.height.width.equalTo(72)
-            $0.trailing.equalToSuperview()
+        circleView.snp.makeConstraints {
+            $0.height.width.equalTo(24)
+            $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
         }
-        postTitleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
-            $0.leading.equalToSuperview().offset(16)
+        clockImageView.snp.makeConstraints {
+            $0.height.width.equalTo(12)
+            $0.centerX.equalTo(circleView.snp.centerX)
+            $0.centerY.equalTo(circleView.snp.centerY)
         }
-        writerNameLabel.snp.makeConstraints {
-            $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(postTitleLabel.snp.leading)
+        searchLabel.snp.makeConstraints {
+            $0.centerY.centerX.equalToSuperview()
+            $0.width.equalTo(300)
+            $0.height.equalTo(25)
         }
-        postTimeLabel.snp.makeConstraints {
-            $0.leading.equalTo(writerNameLabel.snp.trailing).offset(14)
-            $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
-        }
-        likeCountIcon.snp.makeConstraints {
-            $0.leading.equalTo(postTitleLabel.snp.leading)
-            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
-        }
-        likeCountLabel.snp.makeConstraints {
-            $0.leading.equalTo(likeCountIcon.snp.trailing).offset(4)
-            $0.centerY.equalTo(likeCountIcon.snp.centerY)
-        }
-        sawPostIcon.snp.makeConstraints {
-            $0.leading.equalTo(likeCountLabel.snp.trailing).offset(16)
-            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
-        }
-        sawPostLabel.snp.makeConstraints {
-            $0.leading.equalTo(sawPostIcon.snp.trailing).offset(4)
-            $0.centerY.equalTo(likeCountIcon.snp.centerY)
-        }
-        commentCountIcon.snp.makeConstraints {
-            $0.leading.equalTo(sawPostLabel.snp.trailing).offset(16)
-            $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
-        }
-        commentCountLabel.snp.makeConstraints {
-            $0.leading.equalTo(commentCountIcon.snp.trailing).offset(4)
-            $0.centerY.equalTo(likeCountIcon.snp.centerY)
+        deleteButton.snp.makeConstraints {
+            $0.height.width.equalTo(12)
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview()
         }
     }
     func configureCell(_ data: noticeBoardDataModel) {
-        postImage.image = data.empathy.image
-        postTitleLabel.text = data.title
-        writerNameLabel.text = data.author
-        postTimeLabel.text = "\(data.timestamp)"
-        likeCountLabel.text = "\(data.likes)"
-        sawPostLabel.text = "\(data.views)"
-        commentCountLabel.text = "\(data.commentCount)"
+        searchLabel.text = data.title
         }
     
     override func awakeFromNib() {
@@ -143,6 +91,14 @@ class recentSearchTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    override func prepareForReuse() {
+      super.prepareForReuse()
+      self.prepare(text: nil)
+    }
+
+    func prepare(text: String?) {
+        self.searchLabel.text = text
     }
 }
 
