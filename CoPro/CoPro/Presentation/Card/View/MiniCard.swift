@@ -38,7 +38,7 @@ class MiniCard: BaseView {
             $0.textAlignment = .center
     }
     let lineView = UIView().then {
-        $0.backgroundColor = .black // 연한 회색으로 설정
+        $0.backgroundColor = .lightGray // 연한 회색으로 설정
         $0.heightAnchor.constraint(equalToConstant: 1).isActive = true // 가로줄 두께 설정
     }
     let infoStackView = UIStackView().then {
@@ -63,10 +63,53 @@ class MiniCard: BaseView {
     }
     let userCareerLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.attributedText = NSAttributedString(string: "6개월", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.kern: 1.21])
+        $0.attributedText = NSAttributedString(string: "~6개월", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.kern: 1.21])
         $0.adjustsFontSizeToFitWidth = true
         $0.minimumScaleFactor = 0.7
     }
+    let cardbuttonStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.distribution = .fillEqually
+        $0.spacing = 5
+    }
+    let chatButton = UIButton().then {
+        $0.backgroundColor =  UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1)
+        $0.layer.cornerRadius = 15
+    }
+    let chatLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.attributedText = NSAttributedString(string: "채팅하기", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.kern: 1.25])
+        $0.adjustsFontSizeToFitWidth = true
+        $0.minimumScaleFactor = 0.7
+    }
+    let gitImage = UIImageView(image: Image.github_SignInButton)
+    let gitButtonStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 1
+        $0.alignment = .center
+    }
+    
+    let gitButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        let gitImage = UIImage(named: "github_SignInButton")?.withRenderingMode(.alwaysTemplate)
+        var container = AttributeContainer()
+        container.font = .systemFont(ofSize: 16, weight: .regular)
+        let resizedImage = gitImage?.resized(to: CGSize(width: 32, height: 32)) // 이미지 크기 조절
+        
+        // 이미지와 텍스트 간 여백 설정
+        config.imagePadding = 5 // 이미지 여백
+        config.imagePlacement = .leading // 이미지 위치
+        config.attributedTitle = AttributedString("Git", attributes: container)
+        config.image = resizedImage
+        config.baseForegroundColor = .black
+        
+        let button = UIButton(configuration: config)
+        
+        button.backgroundColor =  UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1)
+        button.layer.cornerRadius = 15
+        
+        return button
+    }()
     
     override func setUI() {
        
@@ -75,6 +118,10 @@ class MiniCard: BaseView {
         shapes.addSubview(lineView)
         shapes.addSubview(infoStackView)
         infoStackView.addArrangedSubviews(userPartLabel,userLangLabel,userCareerLabel)
+        shapes.addSubview(cardbuttonStackView)
+        cardbuttonStackView.addArrangedSubview(gitButton)
+        cardbuttonStackView.addArrangedSubview(chatButton)
+        chatButton.addSubview(chatLabel)
         
         
        
@@ -107,10 +154,27 @@ class MiniCard: BaseView {
         lineView.snp.makeConstraints{
             $0.top.equalTo(profileLabel.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
+            $0.width.equalToSuperview().dividedBy(3)
         }
         infoStackView.snp.makeConstraints {
             $0.top.equalTo(lineView.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
+        }
+        cardbuttonStackView.snp.makeConstraints{
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(20)
+            $0.width.equalToSuperview().inset(20)
+            $0.height.equalTo(50)
+        }
+        chatButton.snp.makeConstraints{
+            $0.centerY.equalToSuperview()
+        }
+        gitButton.snp.makeConstraints{
+            $0.centerY.equalToSuperview()
+            
+        }
+        chatLabel.snp.makeConstraints{
+            $0.center.equalToSuperview()
         }
     }
     
