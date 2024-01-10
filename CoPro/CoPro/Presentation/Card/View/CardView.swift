@@ -62,33 +62,17 @@ class CardView: BaseView {
     }
     
     let slideCardView = SlideCardView()
-//    let scrollView = UIScrollView().then {
-//        $0.isPagingEnabled = true
-//        $0.showsHorizontalScrollIndicator = false
-//        
-//    }
-//    let stackView = UIStackView().then {
-//        $0.axis = .horizontal
-//                $0.distribution = .fillEqually
-//                $0.spacing = 20
-//        
-//    }
-    let collectionViewLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 20
-        return layout
-    }()
-
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isPagingEnabled = true
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        collectionView.register(SlideCardView.self, forCellWithReuseIdentifier: "SlideCardView")
-        return collectionView
-    }()
+    let carouselSlideView = CarouselSlideView()
+    let scrollView = UIScrollView().then {
+        $0.isPagingEnabled = true
+        $0.showsHorizontalScrollIndicator = false
+        
+    }
+    let stackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+    }
+    let miniCardView = MiniCard()
     
     override func setUI() {
         addSubview(buttonStackView)
@@ -96,18 +80,9 @@ class CardView: BaseView {
         partContainerView.addSubviews(partLabel,partButton)
         langContainerView.addSubviews(langLabel,langButton)
         oldContainerView.addSubviews(oldLabel,oldButton)
-        //        addSubview(slideCardView)
-//        addSubview(scrollView)
-//        scrollView.addSubview(stackView)
-//        for _ in 0..<10 {
-//            let slideCardView = SlideCardView()
-//            stackView.addArrangedSubview(slideCardView)
-//            slideCardView.snp.makeConstraints {
-//                $0.width.equalTo(scrollView.snp.width).offset(-40)
-//            }
-//        }
-        addSubview(collectionView)
-
+        addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        
             
     }
     
@@ -148,12 +123,7 @@ class CardView: BaseView {
             $0.trailing.equalTo(oldLabel.snp.trailing).offset(20)
             $0.centerY.equalToSuperview()
         }
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
-            $0.centerX.equalTo(self.safeAreaLayoutGuide)
-            $0.width.equalTo(self.safeAreaLayoutGuide).offset(-20)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(100)
-        }
+        
         
         //        slideCardView.snp.makeConstraints{
         //            $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
@@ -161,16 +131,16 @@ class CardView: BaseView {
         //            $0.width.equalTo(self.safeAreaLayoutGuide).inset(20)
         //            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(100)
         //        }
-//        scrollView.snp.makeConstraints{
-//            $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
-//            $0.centerX.equalTo(self.safeAreaLayoutGuide)
-//            $0.width.equalTo(self.safeAreaLayoutGuide).offset(20)
-//            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(100)
-//        }
-//        stackView.snp.makeConstraints {
-//            $0.edges.equalToSuperview()
-//            $0.height.equalTo(scrollView)
-//        }
+        scrollView.snp.makeConstraints{
+            $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
+            $0.centerX.equalTo(self.safeAreaLayoutGuide)
+            $0.width.equalTo(self.safeAreaLayoutGuide).offset(-20)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(100)
+        }
+        stackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.height.equalTo(scrollView)
+        }
     }
     
 }
