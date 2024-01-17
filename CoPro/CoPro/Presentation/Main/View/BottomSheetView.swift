@@ -36,12 +36,12 @@ final class BottomSheetView: PassThroughView {
   // MARK: UI
   let bottomSheetView: UIView = {
     let view = UIView()
-    view.backgroundColor = .lightGray
+    view.backgroundColor = .clear
     return view
   }()
   private let barView: UIView = {
     let view = UIView()
-    view.backgroundColor = .darkGray
+    view.backgroundColor = .clear
     view.isUserInteractionEnabled = false
     return view
   }()

@@ -19,7 +19,11 @@ final class MainViewController: UIViewController {
     private let bottomSheetView: BottomSheetView = {
       let view = BottomSheetView()
       view.bottomSheetColor = .white
-      view.barViewColor = .darkGray
+      view.barViewColor = .clear
+            view.layer.shadowColor = UIColor.black.cgColor
+            view.layer.shadowOffset = CGSize(width: 0, height: 1)
+            view.layer.shadowOpacity = 0.3
+            view.layer.shadowRadius = 10
       return view
     }()
     var panGesture = UIPanGestureRecognizer()
@@ -112,8 +116,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.view.translatesAutoresizingMaskIntoConstraints = false
         }
         segmentedControl.do {
-            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#6D6E72"), .font: UIFont.systemFont(ofSize: 13, weight: .bold)], for: .normal)
-            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2577FE"),.font: UIFont.systemFont(ofSize: 13, weight: .bold)],for: .selected)
+            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#6D6E72"), .font: UIFont.systemFont(ofSize: 15, weight: .bold)], for: .normal)
+            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2577FE"),.font: UIFont.systemFont(ofSize: 15, weight: .bold)],for: .selected)
             $0.selectedSegmentIndex = 0
         }
         self.changeValue(control: self.segmentedControl)

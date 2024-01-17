@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import KeychainSwift
 
 final class recruitViewController: UIViewController {
     
@@ -17,6 +18,9 @@ final class recruitViewController: UIViewController {
     private let sortButton = UIButton()
     private lazy var tableView = UITableView()
     private let dummy = noticeBoardDataModel.dummy()
+    private let keychain = KeychainSwift()
+    private var filteredPosts: [BoardDataModel]!
+    var posts: [BoardDataModel]!
 
     // MARK: - LifeCycle
     
@@ -67,7 +71,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
-
+    
     private func setDelegate() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -82,10 +86,10 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: noticeBoardTableViewCell.identifier, for: indexPath) as? noticeBoardTableViewCell else { return UITableViewCell() }
-
-                cell.configureCell(dummy[indexPath.row])
-                
-                return cell
+        
+        cell.configureCell(dummy[indexPath.row])
+        
+        return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 90
@@ -97,6 +101,50 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         let bottomSheetVC = SortBottomSheetViewController()
         present(bottomSheetVC, animated: true, completion: nil)
     }
-
 }
-
+extension recruitViewController {
+    func getAllBoard(category: String, page: Int) {
+        if let token = self.keychain.get("idToken") {
+            print("\(token)")
+            BoardAPI.shared.getAllBoard(token: token ?? "", category: category, page: page, standard: "create_at") { result in
+                switch result {
+                case .success(let data):
+                    if let data = data as? BoardDTO {
+                        let serverData = data.boards
+                        var mappedData: [BoardDataModel] = []
+                        
+                        for serverItem in serverData {
+                            let mappedItem = BoardDataModel (title: serverItem.title, nickName: serverItem.nickName, createAt: serverItem.createAt, heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL)
+                            mappedData.append(mappedItem)
+                        }
+                        
+                        // 매핑된 데이터를 배열에 저장
+                        self.posts = mappedData
+                        self.filteredPosts = self.posts
+                        
+                        
+                        // 테이블 뷰 업데이트
+                        self.tableView.reloadData()
+                    } else {
+                        print("Failed to decode the response.")
+                    }
+                case .requestErr(let message):
+                    // Handle request error here.
+                    print("Request error: \(message)")
+                case .pathErr:
+                    // Handle path error here.
+                    print("Path error")
+                case .serverErr:
+                    // Handle server error here.
+                    print("Server error")
+                case .networkFail:
+                    // Handle network failure here.
+                    print("Network failure")
+                default:
+                    break
+                }
+                
+            }
+        }
+    }
+    }

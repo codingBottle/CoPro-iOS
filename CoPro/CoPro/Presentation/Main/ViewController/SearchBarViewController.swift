@@ -10,10 +10,12 @@ import UIKit
 import SnapKit
 import Then
 
-final class SearchBarViewController: UIViewController {
+final class SearchBarViewController: UIViewController, UISearchControllerDelegate {
     
     // MARK: - UI Components
-    
+    private let searchController = UISearchController(searchResultsController: nil)
+    private let customView = UIView()
+    private let backButton = UIButton()
     private let searchBar = UISearchBar()
     private lazy var popularSearchTableView = UITableView()
     private let popularSearchStackView = UIStackView()
@@ -22,7 +24,7 @@ final class SearchBarViewController: UIViewController {
     private let recentSearchDeleteButton = UIButton()
     private let recentSearchStackView = UIStackView()
     private lazy var recentSearchTableView = UITableView()
-    var items: [String] = ["안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕"]
+    var items: [String] = ["안녕", "나는", "문인호임룰루","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕"]
 
 
     // MARK: - LifeCycle
@@ -41,7 +43,21 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     private func setUI() {
         
         self.view.backgroundColor = .white
-        
+        customView.do {
+            $0.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        }
+        backButton.do {
+            $0.frame =  CGRect(x: customView.frame.width - 50, y: 0, width: 50, height: 50)
+            $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        }
+        searchController.do {
+            $0.delegate = self
+            $0.searchBar.frame = CGRect(x: 0, y: 0, width: customView.frame.width - 50, height: 50)
+            customView.addSubview(searchController.searchBar)
+            $0.searchBar.showsCancelButton = false
+            $0.searchBar.placeholder = "검색"
+            $0.hidesNavigationBarDuringPresentation = false
+        }
         searchBar.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.delegate = self
@@ -98,17 +114,18 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     }
     
     private func setLayout() {
+        customView.addSubviews(backButton, searchController.searchBar)
         popularSearchStackView.addArrangedSubviews(popularLabel, popularSearchTableView)
         recentSearchStackView.addArrangedSubviews(recentSearchLabel, recentSearchDeleteButton)
         view.addSubviews(popularSearchStackView, recentSearchStackView, recentSearchTableView)
         
-        popularLabel.snp.makeConstraints {
+            popularLabel.snp.makeConstraints {
                 $0.top.leading.equalToSuperview()
             }
             popularSearchTableView.snp.makeConstraints {
                 $0.top.equalTo(popularLabel.snp.bottom).offset(10)
                 $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(40)
+                $0.height.equalTo(30)
             }
             popularSearchStackView.snp.makeConstraints {
                 $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
@@ -136,7 +153,8 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     private func setNavigate() {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonTapped))
         self.navigationItem.leftBarButtonItem = leftButton
-        self.navigationItem.titleView = searchBar
+//        self.navigationItem.titleView = searchBar
+        self.navigationItem.searchController = searchController
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

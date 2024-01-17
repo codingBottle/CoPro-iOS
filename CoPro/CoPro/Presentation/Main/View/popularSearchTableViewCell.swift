@@ -19,18 +19,18 @@ final class popularSearchTableViewCell: UITableViewCell, UICollectionViewDelegat
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
     private let collectionViewFlowLayout = UICollectionViewFlowLayout()
     private var items = [String]()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         setStyle()
         setLayout()
     }
-        
+    
     @available(*, unavailable)
-        required init?(coder: NSCoder) {
-            super.init(coder: coder)
-        }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
     
     // MARK: - UI Components Property
     
@@ -68,23 +68,42 @@ final class popularSearchTableViewCell: UITableViewCell, UICollectionViewDelegat
         }
     }
     override func prepareForReuse() {
-      super.prepareForReuse()
-      self.prepare(items: [])
+        super.prepareForReuse()
+        self.prepare(items: [])
     }
-
+    
     func prepare(items: [String]) {
-      self.items = items
+        self.items = items
     }
 }
 
-extension popularSearchTableViewCell: UICollectionViewDataSource {
+extension popularSearchTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-      self.items.count
+        self.items.count
     }
+    //
+    //
+    //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "popularSearchCollectionViewCell", for: indexPath) as! popularSearchCollectionViewCell
+    //            let text = self.items[indexPath.item]
+    //            cell.prepare(text: text)
+    //        return CGSize(width: cell.buttonWidth, height: 30.0)
+    //    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "popularSearchCollectionViewCell", for: indexPath) as! popularSearchCollectionViewCell
+        cell.searchButton.setTitle(self.items[indexPath.row], for: .normal)
+        cell.searchButton.titleLabel?.sizeToFit()
+        let cellWidth = cell.searchButton.frame.width + 16
+        
+        return CGSize(width: cellWidth, height: 41)
+        
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "popularSearchCollectionViewCell", for: indexPath) as! popularSearchCollectionViewCell
-            let text = self.items[indexPath.item]
-            cell.prepare(text: text)
-            return cell
+        let text = self.items[indexPath.item]
+        cell.prepare(text: text)
+        return cell
     }
-  }
+}

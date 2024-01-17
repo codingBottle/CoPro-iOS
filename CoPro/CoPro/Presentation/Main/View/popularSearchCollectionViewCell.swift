@@ -10,7 +10,9 @@ import UIKit
 final class popularSearchCollectionViewCell: UICollectionViewCell {
     static let id = "popularSearchCollectionViewCell"
     
-    private let searchButton = UIButton()
+    let searchButton = UIButton()
+    
+    
     
     @available(*, unavailable)
       required init?(coder: NSCoder) {
@@ -21,10 +23,13 @@ final class popularSearchCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
           searchButton.do {
-              $0.layer.cornerRadius = 15
-              $0.backgroundColor = .yellow
+              $0.layer.cornerRadius = 10
+              $0.layer.borderWidth = 0.4
+              $0.layer.borderColor = UIColor.black.cgColor
+              $0.backgroundColor = .clear
               $0.setTitleColor(.black, for: .normal)
               $0.translatesAutoresizingMaskIntoConstraints = false
+              $0.titleLabel?.font = UIFont(name: "Pretendard-Regular", size: 17) ?? .systemFont(ofSize: 17)
           }
         self.contentView.addSubview(self.searchButton)
         
@@ -44,4 +49,7 @@ final class popularSearchCollectionViewCell: UICollectionViewCell {
       func prepare(text: String?) {
           self.searchButton.setTitle(text, for: .normal)
       }
+    var buttonWidth: CGFloat {
+            return searchButton.frame.width
+        }
 }
