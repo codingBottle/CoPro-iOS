@@ -149,7 +149,7 @@ extension recruitViewController {
                         var mappedData: [BoardDataModel] = []
                         
                         for serverItem in serverData {
-                            let mappedItem = BoardDataModel (title: serverItem.title ?? "", nickName: serverItem.nickName ?? "", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
+                            let mappedItem = BoardDataModel (title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
                             mappedData.append(mappedItem)
                         }
                         

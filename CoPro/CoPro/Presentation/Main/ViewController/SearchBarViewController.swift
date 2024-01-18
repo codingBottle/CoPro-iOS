@@ -56,6 +56,11 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.setImage(UIImage(), for: UISearchBar.Icon.search, state: .normal)
             $0.showsCancelButton = false
             $0.placeholder = "검색"
+            if let textField = $0.value(forKey: "searchField") as? UITextField {
+                textField.returnKeyType = .search
+            }
+            $0.becomeFirstResponder()
+            $0.sizeToFit()
         }
         popularSearchTableView.do {
             $0.showsVerticalScrollIndicator = true
@@ -187,5 +192,15 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             } else {
                 self.navigationController?.popViewController(animated: true)
             }
+        }
+}
+
+extension SearchBarViewController {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+            // 검색 버튼을 눌렀을 때의 동작을 정의합니다.
+//            performSearch()
+
+            // 키보드를 내립니다.
+            searchBar.resignFirstResponder()
         }
 }
