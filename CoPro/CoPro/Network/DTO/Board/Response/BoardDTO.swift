@@ -10,6 +10,13 @@ import Foundation
 // MARK: - BoardDataModel
 // 게시물 검색, 게시물 조회
 struct BoardDTO: Codable {
+    let message: String
+    let statusCode: Int
+    let data:boardData
+}
+
+//MARK: - Data
+struct boardData: Codable {
     let boards: [Board]
     let pageInfo: PageInfo
 }
@@ -17,9 +24,9 @@ struct BoardDTO: Codable {
 // MARK: - Board
 struct Board: Codable {
     let id: Int
-    let title, nickName, createAt: String
+    let title, nickName, createAt: String?
     let count, heart: Int
-    let imageURL: String
+    let imageURL: String?
 
     enum CodingKeys: String, CodingKey {
         case id, title, nickName, createAt, count, heart

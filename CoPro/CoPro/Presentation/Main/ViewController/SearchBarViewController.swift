@@ -50,17 +50,10 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.frame =  CGRect(x: customView.frame.width - 50, y: 0, width: 50, height: 50)
             $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         }
-        searchController.do {
-            $0.delegate = self
-            $0.searchBar.frame = CGRect(x: 0, y: 0, width: customView.frame.width - 50, height: 50)
-            customView.addSubview(searchController.searchBar)
-            $0.searchBar.showsCancelButton = false
-            $0.searchBar.placeholder = "검색"
-            $0.hidesNavigationBarDuringPresentation = false
-        }
         searchBar.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.delegate = self
+            $0.setImage(UIImage(), for: UISearchBar.Icon.search, state: .normal)
             $0.showsCancelButton = false
             $0.placeholder = "검색"
         }
@@ -153,8 +146,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     private func setNavigate() {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonTapped))
         self.navigationItem.leftBarButtonItem = leftButton
-//        self.navigationItem.titleView = searchBar
-        self.navigationItem.searchController = searchController
+        self.navigationItem.titleView = searchBar
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

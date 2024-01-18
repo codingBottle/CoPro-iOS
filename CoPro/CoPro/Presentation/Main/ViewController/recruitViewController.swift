@@ -26,6 +26,7 @@ final class recruitViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getAllBoard(category: "공지사항", page: 1)
         setUI()
         setLayout()
         setDelegate()
@@ -80,17 +81,51 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     private func setAddTarget() {
         sortButton.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
     }
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return dummy.count
+//    }
+//    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: noticeBoardTableViewCell.identifier, for: indexPath) as? noticeBoardTableViewCell else { return UITableViewCell() }
+//        
+//        cell.configureCell(dummy[indexPath.row])
+//        
+//        return cell
+//    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dummy.count
+        return filteredPosts?.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: noticeBoardTableViewCell.identifier, for: indexPath) as? noticeBoardTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: noticeBoardTableViewCell.identifier, for: indexPath) as? noticeBoardTableViewCell else {
+            return UITableViewCell()
+        }
         
-        cell.configureCell(dummy[indexPath.row])
+        let post: BoardDataModel
+        if indexPath.row < filteredPosts.count {
+            post = filteredPosts[indexPath.row]
+        } else {
+            post = posts[indexPath.row]
+        }
+        
+        cell.configureCell(post)
         
         return cell
     }
+
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let detailVC = DetailBoardViewController()
+//        
+//        if indexPath.row < filteredPosts.count {
+//            print(filteredPosts[indexPath.row].title)
+//            detailVC.postId = filteredPosts[indexPath.row].postId
+//        } else {
+//            print("Invalid index")
+//            detailVC.postId = posts[indexPath.row].postId
+//        }
+        
+//        self.navigationController?.pushViewController(detailVC, animated: true)
+//    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 90
     }
@@ -106,15 +141,15 @@ extension recruitViewController {
     func getAllBoard(category: String, page: Int) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
-            BoardAPI.shared.getAllBoard(token: token ?? "", category: category, page: page, standard: "create_at") { result in
+            BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: "create_at") { result in
                 switch result {
                 case .success(let data):
                     if let data = data as? BoardDTO {
-                        let serverData = data.boards
+                        let serverData = data.data.boards
                         var mappedData: [BoardDataModel] = []
                         
                         for serverItem in serverData {
-                            let mappedItem = BoardDataModel (title: serverItem.title, nickName: serverItem.nickName, createAt: serverItem.createAt, heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL)
+                            let mappedItem = BoardDataModel (title: serverItem.title ?? "", nickName: serverItem.nickName ?? "", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
                             mappedData.append(mappedItem)
                         }
                         
@@ -147,4 +182,4 @@ extension recruitViewController {
             }
         }
     }
-    }
+}
