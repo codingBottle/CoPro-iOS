@@ -20,8 +20,9 @@ final class recruitViewController: UIViewController {
     private let dummy = noticeBoardDataModel.dummy()
     private let keychain = KeychainSwift()
     private var filteredPosts: [BoardDataModel]!
-    var posts: [BoardDataModel]!
-
+    var posts = [BoardDataModel]()
+    var isInfiniteScroll = true
+    var offset = 1
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -81,17 +82,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     private func setAddTarget() {
         sortButton.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
     }
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return dummy.count
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: noticeBoardTableViewCell.identifier, for: indexPath) as? noticeBoardTableViewCell else { return UITableViewCell() }
-//        
-//        cell.configureCell(dummy[indexPath.row])
-//        
-//        return cell
-//    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredPosts?.count ?? 0
     }
@@ -127,7 +118,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
 //        self.navigationController?.pushViewController(detailVC, animated: true)
 //    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
+        return 88
     }
     
     // MARK: - @objc Method
@@ -154,9 +145,10 @@ extension recruitViewController {
                         }
                         
                         // 매핑된 데이터를 배열에 저장
-                        self.posts = mappedData
+                        self.posts.append(contentsOf: mappedData)
+//                        self.posts = mappedData
+
                         self.filteredPosts = self.posts
-                        
                         
                         // 테이블 뷰 업데이트
                         self.tableView.reloadData()
@@ -179,7 +171,20 @@ extension recruitViewController {
                     break
                 }
                 
+                self.isInfiniteScroll = true
+                
             }
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.bounds.height {
+                if isInfiniteScroll {
+                    isInfiniteScroll = false
+                    offset += 1
+                    getAllBoard(category: "공지사항", page: offset)
+                }
+            }
+        }
+
 }

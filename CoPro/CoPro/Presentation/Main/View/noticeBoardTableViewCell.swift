@@ -144,7 +144,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         postTimeLabel.text = data.createAt
         likeCountLabel.text = "\(data.heartCount)"
         sawPostLabel.text = "\(data.viewsCount)"
-        commentCountLabel.text = ""
+        commentCountLabel.text = "1"
 //        commentCountLabel.text = "\(data.commentCount)"
     }
     
