@@ -152,6 +152,7 @@ extension recruitViewController {
                         
                         // 테이블 뷰 업데이트
                         self.tableView.reloadData()
+                        self.isInfiniteScroll = data.data.pageInfo.hasNext
                     } else {
                         print("Failed to decode the response.")
                     }
@@ -171,7 +172,7 @@ extension recruitViewController {
                     break
                 }
                 
-                self.isInfiniteScroll = true
+//                self.isInfiniteScroll = true
                 
             }
         }
@@ -186,5 +187,4 @@ extension recruitViewController {
                 }
             }
         }
-
 }
