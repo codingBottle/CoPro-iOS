@@ -127,21 +127,13 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.centerY.equalTo(likeCountIcon.snp.centerY)
         }
     }
-//    func configureCell(_ data: noticeBoardDataModel) {
-//        postImage.image = data.empathy.image
-//        postTitleLabel.text = data.title
-//        writerNameLabel.text = data.author
-//        postTimeLabel.text = "\(data.timestamp)"
-//        likeCountLabel.text = "\(data.likes)"
-//        sawPostLabel.text = "\(data.views)"
-//        commentCountLabel.text = "\(data.commentCount)"
-//        }
+
     func configureCell(_ data: BoardDataModel) {
 //        postImage.image = data.imageUrl
         postImage.image = nil
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName
-        postTimeLabel.text = data.createAt
+        postTimeLabel.text = data.getDateString()
         likeCountLabel.text = "\(data.heartCount)"
         sawPostLabel.text = "\(data.viewsCount)"
         commentCountLabel.text = "1"

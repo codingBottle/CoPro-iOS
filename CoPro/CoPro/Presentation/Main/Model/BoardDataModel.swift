@@ -8,21 +8,45 @@
 import Foundation
 
 struct BoardDataModel {
+    var boardId: Int
     var title: String
     var nickName: String
-    var createAt: String
+    var createAt: Date
 //    var empathy: likeButtonStatus
     var heartCount: Int
     var viewsCount: Int
     var imageUrl: String
 
-    init(title: String, nickName: String, createAt: String, heartCount: Int, viewsCount: Int, imageUrl: String) {
+    init(boardId: Int, title: String, nickName: String, createAt: String, heartCount: Int, viewsCount: Int, imageUrl: String) {
+        self.boardId = boardId
         self.title = title
         self.nickName = nickName
-        self.createAt = createAt
+        let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+                formatter.locale = Locale(identifier: "en_US_POSIX")
+                formatter.timeZone = TimeZone(secondsFromGMT: 0)
+                
+                if let date = formatter.date(from: createAt) {
+                    self.createAt = date
+                } else {
+                    fatalError("Invalid date format")
+                }
 //        self.empathy = empathy
         self.heartCount = heartCount
         self.viewsCount = viewsCount
         self.imageUrl = imageUrl
     }
+    
+    func getDateString() -> String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd HH:mm"
+            return formatter.string(from: createAt)
+        }
+
+//        func getTimeString() -> String {
+//            let formatter = DateFormatter()
+//            formatter.dateFormat = "HH:mm"
+//            return formatter.string(from: createAt)
+//        }
+    
 }

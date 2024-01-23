@@ -10,38 +10,35 @@ import Foundation
 // MARK: - DetailBoardDTO
 // 상세페이지, 수정, 등록
 struct DetailBoardDTO: Codable {
-    let boardID: Int
-    let title, category, contents, tag: String
-    let count, heart: Int
-    let imageURL: [String]
-    let nickName, occupation: String
-    let heartMemberIDS, scrapMemberIDS: [Int]
-    let commentResDtoList: [CommentResDtoList]
-
-    enum CodingKeys: String, CodingKey {
-        case boardID = "boardId"
-        case title, category, contents, tag, count, heart
-        case imageURL = "imageUrl"
-        case nickName, occupation
-        case heartMemberIDS = "heartMemberIds"
-        case scrapMemberIDS = "scrapMemberIds"
-        case commentResDtoList
+    let statusCode: Int
+        let message: String
+        let data: BoardData
     }
-}
 
-// MARK: - CommentResDtoList
-struct CommentResDtoList: Codable {
-    let commentID: Int
-    let content: String
-    let writer: Writer
-
-    enum CodingKeys: String, CodingKey {
-        case commentID = "commentId"
-        case content, writer
+    struct BoardData: Codable {
+        let boardId: Int
+        let title: String
+        let category: String
+        let contents: String
+        let tag: String
+        let count: Int
+        let heart: Int
+        let imageUrl: [String]?
+        let nickName: String
+        let occupation: String
+        let heartMemberIds: [Int]?
+        let scrapMemberIds: [Int]?
+        let commentResDtoList: [Comment]?
     }
-}
 
-// MARK: - Writer
-struct Writer: Codable {
-    let nickName, occupation: String
-}
+    struct Comment: Codable {
+        let commentId: Int
+        let content: String
+        let writer: Writer
+        let children: [Comment]?
+    }
+
+    struct Writer: Codable {
+        let nickName: String
+        let occupation: String
+    }

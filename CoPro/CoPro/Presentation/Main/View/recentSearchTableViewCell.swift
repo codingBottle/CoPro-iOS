@@ -40,8 +40,9 @@ class recentSearchTableViewCell: UITableViewCell {
         selectionStyle = .none
         circleView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.backgroundColor = .clear
             $0.layer.cornerRadius = 24 / 2
+            $0.layer.borderColor = UIColor(hex: "#949598").cgColor
+            $0.layer.borderWidth = 0.2
         }
         clockImageView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +59,8 @@ class recentSearchTableViewCell: UITableViewCell {
         }
     }
     private func setLayout() {
-        addSubviews(circleView, clockImageView, searchLabel, deleteButton)
+        addSubviews(circleView, searchLabel, deleteButton)
+        circleView.addSubview(clockImageView)
         
         circleView.snp.makeConstraints {
             $0.height.width.equalTo(24)
@@ -81,7 +83,7 @@ class recentSearchTableViewCell: UITableViewCell {
             $0.trailing.equalToSuperview()
         }
     }
-    func configureCell(_ data: noticeBoardDataModel) {
+    func configureCell(_ data: BoardDataModel) {
         searchLabel.text = data.title
         }
     

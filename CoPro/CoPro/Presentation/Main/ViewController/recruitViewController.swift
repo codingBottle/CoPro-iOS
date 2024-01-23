@@ -17,12 +17,12 @@ final class recruitViewController: UIViewController {
     
     private let sortButton = UIButton()
     private lazy var tableView = UITableView()
-    private let dummy = noticeBoardDataModel.dummy()
     private let keychain = KeychainSwift()
     private var filteredPosts: [BoardDataModel]!
     var posts = [BoardDataModel]()
     var isInfiniteScroll = true
     var offset = 1
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -104,19 +104,19 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let detailVC = DetailBoardViewController()
-//        
-//        if indexPath.row < filteredPosts.count {
-//            print(filteredPosts[indexPath.row].title)
-//            detailVC.postId = filteredPosts[indexPath.row].postId
-//        } else {
-//            print("Invalid index")
-//            detailVC.postId = posts[indexPath.row].postId
-//        }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = DetailBoardViewController()
         
-//        self.navigationController?.pushViewController(detailVC, animated: true)
-//    }
+        if indexPath.row < filteredPosts.count {
+            print(filteredPosts[indexPath.row].title)
+            detailVC.postId = filteredPosts[indexPath.row].boardId
+        } else {
+            print("Invalid index")
+            detailVC.postId = posts[indexPath.row].boardId
+        }
+        
+        self.navigationController?.pushViewController(detailVC, animated: true)
+    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
     }
@@ -140,14 +140,12 @@ extension recruitViewController {
                         var mappedData: [BoardDataModel] = []
                         
                         for serverItem in serverData {
-                            let mappedItem = BoardDataModel (title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
+                            let mappedItem = BoardDataModel (boardId: serverItem.id,title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
                             mappedData.append(mappedItem)
                         }
                         
                         // 매핑된 데이터를 배열에 저장
                         self.posts.append(contentsOf: mappedData)
-//                        self.posts = mappedData
-
                         self.filteredPosts = self.posts
                         
                         // 테이블 뷰 업데이트
@@ -171,9 +169,6 @@ extension recruitViewController {
                 default:
                     break
                 }
-                
-//                self.isInfiniteScroll = true
-                
             }
         }
     }

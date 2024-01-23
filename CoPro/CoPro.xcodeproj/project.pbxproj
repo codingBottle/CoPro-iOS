@@ -66,6 +66,9 @@
 		B5D3E54C2AFF9F8D0021DDA0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54B2AFF9F8D0021DDA0 /* SnapKit */; };
 		B5D3E54F2B0213370021DDA0 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54E2B0213370021DDA0 /* KeychainSwift */; };
 		B5D3E5512B06127C0021DDA0 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D3E5502B06127C0021DDA0 /* Image.xcassets */; };
+		E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */; };
+		E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */; };
+		E314AD192B5E735300BDB6AD /* DetailBoardDateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD182B5E735300BDB6AD /* DetailBoardDateModel.swift */; };
 		E32B671E2B566C4100EBB5AC /* BoardAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32B671D2B566C4100EBB5AC /* BoardAPI.swift */; };
 		E32B67212B566CF600EBB5AC /* BoardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32B67202B566CF600EBB5AC /* BoardDTO.swift */; };
 		E32B67232B566D7900EBB5AC /* BoardRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32B67222B566D7900EBB5AC /* BoardRouter.swift */; };
@@ -89,7 +92,6 @@
 		E37AE7FC2B3C2785002ABDCD /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7FB2B3C2785002ABDCD /* BottomSheetView.swift */; };
 		E37AE7FE2B3C27B1002ABDCD /* recruitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7FD2B3C27B1002ABDCD /* recruitViewController.swift */; };
 		E37AE8002B3C27D0002ABDCD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */; };
-		E37AE8022B3C27F7002ABDCD /* noticeBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8012B3C27F7002ABDCD /* noticeBoardDataModel.swift */; };
 		E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8042B3C2878002ABDCD /* RadioButton.swift */; };
 		E37AE8082B3C289B002ABDCD /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */; };
 		E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1552AEFACA3003269FF /* URLConst.swift */; };
@@ -139,6 +141,9 @@
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B5D3E5502B06127C0021DDA0 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
+		E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardViewController.swift; sourceTree = "<group>"; };
+		E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		E314AD182B5E735300BDB6AD /* DetailBoardDateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardDateModel.swift; sourceTree = "<group>"; };
 		E32B671D2B566C4100EBB5AC /* BoardAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardAPI.swift; sourceTree = "<group>"; };
 		E32B67202B566CF600EBB5AC /* BoardDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardDTO.swift; sourceTree = "<group>"; };
 		E32B67222B566D7900EBB5AC /* BoardRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardRouter.swift; sourceTree = "<group>"; };
@@ -162,7 +167,6 @@
 		E37AE7FB2B3C2785002ABDCD /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
 		E37AE7FD2B3C27B1002ABDCD /* recruitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recruitViewController.swift; sourceTree = "<group>"; };
 		E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		E37AE8012B3C27F7002ABDCD /* noticeBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardDataModel.swift; sourceTree = "<group>"; };
 		E37AE8042B3C2878002ABDCD /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
 		E3D6D1552AEFACA3003269FF /* URLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConst.swift; sourceTree = "<group>"; };
@@ -526,6 +530,7 @@
 				E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */,
 				E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */,
 				E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */,
+				E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */,
 				E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */,
 				E37AE7FB2B3C2785002ABDCD /* BottomSheetView.swift */,
 			);
@@ -539,6 +544,7 @@
 				E37AE7FD2B3C27B1002ABDCD /* recruitViewController.swift */,
 				E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */,
 				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
+				E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -546,8 +552,8 @@
 		E37AE7F42B3C2718002ABDCD /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				E37AE8012B3C27F7002ABDCD /* noticeBoardDataModel.swift */,
 				E32B67332B56A39D00EBB5AC /* BoardDataModel.swift */,
+				E314AD182B5E735300BDB6AD /* DetailBoardDateModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -682,11 +688,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E32B67342B56A39D00EBB5AC /* BoardDataModel.swift in Sources */,
-				E37AE8022B3C27F7002ABDCD /* noticeBoardDataModel.swift in Sources */,
 				E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */,
 				E32B67462B571F4D00EBB5AC /* ReportBoardRequestBody.swift in Sources */,
 				9E05D2F02AD5222300F4CA43 /* UIStackView++.swift in Sources */,
 				E37AE7FE2B3C27B1002ABDCD /* recruitViewController.swift in Sources */,
+				E314AD192B5E735300BDB6AD /* DetailBoardDateModel.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				E37AE7F62B3C272A002ABDCD /* PassThroughView.swift in Sources */,
 				E32B671E2B566C4100EBB5AC /* BoardAPI.swift in Sources */,
@@ -727,7 +733,9 @@
 				E32B673E2B56D16000EBB5AC /* heartRequestBody.swift in Sources */,
 				E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */,
 				E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */,
+				E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,
+				E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */,
 				9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */,
 				9E05D2EE2AD5221500F4CA43 /* UIView++.swift in Sources */,
 				9E05D2D72AD509D100F4CA43 /* BaseView.swift in Sources */,

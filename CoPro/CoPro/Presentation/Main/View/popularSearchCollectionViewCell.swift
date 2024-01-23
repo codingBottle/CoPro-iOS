@@ -46,9 +46,12 @@ final class popularSearchCollectionViewCell: UICollectionViewCell {
         self.prepare(text: nil)
       }
       
-      func prepare(text: String?) {
-          self.searchButton.setTitle(text, for: .normal)
-      }
+    func prepare(text: String?) {
+        self.searchButton.setTitle(text, for: .normal)
+        let height = searchButton.frame.height  // 버튼의 현재 높이를 저장합니다.
+        searchButton.sizeToFit()  // 버튼의 크기를 텍스트 크기에 맞게 조정합니다.
+        searchButton.frame = CGRect(x: searchButton.frame.origin.x, y: searchButton.frame.origin.y, width: searchButton.frame.width, height: height)
+    }
     var buttonWidth: CGFloat {
             return searchButton.frame.width
         }
