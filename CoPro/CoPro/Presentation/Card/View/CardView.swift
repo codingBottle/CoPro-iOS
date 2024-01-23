@@ -10,8 +10,7 @@ import SnapKit
 import Then
 
 
-class CardView: BaseView {
-    
+class CardView: BaseView{
     // UIStackView 생성
     let buttonStackView = UIStackView().then {
         $0.axis = .horizontal  // 가로 방향으로 정렬
@@ -62,15 +61,10 @@ class CardView: BaseView {
     }
     
     let slideCardView = SlideCardView()
-    let carouselSlideView = CarouselSlideView()
     let scrollView = UIScrollView().then {
         $0.isPagingEnabled = true
         $0.showsHorizontalScrollIndicator = false
         
-    }
-    let stackView = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
     }
     let miniCardView = MiniCard()
     
@@ -81,9 +75,6 @@ class CardView: BaseView {
         langContainerView.addSubviews(langLabel,langButton)
         oldContainerView.addSubviews(oldLabel,oldButton)
         addSubview(scrollView)
-        scrollView.addSubview(stackView)
-        
-            
     }
     
     override func setLayout() {
@@ -123,23 +114,11 @@ class CardView: BaseView {
             $0.trailing.equalTo(oldLabel.snp.trailing).offset(20)
             $0.centerY.equalToSuperview()
         }
-        
-        
-        //        slideCardView.snp.makeConstraints{
-        //            $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
-        //            $0.centerX.equalTo(self.safeAreaLayoutGuide)
-        //            $0.width.equalTo(self.safeAreaLayoutGuide).inset(20)
-        //            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(100)
-        //        }
         scrollView.snp.makeConstraints{
             $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
             $0.centerX.equalTo(self.safeAreaLayoutGuide)
             $0.width.equalTo(self.safeAreaLayoutGuide).offset(-20)
             $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(100)
-        }
-        stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalTo(scrollView)
         }
     }
     
