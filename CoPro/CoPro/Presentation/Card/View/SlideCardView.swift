@@ -8,16 +8,32 @@
 import UIKit
 import SnapKit
 import Then
+import Kingfisher
 
 class SlideCardView: BaseView {
+    let imageUrl = UILabel().then{
+        $0.text = ""
+    }
+    func loadImage(url: String) {
+        guard let url = URL(string: "\(url)") else { return }
+        let cornerImageProcessor = RoundCornerImageProcessor(cornerRadius: 30)
+        cardImage.kf.indicatorType = .activity
+        cardImage.kf.setImage(
+            with: url,
+            placeholder: nil,
+            options: [
+                .transition(.fade(1.2)),
+                .forceTransition,
+                .processor(cornerImageProcessor)
+            ],
+            completionHandler: nil
+        )
+    }
     let cardView = UIView().then {
         $0.backgroundColor = UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1)
         $0.layer.cornerRadius = 30
     }
-    let cardImage = UIImageView().then {
-        $0.backgroundColor = UIColor.white
-        $0.layer.cornerRadius = 30
-    }
+    let cardImage = UIImageView()
     let cardbuttonStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
@@ -90,6 +106,14 @@ class SlideCardView: BaseView {
     let likeIcon = UIImageView().then {
         $0.image = UIImage(systemName: "heart")
         $0.contentMode = .scaleAspectFit
+    }
+    override init() {
+        super.init()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func setUI() {
