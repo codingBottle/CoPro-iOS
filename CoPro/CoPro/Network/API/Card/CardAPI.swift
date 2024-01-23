@@ -15,31 +15,6 @@ final class CardAPI : BaseAPI {
     private override init() {}
 }
 extension CardAPI {
-//    // Alamofire을 사용한 API 요청
-//    AF.request("http://43.202.172.4:8091/api/infos", method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
-//        .responseDecodable(of: CardDTO.self) { response in
-//            switch response.result {
-//            case .success(let cardDTO):
-//                print("Api Response Success \(response)")
-//                self.contents.append(contentsOf: cardDTO.data.memberResDto.content)
-//                self.last = cardDTO.data.memberResDto.last
-//                self.myViewType = cardDTO.data.myViewType
-//                print("myViewType : \(cardDTO.data.myViewType)")
-//                DispatchQueue.main.async {
-//                    //ViewType에 따른 스크롤 방향 결정
-//                    let scrollDirection: UICollectionView.ScrollDirection = (self.myViewType == 0) ? .horizontal : .vertical
-//
-//                    if let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-//                        layout.scrollDirection = scrollDirection
-//                        self.collectionView.isPagingEnabled = (scrollDirection == .horizontal)
-//                    }
-//                    self.collectionView.reloadData()
-//                    
-//                }
-//            case .failure(let error):
-//                print("Api Response Error: \(error)")
-//            }
-//        }
     // CardViewController User API 데이터를 불러오는 메서드
     func getUserData(part: String, lang: String, old: String, page: Int,completion: @escaping (Result<CardDTO, AFError>) -> Void){
         
@@ -64,7 +39,7 @@ extension CardAPI {
             "size":10
             
         ]
-        AF.request("http://43.202.172.4:8091/api/infos", method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+        AF.request("API_URL", method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
                     .responseDecodable(of: CardDTO.self) { response in
                         completion(response.result)
                     }
