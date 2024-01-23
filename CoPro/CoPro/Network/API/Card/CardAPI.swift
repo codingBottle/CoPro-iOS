@@ -17,7 +17,6 @@ final class CardAPI : BaseAPI {
 extension CardAPI {
     // CardViewController User API 데이터를 불러오는 메서드
     func getUserData(part: String, lang: String, old: String, page: Int,completion: @escaping (Result<CardDTO, AFError>) -> Void){
-        
         //keychain 토큰가저오기
         let keychain = KeychainSwift()
         guard let token = keychain.get("idToken") else {
