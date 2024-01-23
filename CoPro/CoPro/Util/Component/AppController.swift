@@ -39,7 +39,8 @@ final class AppController {
 
     @objc func checkSignIn() {
         if let user = Auth.auth().currentUser {
-            setCahnnelScene(with: user)
+            switchView()
+//            setCahnnelScene(with: user)
         } else {
             setLoginScene()
         }
@@ -58,6 +59,10 @@ final class AppController {
     
     private func setLoginScene() {
         rootViewController = BaseNavigationController(rootViewController: LoginViewController())
+    }
+    
+    private func switchView() {
+        rootViewController = BaseNavigationController(rootViewController: MyProfileViewController())
     }
 }
 
