@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import KeychainSwift
 
 final class recruitViewController: UIViewController {
     
@@ -16,12 +17,17 @@ final class recruitViewController: UIViewController {
     
     private let sortButton = UIButton()
     private lazy var tableView = UITableView()
-    private let dummy = noticeBoardDataModel.dummy()
-
+    private let keychain = KeychainSwift()
+    private var filteredPosts: [BoardDataModel]!
+    var posts = [BoardDataModel]()
+    var isInfiniteScroll = true
+    var offset = 1
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getAllBoard(category: "공지사항", page: 1)
         setUI()
         setLayout()
         setDelegate()
@@ -67,28 +73,52 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
-
+    
     private func setDelegate() {
         tableView.delegate = self
-        tableView.dataSource = self  // 추가: tableView의 dataSource를 설정
+        tableView.dataSource = self
     }
     
     private func setAddTarget() {
         sortButton.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
     }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dummy.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: noticeBoardTableViewCell.identifier, for: indexPath) as? noticeBoardTableViewCell else { return UITableViewCell() }
 
-                cell.configureCell(dummy[indexPath.row])
-                
-                return cell
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredPosts?.count ?? 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: noticeBoardTableViewCell.identifier, for: indexPath) as? noticeBoardTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let post: BoardDataModel
+        if indexPath.row < filteredPosts.count {
+            post = filteredPosts[indexPath.row]
+        } else {
+            post = posts[indexPath.row]
+        }
+        
+        cell.configureCell(post)
+        
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = DetailBoardViewController()
+        
+        if indexPath.row < filteredPosts.count {
+            print(filteredPosts[indexPath.row].title)
+            detailVC.postId = filteredPosts[indexPath.row].boardId
+        } else {
+            print("Invalid index")
+            detailVC.postId = posts[indexPath.row].boardId
+        }
+        
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
+        return 88
     }
     
     // MARK: - @objc Method
@@ -97,6 +127,59 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         let bottomSheetVC = SortBottomSheetViewController()
         present(bottomSheetVC, animated: true, completion: nil)
     }
-
 }
-
+extension recruitViewController {
+    func getAllBoard(category: String, page: Int) {
+        if let token = self.keychain.get("idToken") {
+            print("\(token)")
+            BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: "create_at") { result in
+                switch result {
+                case .success(let data):
+                    if let data = data as? BoardDTO {
+                        let serverData = data.data.boards
+                        var mappedData: [BoardDataModel] = []
+                        
+                        for serverItem in serverData {
+                            let mappedItem = BoardDataModel (boardId: serverItem.id,title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
+                            mappedData.append(mappedItem)
+                        }
+                        
+                        // 매핑된 데이터를 배열에 저장
+                        self.posts.append(contentsOf: mappedData)
+                        self.filteredPosts = self.posts
+                        
+                        // 테이블 뷰 업데이트
+                        self.tableView.reloadData()
+                        self.isInfiniteScroll = data.data.pageInfo.hasNext
+                    } else {
+                        print("Failed to decode the response.")
+                    }
+                case .requestErr(let message):
+                    // Handle request error here.
+                    print("Request error: \(message)")
+                case .pathErr:
+                    // Handle path error here.
+                    print("Path error")
+                case .serverErr:
+                    // Handle server error here.
+                    print("Server error")
+                case .networkFail:
+                    // Handle network failure here.
+                    print("Network failure")
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.bounds.height {
+                if isInfiniteScroll {
+                    isInfiniteScroll = false
+                    offset += 1
+                    getAllBoard(category: "공지사항", page: offset)
+                }
+            }
+        }
+}
