@@ -170,6 +170,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     private func setDelegate() {
         pageViewController.delegate = self
         scrollView.delegate = self
+        recruitVC.delegate = self
     }
     private func setRegister() {
 
@@ -248,39 +249,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
       self.segmentedControl.selectedSegmentIndex = index
     }
 
-//    // MARK: - @objc Method
-//    @objc func panGestureHandler(recognizer: UIPanGestureRecognizer) {
-//        let translation = recognizer.translation(in: noticeBoardView)
-//        let maxHeight = view.frame.size.height - navigationController!.navigationBar.frame.size.height - UIApplication.shared.statusBarFrame.height
-//        if recognizer.state == .changed {
-//            let newY = max(self.noticeBoardView.frame.origin.y + translation.y, 0)
-//            self.noticeBoardView.frame.origin.y = newY
-//            recognizer.setTranslation(CGPoint.zero, in: self.view)
-//        }
-//        else if recognizer.state == .ended {
-////            if self.noticeBoardView.frame.origin.y < halfHeight {
-////                openDrawer(maxHeight: maxHeight)
-////            }
-////            else {
-////                closeDrawer(halfHeight: halfHeight)
-////            }
-//            openDrawer(maxHeight: maxHeight)
-//        }
-//    }
-//
-//    func openDrawer(maxHeight: CGFloat) {
-//        noticeBoardView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: maxHeight)
-//        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
-//            self.view.layoutIfNeeded()
-//        }, completion: nil)
-//    }
-//
-//    func closeDrawer(halfHeight: CGFloat) {
-//        noticeBoardView.frame = CGRect(x: 0, y: halfHeight, width: view.frame.width, height: halfHeight)
-//        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
-//            self.view.layoutIfNeeded()
-//        }, completion: nil)
-//    }
+    // MARK: - @objc Method
+
 
     @objc private func changeValue(control: UISegmentedControl) {
       // 코드로 값을 변경하면 해당 메소드 호출 x
@@ -297,3 +267,11 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     }
 }
     
+extension MainViewController: RecruitVCDelegate {
+    func didSelectItem(withId id: Int) {
+            let detailVC = DetailBoardViewController()
+            detailVC.postId = id
+            print("hello")
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
+}

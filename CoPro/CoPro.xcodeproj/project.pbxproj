@@ -105,6 +105,7 @@
 		E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */; };
 		E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */; };
 		E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */; };
+		E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363D5C12B5FA71700FE6A9C /* DetailBoardRequestBody.swift */; };
 		E37AE7F02B3C25BD002ABDCD /* UISegmented++.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7EF2B3C25BD002ABDCD /* UISegmented++.swift */; };
 		E37AE7F62B3C272A002ABDCD /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7F52B3C272A002ABDCD /* PassThroughView.swift */; };
 		E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */; };
@@ -199,6 +200,7 @@
 		E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recentSearchTableViewCell.swift; sourceTree = "<group>"; };
 		E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchTableViewCell.swift; sourceTree = "<group>"; };
 		E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		E363D5C12B5FA71700FE6A9C /* DetailBoardRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardRequestBody.swift; sourceTree = "<group>"; };
 		E37AE7EF2B3C25BD002ABDCD /* UISegmented++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmented++.swift"; sourceTree = "<group>"; };
 		E37AE7F52B3C272A002ABDCD /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardTableViewCell.swift; sourceTree = "<group>"; };
@@ -594,6 +596,7 @@
 			children = (
 				E32B673B2B56AD6700EBB5AC /* CreateBoardRequestBody.swift */,
 				E32B67452B571F4D00EBB5AC /* ReportBoardRequestBody.swift */,
+				E363D5C12B5FA71700FE6A9C /* DetailBoardRequestBody.swift */,
 				E32B673D2B56D16000EBB5AC /* heartRequestBody.swift */,
 				E32B673F2B56EE6300EBB5AC /* SearchBoardRequestBody.swift */,
 				E32B67412B56F1B600EBB5AC /* allBoardRequestBody.swift */,
@@ -801,6 +804,7 @@
 				E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
+				E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */,
 				9E7401E12B3C18A60030C8EC /* ChatFirestoreStream.swift in Sources */,
 				9E7401C62B3BF48D0030C8EC /* NSObject++.swift in Sources */,
 				9E7401E52B3C18A60030C8EC /* Message.swift in Sources */,

@@ -13,13 +13,14 @@ import KeychainSwift
 
 final class DetailBoardViewController: UIViewController {
     var postId: Int?
+    var dataModel = [Comment]()
     private let keychain = KeychainSwift()
     private let titleLabel = UILabel()
     private let nicknameLabel = UILabel()
     private let jobLabel = UILabel()
+    private let tagLabel = UILabel()
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
-    private let viewLabel = UILabel()
     private let viewCountLabel = UILabel()
     private let infoStackView = UIStackView()
     private let nameStackView = UIStackView()
@@ -34,11 +35,11 @@ final class DetailBoardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUI()
+        getDetailBoard( boardId: postId!)
+//        setUI()
         setLayout()
 //        addTarget()
         setNavigate()
-        getDetailBoard( boardId: postId!)
     }
     
     private func setUI() {
@@ -60,10 +61,6 @@ final class DetailBoardViewController: UIViewController {
                     $0.font = UIFont(name: "Pretendard-Regular", size : 13)
         }
         timeLabel.do {
-                    $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
-        }
-        viewLabel.do {
                     $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
                     $0.font = UIFont(name: "Pretendard-Regular", size : 13)
         }
@@ -115,7 +112,67 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     private func setLayout() {
-        view.addSubviews(titleLabel,infoStackView,contentLabel,heartButton,heartCountLabel,chatButton,commentTableView)
+        view.addSubviews(titleLabel,infoStackView, lineView1,contentLabel,heartButton,heartCountLabel, lineView2,chatButton,commentTableView)
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        infoStackView.addSubviews(nameStackView, dateStackView)
+        infoStackView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(8)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(28)
+        }
+        nameStackView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview()
+        }
+        nameStackView.addArrangedSubviews(nicknameLabel, jobLabel,tagLabel)
+        nicknameLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+        }
+        dateStackView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview()
+        }
+        dateStackView.addArrangedSubviews(dateLabel, timeLabel, viewCountLabel)
+        viewCountLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+        }
+        lineView1.snp.makeConstraints {
+            $0.top.equalTo(infoStackView.snp.bottom)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        contentLabel.snp.makeConstraints {
+            $0.top.equalTo(lineView1.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-95)
+            $0.height.equalTo(282)
+        }
+        chatButton.snp.makeConstraints {
+            $0.top.equalTo(contentLabel.snp.bottom)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.width.equalTo(151)
+            $0.height.equalTo(41)
+        }
+        heartCountLabel.snp.makeConstraints {
+            $0.centerY.equalTo(chatButton.snp.centerY)
+            $0.trailing.equalTo(chatButton.snp.leading).offset(-15)
+        }
+        heartButton.snp.makeConstraints {
+            $0.centerY.equalTo(chatButton.snp.centerY)
+            $0.trailing.equalTo(heartCountLabel.snp.leading).offset(-6)
+            $0.width.height.equalTo(24)
+        }
+        lineView2.snp.makeConstraints {
+            $0.top.equalTo(chatButton.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
     }
     private func setNavigate() {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
@@ -130,7 +187,11 @@ final class DetailBoardViewController: UIViewController {
                 case .success(let data):
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, category: data.data.category, contents: data.data.contents, tag: data.data.tag, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName, occupation: data.data.occupation, heartMemberIds: data.data.heartMemberIds, scrapMemberIds: data.data.scrapMemberIds, comments: data.data.commentResDtoList)
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category, contents: data.data.contents, tag: data.data.tag, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", heartMemberIds: data.data.heartMemberIds, scrapMemberIds: data.data.scrapMemberIds, comments: data.data.commentResDtoList)
+                        DispatchQueue.main.async {
+                            self.setUI()
+                            self.updateView(with: mappedItem)
+                                        }
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
@@ -154,10 +215,9 @@ final class DetailBoardViewController: UIViewController {
         titleLabel.text = data.title
         nicknameLabel.text = data.nickName
         jobLabel.text = data.occupation
-        let dateString = "01/02"
-        dateLabel.text = dateString
-        timeLabel.text = "11:02"
-        viewCountLabel.text = String(data.count)
+        dateLabel.text = data.getDateString()
+        timeLabel.text = data.getTimeString()
+        viewCountLabel.text = "조회 \(data.count)"
         contentLabel.text = data.contents
         heartCountLabel.text = String(data.heart)
     }

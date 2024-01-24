@@ -11,10 +11,15 @@ import SnapKit
 import Then
 import KeychainSwift
 
+protocol RecruitVCDelegate: AnyObject {
+    func didSelectItem(withId id: Int)
+}
+
 final class recruitViewController: UIViewController {
     
     // MARK: - UI Components
     
+    weak var delegate: RecruitVCDelegate?
     private let sortButton = UIButton()
     private lazy var tableView = UITableView()
     private let keychain = KeychainSwift()
@@ -106,16 +111,15 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailBoardViewController()
-        
         if indexPath.row < filteredPosts.count {
             print(filteredPosts[indexPath.row].title)
+            print("\(filteredPosts[indexPath.row].boardId)")
             detailVC.postId = filteredPosts[indexPath.row].boardId
+            delegate?.didSelectItem(withId: detailVC.postId!)
         } else {
             print("Invalid index")
             detailVC.postId = posts[indexPath.row].boardId
         }
-        
-        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
@@ -140,7 +144,7 @@ extension recruitViewController {
                         var mappedData: [BoardDataModel] = []
                         
                         for serverItem in serverData {
-                            let mappedItem = BoardDataModel (boardId: serverItem.id,title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
+                            let mappedItem = BoardDataModel (boardId: serverItem.id,title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "", commentCount: serverItem.commentCount)
                             mappedData.append(mappedItem)
                         }
                         

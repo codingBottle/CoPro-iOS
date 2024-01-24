@@ -92,31 +92,22 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         nameJobStackView.addArrangedSubviews(nicknameLabel, jobLabel)
         dateTimeStackView.addArrangedSubviews(dateLabel,timeLabel,recommentButton)
     }
-    func configureCell(_ data: CommentData, isChild: Bool = false) {
+    func configureCell(_ data: CommentData) {
         nicknameLabel.text = data.writer.nickName
         jobLabel.text = data.writer.occupation
         contentLabel.text = data.content
-
-        // 대댓글의 경우에는 들여쓰기를 적용합니다.
-        if isChild {
-            cellStackView.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(20) // 추가적인 여백
-                // 나머지 제약 조건
-            }
-        } else {
-            cellStackView.snp.makeConstraints { make in
-                make.leading.equalToSuperview()
-                // 나머지 제약 조건
-            }
-        }
-
-        // 대댓글이 있는 경우에는 대댓글을 표시하는 로직을 추가합니다.
-        if let children = data.children {
-            for childComment in children {
-                let childCommentCell = commentTableViewCell()
-                childCommentCell.configureCell(childComment, isChild: true)
-                // childCommentCell을 적절한 위치에 추가합니다.
-            }
-        }
+        
+//        if data.parentCommentID != nil {
+//                cellStackView.snp.updateConstraints {
+//                    $0.leading.equalToSuperview().offset(30)  // 여기서 30은 원하는 들여쓰기 크기입니다.
+//                }
+//            } else {
+//                cellStackView.snp.updateConstraints {
+//                    $0.leading.equalToSuperview()
+//                }
+//            }
+//
+//            // 대댓글 버튼 표시 여부 결정 코드
+//            recommentButton.isHidden = data.parentCommentID != nil
     }
 }

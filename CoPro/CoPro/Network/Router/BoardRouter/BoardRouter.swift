@@ -99,7 +99,8 @@ extension BoardRouter: BaseTargetType {
             let requestModel = allBoardRequestBody(page: page, standard: standard)
             return .query(requestModel)
         case .getDetailBoard(_, let boardId):
-            return .query(boardId)
+            let requestModel = DetailBoardRequestBody(boardID: boardId)
+            return .query(requestModel)
         case .editBoard(_, let boardId, let requestBody):
             return .both(boardId, _parameter: requestBody)
         case .addBoard(_, let requestBody):
