@@ -77,7 +77,11 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     }
     // 셀사이 여백 값 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        if myViewType == 1 {
+            return 10
+        }else{
+            return 0
+        }
     }
     //셀 스크롤 에니메이션
     //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
