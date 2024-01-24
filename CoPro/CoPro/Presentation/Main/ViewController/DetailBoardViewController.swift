@@ -46,27 +46,38 @@ final class DetailBoardViewController: UIViewController {
         self.view.backgroundColor = .white
         titleLabel.do {
             $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Medium", size : 22)
+//            $0.font = UIFont(name: "Pretendard-Medium", size : 22)
+            $0.font = .systemFont(ofSize: 22)
         }
         nicknameLabel.do {
             $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+//            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.font = .systemFont(ofSize: 13)
         }
         jobLabel.do {
                     $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
-                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+//                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.font = .systemFont(ofSize: 13)
+        }
+        tagLabel.do {
+                    $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
+//                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.font = .systemFont(ofSize: 13)
         }
         dateLabel.do {
                     $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+//                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.font = .systemFont(ofSize: 13)
         }
         timeLabel.do {
                     $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+//                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.font = .systemFont(ofSize: 13)
         }
         viewCountLabel.do {
             $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            //            $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.font = .systemFont(ofSize: 13)
         }
         infoStackView.do {
             $0.axis = .horizontal
@@ -80,13 +91,13 @@ final class DetailBoardViewController: UIViewController {
             $0.spacing = 10
         }
         lineView1.do {
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
+            $0.backgroundColor = UIColor(hex: "#D1D1D2")
         }
         contentLabel.do {
             $0.frame = CGRect(x: 0, y: 0, width: 282, height: 50)
             $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+//            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+            $0.font = .systemFont(ofSize: 17)
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
         }
@@ -95,7 +106,8 @@ final class DetailBoardViewController: UIViewController {
         }
         heartCountLabel.do {
             $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+//            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+            $0.font = .systemFont(ofSize: 17)
         }
         chatButton.do {
             $0.frame = CGRect(x: 0, y: 0, width: 151, height: 41)
@@ -103,8 +115,7 @@ final class DetailBoardViewController: UIViewController {
             $0.layer.cornerRadius = 10
         }
         lineView2.do {
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
+            $0.backgroundColor = UIColor(hex: "#D1D1D2")
         }
         commentTableView.do {
             $0.showsVerticalScrollIndicator = false
@@ -146,12 +157,12 @@ final class DetailBoardViewController: UIViewController {
             $0.top.equalTo(infoStackView.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(0.5)
         }
         contentLabel.snp.makeConstraints {
             $0.top.equalTo(lineView1.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-95)
-            $0.height.equalTo(282)
+            $0.trailing.equalToSuperview().offset(-139)
         }
         chatButton.snp.makeConstraints {
             $0.top.equalTo(contentLabel.snp.bottom)
@@ -172,6 +183,7 @@ final class DetailBoardViewController: UIViewController {
             $0.top.equalTo(chatButton.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(0.5)
         }
     }
     private func setNavigate() {
@@ -215,6 +227,7 @@ final class DetailBoardViewController: UIViewController {
         titleLabel.text = data.title
         nicknameLabel.text = data.nickName
         jobLabel.text = data.occupation
+        tagLabel.text = data.tag
         dateLabel.text = data.getDateString()
         timeLabel.text = data.getTimeString()
         viewCountLabel.text = "조회 \(data.count)"
