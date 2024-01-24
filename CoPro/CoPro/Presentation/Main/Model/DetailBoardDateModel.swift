@@ -19,11 +19,11 @@ struct DetailBoardDataModel {
     let imageUrl: [String]?
     let nickName: String
     let occupation: String
-    let heartMemberIds: [Int]?
-    let scrapMemberIds: [Int]?
-    let comments: [Comment]?
+    let isHeart: Bool
+    let isScrap: Bool
+//    let comments: [Comment]?
 
-    init(boardId: Int, title: String, createAt: String,category: String, contents: String, tag: String, count: Int, heart: Int, imageUrl: [String]?, nickName: String, occupation: String, heartMemberIds: [Int]?, scrapMemberIds: [Int]?, comments: [Comment]?) {
+    init(boardId: Int, title: String, createAt: String,category: String, contents: String, tag: String, count: Int, heart: Int, imageUrl: [String]?, nickName: String, occupation: String, isHeart: Bool, isScrap: Bool) {
         self.boardId = boardId
         self.title = title
         let formatter = DateFormatter()
@@ -45,9 +45,9 @@ struct DetailBoardDataModel {
         self.imageUrl = imageUrl
         self.nickName = nickName
         self.occupation = occupation
-        self.heartMemberIds = heartMemberIds
-        self.scrapMemberIds = scrapMemberIds
-        self.comments = comments
+        self.isHeart = isHeart
+        self.isScrap = isScrap
+//        self.comments = comments
     }
     
     func getDateString() -> String {
@@ -65,12 +65,14 @@ struct DetailBoardDataModel {
 }
 
 struct CommentData {
+    let parentId: Int?
     let commentId: Int
     let content: String
     let writer: WriterData
     let children: [CommentData]?
 
-    init(commentId: Int, content: String, writer: WriterData, children: [CommentData]?) {
+    init(parentId: Int?,commentId: Int, content: String, writer: WriterData, children: [CommentData]?) {
+        self.parentId = parentId
         self.commentId = commentId
         self.content = content
         self.writer = writer

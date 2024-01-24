@@ -97,17 +97,17 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         jobLabel.text = data.writer.occupation
         contentLabel.text = data.content
         
-//        if data.parentCommentID != nil {
-//                cellStackView.snp.updateConstraints {
-//                    $0.leading.equalToSuperview().offset(30)  // 여기서 30은 원하는 들여쓰기 크기입니다.
-//                }
-//            } else {
-//                cellStackView.snp.updateConstraints {
-//                    $0.leading.equalToSuperview()
-//                }
-//            }
-//
-//            // 대댓글 버튼 표시 여부 결정 코드
-//            recommentButton.isHidden = data.parentCommentID != nil
+        if data.parentId == -1 {
+                cellStackView.snp.updateConstraints {
+                    $0.leading.equalToSuperview().offset(30)  // 여기서 30은 원하는 들여쓰기 크기입니다.
+                }
+            } else {
+                cellStackView.snp.updateConstraints {
+                    $0.leading.equalToSuperview()
+                }
+            }
+
+            // 대댓글 버튼 표시 여부 결정 코드
+            recommentButton.isHidden = Bool(data.parentId == -1)
     }
 }

@@ -82,16 +82,16 @@ extension BoardAPI {
         }
     }
     // 7. 좋아요 등록
-    public func saveHeart(token: String, requestBody: heartRequestBody, completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.saveHeart(token: token, requestBody: requestBody)).responseData { response in
+    public func saveHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.saveHeart(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: VoidDTO.self,
                                 completion: completion)
         }
     }
     // 8. 좋아요 삭제
-    public func deleteHeart(token: String, requestBody: heartRequestBody, completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.deleteHeart(token: token, requestBody: requestBody)).responseData { response in
+    public func deleteHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.deleteHeart(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: VoidDTO.self,
                                 completion: completion)

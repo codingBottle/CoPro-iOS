@@ -106,6 +106,7 @@
 		E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */; };
 		E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */; };
 		E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363D5C12B5FA71700FE6A9C /* DetailBoardRequestBody.swift */; };
+		E363D5C42B60D8B100FE6A9C /* CommentDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363D5C32B60D8B100FE6A9C /* CommentDataModel.swift */; };
 		E37AE7F02B3C25BD002ABDCD /* UISegmented++.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7EF2B3C25BD002ABDCD /* UISegmented++.swift */; };
 		E37AE7F62B3C272A002ABDCD /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7F52B3C272A002ABDCD /* PassThroughView.swift */; };
 		E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */; };
@@ -201,6 +202,7 @@
 		E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchTableViewCell.swift; sourceTree = "<group>"; };
 		E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		E363D5C12B5FA71700FE6A9C /* DetailBoardRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardRequestBody.swift; sourceTree = "<group>"; };
+		E363D5C32B60D8B100FE6A9C /* CommentDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDataModel.swift; sourceTree = "<group>"; };
 		E37AE7EF2B3C25BD002ABDCD /* UISegmented++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmented++.swift"; sourceTree = "<group>"; };
 		E37AE7F52B3C272A002ABDCD /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		E37AE7F72B3C2747002ABDCD /* noticeBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeBoardTableViewCell.swift; sourceTree = "<group>"; };
@@ -656,6 +658,7 @@
 			children = (
 				E32B67332B56A39D00EBB5AC /* BoardDataModel.swift */,
 				E314AD182B5E735300BDB6AD /* DetailBoardDateModel.swift */,
+				E363D5C32B60D8B100FE6A9C /* CommentDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -802,6 +805,7 @@
 				E37AE7F62B3C272A002ABDCD /* PassThroughView.swift in Sources */,
 				E32B671E2B566C4100EBB5AC /* BoardAPI.swift in Sources */,
 				E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */,
+				E363D5C42B60D8B100FE6A9C /* CommentDataModel.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
 				E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */,

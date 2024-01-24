@@ -23,13 +23,13 @@ struct DetailBoardDTO: Codable {
         let imageUrl: [String]?
         let nickName: String?
         let occupation: String?
-        let heartMemberIds: [Int]?
-        let scrapMemberIds: [Int]?
+        let isHeart: Bool
+        let isScrap: Bool
         let commentResDtoList: [Comment]?
     }
 
     struct Comment: Codable {
-        let parendId: Int?
+        let parentId: Int?
         let commentId: Int
         let content: String
         let writer: Writer?

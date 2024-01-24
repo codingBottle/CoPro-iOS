@@ -17,8 +17,8 @@ enum BoardRouter {
     case addBoard(token: String, requestBody: CreateBoardRequestBody)
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
-    case saveHeart(token: String, requestBody: heartRequestBody)
-    case deleteHeart(token: String, requestBody: heartRequestBody)
+    case saveHeart(token: String, boardId: Int)
+    case deleteHeart(token: String, boardId: Int)
     case mostPopularBoard(token: String)
     case deleteScrap(token: String, requestBody: heartRequestBody)
     case saveScrap(token: String, requestBody: heartRequestBody)
@@ -109,10 +109,12 @@ extension BoardRouter: BaseTargetType {
             return .query(boardId)
         case .requestWritePage:
             return .none
-        case .saveHeart(_, let body):
-            return .body(body)
-        case .deleteHeart(_, let body):
-            return .body(body)
+        case .saveHeart(_, let boardId):
+            let requestModel = heartRequestBody(boardID: boardId)
+            return .body(requestModel)
+        case .deleteHeart(_, let boardId):
+            let requestModel = heartRequestBody(boardID: boardId)
+            return .body(requestModel)
         case .mostPopularBoard:
             return .none
         case .deleteScrap(_, let body):
