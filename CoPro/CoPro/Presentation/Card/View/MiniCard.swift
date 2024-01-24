@@ -24,8 +24,11 @@ class MiniCard: BaseView {
         $0.clipsToBounds = true
     }
     func loadImage(url: String) {
-            guard let imageURL = URL(string: url) else { return }
-
+        guard !url.isEmpty, let imageURL = URL(string: url) else {
+                // URL이 빈 문자열일 때의 처리 (예: 빨간색 배경)
+                profile.backgroundColor = .red
+                return
+            }
             profile.kf.indicatorType = .activity
             profile.kf.setImage(
                 with: imageURL,

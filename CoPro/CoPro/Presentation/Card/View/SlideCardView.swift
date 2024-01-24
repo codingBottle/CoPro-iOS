@@ -15,16 +15,21 @@ class SlideCardView: BaseView {
         $0.text = ""
     }
     func loadImage(url: String) {
-        guard let url = URL(string: "\(url)") else { return }
-        let cornerImageProcessor = RoundCornerImageProcessor(cornerRadius: 30)
+        guard !url.isEmpty, let imageURL = URL(string: url) else {
+            // URL이 빈 문자열일 때의 처리 (예: 빨간색 배경)
+            cardImage.backgroundColor = .red
+            return
+        }
         cardImage.kf.indicatorType = .activity
         cardImage.kf.setImage(
-            with: url,
+            with: imageURL,
             placeholder: nil,
             options: [
-                .transition(.fade(1.2)),
+                .transition(.fade(1.0)),
                 .forceTransition,
-                .processor(cornerImageProcessor)
+                .cacheOriginalImage,
+                .scaleFactor(UIScreen.main.scale), // 이미지 스케일 지정
+                
             ],
             completionHandler: nil
         )
@@ -33,7 +38,10 @@ class SlideCardView: BaseView {
         $0.backgroundColor = UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1)
         $0.layer.cornerRadius = 30
     }
-    let cardImage = UIImageView()
+    let cardImage = UIImageView().then{
+        $0.layer.cornerRadius = 30
+        $0.clipsToBounds = true
+    }
     let cardbuttonStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
