@@ -55,6 +55,7 @@ class CardCollectionCellView: UICollectionViewCell {
     
     func configure(with imageUrl: String,name: String, occupation: String, language: String,gitButtonURL: String) {
         self.gitButtonURL = gitButtonURL
+        slideCardView.loadImage(url: imageUrl)
         slideCardView.userNameLabel.text = name
         slideCardView.userPartLabel.text = occupation
         slideCardView.userLangLabel.text = language
