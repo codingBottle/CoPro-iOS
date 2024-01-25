@@ -58,6 +58,7 @@ class MemberResDto: Codable {
 
 // MARK: - Content
 class Content: Codable {
+    let memberId: Int
     let name, email, picture: String
     let occupation: String?
     let language: String?
@@ -65,16 +66,16 @@ class Content: Codable {
     let gitHubURL: String?
     let nickName: String?
     let likeMembersCount: Int
-    let likeMembersID: [Int]
+    let isLikeMembers: Bool
     
     enum CodingKeys: String, CodingKey {
-        case name, email, picture, occupation, language, career
+        case memberId,name, email, picture, occupation, language, career, isLikeMembers
         case gitHubURL = "gitHubUrl"
         case nickName, likeMembersCount
-        case likeMembersID = "likeMembersId"
     }
     
-    init(name: String, email: String, picture: String, occupation: String, language: String, career: String, gitHubURL: String, nickName: String, likeMembersCount: Int, likeMembersID: [Int]) {
+    init(memberId: Int,name: String, email: String, picture: String, occupation: String, language: String, career: String, gitHubURL: String, nickName: String, likeMembersCount: Int, likeMembersID: [Int], isLikeMembers: Bool) {
+        self.memberId = memberId
         self.name = name
         self.email = email
         self.picture = picture
@@ -84,7 +85,7 @@ class Content: Codable {
         self.gitHubURL = gitHubURL
         self.nickName = nickName
         self.likeMembersCount = likeMembersCount
-        self.likeMembersID = likeMembersID
+        self.isLikeMembers = isLikeMembers
     }
 }
 
