@@ -36,7 +36,10 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
             cell.configure(with: contents[indexPath.item].picture,
                            name: contents[indexPath.item].name,
                            occupation: contents[indexPath.item].occupation ?? " ",
-                           language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ")
+                           language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount,memberId: contents[indexPath.item].memberId,isLike: contents[indexPath.item].isLikeMembers)
+            if contents[indexPath.item].isLikeMembers == true {
+                SlideCardView().likeIcon.tintColor = .blue
+            }
             return cell
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MiniCardGridView", for: indexPath) as? MiniCardGridView else {
@@ -215,7 +218,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     }
     //API호출
     func loadCardDataFromAPI(part: String, lang: String, old: String, page: Int) {
-        CardAPI.shared.getUserData(part: part, lang: lang, old: old, page: page) { [weak self] result in
+        CardAPI.shared.getUserData(part: part, lang: lang, old: 0, page: page) { [weak self] result in
                 switch result {
                 case .success(let cardDTO):
                     
@@ -230,7 +233,9 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
                             layout.scrollDirection = scrollDirection
                             self?.collectionView.isPagingEnabled = (scrollDirection == .horizontal)
                         }
+                        
                         self?.collectionView.reloadData()
+                        
                         print("After reloadData")
                         print("API Success: \(cardDTO.data.memberResDto.content.count)")
                         print("APIDATA : \(String(describing: self?.contents))")
@@ -263,6 +268,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
             if dropDown == self.partDropDown {
                 self.cardView.partLabel.text = item
                 print(self.cardView.partLabel.text!)
+                updateLangDropDown(part: item)
                 
             } else if dropDown == self.langDropDown {
                 self.cardView.langLabel.text = item
@@ -271,9 +277,6 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
                 self.cardView.oldLabel.text = item
                 print(self.cardView.oldLabel.text!)
             }
-            let part = self.cardView.partLabel.text ?? " "
-            let lang = self.cardView.langLabel.text ?? " "
-            let old = self.cardView.oldLabel.text ?? " "
             DispatchQueue.main.async {
                 self.contents.removeAll()
                         let part = self.cardView.partLabel.text ?? " "
@@ -285,6 +288,23 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         
         button.addTarget(self, action: #selector(showDropDown(sender:)), for: .touchUpInside)
         
+    }
+    // 두 번째 드롭다운 내용 업데이트 메서드
+    func updateLangDropDown(part: String) {
+        var langItems: [String] = []
+
+        // 첫 번째 드롭다운 선택값에 따라 두 번째 드롭다운 내용 설정
+        if part == "Mobile" {
+            langItems = ["Flutter", "Kotlin", "Java", "Objective-C"]
+        } else if part == "Server" {
+            langItems = ["Java", "Node.js", "Python"]
+        } else if part == "Web" {
+            langItems = ["HTML", "CSS", "Angular", "Vue.js", "TypeScript", "JavaScript", "React", "Sass"]
+        }
+
+        // 두 번째 드롭다운 업데이트
+        langDropDown.dataSource = langItems
+        langDropDown.reloadAllComponents()
     }
     
     //Dropdown show function
