@@ -14,11 +14,24 @@ import KeychainSwift
 protocol RecruitVCDelegate: AnyObject {
     func didSelectItem(withId id: Int)
 }
+protocol radioDelegate: AnyObject {
+    func sendDefaultSelect(withOpt opt: String)
+}
 
-final class recruitViewController: UIViewController {
+final class recruitViewController: UIViewController, SendStringData {
+    func radioButtonDidSelect() {
+        print("라디오버튼눌림")
+    }
+    
+    func sendData(mydata: String, groupId: Int) {
+        sortButton.setTitle(mydata, for: .normal)
+        
+    }
+    
     
     // MARK: - UI Components
     
+    weak var delegate1: radioDelegate?
     weak var delegate: RecruitVCDelegate?
     private let sortButton = UIButton()
     private lazy var tableView = UITableView()
@@ -129,7 +142,9 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc func sortButtonPressed() {
         let bottomSheetVC = SortBottomSheetViewController()
-        present(bottomSheetVC, animated: true, completion: nil)
+        delegate1?.sendDefaultSelect(withOpt: sortButton.titleLabel?.text ?? "최신순")
+            bottomSheetVC.prepareForDisplay()
+            present(bottomSheetVC, animated: true, completion: nil)
     }
 }
 extension recruitViewController {

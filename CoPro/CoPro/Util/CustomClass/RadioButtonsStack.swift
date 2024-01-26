@@ -12,7 +12,9 @@ import Then
 
 protocol SendStringData: AnyObject {
     func sendData(mydata: String, groupId: Int)
+    func radioButtonDidSelect()
 }
+
 
 class RadioButtonsStack: UIView {
     
@@ -86,6 +88,7 @@ class RadioButtonsStack: UIView {
             radioViews.forEach {
                 $0.select($0.radioButton.tag == sender.tag)
             }
+            delegate?.radioButtonDidSelect()
         }
     }
 

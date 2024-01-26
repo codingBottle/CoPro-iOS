@@ -54,6 +54,24 @@ final class MainViewController: UIViewController {
       vc.view.translatesAutoresizingMaskIntoConstraints = false
       return vc
     }()
+    
+    private lazy var addPostButton: UIButton = {
+        
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
+        btn.backgroundColor = UIColor(hex: "#2577FE")
+        btn.layer.cornerRadius = 20
+        btn.setImage(UIImage(systemName: "plus"), for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 17)
+        btn.setTitle("글쓰기", for: .normal)
+        btn.contentEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: 1)
+        btn.imageEdgeInsets = .init(top: 0, left: -1, bottom: 0, right: 1)
+        btn.titleEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: -1)
+        btn.clipsToBounds = true
+        btn.tintColor = .white
+        btn.addTarget(self, action: #selector(addButtonDidTapped), for: .touchUpInside)
+
+        return btn
+    }()
       
     var dataViewControllers: [UIViewController] {
         [recruitVC, self.vc2, self.vc3]
@@ -86,6 +104,7 @@ final class MainViewController: UIViewController {
         setupScrollView()
         setupPageControl()
         view.bringSubviewToFront(bottomSheetView)
+        view.bringSubviewToFront(addPostButton)
     }
 }
 
@@ -165,6 +184,13 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.trailing.equalToSuperview().offset(-4)
             $0.bottom.equalToSuperview().offset(-4)
             $0.top.equalTo(segmentedControl.snp.bottom).offset(5)
+        }
+        view.addSubview(addPostButton)
+        addPostButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-91)
+            $0.width.equalTo(91)
+            $0.height.equalTo(37)
         }
     }
     private func setDelegate() {
@@ -264,6 +290,13 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     @objc func pushToSearchBarViewController() {
         let secondViewController = SearchBarViewController()
         self.navigationController?.pushViewController(secondViewController, animated: true)
+    }
+    
+    @objc func addButtonDidTapped() {
+        let addPostVC = AddPostViewController()
+            let navigationController = UINavigationController(rootViewController: addPostVC)
+            navigationController.modalPresentationStyle = .fullScreen
+            self.present(navigationController, animated: true, completion: nil)
     }
 }
     
