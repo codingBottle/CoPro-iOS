@@ -117,6 +117,7 @@
 		E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8042B3C2878002ABDCD /* RadioButton.swift */; };
 		E37AE8082B3C289B002ABDCD /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */; };
 		E3C64F932B634F87000BB5D6 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */; };
+		E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */; };
 		E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1552AEFACA3003269FF /* URLConst.swift */; };
 		E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1572AEFACB6003269FF /* NetworkResult.swift */; };
 		E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */; };
@@ -214,6 +215,7 @@
 		E37AE8042B3C2878002ABDCD /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
 		E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
+		E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeartDataModel.swift; sourceTree = "<group>"; };
 		E3D6D1552AEFACA3003269FF /* URLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConst.swift; sourceTree = "<group>"; };
 		E3D6D1572AEFACB6003269FF /* NetworkResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResult.swift; sourceTree = "<group>"; };
 		E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
@@ -662,6 +664,7 @@
 				E32B67332B56A39D00EBB5AC /* BoardDataModel.swift */,
 				E314AD182B5E735300BDB6AD /* DetailBoardDateModel.swift */,
 				E363D5C32B60D8B100FE6A9C /* CommentDataModel.swift */,
+				E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -844,6 +847,7 @@
 				E32B672F2B567B4B00EBB5AC /* MostIncreasedLikesDTO.swift in Sources */,
 				9E7401E72B3C18A60030C8EC /* DatabaseRepresentation.swift in Sources */,
 				9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */,
+				E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */,
 				E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */,
 				B5D3E5322AFB7C2E0021DDA0 /* LoginViewController.swift in Sources */,
 				E37AE8082B3C289B002ABDCD /* RadioButtonsStack.swift in Sources */,

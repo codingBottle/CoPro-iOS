@@ -117,6 +117,7 @@ final class DetailBoardViewController: UIViewController {
             $0.frame = CGRect(x: 0, y: 0, width: 151, height: 41)
             $0.layer.backgroundColor = UIColor(red: 0.145, green: 0.467, blue: 0.996, alpha: 1).cgColor
             $0.layer.cornerRadius = 10
+            $0.setTitle("채팅하기", for: .normal)
         }
         lineView2.do {
             $0.backgroundColor = UIColor(hex: "#D1D1D2")
@@ -194,6 +195,17 @@ final class DetailBoardViewController: UIViewController {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
         leftButton.tintColor = UIColor(hex: "121213")
         self.navigationItem.leftBarButtonItem = leftButton
+        if #available(iOS 14.0, *) {
+            let menuItem1 = UIAction(title: "신고하기") { action in
+                // 메뉴1을 선택했을 때 수행할 동작
+            }
+            
+            let menu = UIMenu(title: "", children: [menuItem1])
+            
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
+            navigationItem.rightBarButtonItem?.tintColor = UIColor(hex: "121213")
+
+        }
     }
     func getDetailBoard( boardId: Int) {
         if let token = self.keychain.get("idToken") {
@@ -235,11 +247,14 @@ final class DetailBoardViewController: UIViewController {
             print("\(token)")
             BoardAPI.shared.saveHeart(token: token, boardID: boardId) { result in
                 switch result {
-                case .success:
+                case .success(let data):
+                    if let data = data as? DetailHeartDataModel{
                         DispatchQueue.main.async {
+                            self.heartCountLabel.text = "\(data.data.heart)"
                             self.heartButton.tintColor = UIColor(hex: "#2577FE")
-                                        }
-                    self.isHeart = true
+                        }
+                        self.isHeart = true
+                    }
                 case .requestErr(let message):
                     print("Request error: \(message)")
                     
@@ -263,11 +278,14 @@ final class DetailBoardViewController: UIViewController {
             print("\(token)")
             BoardAPI.shared.deleteHeart(token: token, boardID: boardId) { result in
                 switch result {
-                case .success:
+                case .success(let data):
+                    if let data = data as? DetailHeartDataModel{
                         DispatchQueue.main.async {
+                            self.heartCountLabel.text = "\(data.data.heart)"
                             self.heartButton.tintColor = UIColor(hex: "#D1D1D2")
-                                        }
-                    self.isHeart = false
+                        }
+                        self.isHeart = false
+                    }
                 case .requestErr(let message):
                     print("Request error: \(message)")
                     
@@ -303,15 +321,19 @@ final class DetailBoardViewController: UIViewController {
         func popToMainViewController() {
             self.navigationController?.popViewController(animated: true)
         }
+//    @objc
+//        func popToMainViewController() {
+//            self.navigationController?.popViewController(animated: true)
+//        }
     
     @objc func heartButtonTapped(_ sender: UIButton) {
-            guard let postId = postId else { return }
+        guard let postId = postId else { return }
         if isHeart {
             deleteHeart(boardId: postId)
         }
         else {    saveHeart(boardId: postId)
         }
-        }
+    }
 }
 
 extension DetailBoardViewController: UITableViewDelegate, UITableViewDataSource {

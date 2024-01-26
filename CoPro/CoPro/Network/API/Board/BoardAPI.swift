@@ -85,7 +85,7 @@ extension BoardAPI {
     public func saveHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.saveHeart(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
-                                dataModel: VoidDTO.self,
+                                dataModel: DetailHeartDataModel.self,
                                 completion: completion)
         }
     }
@@ -93,7 +93,7 @@ extension BoardAPI {
     public func deleteHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.deleteHeart(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
-                                dataModel: VoidDTO.self,
+                                dataModel: DetailHeartDataModel.self,
                                 completion: completion)
         }
     }
