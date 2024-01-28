@@ -197,7 +197,10 @@ final class DetailBoardViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = leftButton
         if #available(iOS 14.0, *) {
             let menuItem1 = UIAction(title: "신고하기") { action in
-                // 메뉴1을 선택했을 때 수행할 동작
+                guard let boardId = self.postId else { return }
+                let bottomSheetVC = ReportBottomSheetViewController()
+                bottomSheetVC.postId = boardId
+                self.present(bottomSheetVC, animated: true, completion: nil)
             }
             
             let menu = UIMenu(title: "", children: [menuItem1])
