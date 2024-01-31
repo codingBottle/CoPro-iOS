@@ -82,6 +82,7 @@ extension ReportBottomSheetViewController {
         reportButton.do {
             $0.setTitle("접수", for: .normal)
             $0.layer.cornerRadius = 10
+            updateButtonState(isEnabled: false)
         }
     }
     
@@ -149,11 +150,6 @@ extension ReportBottomSheetViewController {
     private func reportButtonDidTapped() {
         reportBoard(boardId: postId ?? 0, contents: contentTextView.text)
     }
-    
-    @objc
-    private func dismissToCreateEvaluateViewController() {
-        dismiss(animated: true, completion: nil)
-    }
 }
 
 extension ReportBottomSheetViewController: UITextViewDelegate {
@@ -161,6 +157,7 @@ extension ReportBottomSheetViewController: UITextViewDelegate {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
             textView.textColor = .black
+            updateButtonState(isEnabled: false)
         }
     }
     
