@@ -10,15 +10,15 @@ import Foundation
 import Alamofire
 
 enum BoardRouter {
-    case reportBoard(token: String, requestBody: ReportBoardRequestBody)
+    case reportBoard(token: String, boardId: Int, contents: String)
     case getAllBoard(token: String, category: String, page: Int, standard: String)
     case getDetailBoard(token: String, boardId: Int)
     case editBoard(token: String, boardId: Int, requestBody: CreateBoardRequestBody)
     case addBoard(token: String, requestBody: CreateBoardRequestBody)
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
-    case saveHeart(token: String, requestBody: heartRequestBody)
-    case deleteHeart(token: String, requestBody: heartRequestBody)
+    case saveHeart(token: String, boardId: Int)
+    case deleteHeart(token: String, boardId: Int)
     case mostPopularBoard(token: String)
     case deleteScrap(token: String, requestBody: heartRequestBody)
     case saveScrap(token: String, requestBody: heartRequestBody)
@@ -89,7 +89,7 @@ extension BoardRouter: BaseTargetType {
             return "/api/board/scrap/save"
         case .searchBoard:
             return "/api/board/search"
-        case .reportBoard(token: let token, requestBody: let requestBody):
+        case .reportBoard:
             return "/api/report"
         }
     }
@@ -99,7 +99,8 @@ extension BoardRouter: BaseTargetType {
             let requestModel = allBoardRequestBody(page: page, standard: standard)
             return .query(requestModel)
         case .getDetailBoard(_, let boardId):
-            return .query(boardId)
+            let requestModel = DetailBoardRequestBody(boardID: boardId)
+            return .query(requestModel)
         case .editBoard(_, let boardId, let requestBody):
             return .both(boardId, _parameter: requestBody)
         case .addBoard(_, let requestBody):
@@ -108,10 +109,12 @@ extension BoardRouter: BaseTargetType {
             return .query(boardId)
         case .requestWritePage:
             return .none
-        case .saveHeart(_, let body):
-            return .body(body)
-        case .deleteHeart(_, let body):
-            return .body(body)
+        case .saveHeart(_, let boardId):
+            let requestModel = heartRequestBody(boardID: boardId)
+            return .body(requestModel)
+        case .deleteHeart(_, let boardId):
+            let requestModel = heartRequestBody(boardID: boardId)
+            return .body(requestModel)
         case .mostPopularBoard:
             return .none
         case .deleteScrap(_, let body):
@@ -121,8 +124,9 @@ extension BoardRouter: BaseTargetType {
         case .searchBoard(_, let query, let page, let standard):
             let requestModel = SearchBoardRequestBody(q: query, page: page, standard: standard)
             return .query(requestModel)
-        case .reportBoard(_, let requestBody):
-            return .body(requestBody)
+        case .reportBoard(_, let boardId, let contents):
+            let requestModel = ReportBoardRequestBody(boardID: boardId, contents: contents)
+            return .body(requestModel)
         }
     }
     
@@ -152,7 +156,7 @@ extension BoardRouter: BaseTargetType {
             return ["Authorization": "Bearer \(token)"]
         case .searchBoard(let token, _, _, _):
             return ["Authorization": "Bearer \(token)"]
-        case .reportBoard(let token, _):
+        case .reportBoard(let token, _, _):
             return ["Authorization": "Bearer \(token)"]
         }
     }

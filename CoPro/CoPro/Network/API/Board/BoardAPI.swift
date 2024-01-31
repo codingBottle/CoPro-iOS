@@ -51,6 +51,16 @@ extension BoardAPI {
         }
     }
     
+    // 게시글 신고하기
+    
+    public func reportBoard(token: String, boardId: Int,contents: String,                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.reportBoard(token: token, boardId: boardId, contents: contents)).responseData { response in
+            self.disposeNetwork(response,
+                                dataModel: VoidDTO.self,
+                                completion: completion)
+        }
+    }
+    
     // 4. 게시글 추가하기
     
     public func addBoard(token: String, requestBody: CreateBoardRequestBody,                         completion: @escaping(NetworkResult<Any>) -> Void) {
@@ -82,18 +92,18 @@ extension BoardAPI {
         }
     }
     // 7. 좋아요 등록
-    public func saveHeart(token: String, requestBody: heartRequestBody, completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.saveHeart(token: token, requestBody: requestBody)).responseData { response in
+    public func saveHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.saveHeart(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
-                                dataModel: VoidDTO.self,
+                                dataModel: DetailHeartDataModel.self,
                                 completion: completion)
         }
     }
     // 8. 좋아요 삭제
-    public func deleteHeart(token: String, requestBody: heartRequestBody, completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.deleteHeart(token: token, requestBody: requestBody)).responseData { response in
+    public func deleteHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.deleteHeart(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
-                                dataModel: VoidDTO.self,
+                                dataModel: DetailHeartDataModel.self,
                                 completion: completion)
         }
     }

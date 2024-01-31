@@ -18,6 +18,7 @@ class noticeBoardTableViewCell: UITableViewCell {
     private let postImage = UIImageView()
     private let postTitleLabel = UILabel()
     private let writerNameLabel = UILabel()
+    private let postDateLabel = UILabel()
     private let postTimeLabel = UILabel()
     private let likeCountIcon = UIImageView()
     private let likeCountLabel = UILabel()
@@ -53,6 +54,10 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.font = UIFont.systemFont(ofSize: 13)
             $0.textColor = UIColor(hex: "6D6E71")
         }
+        postDateLabel.do {
+            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.textColor = UIColor(hex: "6D6E71")
+        }
         postTimeLabel.do {
             $0.font = UIFont.systemFont(ofSize: 13)
             $0.textColor = UIColor(hex: "6D6E71")
@@ -83,7 +88,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         }
     }
     private func setLayout() {
-        addSubviews(postImage, postTitleLabel, writerNameLabel, postTimeLabel, likeCountIcon ,likeCountLabel,sawPostIcon ,sawPostLabel, commentCountIcon, commentCountLabel)
+        addSubviews(postImage, postTitleLabel, writerNameLabel, postDateLabel, postTimeLabel, likeCountIcon ,likeCountLabel,sawPostIcon ,sawPostLabel, commentCountIcon, commentCountLabel)
         
         postImage.snp.makeConstraints {
             $0.height.width.equalTo(72)
@@ -98,8 +103,12 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
             $0.leading.equalTo(postTitleLabel.snp.leading)
         }
-        postTimeLabel.snp.makeConstraints {
+        postDateLabel.snp.makeConstraints {
             $0.leading.equalTo(writerNameLabel.snp.trailing).offset(14)
+            $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
+        }
+        postTimeLabel.snp.makeConstraints {
+            $0.leading.equalTo(postDateLabel.snp.trailing).offset(14)
             $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
         }
         likeCountIcon.snp.makeConstraints {
@@ -133,11 +142,11 @@ class noticeBoardTableViewCell: UITableViewCell {
         postImage.image = nil
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName
-        postTimeLabel.text = data.getDateString()
+        postDateLabel.text = data.getDateString()
+        postTimeLabel.text = data.getTimeString()
         likeCountLabel.text = "\(data.heartCount)"
         sawPostLabel.text = "\(data.viewsCount)"
-        commentCountLabel.text = "1"
-//        commentCountLabel.text = "\(data.commentCount)"
+        commentCountLabel.text = "\(data.commentCount)"
     }
     
     override func awakeFromNib() {
