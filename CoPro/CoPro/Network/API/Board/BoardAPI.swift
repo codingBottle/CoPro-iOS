@@ -51,6 +51,16 @@ extension BoardAPI {
         }
     }
     
+    // 게시글 신고하기
+    
+    public func reportBoard(token: String, boardId: Int,contents: String,                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.reportBoard(token: token, boardId: boardId, contents: contents)).responseData { response in
+            self.disposeNetwork(response,
+                                dataModel: VoidDTO.self,
+                                completion: completion)
+        }
+    }
+    
     // 4. 게시글 추가하기
     
     public func addBoard(token: String, requestBody: CreateBoardRequestBody,                         completion: @escaping(NetworkResult<Any>) -> Void) {

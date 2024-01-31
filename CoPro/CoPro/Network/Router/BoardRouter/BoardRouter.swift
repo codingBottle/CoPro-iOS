@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 enum BoardRouter {
-    case reportBoard(token: String, requestBody: ReportBoardRequestBody)
+    case reportBoard(token: String, boardId: Int, contents: String)
     case getAllBoard(token: String, category: String, page: Int, standard: String)
     case getDetailBoard(token: String, boardId: Int)
     case editBoard(token: String, boardId: Int, requestBody: CreateBoardRequestBody)
@@ -89,7 +89,7 @@ extension BoardRouter: BaseTargetType {
             return "/api/board/scrap/save"
         case .searchBoard:
             return "/api/board/search"
-        case .reportBoard(token: let token, requestBody: let requestBody):
+        case .reportBoard:
             return "/api/report"
         }
     }
@@ -124,8 +124,9 @@ extension BoardRouter: BaseTargetType {
         case .searchBoard(_, let query, let page, let standard):
             let requestModel = SearchBoardRequestBody(q: query, page: page, standard: standard)
             return .query(requestModel)
-        case .reportBoard(_, let requestBody):
-            return .body(requestBody)
+        case .reportBoard(_, let boardId, let contents):
+            let requestModel = ReportBoardRequestBody(boardID: boardId, contents: contents)
+            return .body(requestModel)
         }
     }
     
@@ -155,7 +156,7 @@ extension BoardRouter: BaseTargetType {
             return ["Authorization": "Bearer \(token)"]
         case .searchBoard(let token, _, _, _):
             return ["Authorization": "Bearer \(token)"]
-        case .reportBoard(let token, _):
+        case .reportBoard(let token, _, _):
             return ["Authorization": "Bearer \(token)"]
         }
     }

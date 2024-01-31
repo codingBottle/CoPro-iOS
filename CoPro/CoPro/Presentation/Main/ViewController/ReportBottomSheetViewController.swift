@@ -10,6 +10,7 @@ import UIKit
 
 import SnapKit
 import Then
+import KeychainSwift
 
 final class ReportBottomSheetViewController: UIViewController {
 
@@ -22,6 +23,7 @@ final class ReportBottomSheetViewController: UIViewController {
     private let reportButton = UIButton()
     let textViewPlaceHolder = "신고내용을 입력해주세요"
     private let remainCountLabel = UILabel()
+    private let keychain = KeychainSwift()
 
     // MARK: - Properties
                     
@@ -113,10 +115,40 @@ extension ReportBottomSheetViewController {
     // MARK: - Methods
     
     private func addTarget() {
-        
+        reportButton.addTarget(self, action: #selector(reportButtonDidTapped), for: .touchUpInside)
     }
  
+    func reportBoard( boardId: Int, contents: String) {
+        if let token = self.keychain.get("idToken") {
+            print("\(token)")
+            BoardAPI.shared.reportBoard(token: token, boardId: boardId, contents: contents) { result in
+                switch result {
+                case .success:
+                    self.dismiss(animated: true, completion: nil)
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                    
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
     // MARK: - @objc Methods
+    
+    @objc
+    private func reportButtonDidTapped() {
+        reportBoard(boardId: postId ?? 0, contents: contentTextView.text)
+    }
     
     @objc
     private func dismissToCreateEvaluateViewController() {

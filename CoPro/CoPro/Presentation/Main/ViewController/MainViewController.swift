@@ -77,17 +77,35 @@ final class MainViewController: UIViewController {
         [recruitVC, self.vc2, self.vc3]
     }
     var currentPage: Int = 0 {
-      didSet {
-        // from segmentedControl -> pageViewController 업데이트
-        print(oldValue, self.currentPage)
-        let direction: UIPageViewController.NavigationDirection = oldValue <= self.currentPage ? .forward : .reverse
-        self.pageViewController.setViewControllers(
-          [dataViewControllers[self.currentPage]],
-          direction: direction,
-          animated: true,
-          completion: nil
-        )
-      }
+        didSet {
+            // from segmentedControl -> pageViewController 업데이트
+            print(oldValue, self.currentPage)
+            let direction: UIPageViewController.NavigationDirection = oldValue <= self.currentPage ? .forward : .reverse
+            self.pageViewController.setViewControllers(
+                [dataViewControllers[self.currentPage]],
+                direction: direction,
+                animated: true,
+                completion: nil
+            )
+            switch currentPage {
+            case 0:
+                // currentPage가 0이면 버튼을 보이게 함
+                addPostButton.isHidden = false
+                // a 페이지로 이동하는 코드
+                break
+            case 1:
+                // currentPage가 1이면 버튼을 보이게 함
+                addPostButton.isHidden = false
+                // b 페이지로 이동하는 코드
+                break
+            case 2:
+                // currentPage가 2이면 버튼을 숨김
+                addPostButton.isHidden = true
+                break
+            default:
+                break
+            }
+        }
     }
     
     //MARK: - LifeCycle
@@ -162,12 +180,6 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.top.equalTo(scrollView.snp.bottom)
             $0.centerX.equalTo(self.view.snp.centerX)
         }
-//        noticeBoardView.snp.makeConstraints {
-//            $0.top.equalTo(pageControl.snp.bottom)
-//            $0.height.equalTo(300)
-//            $0.width.equalTo(UIScreen.main.bounds.width)
-//        }
-
         bottomSheetView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -201,10 +213,6 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     private func setRegister() {
 
     }
-//    private func setGesture(){
-//        panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGestureHandler))
-//        self.grabberView.addGestureRecognizer(panGesture)
-//    }
     private func setAddTarget() {
         self.segmentedControl.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
         self.changeValue(control: self.segmentedControl)
@@ -293,10 +301,20 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     }
     
     @objc func addButtonDidTapped() {
-        let addPostVC = AddPostViewController()
-            let navigationController = UINavigationController(rootViewController: addPostVC)
-            navigationController.modalPresentationStyle = .fullScreen
-            self.present(navigationController, animated: true, completion: nil)
+        switch currentPage {
+            case 0:
+                // currentPage가 0일 때의 동작
+                // a 페이지로 이동하는 코드
+                break
+            case 1:
+            let addPostVC = AddPostViewController()
+                let navigationController = UINavigationController(rootViewController: addPostVC)
+                navigationController.modalPresentationStyle = .fullScreen
+                self.present(navigationController, animated: true, completion: nil)
+                break
+            default:
+                break
+            }
     }
 }
     
