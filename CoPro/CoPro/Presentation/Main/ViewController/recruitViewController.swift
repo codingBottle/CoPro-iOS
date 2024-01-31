@@ -25,7 +25,10 @@ final class recruitViewController: UIViewController, SendStringData {
     
     func sendData(mydata: String, groupId: Int) {
         sortButton.setTitle(mydata, for: .normal)
-        
+        offset = 1
+        posts.removeAll()
+        filteredPosts.removeAll()
+        getAllBoard(category: "공지사항", page: offset, standard: getStandard())
     }
     
     
@@ -45,7 +48,7 @@ final class recruitViewController: UIViewController, SendStringData {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getAllBoard(category: "공지사항", page: 1)
+        getAllBoard(category: "공지사항", page: offset, standard: "create_at")
         setUI()
         setLayout()
         setDelegate()
@@ -142,16 +145,16 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc func sortButtonPressed() {
         let bottomSheetVC = SortBottomSheetViewController()
-        delegate1?.sendDefaultSelect(withOpt: sortButton.titleLabel?.text ?? "최신순")
-            bottomSheetVC.prepareForDisplay()
+        bottomSheetVC.delegate = self
+        bottomSheetVC.tmp = sortButton.titleLabel?.text ?? "최신순"
             present(bottomSheetVC, animated: true, completion: nil)
     }
 }
 extension recruitViewController {
-    func getAllBoard(category: String, page: Int) {
+    func getAllBoard(category: String, page: Int, standard: String) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
-            BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: "create_at") { result in
+            BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: standard) { result in
                 switch result {
                 case .success(let data):
                     if let data = data as? BoardDTO {
@@ -197,8 +200,19 @@ extension recruitViewController {
                 if isInfiniteScroll {
                     isInfiniteScroll = false
                     offset += 1
-                    getAllBoard(category: "공지사항", page: offset)
+                    getAllBoard(category: "공지사항", page: offset, standard: getStandard())
                 }
             }
         }
+    
+    func getStandard() -> String {
+        switch sortButton.title(for: .normal) {
+        case "최신순":
+            return "create_at"
+        case "인기순":
+            return "count"
+        default:
+            return "create_at" // 기본값
+        }
+    }
 }

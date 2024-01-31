@@ -13,37 +13,35 @@ import Then
 final class SortBottomSheetViewController: UIViewController, SendStringData, radioDelegate {
     func sendDefaultSelect(withOpt opt: String) {
         tmp = opt
-        let options = ["최신순", "인기순"]
-                sortRadioButton.set(options, defaultSelection: tmp)
     }
-    func prepareForDisplay() {
-            let options = ["최신순", "인기순"]
-            sortRadioButton.set(options, defaultSelection: tmp)
-        }
+    
     func sendData(mydata: String, groupId: Int) {
         delegate?.sendData(mydata: mydata, groupId: groupId)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func radioButtonDidSelect() {
         self.dismiss(animated: true, completion: nil)
     }
     
-
+    
     // MARK: - UI Components
     
     private let sortRadioButton = RadioButtonsStack(groupId: 1)
     weak var delegate: SendStringData?
     var tmp = String()
-
+    
     // MARK: - Properties
-                    
+    
     // MARK: - Initializer
-
+    
     
     // MARK: - View Life Cycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let options = ["최신순", "인기순"]
+        sortRadioButton.set(options, defaultSelection: tmp)
         setUI()
         setLayout()
         addTarget()
@@ -70,8 +68,6 @@ extension SortBottomSheetViewController {
             }]
             
             sortRadioButton.do {
-                let options = ["최신순", "인기순"]
-                $0.set(options, defaultSelection: tmp)
                 $0.translatesAutoresizingMaskIntoConstraints = false
             }
             
