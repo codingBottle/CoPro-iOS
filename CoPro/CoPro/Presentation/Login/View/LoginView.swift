@@ -24,15 +24,30 @@ class LoginView: BaseView {
     let githubSignInButton = UIButton()
     let signOutButton = UIButton()
     let coproLogo = UIImageView(image : Image.coproLogo)
-    let coproLogoLabel = UILabel()
+    let coproLogoLabel = UILabel().then{
+        $0.setPretendardFont(text: "협업할 개발자를 찾는다면?", size: 25.0, weight: .bold, letterSpacing: 1.37)
+        $0.textAlignment = .center
+    }
     let appleLogo = UIImageView(image:Image.apple_SignInButton)
-    let appleSignInTitle = UILabel()
+    let appleSignInTitle = UILabel().then{
+        $0.setPretendardFont(text: "Sign in with Apple", size: 17.0, weight: .regular, letterSpacing: 1.23)
+        $0.textAlignment = .center
+        $0.textColor = UIColor.White()
+    }
     let googleLogo = UIImageView(image:Image.google_SignInButton)
     let googleLogoBackGround = UIView()
-    let googleSignInTitle = UILabel()
+    let googleSignInTitle = UILabel().then{
+        $0.setPretendardFont(text: "Sign in with Google", size: 17.0, weight: .regular, letterSpacing: 1.23)
+        $0.textAlignment = .center
+        $0.textColor = UIColor.White()
+    }
     
     let githubLogo = UIImageView(image:Image.github_SignInButton)
-    let githubSignInTitle = UILabel()
+    let githubSignInTitle = UILabel().then{
+        $0.setPretendardFont(text: "Sign in with GitHub", size: 17.0, weight: .regular, letterSpacing: 1.23)
+        $0.textAlignment = .center
+        $0.textColor = UIColor.White()
+    }
     
     
     
@@ -44,25 +59,19 @@ class LoginView: BaseView {
         addSubview(signOutButton)
         //Copro Label Design
         addSubview(coproLogoLabel)
-        let attributedString = NSMutableAttributedString(string: "협업할 개발자를 찾는다면?", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 25, weight: .bold)])
-        attributedString.addAttribute(NSAttributedString.Key.kern, value: 1.37, range: NSRange(location: 0, length: attributedString.length))
-        
-        coproLogoLabel.attributedText = attributedString
-        coproLogoLabel.textAlignment = .center
-        
+
         //AppleSignInButton
-        appleSignInTitle.attributedText = NSAttributedString(string: "Sign in with Apple", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
         appleSignInButton.addSubview(appleLogo)
         appleSignInButton.addSubview(appleSignInTitle)
+        
+        //GoogleSignInButton
         googleSignInButton.addSubview(googleLogoBackGround)
         googleLogoBackGround.addSubview(googleLogo)
         googleSignInButton.addSubview(googleSignInTitle)
-        googleSignInTitle.attributedText = NSAttributedString(string: "Sign in with Google", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
-        
-        githubSignInTitle.attributedText = NSAttributedString(string: "Sign in with GitHub", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25])
+        //GitHubSignInButton
         githubSignInButton.addSubview(githubLogo)
         githubSignInButton.addSubview(githubSignInTitle)
-        //        githubSignInButton.setAttributedTitle(NSAttributedString(string: "Sign in with GitHub", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.kern: 1.25]), for: .normal)
+
         
     }
     override func setLayout() {
