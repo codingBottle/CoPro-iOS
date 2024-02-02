@@ -63,38 +63,36 @@ class CardCollectionCellView: UICollectionViewCell {
     }
     //좋아요 아이콘을 터치했을 때 실행되는 메서드
     @objc func likeIconTapped() {
-        
-        
         if isLike == true{
             CardAPI.shared.cancelLike(MemberId:likeMemberId!) { success in
                 if success {
                     // API 호출이 성공하면 UI 업데이트
                     DispatchQueue.main.async {
-                                                guard let currentCount = Int(self.slideCardView.likeLabel.text ?? "0") else { return }
-                                                let newCount = currentCount - 1
-                                                self.slideCardView.likeLabel.text = "\(newCount)"
-                        self.slideCardView.likeIcon.tintColor = .gray // 아이콘 색상을 파란색으로 변경
-                        self.slideCardView.likeLabel.textColor = .gray // 라벨 색상을 파란색으로 변경
-                        print("좋아요 취소 후 좋아요 수 \(self.likeCount)")
+                        guard let currentCount = Int(self.slideCardView.likeLabel.text ?? "0") else { return }
+                        let newCount = currentCount - 1
+                        self.slideCardView.likeLabel.text = "\(newCount)"
+                        self.slideCardView.likeIcon.tintColor = UIColor.G1()
+                        self.slideCardView.likeLabel.textColor = UIColor.White()
+                        print("좋아요 취소 후 좋아요 수 \(String(describing: self.likeCount))")
                         self.isLike = false
                         print("좋아요 여부 \(String(describing: self.isLike))")
                     }
                 }
             }
-
+            
         }else{
             CardAPI.shared.addLike(MemberId:likeMemberId!) { success in
                 if success {
                     // API 호출이 성공하면 UI 업데이트
                     DispatchQueue.main.async {
-                                                guard let currentCount = Int(self.slideCardView.likeLabel.text ?? "0") else { return }
-                                                let newCount = currentCount + 1
-                                                self.slideCardView.likeLabel.text = "\(newCount)"
-                        self.slideCardView.likeIcon.tintColor = .blue // 아이콘 색상을 파란색으로 변경
-                        self.slideCardView.likeLabel.textColor = .blue // 라벨 색상을 파란색으로 변경
-                           
-                                        
-                        print("좋아요 후 좋아요 수 \(self.likeCount)")
+                        guard let currentCount = Int(self.slideCardView.likeLabel.text ?? "0") else { return }
+                        let newCount = currentCount + 1
+                        self.slideCardView.likeLabel.text = "\(newCount)"
+                        self.slideCardView.likeIcon.tintColor = UIColor.P2() // 아이콘 색상을 파란색으로 변경
+                        self.slideCardView.likeLabel.textColor = UIColor.P2() // 라벨 색상을 파란색으로 변경
+                        
+                        
+                        print("좋아요 후 좋아요 수 \(String(describing: self.likeCount))")
                         
                         self.isLike = true
                         print("좋아요 여부 \(String(describing: self.isLike))")
@@ -117,11 +115,11 @@ class CardCollectionCellView: UICollectionViewCell {
         self.isLike = isLike
         print("configure IsLike\(isLike)")
         if isLike == true {
-            self.slideCardView.likeIcon.tintColor = .blue // 아이콘 색상을 파란색으로 변경
-            self.slideCardView.likeLabel.textColor = .blue
+            self.slideCardView.likeIcon.tintColor = UIColor.P2()// 아이콘 색상을 파란색으로 변경
+            self.slideCardView.likeLabel.textColor = UIColor.P2()
         }else{
-            self.slideCardView.likeIcon.tintColor = .gray // 아이콘 색상을 파란색으로 변경
-            self.slideCardView.likeLabel.textColor = .gray
+            self.slideCardView.likeIcon.tintColor = UIColor.G1()// 아이콘 색상을 파란색으로 변경
+            self.slideCardView.likeLabel.textColor = UIColor.White()
         }
     }
 }
