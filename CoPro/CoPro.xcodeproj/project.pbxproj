@@ -30,6 +30,23 @@
 		9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2F92AD5227500F4CA43 /* UIColor++.swift */; };
 		9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2FB2AD5228300F4CA43 /* Image.swift */; };
 		9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */; };
+		B513771F2B5E45E1002D3C40 /* CardCollectionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B513771E2B5E45E1002D3C40 /* CardCollectionCellView.swift */; };
+		B51377212B5F8941002D3C40 /* MiniCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51377202B5F8941002D3C40 /* MiniCardGridView.swift */; };
+		B517514E2B427161003453B5 /* CardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B517514D2B427161003453B5 /* CardDTO.swift */; };
+		B51751502B42AA11003453B5 /* SlideCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B517514F2B42AA11003453B5 /* SlideCardView.swift */; };
+		B51751582B4BF0A0003453B5 /* MiniCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51751572B4BF0A0003453B5 /* MiniCard.swift */; };
+		B58A4A632B68F82C00793160 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */; };
+		B58A4A642B68F82C00793160 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5B2B68F82C00793160 /* Pretendard-Bold.otf */; };
+		B58A4A652B68F82C00793160 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5C2B68F82C00793160 /* Pretendard-Medium.otf */; };
+		B58A4A662B68F82C00793160 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5D2B68F82C00793160 /* Pretendard-Thin.otf */; };
+		B58A4A672B68F82C00793160 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5E2B68F82C00793160 /* Pretendard-ExtraBold.otf */; };
+		B58A4A682B68F82C00793160 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5F2B68F82C00793160 /* Pretendard-ExtraLight.otf */; };
+		B58A4A692B68F82C00793160 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A602B68F82C00793160 /* Pretendard-Regular.otf */; };
+		B58A4A6A2B68F82C00793160 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A612B68F82C00793160 /* Pretendard-SemiBold.otf */; };
+		B58A4A6B2B68F82C00793160 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A622B68F82C00793160 /* Pretendard-Black.otf */; };
+		B58A4A6E2B6907E300793160 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A4A6D2B6907E300793160 /* Color.swift */; };
+		B58B8D332B4D3E2100FB98F9 /* CardAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58B8D322B4D3E2100FB98F9 /* CardAPI.swift */; };
+		B58B8D372B4D3F0900FB98F9 /* CardRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58B8D362B4D3F0900FB98F9 /* CardRouter.swift */; };
 		B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D3E4F32AFB73B00021DDA0 /* LoginView.swift */; };
 		B5D3E4F72AFB76250021DDA0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E4F62AFB76250021DDA0 /* FirebaseAnalytics */; };
 		B5D3E4F92AFB76250021DDA0 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E4F82AFB76250021DDA0 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -112,6 +129,23 @@
 		9E05D2F92AD5227500F4CA43 /* UIColor++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor++.swift"; sourceTree = "<group>"; };
 		9E05D2FB2AD5228300F4CA43 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
+		B513771E2B5E45E1002D3C40 /* CardCollectionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionCellView.swift; sourceTree = "<group>"; };
+		B51377202B5F8941002D3C40 /* MiniCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniCardGridView.swift; sourceTree = "<group>"; };
+		B517514D2B427161003453B5 /* CardDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDTO.swift; sourceTree = "<group>"; };
+		B517514F2B42AA11003453B5 /* SlideCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideCardView.swift; sourceTree = "<group>"; };
+		B51751572B4BF0A0003453B5 /* MiniCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniCard.swift; sourceTree = "<group>"; };
+		B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		B58A4A5B2B68F82C00793160 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		B58A4A5C2B68F82C00793160 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		B58A4A5D2B68F82C00793160 /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		B58A4A5E2B68F82C00793160 /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		B58A4A5F2B68F82C00793160 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		B58A4A602B68F82C00793160 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		B58A4A612B68F82C00793160 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		B58A4A622B68F82C00793160 /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		B58A4A6D2B6907E300793160 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		B58B8D322B4D3E2100FB98F9 /* CardAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardAPI.swift; sourceTree = "<group>"; };
+		B58B8D362B4D3F0900FB98F9 /* CardRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRouter.swift; sourceTree = "<group>"; };
 		B5D3E4F32AFB73B00021DDA0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -238,6 +272,7 @@
 		9E05D2C52AD5091700F4CA43 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				B58A4A6C2B6907D000793160 /* Color */,
 				9E05D2E82AD521C000F4CA43 /* AssetsCatalog */,
 				9E05D2E72AD521BA00F4CA43 /* Font */,
 			);
@@ -264,6 +299,7 @@
 		9E05D2C82AD5094A00F4CA43 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				B58B8D312B4D3C4800FB98F9 /* Card */,
 				9E05D2CE2AD5098200F4CA43 /* API.swift */,
 			);
 			path = API;
@@ -272,6 +308,7 @@
 		9E05D2C92AD5094E00F4CA43 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				B58B8D342B4D3EC100FB98F9 /* Card */,
 				9E05D2D02AD5098D00F4CA43 /* DTO.swift */,
 			);
 			path = DTO;
@@ -309,6 +346,15 @@
 		9E05D2E72AD521BA00F4CA43 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				B58A4A622B68F82C00793160 /* Pretendard-Black.otf */,
+				B58A4A5B2B68F82C00793160 /* Pretendard-Bold.otf */,
+				B58A4A5E2B68F82C00793160 /* Pretendard-ExtraBold.otf */,
+				B58A4A5F2B68F82C00793160 /* Pretendard-ExtraLight.otf */,
+				B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */,
+				B58A4A5C2B68F82C00793160 /* Pretendard-Medium.otf */,
+				B58A4A602B68F82C00793160 /* Pretendard-Regular.otf */,
+				B58A4A612B68F82C00793160 /* Pretendard-SemiBold.otf */,
+				B58A4A5D2B68F82C00793160 /* Pretendard-Thin.otf */,
 				9E05D2E92AD521CB00F4CA43 /* Font.swift */,
 			);
 			path = Font;
@@ -348,6 +394,7 @@
 		9E76B89B2AFB4E4F00338E2C /* Router */ = {
 			isa = PBXGroup;
 			children = (
+				B58B8D352B4D3EF800FB98F9 /* CardRouter */,
 				9E76B89C2AFB4E5800338E2C /* BaseRouter */,
 			);
 			path = Router;
@@ -378,6 +425,38 @@
 				B5D3E4F02AFB72C70021DDA0 /* Model */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		B58A4A6C2B6907D000793160 /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				B58A4A6D2B6907E300793160 /* Color.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		B58B8D312B4D3C4800FB98F9 /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				B58B8D322B4D3E2100FB98F9 /* CardAPI.swift */,
+			);
+			path = Card;
+			sourceTree = "<group>";
+		};
+		B58B8D342B4D3EC100FB98F9 /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				B517514D2B427161003453B5 /* CardDTO.swift */,
+			);
+			path = Card;
+			sourceTree = "<group>";
+		};
+		B58B8D352B4D3EF800FB98F9 /* CardRouter */ = {
+			isa = PBXGroup;
+			children = (
+				B58B8D362B4D3F0900FB98F9 /* CardRouter.swift */,
+			);
+			path = CardRouter;
 			sourceTree = "<group>";
 		};
 		B5D3E4F02AFB72C70021DDA0 /* Model */ = {
@@ -423,6 +502,10 @@
 			isa = PBXGroup;
 			children = (
 				B5D3E56A2B1718C40021DDA0 /* CardView.swift */,
+				B517514F2B42AA11003453B5 /* SlideCardView.swift */,
+				B51751572B4BF0A0003453B5 /* MiniCard.swift */,
+				B513771E2B5E45E1002D3C40 /* CardCollectionCellView.swift */,
+				B51377202B5F8941002D3C40 /* MiniCardGridView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -543,9 +626,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B58A4A652B68F82C00793160 /* Pretendard-Medium.otf in Resources */,
 				9E05D2BA2AD508B300F4CA43 /* LaunchScreen.storyboard in Resources */,
+				B58A4A682B68F82C00793160 /* Pretendard-ExtraLight.otf in Resources */,
+				B58A4A6A2B68F82C00793160 /* Pretendard-SemiBold.otf in Resources */,
+				B58A4A672B68F82C00793160 /* Pretendard-ExtraBold.otf in Resources */,
+				B58A4A6B2B68F82C00793160 /* Pretendard-Black.otf in Resources */,
+				B58A4A642B68F82C00793160 /* Pretendard-Bold.otf in Resources */,
+				B58A4A662B68F82C00793160 /* Pretendard-Thin.otf in Resources */,
 				B5D3E5512B06127C0021DDA0 /* Image.xcassets in Resources */,
 				B5D3E53F2AFE7AC50021DDA0 /* GoogleService-Info.plist in Resources */,
+				B58A4A692B68F82C00793160 /* Pretendard-Regular.otf in Resources */,
+				B58A4A632B68F82C00793160 /* Pretendard-Light.otf in Resources */,
 				9E05D2B72AD508B300F4CA43 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -559,6 +651,7 @@
 			files = (
 				E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */,
 				B5D3E56B2B1718C40021DDA0 /* CardView.swift in Sources */,
+				B513771F2B5E45E1002D3C40 /* CardCollectionCellView.swift in Sources */,
 				9E05D2F02AD5222300F4CA43 /* UIStackView++.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
@@ -573,16 +666,23 @@
 				9E05D2F62AD5225600F4CA43 /* UITextField++.swift in Sources */,
 				9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */,
 				B5D3E5322AFB7C2E0021DDA0 /* LoginViewController.swift in Sources */,
+				B51751582B4BF0A0003453B5 /* MiniCard.swift in Sources */,
 				9E05D2D32AD5099E00F4CA43 /* BaseResponse.swift in Sources */,
+				B517514E2B427161003453B5 /* CardDTO.swift in Sources */,
 				9E05D2EA2AD521CB00F4CA43 /* Font.swift in Sources */,
 				E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */,
 				9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */,
 				9E05D2B02AD508B200F4CA43 /* SceneDelegate.swift in Sources */,
 				9E05D2CF2AD5098200F4CA43 /* API.swift in Sources */,
+				B51751502B42AA11003453B5 /* SlideCardView.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,
 				9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */,
+				B58B8D332B4D3E2100FB98F9 /* CardAPI.swift in Sources */,
 				9E05D2EE2AD5221500F4CA43 /* UIView++.swift in Sources */,
 				9E05D2D72AD509D100F4CA43 /* BaseView.swift in Sources */,
+				B58A4A6E2B6907E300793160 /* Color.swift in Sources */,
+				B51377212B5F8941002D3C40 /* MiniCardGridView.swift in Sources */,
+				B58B8D372B4D3F0900FB98F9 /* CardRouter.swift in Sources */,
 				E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -606,6 +706,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_URL = "http://http://43.202.172.4:8091";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -669,6 +770,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BASE_URL = "http://http://43.202.172.4:8091";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
