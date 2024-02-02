@@ -62,7 +62,7 @@ class Content: Codable {
     let name, email, picture: String
     let occupation: String?
     let language: String?
-    let career: String?
+    let career: Int?
     let gitHubURL: String?
     let nickName: String?
     let likeMembersCount: Int
@@ -74,7 +74,7 @@ class Content: Codable {
         case nickName, likeMembersCount
     }
     
-    init(memberId: Int,name: String, email: String, picture: String, occupation: String, language: String, career: String, gitHubURL: String, nickName: String, likeMembersCount: Int, likeMembersID: [Int], isLikeMembers: Bool) {
+    init(memberId: Int,name: String, email: String, picture: String, occupation: String, language: String, career: Int, gitHubURL: String, nickName: String, likeMembersCount: Int, likeMembersID: [Int], isLikeMembers: Bool) {
         self.memberId = memberId
         self.name = name
         self.email = email
