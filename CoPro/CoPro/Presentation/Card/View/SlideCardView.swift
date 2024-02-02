@@ -35,7 +35,7 @@ class SlideCardView: BaseView {
         )
     }
     let cardView = UIView().then {
-        $0.backgroundColor = UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1)
+        $0.backgroundColor = UIColor.P7()
         $0.layer.cornerRadius = 30
     }
     let cardImage = UIImageView().then{
@@ -48,14 +48,12 @@ class SlideCardView: BaseView {
         $0.spacing = 20
     }
     let chatButton = UIButton().then {
-        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+        $0.backgroundColor = UIColor.White(alpha: 0.5)
         $0.layer.cornerRadius = 15
     }
     let chatLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.attributedText = NSAttributedString(string: "채팅하기", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.kern: 1.25])
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.7
+        $0.setPretendardFont(text: "채팅하기", size: 16, weight: .regular, letterSpacing: 1.15)
     }
     let gitImage = UIImageView(image: Image.github_SignInButton)
     let gitButtonStackView = UIStackView().then {
@@ -80,7 +78,7 @@ class SlideCardView: BaseView {
         
         let button = UIButton(configuration: config)
         
-        button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+        button.backgroundColor = UIColor.White(alpha: 0.5)
         button.layer.cornerRadius = 15
         
         return button
@@ -94,26 +92,32 @@ class SlideCardView: BaseView {
     }
     let userNameLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.attributedText = NSAttributedString(string: "개발자 사나이", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .regular), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.kern: 1.21])
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.7
+        $0.setPretendardFont(text: "", size: 14, weight: .regular, letterSpacing: 1.26)
     }
     let userPartLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.attributedText = NSAttributedString(string: "Mobile", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 25, weight: .bold), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.kern: 1.37])
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.7
+        $0.setPretendardFont(text: "", size: 25, weight: .bold, letterSpacing: 1.24)
     }
     let userLangLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.attributedText = NSAttributedString(string: "Swift / Dart", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 25, weight: .bold), NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.kern: 1.37])
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.7
+        $0.setPretendardFont(text: "", size: 25, weight: .bold, letterSpacing: 1.24)
     }
-    let infoIconStackView = UIStackView()
+    let infoIconStackView = UIStackView().then{
+        $0.axis = .vertical
+        $0.distribution = .equalCentering
+        $0.spacing = 2
+    }
     let likeIcon = UIImageView().then {
-        $0.image = UIImage(systemName: "heart")
+        $0.image = UIImage(systemName: "suit.heart.fill")
+        $0.tintColor = UIColor.G1()
         $0.contentMode = .scaleAspectFit
+        $0.isUserInteractionEnabled = true
+//        $0.sizeToFit()
+    }
+    let likeLabel = UILabel().then{
+        $0.setPretendardFont(text: "", size: 16, weight: .regular, letterSpacing: 1.15)
+        $0.textColor = UIColor.White()
+        $0.textAlignment = .center
     }
     override init() {
         super.init()
@@ -135,7 +139,8 @@ class SlideCardView: BaseView {
         infoView.addSubview(infoStackView)
         infoStackView.addArrangedSubviews(userNameLabel,userPartLabel,userLangLabel)
         
-        infoView.addSubview(likeIcon)
+        infoView.addSubview(infoIconStackView)
+        infoIconStackView.addArrangedSubviews(likeIcon,likeLabel)
     }
     
     override func setLayout() {
@@ -155,15 +160,19 @@ class SlideCardView: BaseView {
             $0.width.equalToSuperview().inset(20)
         }
         infoStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
             $0.centerY.equalToSuperview()
         }
         
-        likeIcon.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.centerY.equalToSuperview()
-            $0.width.equalTo(40)
-            $0.height.equalTo(35)
+        infoIconStackView.snp.makeConstraints {
+            $0.right.equalToSuperview()
+            $0.top.equalTo(cardImage.snp.bottom).offset(10)
+        }
+        likeIcon.snp.makeConstraints{
+            $0.centerX.equalToSuperview()
+            $0.width.height.equalTo(40)
+        }
+        likeLabel.snp.makeConstraints{
+            $0.centerX.equalToSuperview()
         }
         cardbuttonStackView.snp.makeConstraints{
             $0.centerX.equalToSuperview()
