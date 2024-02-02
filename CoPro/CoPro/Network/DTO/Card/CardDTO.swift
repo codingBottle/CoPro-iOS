@@ -11,9 +11,9 @@ import Foundation
 class CardDTO: Codable {
     let statusCode: Int
     let message: String
-    let data: DataClass
+    let data: cardDataClass
     
-    init(statusCode: Int, message: String, data: DataClass) {
+    init(statusCode: Int, message: String, data: cardDataClass) {
         self.statusCode = statusCode
         self.message = message
         self.data = data
@@ -21,7 +21,7 @@ class CardDTO: Codable {
 }
 
 // MARK: - DataClass
-class DataClass: Codable {
+class cardDataClass: Codable {
     let myViewType: Int
     let memberResDto: MemberResDto
     
