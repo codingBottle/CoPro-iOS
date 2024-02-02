@@ -37,9 +37,6 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
                            name: contents[indexPath.item].name,
                            occupation: contents[indexPath.item].occupation ?? " ",
                            language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount,memberId: contents[indexPath.item].memberId,isLike: contents[indexPath.item].isLikeMembers)
-            if contents[indexPath.item].isLikeMembers == true {
-                SlideCardView().likeIcon.tintColor = .blue
-            }
             return cell
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MiniCardGridView", for: indexPath) as? MiniCardGridView else {
@@ -57,7 +54,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         cell.configure(with: contents[indexPath.item].picture,
                        name: contents[indexPath.item].name,
                        occupation: contents[indexPath.item].occupation ?? " ",
-                       language: contents[indexPath.item].language ?? " ", gitButtonURL: contents[indexPath.item].gitHubURL ?? " ")
+                       language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount,memberId: contents[indexPath.item].memberId,isLike: contents[indexPath.item].isLikeMembers)
         return cell
     }
     //셀 사이즈 정의
@@ -67,14 +64,14 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         }
         else{
             let numberOfItemsInRow: CGFloat = 2
-                let spacingBetweenItems: CGFloat = 10
-                
-                let totalSpacing = (numberOfItemsInRow - 1) * spacingBetweenItems
-                let cellWidth = (collectionView.frame.width - totalSpacing) / numberOfItemsInRow
+            let spacingBetweenItems: CGFloat = 10
+            
+            let totalSpacing = (numberOfItemsInRow - 1) * spacingBetweenItems
+            let cellWidth = (collectionView.frame.width - totalSpacing) / numberOfItemsInRow
             
             let cellHeight = 272
-                
-                return CGSize(width: cellWidth, height: 272)
+            
+            return CGSize(width: cellWidth, height: 272)
         }
         
     }
@@ -111,25 +108,25 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
             let index = Int(scrollView.contentOffset.x / width)
             print("가로 현재 페이지: \(index)")
             
-            if last == true {
-                print("가로 마지막 페이지")
-                return
-            }else if index == contents.count - 1 {
+            if last == true && index >= contents.count {
+                print("가로 마지막 페이지 - 처음 페이지로 돌아갑니다.")
+                DispatchQueue.main.async {
+                    self.loadFirstPage()
+                }
+            } else if index == contents.count - 1 {
                 DispatchQueue.main.async {
                     self.loadNextPage()
-                    
                 }
             }
         }
         else {
-            let height =  scrollView.frame.height / 4
+            let height =  scrollView.frame.height / 2
             let index = Int(scrollView.contentOffset.y / height)
             print("세로 현재 페이지: \(index)")
-            
             if last == true {
                 print("세로 마지막 페이지")
                 return
-            }else if index == contents.count - 4 {
+            }else if index == contents.count - 7 {
                 DispatchQueue.main.async {
                     self.loadNextPage()
                     
@@ -141,23 +138,36 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     func loadNextPage() {
         if last {
             print("마지막 페이지")
-            return
+            DispatchQueue.main.async {
+                self.loadFirstPage()
+            }
+        }else{
+            // 페이지 번호를 증가시키고 데이터를 불러옴
+            page += 1
+            let part = self.cardView.partLabel.text ?? " "
+            let lang = self.cardView.langLabel.text ?? " "
+            let old = self.oldIndex
+            
+            self.loadCardDataFromAPI(part: part, lang: lang, old: old,page: page)
+            
+            print("page value: \(page)")
         }
-        
-        // 페이지 번호를 증가시키고 데이터를 불러옴
-        page += 1
+    }
+    //첫 페이지로 돌아가는 메소드
+    func loadFirstPage() {
+        self.page = 0
+        self.contents.removeAll()
         let part = self.cardView.partLabel.text ?? " "
         let lang = self.cardView.langLabel.text ?? " "
-        let old = self.cardView.oldLabel.text ?? " "
-        
-        self.loadCardDataFromAPI(part: part, lang: lang, old: old,page: page)
-        
-        print("page value: \(page)")
+        let old = self.oldIndex
+        loadCardDataFromAPI(part: part, lang: lang, old: old, page: 0)
+        print("첫 페이지로 돌아갔습니다.")
     }
     
     var myViewType = 0
     var last = false
     var page = 0
+    var oldIndex = 0
     var contents: [Content] = [] // API 데이터를 저장할 배열
     let partDropDown = DropDown()
     let langDropDown = DropDown()
@@ -186,12 +196,23 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         // DropDown 설정
         setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["Mobile", "Server", "Web"])
         setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["Swift", "Java", "Flutter"])
-        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["1 year", "2 years", "3 years"])
+        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["~ 6개월", "6개월~1년", "1년~2년", "2년~3년", "3년~5년", "5년~10년", "10년 이상"])
         
         setupCollectionView()
-        loadCardDataFromAPI(part: " ", lang: " ", old: " ",page: page)
+        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: page)
+        //        getFontName()
         
-        
+    }
+    func getFontName() {
+        for family in UIFont.familyNames {
+            
+            let sName: String = family as String
+            print("family: \(sName)")
+            
+            for name in UIFont.fontNames(forFamilyName: sName) {
+                print("name: \(name as String)")
+            }
+        }
     }
     //컬렉션뷰 셋업 메소드
     private func setupCollectionView() {
@@ -217,35 +238,46 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         collectionView.delegate = self
     }
     //API호출
-    func loadCardDataFromAPI(part: String, lang: String, old: String, page: Int) {
-        CardAPI.shared.getUserData(part: part, lang: lang, old: 0, page: page) { [weak self] result in
-                switch result {
-                case .success(let cardDTO):
+    func loadCardDataFromAPI(part: String, lang: String, old: Int, page: Int) {
+        CardAPI.shared.getUserData(part: part, lang: lang, old: old, page: page) { [weak self] result in
+            switch result {
+            case .success(let cardDTO):
+                
+                
+                DispatchQueue.main.async {
+                    self?.contents.append(contentsOf: cardDTO.data.memberResDto.content)
+                    self?.last = cardDTO.data.memberResDto.last
+                    self?.myViewType = cardDTO.data.myViewType
+                    let scrollDirection: UICollectionView.ScrollDirection = (self?.myViewType == 0) ? .horizontal : .vertical
                     
-
-                    DispatchQueue.main.async {
-                        self?.contents.append(contentsOf: cardDTO.data.memberResDto.content)
-                        self?.last = cardDTO.data.memberResDto.last
-                        self?.myViewType = cardDTO.data.myViewType
-                        let scrollDirection: UICollectionView.ScrollDirection = (self?.myViewType == 0) ? .horizontal : .vertical
-
-                        if let layout = self?.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                            layout.scrollDirection = scrollDirection
-                            self?.collectionView.isPagingEnabled = (scrollDirection == .horizontal)
-                        }
-                        
-                        self?.collectionView.reloadData()
-                        
-                        print("After reloadData")
-                        print("API Success: \(cardDTO.data.memberResDto.content.count)")
-                        print("APIDATA : \(String(describing: self?.contents))")
+                    if let layout = self?.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                        layout.scrollDirection = scrollDirection
+                        self?.collectionView.isPagingEnabled = (scrollDirection == .horizontal)
                     }
-
-                case .failure(let error):
-                    print("API Error: \(error)")
+                    
+                    self?.collectionView.reloadData()
+                    if self?.contents.count == 0 {
+                        // contents가 비어있을 때 메시지 라벨을 추가합니다.
+                        let messageLabel = UILabel().then{
+                            $0.setPretendardFont(text: "조건에 맞는 개발자를 찾을 수 없어요.", size: 17, weight: .bold, letterSpacing: 1.35)
+                        }
+                        messageLabel.textColor = .black
+                        messageLabel.textAlignment = .center
+                        self?.collectionView.backgroundView = messageLabel
+                    } else {
+                        // contents가 비어있지 않을 때 메시지 라벨을 제거합니다.
+                        self?.collectionView.backgroundView = nil
+                    }
+                    print("After reloadData")
+                    print("API Success: \(cardDTO.data.memberResDto.content.count)")
+                    print("APIDATA : \(String(describing: self?.contents))")
                 }
+                
+            case .failure(let error):
+                print("API Error: \(error)")
             }
         }
+    }
     
     override func setUI() {
         
@@ -263,6 +295,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     func setupDropDown(dropDown: DropDown, anchorView: UIView, button: UIButton, items: [String]) {
         dropDown.anchorView = anchorView
         dropDown.dataSource = items
+        //        var oldIndex = 0
         
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             if dropDown == self.partDropDown {
@@ -275,15 +308,33 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
                 print(self.cardView.langLabel.text!)
             } else if dropDown == self.oldDropDown {
                 self.cardView.oldLabel.text = item
-                print(self.cardView.oldLabel.text!)
+                switch item {
+                case "~ 6개월":
+                    self.oldIndex = 1
+                case "6개월~1년":
+                    self.oldIndex = 2
+                case "1년~2년":
+                    self.oldIndex = 3
+                case "2년~3년":
+                    self.oldIndex = 4
+                case "3년~5년":
+                    self.oldIndex = 5
+                case "5년~10년":
+                    self.oldIndex = 6
+                case "10년 이상":
+                    self.oldIndex = 7
+                default:
+                    self.oldIndex = 0
+                }
+                print(oldIndex)
             }
             DispatchQueue.main.async {
                 self.contents.removeAll()
-                        let part = self.cardView.partLabel.text ?? " "
-                        let lang = self.cardView.langLabel.text ?? " "
-                        let old = self.cardView.oldLabel.text ?? " "
-                        self.loadCardDataFromAPI(part: part, lang: lang, old: old, page: self.page)
-                    }
+                let part = self.cardView.partLabel.text ?? " "
+                let lang = self.cardView.langLabel.text ?? " "
+                let old = self.cardView.oldLabel.text == " " ? 0 : 1
+                self.loadCardDataFromAPI(part: part, lang: lang, old: oldIndex, page: self.page)
+            }
         }
         
         button.addTarget(self, action: #selector(showDropDown(sender:)), for: .touchUpInside)
@@ -292,7 +343,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     // 두 번째 드롭다운 내용 업데이트 메서드
     func updateLangDropDown(part: String) {
         var langItems: [String] = []
-
+        
         // 첫 번째 드롭다운 선택값에 따라 두 번째 드롭다운 내용 설정
         if part == "Mobile" {
             langItems = ["Flutter", "Kotlin", "Java", "Objective-C"]
@@ -301,7 +352,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         } else if part == "Web" {
             langItems = ["HTML", "CSS", "Angular", "Vue.js", "TypeScript", "JavaScript", "React", "Sass"]
         }
-
+        
         // 두 번째 드롭다운 업데이트
         langDropDown.dataSource = langItems
         langDropDown.reloadAllComponents()
