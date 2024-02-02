@@ -23,13 +23,12 @@ class CardView: BaseView{
     }
     let partLabel = UILabel().then {
         $0.textAlignment = .left
-        $0.attributedText = NSAttributedString(string: "직군", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold), NSAttributedString.Key.foregroundColor: UIColor(red: 0.581, green: 0.585, blue: 0.596, alpha: 1), NSAttributedString.Key.kern: 1.25])
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.7
+        $0.setPretendardFont(text: "직군", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.G3()
     }
     let partButton = UIButton().then {
         $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = UIColor(red: 0.581, green: 0.585, blue: 0.596, alpha: 1)
+        $0.tintColor = UIColor.G3()
     }
     let langContainerView = UIView().then {
         $0.backgroundColor = UIColor(red: 0.463, green: 0.463, blue: 0.502, alpha: 0.24)
@@ -37,13 +36,12 @@ class CardView: BaseView{
     }
     let langLabel = UILabel().then {
         $0.textAlignment = .left
-        $0.attributedText = NSAttributedString(string: "언어", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold), NSAttributedString.Key.foregroundColor: UIColor(red: 0.581, green: 0.585, blue: 0.596, alpha: 1), NSAttributedString.Key.kern: 1.25])
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.7
+        $0.setPretendardFont(text: "언어", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.G3()
     }
     let langButton = UIButton().then {
         $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = UIColor(red: 0.581, green: 0.585, blue: 0.596, alpha: 1)
+        $0.tintColor = UIColor.G3()
     }
     let oldContainerView = UIView().then {
         $0.backgroundColor = UIColor(red: 0.463, green: 0.463, blue: 0.502, alpha: 0.24)
@@ -51,13 +49,12 @@ class CardView: BaseView{
     }
     let oldLabel = UILabel().then {
         $0.textAlignment = .left
-        $0.attributedText = NSAttributedString(string: "경력", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold), NSAttributedString.Key.foregroundColor: UIColor(red: 0.581, green: 0.585, blue: 0.596, alpha: 1), NSAttributedString.Key.kern: 1.25])
-        $0.adjustsFontSizeToFitWidth = true
-        $0.minimumScaleFactor = 0.7
+        $0.setPretendardFont(text: "경력", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.G3()
     }
     let oldButton = UIButton().then {
         $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        $0.tintColor = UIColor(red: 0.581, green: 0.585, blue: 0.596, alpha: 1)
+        $0.tintColor = UIColor.G3()
     }
     
     let slideCardView = SlideCardView()
