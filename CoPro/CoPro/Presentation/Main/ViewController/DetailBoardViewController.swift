@@ -55,7 +55,6 @@ final class DetailBoardViewController: UIViewController {
 
 
         stackView.do {
-//            $0.backgroundColor = .blue
             $0.axis = .vertical
             $0.spacing = 8
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -206,7 +205,7 @@ final class DetailBoardViewController: UIViewController {
         leftButton.tintColor = UIColor(hex: "121213")
         self.navigationItem.leftBarButtonItem = leftButton
         if #available(iOS 14.0, *) {
-            let menuItem1 = UIAction(title: "신고") { action in
+            let menuItem1 = UIAction(title: "신고", attributes: .destructive) { action in
                 guard let boardId = self.postId else { return }
                 let bottomSheetVC = ReportBottomSheetViewController()
                 bottomSheetVC.postId = boardId
@@ -383,7 +382,7 @@ final class DetailBoardViewController: UIViewController {
         timeLabel.text = data.getTimeString()
         viewCountLabel.text = "조회 \(data.count)"
         contentLabel.text = data.contents
-        scrapButton.tintColor = data.isHeart ? UIColor(hex: "#2577FE") : UIColor(hex: "#D1D1D2")
+        scrapButton.tintColor = data.isScrap ? UIColor(hex: "#2577FE") : UIColor(hex: "#D1D1D2")
 //        heartCountLabel.text = String(data.heart)
 //        heartButton.tintColor = data.isHeart ? UIColor(hex: "#2577FE") : UIColor(hex: "#D1D1D2")
     }

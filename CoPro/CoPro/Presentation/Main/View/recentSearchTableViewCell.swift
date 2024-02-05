@@ -10,6 +10,10 @@ import UIKit
 import SnapKit
 import Then
 
+protocol RecentSearchTableViewCellDelegate: AnyObject {
+    func recentSearchTableViewCellDidRequestDelete(_ cell: recentSearchTableViewCell)
+}
+
 class recentSearchTableViewCell: UITableViewCell {
     
     //MARK: - UI Components
@@ -19,7 +23,8 @@ class recentSearchTableViewCell: UITableViewCell {
     private let clockImageView = UIImageView()
     private let searchLabel = UILabel()
     private let deleteButton = UIButton()
-    
+    weak var delegate: RecentSearchTableViewCellDelegate?
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -56,6 +61,7 @@ class recentSearchTableViewCell: UITableViewCell {
         deleteButton.do {
             $0.setImage(UIImage(systemName: "xmark"), for: .normal)
             $0.tintColor = UIColor(hex: "6D6E72")
+            $0.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         }
     }
     private func setLayout() {
@@ -102,5 +108,9 @@ class recentSearchTableViewCell: UITableViewCell {
     func prepare(text: String?) {
         self.searchLabel.text = text
     }
+    
+    @objc private func didTapDeleteButton() {
+            delegate?.recentSearchTableViewCellDidRequestDelete(self)
+        }
 }
 

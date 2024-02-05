@@ -46,7 +46,8 @@ class noticeBoardTableViewCell: UITableViewCell {
         separatorInset.left = 0
         selectionStyle = .none
         postImage.do {
-            $0.layer.cornerRadius = 10
+            $0.layer.cornerRadius = 5
+            $0.clipsToBounds = true
         }
         postTitleLabel.do {
             $0.font = UIFont.boldSystemFont(ofSize: 15)
@@ -93,7 +94,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         
         postImage.snp.makeConstraints {
             $0.height.width.equalTo(72)
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-16)
             $0.centerY.equalToSuperview()
         }
         postTitleLabel.snp.makeConstraints {
@@ -140,7 +141,7 @@ class noticeBoardTableViewCell: UITableViewCell {
 
     func configureCell(_ data: BoardDataModel) {
         postImage.kf.indicatorType = .activity
-        if let url = URL(string: "https://firebasestorage.googleapis.com/v0/b/honggun-blog.appspot.com/o/%E1%84%91%E1%85%B5%E1%84%8F%E1%85%A1%E1%84%8E%E1%85%B2.png?alt=media&token=68c2ffff-81a5-4db9-a67e-b776242cea02") {
+        if let url = URL(string: data.imageUrl) {
             postImage.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
         } else {
             // URL 변환이 잘못된 경우, 디폴트 이미지를 로드하거나 에러 처리를 합니다.
