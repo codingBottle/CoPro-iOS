@@ -123,6 +123,7 @@
 		E37AE8002B3C27D0002ABDCD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */; };
 		E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8042B3C2878002ABDCD /* RadioButton.swift */; };
 		E37AE8082B3C289B002ABDCD /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */; };
+		E37B20972B71DDFC00308158 /* DetailFreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B20962B71DDFC00308158 /* DetailFreeViewController.swift */; };
 		E3C64F932B634F87000BB5D6 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */; };
 		E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */; };
 		E3C64F972B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */; };
@@ -229,6 +230,7 @@
 		E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		E37AE8042B3C2878002ABDCD /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
+		E37B20962B71DDFC00308158 /* DetailFreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailFreeViewController.swift; sourceTree = "<group>"; };
 		E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeartDataModel.swift; sourceTree = "<group>"; };
 		E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBottomSheetViewController.swift; sourceTree = "<group>"; };
@@ -709,6 +711,7 @@
 				E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */,
 				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
 				E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */,
+				E37B20962B71DDFC00308158 /* DetailFreeViewController.swift */,
 				E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */,
 			);
 			path = ViewController;
@@ -896,6 +899,7 @@
 				E32B672B2B56792900EBB5AC /* VoidDTO.swift in Sources */,
 				E33379A52B4402DA0097ED0D /* SearchBarViewController.swift in Sources */,
 				E3D6D15C2AEFACE6003269FF /* BaseAPI.swift in Sources */,
+				E37B20972B71DDFC00308158 /* DetailFreeViewController.swift in Sources */,
 				9E7401E62B3C18A60030C8EC /* Channel.swift in Sources */,
 				9E7401D92B3C187F0030C8EC /* ChatViewController.swift in Sources */,
 				9E7401E22B3C18A60030C8EC /* ImageMediaItem.swift in Sources */,

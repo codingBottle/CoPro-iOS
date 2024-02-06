@@ -21,9 +21,9 @@ struct DetailBoardDataModel {
     let occupation: String
     let isHeart: Bool
     let isScrap: Bool
-//    let comments: [Comment]?
+    let commentCount: Int?
 
-    init(boardId: Int, title: String, createAt: String,category: String, contents: String, tag: String, count: Int, heart: Int, imageUrl: [String]?, nickName: String, occupation: String, isHeart: Bool, isScrap: Bool) {
+    init(boardId: Int, title: String, createAt: String,category: String, contents: String, tag: String, count: Int, heart: Int, imageUrl: [String]?, nickName: String, occupation: String, isHeart: Bool, isScrap: Bool, commentCount: Int) {
         self.boardId = boardId
         self.title = title
         let formatter = DateFormatter()
@@ -47,7 +47,7 @@ struct DetailBoardDataModel {
         self.occupation = occupation
         self.isHeart = isHeart
         self.isScrap = isScrap
-//        self.comments = comments
+        self.commentCount = commentCount
     }
     
     func getDateString() -> String {
@@ -64,28 +64,28 @@ struct DetailBoardDataModel {
     
 }
 
-struct CommentData {
-    let parentId: Int?
-    let commentId: Int
-    let content: String
-    let writer: WriterData
-    let children: [CommentData]?
-
-    init(parentId: Int?,commentId: Int, content: String, writer: WriterData, children: [CommentData]?) {
-        self.parentId = parentId
-        self.commentId = commentId
-        self.content = content
-        self.writer = writer
-        self.children = children
-    }
-}
-
-struct WriterData {
-    let nickName: String
-    let occupation: String
-
-    init(nickName: String, occupation: String) {
-        self.nickName = nickName
-        self.occupation = occupation
-    }
-}
+//struct CommentData {
+//    let parentId: Int?
+//    let commentId: Int
+//    let content: String
+//    let writer: WriterData
+//    let children: [CommentData]?
+//
+//    init(parentId: Int?,commentId: Int, content: String, writer: WriterData, children: [CommentData]?) {
+//        self.parentId = parentId
+//        self.commentId = commentId
+//        self.content = content
+//        self.writer = writer
+//        self.children = children
+//    }
+//}
+//
+//struct WriterData {
+//    let nickName: String
+//    let occupation: String
+//
+//    init(nickName: String, occupation: String) {
+//        self.nickName = nickName
+//        self.occupation = occupation
+//    }
+//}

@@ -31,12 +31,18 @@ final class PhotoCell: UICollectionViewCell {
         $0.backgroundColor = .clear
         $0.layer.borderWidth = 2.0
         $0.backgroundColor = .black.withAlphaComponent(0.5)
-        $0.layer.borderColor = UIColor.green.cgColor
+        $0.layer.borderColor = UIColor.white.cgColor
         $0.isUserInteractionEnabled = false
     }
     private let orderLabel = UILabel().then {
-        $0.textColor = .green
+        $0.textColor = .white
+        $0.font = .systemFont(ofSize: 11)
     }
+    private let orderCircle = UIView().then {
+            $0.layer.cornerRadius = 12
+            $0.layer.borderWidth = 1.0
+            $0.layer.borderColor = UIColor.white.cgColor
+        }
     
     // MARK: Initializer
     @available(*, unavailable)
@@ -49,7 +55,9 @@ final class PhotoCell: UICollectionViewCell {
         layer.masksToBounds = true // 주의: 이값을 안주면 이미지가 셀의 다른 영역을 침범하는 영향을 주는것
         contentView.addSubview(imageView)
         imageView.addSubview(highlightedView)
-        highlightedView.addSubview(orderLabel)
+        orderCircle.addSubview(orderLabel)
+        highlightedView.addSubview(orderCircle)
+
         
         imageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -58,8 +66,12 @@ final class PhotoCell: UICollectionViewCell {
             $0.edges.equalToSuperview()
         }
         orderLabel.snp.makeConstraints {
-            $0.leading.top.equalToSuperview().inset(4)
-        }
+                    $0.center.equalToSuperview()
+                }
+        orderCircle.snp.makeConstraints {
+                    $0.trailing.top.equalToSuperview().inset(4)
+                    $0.width.height.equalTo(24)
+                }
     }
     
     override func prepareForReuse() {
@@ -68,13 +80,15 @@ final class PhotoCell: UICollectionViewCell {
     }
     
     func prepare(info: PhotoCellInfo?) {
-        imageView.image = info?.image
-        
-        if case let .selected(order) = info?.selectedOrder {
-            highlightedView.isHidden = false
-            orderLabel.text = String(order)
-        } else {
-            highlightedView.isHidden = true
+            imageView.image = info?.image
+
+            if case let .selected(order) = info?.selectedOrder {
+                highlightedView.isHidden = false
+                orderLabel.text = String(order)
+                orderCircle.backgroundColor = .blue
+            } else {
+                highlightedView.isHidden = true
+                orderCircle.backgroundColor = .darkGray
+            }
         }
-    }
 }

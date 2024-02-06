@@ -10,7 +10,7 @@ import Then
 import SnapKit
 import Photos
 
-final class PhotoViewController: UIViewController {
+final class PhotoViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     private enum Const {
         static let numberOfColumns = 3.0
         static let cellSpace = 1.0
@@ -24,6 +24,10 @@ final class PhotoViewController: UIViewController {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.blue, for: .normal)
         $0.setTitleColor(.systemBlue, for: [.normal, .highlighted])
+    }
+    private let dismissButton = UIButton(type: .system).then {
+        $0.setImage(UIImage(systemName: "xmark"), for: .normal)
+        $0.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
     }
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -41,6 +45,7 @@ final class PhotoViewController: UIViewController {
         $0.backgroundColor = .clear
         $0.clipsToBounds = true
         $0.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.id)
+        $0.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "CameraCell")
     }
     
     // MARK: Property
@@ -69,10 +74,12 @@ final class PhotoViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        view.addSubview(submitButton)
+        view.addSubviews(dismissButton,submitButton)
+        dismissButton.snp.makeConstraints {
+            $0.top.leading.equalTo(view.safeAreaLayoutGuide).offset(10)
+        }
         submitButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            $0.centerX.equalToSuperview()
+            $0.top.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
         view.addSubview(collectionView)
@@ -97,6 +104,9 @@ final class PhotoViewController: UIViewController {
             self?.collectionView.reloadData()
         }
     }
+    @objc func dismissButtonTapped() {
+        self.dismiss(animated: true)
+    }
 }
 
 extension PhotoViewController: UICollectionViewDataSource {
@@ -104,8 +114,18 @@ extension PhotoViewController: UICollectionViewDataSource {
         dataSource.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.id, for: indexPath) as? PhotoCell
+        
+        //        if indexPath.item == 0 {
+        //            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CameraCell", for: indexPath)
+        //            cell.backgroundColor = .white
+        //            let cameraIcon = UIImageView(image: UIImage(systemName: "camera.fill"))
+        //            cameraIcon.contentMode = .center
+        //            cameraIcon.tintColor = UIColor(hex: "#6D6E72")
+        //            cell.addSubview(cameraIcon)
+        //            cameraIcon.frame = cell.bounds
+        //            return cell
+        //        } else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.id, for: indexPath) as? PhotoCell
         else { return UICollectionViewCell() }
         let imageInfo = dataSource[indexPath.item]
         let phAsset = imageInfo.phAsset
@@ -122,10 +142,17 @@ extension PhotoViewController: UICollectionViewDataSource {
         return cell
     }
 }
+//}
 
 extension PhotoViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let info = dataSource[indexPath.item]
+        //        if indexPath.item == 0 {
+        //            let picker = UIImagePickerController()
+        //            picker.delegate = self
+        //            picker.sourceType = .camera
+        //            present(picker, animated: true, completion: nil)
+        //        } else { 
+        let info = dataSource[indexPath.item ]
         let updatingIndexPaths: [IndexPath]
         
         if case .selected = info.selectedOrder {
@@ -160,8 +187,8 @@ extension PhotoViewController: UICollectionViewDelegate {
         }
         
         update(indexPaths: updatingIndexPaths)
+        //        }
     }
-    
     private func update(indexPaths: [IndexPath]) {
         collectionView.performBatchUpdates {
             collectionView.reloadItems(at: indexPaths)
