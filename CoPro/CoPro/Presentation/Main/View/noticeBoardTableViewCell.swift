@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Kingfisher
 import SnapKit
 import Then
 
@@ -45,7 +46,8 @@ class noticeBoardTableViewCell: UITableViewCell {
         separatorInset.left = 0
         selectionStyle = .none
         postImage.do {
-            $0.roundCorners(cornerRadius: 6, maskedCorners: .layerMaxXMaxYCorner)
+            $0.layer.cornerRadius = 5
+            $0.clipsToBounds = true
         }
         postTitleLabel.do {
             $0.font = UIFont.boldSystemFont(ofSize: 15)
@@ -92,7 +94,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         
         postImage.snp.makeConstraints {
             $0.height.width.equalTo(72)
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-16)
             $0.centerY.equalToSuperview()
         }
         postTitleLabel.snp.makeConstraints {
@@ -138,8 +140,13 @@ class noticeBoardTableViewCell: UITableViewCell {
     }
 
     func configureCell(_ data: BoardDataModel) {
-//        postImage.image = data.imageUrl
-        postImage.image = nil
+        postImage.kf.indicatorType = .activity
+        if let url = URL(string: data.imageUrl) {
+            postImage.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
+        } else {
+            // URL 변환이 잘못된 경우, 디폴트 이미지를 로드하거나 에러 처리를 합니다.
+            postImage.image = UIImage(systemName: "heart")
+        }
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName
         postDateLabel.text = data.getDateString()

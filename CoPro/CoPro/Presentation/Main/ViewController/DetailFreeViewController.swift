@@ -1,8 +1,8 @@
 //
-//  DetailBoardViewController.swift
+//  DetailFreeViewController.swift
 //  CoPro
 //
-//  Created by 문인호 on 1/21/24.
+//  Created by 문인호 on 2/6/24.
 //
 
 import UIKit
@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import KeychainSwift
 
-final class DetailBoardViewController: UIViewController {
+final class DetailFreeViewController: UIViewController {
     var postId: Int?
     var isHeart = Bool()
     var isScrap = Bool()
@@ -227,10 +227,10 @@ final class DetailBoardViewController: UIViewController {
                 case .success(let data):
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category, contents: data.data.contents, tag: data.data.tag, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount)
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category, contents: data.data.contents, tag: data.data.tag, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap)
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
-//                        var mappedData: [CommentData] = []
+                        var mappedData: [CommentData] = []
                         DispatchQueue.main.async {
                             self.setUI()
                             self.updateView(with: mappedItem)
@@ -270,16 +270,16 @@ final class DetailBoardViewController: UIViewController {
 //                    }
 //                case .requestErr(let message):
 //                    print("Request error: \(message)")
-//                    
+//
 //                case .pathErr:
 //                    print("Path error")
-//                    
+//
 //                case .serverErr:
 //                    print("Server error")
-//                    
+//
 //                case .networkFail:
 //                    print("Network failure")
-//                    
+//
 //                default:
 //                    break
 //                }
@@ -301,16 +301,16 @@ final class DetailBoardViewController: UIViewController {
 //                    }
 //                case .requestErr(let message):
 //                    print("Request error: \(message)")
-//                    
+//
 //                case .pathErr:
 //                    print("Path error")
-//                    
+//
 //                case .serverErr:
 //                    print("Server error")
-//                    
+//
 //                case .networkFail:
 //                    print("Network failure")
-//                    
+//
 //                default:
 //                    break
 //                }
@@ -429,16 +429,16 @@ final class DetailBoardViewController: UIViewController {
 //        guard let cell = tableView.dequeueReusableCell(withIdentifier: commentTableViewCell.identifier, for: indexPath) as? commentTableViewCell else {
 //            return UITableViewCell()
 //        }
-//        
+//
 //        let post: CommentData
 //        if indexPath.row < filteredComments.count {
 //            post = filteredComments[indexPath.row]
 //        } else {
 //            post = Comments[indexPath.row]
 //        }
-//        
+//
 //        cell.configureCell(post)
-//        
+//
 //        return cell
 //    }
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

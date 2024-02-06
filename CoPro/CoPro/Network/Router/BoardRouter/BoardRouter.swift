@@ -20,8 +20,8 @@ enum BoardRouter {
     case saveHeart(token: String, boardId: Int)
     case deleteHeart(token: String, boardId: Int)
     case mostPopularBoard(token: String)
-    case deleteScrap(token: String, requestBody: heartRequestBody)
-    case saveScrap(token: String, requestBody: heartRequestBody)
+    case deleteScrap(token: String, boardId: Int)
+    case saveScrap(token: String, boardId: Int)
     case searchBoard(token: String, query: String, page: Int, standard: String)
 //    case sortLikes(token: String)
 }
@@ -117,10 +117,12 @@ extension BoardRouter: BaseTargetType {
             return .body(requestModel)
         case .mostPopularBoard:
             return .none
-        case .deleteScrap(_, let body):
-            return .body(body)
-        case .saveScrap(_, let body):
-            return .body(body)
+        case .deleteScrap(_, let boardId):
+            let requestModel = heartRequestBody(boardID: boardId)
+            return .body(requestModel)
+        case .saveScrap(_, let boardId):
+            let requestModel = heartRequestBody(boardID: boardId)
+            return .body(requestModel)
         case .searchBoard(_, let query, let page, let standard):
             let requestModel = SearchBoardRequestBody(q: query, page: page, standard: standard)
             return .query(requestModel)

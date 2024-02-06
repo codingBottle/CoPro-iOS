@@ -12,7 +12,6 @@ struct BoardDataModel {
     var title: String
     var nickName: String
     var createAt: Date
-//    var empathy: likeButtonStatus
     var heartCount: Int
     var viewsCount: Int
     var imageUrl: String
