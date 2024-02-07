@@ -116,16 +116,17 @@ extension BoardAPI {
         }
     }
     // 10. 스크랩 삭제
-    public func deleteScrap(token: String, requestBody: heartRequestBody, completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.deleteScrap(token: token, requestBody: requestBody)).responseData { response in
+    public func deleteScrap(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.deleteScrap(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: VoidDTO.self,
                                 completion: completion)
         }
     }
+
     // 11. 스크랩 추가
-    public func saveScrap(token: String, requestBody: heartRequestBody, completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.saveScrap(token: token, requestBody: requestBody)).responseData { response in
+    public func saveScrap(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.saveScrap(token: token, boardId: boardID)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: VoidDTO.self,
                                 completion: completion)

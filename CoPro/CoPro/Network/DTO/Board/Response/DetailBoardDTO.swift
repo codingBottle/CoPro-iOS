@@ -17,7 +17,7 @@ struct DetailBoardDTO: Codable {
 
     struct BoardData: Codable {
         let boardId: Int
-        let title, createAt, category, contents, tag: String
+        let title, createAt, category, contents, part,tag: String
         let count: Int
         let heart: Int
         let imageUrl: [String]?
@@ -25,18 +25,18 @@ struct DetailBoardDTO: Codable {
         let occupation: String?
         let isHeart: Bool
         let isScrap: Bool
-        let commentResDtoList: [Comment]?
+        let commentCount: Int
     }
-
-    struct Comment: Codable {
-        let parentId: Int?
-        let commentId: Int
-        let content: String
-        let writer: Writer?
-        let children: [Comment]?
-    }
-
-    struct Writer: Codable {
-        let nickName: String
-        let occupation: String
-    }
+//
+//    struct Comment: Codable {
+//        let parentId: Int?
+//        let commentId: Int
+//        let content: String
+//        let writer: Writer?
+//        let children: [Comment]?
+//    }
+//
+//    struct Writer: Codable {
+//        let nickName: String
+//        let occupation: String
+//    }

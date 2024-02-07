@@ -9,6 +9,9 @@ import UIKit
 
 class AddPostViewController: UIViewController {
 
+    private let authService: PhotoAuthManager = MyPhotoAuthManager()
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
     private let sortStackView = UIStackView()
     private let sortLabel = UILabel()
     private let sortButton = UIButton()
@@ -65,8 +68,9 @@ class AddPostViewController: UIViewController {
             $0.delegate = self
         }
         attachButton.do {
-            $0.setImage(UIImage(systemName: "camera"), for: .normal)
+            $0.setImage(UIImage(systemName: "camera.fill"), for: .normal)
             attachButton.addTarget(self, action: #selector(attachButtonTapped), for: .touchUpInside)
+            $0.setPreferredSymbolConfiguration(.init(scale: .large), forImageIn: .normal)
             $0.backgroundColor = .lightGray
             $0.tintColor = .white
             $0.layer.cornerRadius = 45 / 2
@@ -144,7 +148,19 @@ class AddPostViewController: UIViewController {
             dismiss(animated: true, completion: nil)
         }
     @objc private func attachButtonTapped() {
-        print("attachButtonTapped")
+        authService.requestAuthorization { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success:
+                let vc = PhotoViewController().then {
+                    $0.modalPresentationStyle = .fullScreen
+                }
+                present(vc, animated: true)
+            case .failure:
+                return
+            }
+        }
     }
 }
 

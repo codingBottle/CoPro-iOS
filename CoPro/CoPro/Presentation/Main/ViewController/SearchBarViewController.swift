@@ -17,20 +17,24 @@ final class SearchBarViewController: UIViewController, UISearchControllerDelegat
     private let customView = UIView()
     private let backButton = UIButton()
     private let searchBar = UISearchBar()
-    private lazy var popularSearchTableView = UITableView()
+    private let popularSearchScrollView = UIScrollView()
     private let popularSearchStackView = UIStackView()
+    private let popularSearchButtonStackView = UIStackView()
     private let popularLabel = UILabel()
     private let recentSearchLabel = UILabel()
     private let recentSearchDeleteButton = UIButton()
     private let recentSearchStackView = UIStackView()
     private lazy var recentSearchTableView = UITableView()
     var items: [String] = ["안녕", "나는", "문인호임룰루","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕"]
-
+    var items1: [String] = []
 
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
+                items1 = savedItems
+            }
         setUI()
         setLayout()
         setNavigate()
@@ -43,13 +47,6 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     private func setUI() {
         
         self.view.backgroundColor = .white
-        customView.do {
-            $0.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
-        }
-        backButton.do {
-            $0.frame =  CGRect(x: customView.frame.width - 50, y: 0, width: 50, height: 50)
-            $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        }
         searchBar.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.delegate = self
@@ -62,23 +59,21 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.becomeFirstResponder()
             $0.sizeToFit()
         }
-        popularSearchTableView.do {
-            $0.showsVerticalScrollIndicator = true
-            $0.backgroundColor = .clear
-            $0.contentInset = .zero
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.separatorStyle = .none
-            $0.bounces = true
-            $0.delegate = self
-            $0.dataSource = self
-            $0.register(popularSearchTableViewCell.self,
-                        forCellReuseIdentifier: popularSearchTableViewCell.id)
+        popularSearchScrollView.do {
+            $0.showsHorizontalScrollIndicator = false
         }
         popularSearchStackView.do {
             $0.axis = .vertical
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.distribution = .equalCentering
-            $0.alignment = .leading
+            $0.distribution = .equalSpacing
+            $0.spacing = 10
+        }
+        popularSearchButtonStackView.do {
+            $0.axis = .horizontal
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.spacing = 8
+            $0.alignment = .fill
+            $0.distribution = .equalSpacing
         }
         recentSearchTableView.do {
             $0.showsVerticalScrollIndicator = false
@@ -109,22 +104,41 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.alignment = .center
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        popularSearchScrollView.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
     private func setLayout() {
-        customView.addSubviews(backButton, searchController.searchBar)
-        popularSearchStackView.addArrangedSubviews(popularLabel, popularSearchTableView)
+        popularSearchStackView.addArrangedSubviews(popularLabel, popularSearchScrollView)
         recentSearchStackView.addArrangedSubviews(recentSearchLabel, recentSearchDeleteButton)
         view.addSubviews(popularSearchStackView, recentSearchStackView, recentSearchTableView)
         
             popularLabel.snp.makeConstraints {
                 $0.top.leading.equalToSuperview()
             }
-            popularSearchTableView.snp.makeConstraints {
-                $0.top.equalTo(popularLabel.snp.bottom).offset(10)
+            popularSearchScrollView.snp.makeConstraints {
                 $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(30)
+                $0.height.equalTo(41)
             }
+        popularSearchScrollView.addSubview(popularSearchButtonStackView)
+        popularSearchButtonStackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.height.equalToSuperview()
+        }
+        for item in self.items {
+            let button = UIButton()
+            button.setTitle(item, for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            button.setTitleColor(.black, for: .normal)
+            button.layer.borderColor = UIColor(hex: "#D1D1D2").cgColor
+            button.layer.borderWidth = 0.5
+            button.layer.cornerRadius = 10
+            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+            button.addTarget(self, action: #selector(keywordButtonTapped(_:)), for: .touchUpInside)
+            popularSearchButtonStackView.addArrangedSubview(button)
+        }
+            
             popularSearchStackView.snp.makeConstraints {
                 $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
                 $0.leading.trailing.equalToSuperview().inset(16)
@@ -154,36 +168,60 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
         self.navigationItem.titleView = searchBar
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == popularSearchTableView {
-            return 1
+    // 검색어를 UserDefaults에 저장하는 함수
+    func saveSearchKeyword(keyword: String) {
+        let defaults = UserDefaults.standard
+        var searches: [String] = defaults.array(forKey: "recentSearches") as? [String] ?? []
+        searches.append(keyword)
+        defaults.set(searches, forKey: "recentSearches")
+    }
+
+    // UserDefaults에서 검색어를 불러오는 함수
+    func loadSearchKeywords() -> [String] {
+        let defaults = UserDefaults.standard
+        let searches: [String] = defaults.array(forKey: "recentSearches") as? [String] ?? []
+        return searches
+    }
+    
+    // 모든 검색어를 UserDefaults에서 삭제하는 함수
+    func deleteAllSearchKeywords() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: "recentSearches")
+    }
+
+    // 특정 검색어를 UserDefaults에서 삭제하는 함수
+    func deleteSearchKeyword(keyword: String) {
+        let defaults = UserDefaults.standard
+        var searches: [String] = defaults.array(forKey: "recentSearches") as? [String] ?? []
+        if let index = searches.firstIndex(of: keyword) {
+            searches.remove(at: index)
+            defaults.set(searches, forKey: "recentSearches")
         }
-            else {
-                return items.count
-            }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+                return items1.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == popularSearchTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: popularSearchTableViewCell.id, for: indexPath) as! popularSearchTableViewCell
-        cell.prepare(items: items)
+        let cell = tableView.dequeueReusableCell(withIdentifier: recentSearchTableViewCell.id, for: indexPath) as! recentSearchTableViewCell
+
+        // items 배열의 데이터를 셀에 표시합니다.
+        cell.prepare(text: items1[indexPath.row])
         return cell
-        }
-            else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: recentSearchTableViewCell.id, for: indexPath) as! recentSearchTableViewCell
-                cell.prepare(text: items.first)
-            return cell
-            }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == popularSearchTableView {
-            return popularSearchTableViewCell.cellHeight
-        }
-        else {
             return 41
-        }
     }
 
     // MARK: - @objc Method
+    
+    @objc func keywordButtonTapped(_ sender: UIButton) {
+        // 버튼의 타이틀을 가져와서 검색 바의 텍스트로 설정
+        searchBar.text = sender.titleLabel?.text
+
+        // 검색 수행    
+        // TODO: 검색 로직을 여기에 추가
+    }
     
     @objc func backButtonTapped() {
             
@@ -198,9 +236,46 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
 extension SearchBarViewController {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             // 검색 버튼을 눌렀을 때의 동작을 정의합니다.
-//            performSearch()
+        saveSearchKeyword(keyword: searchBar.text!)
 
             // 키보드를 내립니다.
             searchBar.resignFirstResponder()
         }
+}
+
+extension SearchBarViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        if updatedText.isEmpty {
+            onSearchTextCleared()
+        }
+        return true
+    }
+    
+    func onSearchTextCleared() {
+        // UserDefaults에서 데이터를 다시 불러와서 테이블뷰를 갱신합니다.
+        if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
+            items = savedItems
+            recentSearchTableView.reloadData()
+        }
+    }
+}
+
+extension SearchBarViewController: RecentSearchTableViewCellDelegate {
+    func recentSearchTableViewCellDidRequestDelete(_ cell: recentSearchTableViewCell) {
+        guard let indexPath = recentSearchTableView.indexPath(for: cell) else { return }
+        // UserDefaults에서 데이터를 가져옵니다.
+        var recentSearches = UserDefaults.standard.array(forKey: "recentSearches") as? [String] ?? []
+        
+        // recentSearches에서 해당 데이터를 삭제합니다.
+        recentSearches.remove(at: indexPath.row)
+        
+        // 수정된 recentSearches를 다시 UserDefaults에 저장합니다.
+        UserDefaults.standard.set(recentSearches, forKey: "recentSearches")
+        
+        // 테이블 뷰에서 해당 셀을 삭제합니다.
+        recentSearchTableView.deleteRows(at: [indexPath], with: .automatic)
+    }
 }
