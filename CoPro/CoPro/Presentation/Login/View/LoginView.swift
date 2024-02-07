@@ -19,21 +19,23 @@ protocol LoginViewDelegate: AnyObject {
 class LoginView: BaseView {
     weak var delegate: LoginViewDelegate?
     //loginButton 선언
-    let googleSignInButton = UIButton()
-    let appleSignInButton = UIButton()
-    let githubSignInButton = UIButton()
     let signOutButton = UIButton()
+    //SigninLogo&Label
     let coproLogo = UIImageView(image : Image.coproLogo)
     let coproLogoLabel = UILabel().then{
         $0.setPretendardFont(text: "협업할 개발자를 찾는다면?", size: 25.0, weight: .bold, letterSpacing: 1.37)
         $0.textAlignment = .center
     }
+    //appleSignInButton
+    let appleSignInButton = UIButton()
     let appleLogo = UIImageView(image:Image.apple_SignInButton)
     let appleSignInTitle = UILabel().then{
         $0.setPretendardFont(text: "Sign in with Apple", size: 17.0, weight: .regular, letterSpacing: 1.23)
         $0.textAlignment = .center
         $0.textColor = UIColor.White()
     }
+    //GoogleSignInButton
+    let googleSignInButton = UIButton()
     let googleLogo = UIImageView(image:Image.google_SignInButton)
     let googleLogoBackGround = UIView()
     let googleSignInTitle = UILabel().then{
@@ -41,7 +43,8 @@ class LoginView: BaseView {
         $0.textAlignment = .center
         $0.textColor = UIColor.White()
     }
-    
+    //GitHubSignInButton
+    let githubSignInButton = UIButton()
     let githubLogo = UIImageView(image:Image.github_SignInButton)
     let githubSignInTitle = UILabel().then{
         $0.setPretendardFont(text: "Sign in with GitHub", size: 17.0, weight: .regular, letterSpacing: 1.23)
