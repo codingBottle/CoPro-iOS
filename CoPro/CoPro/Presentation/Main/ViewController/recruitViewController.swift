@@ -48,7 +48,7 @@ final class recruitViewController: UIViewController, SendStringData {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getAllBoard(category: "프로젝트", page: offset, standard: "create_at")
+        getAllBoard(category: "공지사항", page: offset, standard: "create_at")
         setUI()
         setLayout()
         setDelegate()

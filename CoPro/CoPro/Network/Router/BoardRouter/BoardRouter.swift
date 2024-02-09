@@ -24,6 +24,8 @@ enum BoardRouter {
     case saveScrap(token: String, boardId: Int)
     case searchBoard(token: String, query: String, page: Int, standard: String)
 //    case sortLikes(token: String)
+    case getAllComment(token: String, boardId: Int, page: Int)
+    case addComment(token: String,boardId: Int, parentId: Int, contents: String)
 }
 
 extension BoardRouter: BaseTargetType {
@@ -56,9 +58,11 @@ extension BoardRouter: BaseTargetType {
             return .post
         case .searchBoard:
             return .get
-            //        case .sortLikes:
-            //            return .put
         case .reportBoard:
+            return .post
+        case .getAllComment:
+            return .get
+        case .addComment:
             return .post
         }
     }
@@ -91,6 +95,10 @@ extension BoardRouter: BaseTargetType {
             return "/api/board/search"
         case .reportBoard:
             return "/api/report"
+        case .getAllComment(_, let boardId, _):
+            return "/api/comment/\(boardId)/comments"
+        case .addComment(_, let boardId, _, _):
+            return "/api/comment/\(boardId)"
         }
     }
     var parameters: RequestParams {
@@ -129,6 +137,12 @@ extension BoardRouter: BaseTargetType {
         case .reportBoard(_, let boardId, let contents):
             let requestModel = ReportBoardRequestBody(boardID: boardId, contents: contents)
             return .body(requestModel)
+        case .getAllComment(_, _, let page):
+            let requestModel = allCommentRequestBody(page: page)
+            return .query(requestModel)
+        case .addComment(_, _, let parentId, let content):
+            let requestModel = addCommentRequestBody(parentId: parentId, content: content)
+            return .body(requestModel)
         }
     }
     
@@ -159,6 +173,10 @@ extension BoardRouter: BaseTargetType {
         case .searchBoard(let token, _, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .reportBoard(let token, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .getAllComment(let token, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .addComment(let token, _, _, _):
             return ["Authorization": "Bearer \(token)"]
         }
     }

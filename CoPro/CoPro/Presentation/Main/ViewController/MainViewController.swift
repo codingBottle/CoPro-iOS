@@ -17,14 +17,14 @@ final class MainViewController: UIViewController {
     let grabberView = UIView()
 //    private lazy var noticeBoardView = UIView()
     private let bottomSheetView: BottomSheetView = {
-      let view = BottomSheetView()
-      view.bottomSheetColor = .white
-      view.barViewColor = .clear
-            view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOffset = CGSize(width: 0, height: 1)
-            view.layer.shadowOpacity = 0.3
-            view.layer.shadowRadius = 10
-      return view
+        let view = BottomSheetView()
+        view.bottomSheetColor = .white
+        view.barViewColor = .clear
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 1)
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowRadius = 10
+        return view
     }()
     var panGesture = UIPanGestureRecognizer()
     private let scrollView = UIScrollView()

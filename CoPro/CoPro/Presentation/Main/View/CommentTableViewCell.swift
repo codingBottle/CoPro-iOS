@@ -27,7 +27,6 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setStyle()
         setLayout()
     }
@@ -79,7 +78,6 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             $0.contentHorizontalAlignment = .right
             $0.setTitle("답글쓰기", for: .normal)
         }
-        
     }
     private func setLayout() {
         addSubviews(cellStackView)
@@ -92,22 +90,15 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         nameJobStackView.addArrangedSubviews(nicknameLabel, jobLabel)
         dateTimeStackView.addArrangedSubviews(dateLabel,timeLabel,recommentButton)
     }
-    func configureCell(_ data: CommentData) {
-        nicknameLabel.text = data.writer.nickName
-        jobLabel.text = data.writer.occupation
-        contentLabel.text = data.content
+    func configureCell(_ data: DisplayComment) {
+        nicknameLabel.text = data.comment.writer.nickName
+        jobLabel.text = data.comment.writer.occupation
+        contentLabel.text = data.comment.content
+        dateLabel.text = data.comment.getDateString()
+        timeLabel.text = data.comment.getTimeString()
         
-        if data.parentId == -1 {
-                cellStackView.snp.updateConstraints {
-                    $0.leading.equalToSuperview().offset(30)  // 여기서 30은 원하는 들여쓰기 크기입니다.
-                }
-            } else {
-                cellStackView.snp.updateConstraints {
-                    $0.leading.equalToSuperview()
-                }
-            }
-
-            // 대댓글 버튼 표시 여부 결정 코드
-            recommentButton.isHidden = Bool(data.parentId == -1)
+        if data.level != 0 {
+            recommentButton.isHidden = true
+        }
     }
 }

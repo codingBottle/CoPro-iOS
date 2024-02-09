@@ -20,11 +20,6 @@ final class SortBottomSheetViewController: UIViewController, SendStringData, rad
         self.dismiss(animated: true, completion: nil)
     }
     
-    func radioButtonDidSelect() {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    
     // MARK: - UI Components
     
     private let sortRadioButton = RadioButtonsStack(groupId: 1)
@@ -98,5 +93,5 @@ extension SortBottomSheetViewController {
     @objc
     private func dismissToCreateEvaluateViewController() {
         dismiss(animated: true, completion: nil)
-    } 
+    }
 }

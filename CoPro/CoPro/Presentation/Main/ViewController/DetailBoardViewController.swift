@@ -21,7 +21,7 @@ final class DetailBoardViewController: UIViewController {
     private let titleLabel = UILabel()
     private let nicknameLabel = UILabel()
     private let jobLabel = UILabel()
-//    private let tagLabel = UILabel()
+    //    private let tagLabel = UILabel()
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
     private let viewCountLabel = UILabel()
@@ -29,31 +29,30 @@ final class DetailBoardViewController: UIViewController {
     private let lineView1 = UIView()
     private let lineView2 = UIView()
     private let contentLabel = UILabel()
-//    private let heartButton = UIButton()
-//    private let heartCountLabel = UILabel()
+    private let heartButton = UIButton()
+    private let heartCountLabel = UILabel()
     private let scrapButton = UIButton()
-    private let chatButton = UIButton()
+    private let commentButton = UIButton()
+    private let commentCountLabel = UILabel()
     private let bottomView = UIView()
-//    private let commentTableView = UITableView()
-//    private var filteredComments: [CommentData]!
-//    var Comments = [CommentData]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getDetailBoard( boardId: postId!)
-//        setUI()
+        setUI()
         setLayout()
         addTarget()
         setNavigate()
     }
     private func addTarget() {
-//        heartButton.addTarget(self, action: #selector(heartButtonTapped(_: )), for: .touchUpInside)
+        heartButton.addTarget(self, action: #selector(heartButtonTapped(_: )), for: .touchUpInside)
         scrapButton.addTarget(self, action: #selector(scrapButtonTapped(_: )), for: .touchUpInside)
+        commentButton.addTarget(self, action: #selector(commentButtonTapped(_: )), for: .touchUpInside)
     }
     private func setUI() {
         self.view.backgroundColor = .white
-
-
+        
+        
         stackView.do {
             $0.axis = .vertical
             $0.spacing = 8
@@ -63,32 +62,32 @@ final class DetailBoardViewController: UIViewController {
         }
         titleLabel.do {
             $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-//            $0.font = UIFont(name: "Pretendard-Medium", size : 22)
+            //            $0.font = UIFont(name: "Pretendard-Medium", size : 22)
             $0.font = .systemFont(ofSize: 22)
         }
         nicknameLabel.do {
             $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-//            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            //            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
             $0.font = .systemFont(ofSize: 13)
         }
         jobLabel.do {
-                    $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
-//                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
+            //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
-//        tagLabel.do {
-//                    $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
-////                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
-//            $0.font = .systemFont(ofSize: 13)
-//        }
+        //        tagLabel.do {
+        //                    $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
+        ////                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+        //            $0.font = .systemFont(ofSize: 13)
+        //        }
         dateLabel.do {
-                    $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-//                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         timeLabel.do {
-                    $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-//                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
+            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         viewCountLabel.do {
@@ -102,29 +101,46 @@ final class DetailBoardViewController: UIViewController {
         }
         contentLabel.do {
             $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-//            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+            //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
             $0.font = .systemFont(ofSize: 17)
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
         }
-//        heartButton.do {
-//                    $0.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-//        }
-//        heartCountLabel.do {
-//            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-////            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
-//            $0.font = .systemFont(ofSize: 17)
-//        }
-        chatButton.do {
-            $0.layer.backgroundColor = UIColor(red: 0.145, green: 0.467, blue: 0.996, alpha: 1).cgColor
-            $0.layer.cornerRadius = 10
-            $0.setTitle("채팅하기", for: .normal)
+        heartButton.do {_ in
+            if isHeart {
+                heartButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
+            } else {
+                heartButton.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
+            }
         }
+        heartCountLabel.do {
+            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+            $0.font = .systemFont(ofSize: 17)
+        }
+        commentButton.do {
+            $0.setImage(UIImage(systemName: "text.bubble"), for: .normal)
+            $0.tintColor = UIColor.G4()
+        }
+        commentCountLabel.do {
+            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+            $0.font = .systemFont(ofSize: 17)
+        }
+        //        chatButton.do {
+        //            $0.layer.backgroundColor = UIColor(red: 0.145, green: 0.467, blue: 0.996, alpha: 1).cgColor
+        //            $0.layer.cornerRadius = 10
+        //            $0.setTitle("채팅하기", for: .normal)
+        //        }
         lineView2.do {
-            $0.backgroundColor = UIColor(hex: "#D1D1D2")
+            $0.backgroundColor = UIColor.G4()
         }
-        scrapButton.do {
-            $0.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+        scrapButton.do {_ in
+            if isScrap {
+                scrapButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+            } else {
+                scrapButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
+            }
         }
     }
     private func setLayout() {
@@ -143,23 +159,34 @@ final class DetailBoardViewController: UIViewController {
             $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(64)
         }
-        bottomView.addSubviews(scrapButton, chatButton)
+        bottomView.addSubviews(scrapButton, heartButton,heartCountLabel, commentButton, commentCountLabel)
         scrapButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(32)
         }
-        chatButton.snp.makeConstraints {
+        heartButton.snp.makeConstraints {
+            $0.leading.equalTo(scrapButton.snp.trailing).offset(16)
+            $0.centerY.equalToSuperview()
+            $0.width.height.equalTo(32)
+        }
+        heartCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(heartButton.snp.trailing).offset(5)
+            $0.centerY.equalToSuperview()
+        }
+        commentCountLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(151)
-            $0.height.equalTo(41)
+            $0.centerY.equalToSuperview()
+        }
+        commentButton.snp.makeConstraints {
+            $0.trailing.equalTo(commentCountLabel.snp.leading).offset(-5)
             $0.centerY.equalToSuperview()
         }
         scrollView.addSubview(stackView)
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
-                }
+        }
         stackView.addArrangedSubviews(titleLabel,infoView,contentLabel)
         infoView.addSubviews(nicknameLabel, jobLabel, dateLabel, timeLabel, viewCountLabel, lineView1)
         infoView.snp.makeConstraints {
@@ -190,19 +217,10 @@ final class DetailBoardViewController: UIViewController {
             $0.height.equalTo(0.5)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-//        heartCountLabel.snp.makeConstraints {
-//            $0.centerY.equalTo(chatButton.snp.centerY)
-//            $0.trailing.equalTo(chatButton.snp.leading).offset(-15)
-//        }
-//        heartButton.snp.makeConstraints {
-//            $0.centerY.equalTo(chatButton.snp.centerY)
-//            $0.trailing.equalTo(heartCountLabel.snp.leading).offset(-6)
-//            $0.width.height.equalTo(24)
-//        }
     }
     private func setNavigate() {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
-        leftButton.tintColor = UIColor(hex: "121213")
+        leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         if #available(iOS 14.0, *) {
             let menuItem1 = UIAction(title: "신고", attributes: .destructive) { action in
@@ -215,8 +233,8 @@ final class DetailBoardViewController: UIViewController {
             let menu = UIMenu(title: "", children: [menuItem1])
             
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
-            navigationItem.rightBarButtonItem?.tintColor = UIColor(hex: "121213")
-
+            navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
+            
         }
     }
     func getDetailBoard( boardId: Int) {
@@ -227,15 +245,13 @@ final class DetailBoardViewController: UIViewController {
                 case .success(let data):
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category, contents: data.data.contents, tag: data.data.tag, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount)
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil")
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
-//                        var mappedData: [CommentData] = []
                         DispatchQueue.main.async {
                             self.setUI()
                             self.updateView(with: mappedItem)
-//                            self.commentTableView.reloadData()
-                                        }
+                        }
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
@@ -255,78 +271,82 @@ final class DetailBoardViewController: UIViewController {
             }
         }
     }
-//    func saveHeart( boardId: Int) {
-//        if let token = self.keychain.get("idToken") {
-//            print("\(token)")
-//            BoardAPI.shared.saveHeart(token: token, boardID: boardId) { result in
-//                switch result {
-//                case .success(let data):
-//                    if let data = data as? DetailHeartDataModel{
-//                        DispatchQueue.main.async {
-//                            self.heartCountLabel.text = "\(data.data.heart)"
-//                            self.heartButton.tintColor = UIColor(hex: "#2577FE")
-//                        }
-//                        self.isHeart = true
-//                    }
-//                case .requestErr(let message):
-//                    print("Request error: \(message)")
-//                    
-//                case .pathErr:
-//                    print("Path error")
-//                    
-//                case .serverErr:
-//                    print("Server error")
-//                    
-//                case .networkFail:
-//                    print("Network failure")
-//                    
-//                default:
-//                    break
-//                }
-//            }
-//        }
-//    }
-//    func deleteHeart( boardId: Int) {
-//        if let token = self.keychain.get("idToken") {
-//            print("\(token)")
-//            BoardAPI.shared.deleteHeart(token: token, boardID: boardId) { result in
-//                switch result {
-//                case .success(let data):
-//                    if let data = data as? DetailHeartDataModel{
-//                        DispatchQueue.main.async {
-//                            self.heartCountLabel.text = "\(data.data.heart)"
-//                            self.heartButton.tintColor = UIColor(hex: "#D1D1D2")
-//                        }
-//                        self.isHeart = false
-//                    }
-//                case .requestErr(let message):
-//                    print("Request error: \(message)")
-//                    
-//                case .pathErr:
-//                    print("Path error")
-//                    
-//                case .serverErr:
-//                    print("Server error")
-//                    
-//                case .networkFail:
-//                    print("Network failure")
-//                    
-//                default:
-//                    break
-//                }
-//            }
-//        }
-//    }
+    func saveHeart( boardId: Int) {
+        if let token = self.keychain.get("idToken") {
+            print("\(token)")
+            BoardAPI.shared.saveHeart(token: token, boardID: boardId) { result in
+                switch result {
+                case .success(let data):
+                    if let data = data as? DetailHeartDataModel{
+                        DispatchQueue.main.async {
+                            self.heartCountLabel.text = "\(data.data.heart)"
+                            self.heartButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
+                            self.heartButton.tintColor = UIColor.G5()
+                        }
+                        self.isHeart = true
+                    }
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                    
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
+    func deleteHeart( boardId: Int) {
+        if let token = self.keychain.get("idToken") {
+            print("\(token)")
+            BoardAPI.shared.deleteHeart(token: token, boardID: boardId) { result in
+                switch result {
+                case .success(let data):
+                    if let data = data as? DetailHeartDataModel{
+                        DispatchQueue.main.async {
+                            self.heartCountLabel.text = "\(data.data.heart)"
+                            self.heartButton.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
+                            self.heartButton.tintColor = UIColor.G4()
+                        }
+                        self.isHeart = false
+                    }
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                    
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
     func saveScrap( boardId: Int) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
             BoardAPI.shared.saveScrap(token: token, boardID: boardId) { result in
                 switch result {
                 case .success:
-                        DispatchQueue.main.async {
-                            self.scrapButton.tintColor = UIColor(hex: "#2577FE")
-                        }
-                        self.isScrap = true
+                    DispatchQueue.main.async {
+                        self.scrapButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+                        self.scrapButton.tintColor = UIColor.G5()
+                    }
+                    self.isScrap = true
                 case .requestErr(let message):
                     print("Request error: \(message)")
                     
@@ -351,10 +371,11 @@ final class DetailBoardViewController: UIViewController {
             BoardAPI.shared.deleteScrap(token: token, boardID: boardId) { result in
                 switch result {
                 case .success:
-                        DispatchQueue.main.async {
-                            self.scrapButton.tintColor = UIColor(hex: "#D1D1D2")
-                        }
-                        self.isScrap = false
+                    DispatchQueue.main.async {
+                        self.scrapButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
+                        self.scrapButton.tintColor = UIColor.G4()
+                    }
+                    self.isScrap = false
                 case .requestErr(let message):
                     print("Request error: \(message)")
                     
@@ -377,34 +398,35 @@ final class DetailBoardViewController: UIViewController {
         titleLabel.text = data.title
         nicknameLabel.text = data.nickName
         jobLabel.text = data.occupation
-//        tagLabel.text = data.tag
+        //        tagLabel.text = data.tag
         dateLabel.text = data.getDateString()
         timeLabel.text = data.getTimeString()
         viewCountLabel.text = "조회 \(data.count)"
         contentLabel.text = data.contents
-        scrapButton.tintColor = data.isScrap ? UIColor(hex: "#2577FE") : UIColor(hex: "#D1D1D2")
-//        heartCountLabel.text = String(data.heart)
-//        heartButton.tintColor = data.isHeart ? UIColor(hex: "#2577FE") : UIColor(hex: "#D1D1D2")
+        scrapButton.tintColor = data.isScrap ? UIColor.G5() : UIColor.G4()
+        heartCountLabel.text = String(data.heart)
+        heartButton.tintColor = data.isHeart ? UIColor.G5() : UIColor.G4()
+        commentCountLabel.text = String(data.commentCount)
     }
     
     @objc
-        func popToMainViewController() {
-            self.navigationController?.popViewController(animated: true)
-        }
+    func popToMainViewController() {
+        self.navigationController?.popViewController(animated: true)
+    }
     @objc
-        func pushToCommentViewController() {
-            self.navigationController?.popViewController(animated: true)
-        }
+    func pushToCommentViewController() {
+        self.navigationController?.popViewController(animated: true)
+    }
     
-//    @objc func heartButtonTapped(_ sender: UIButton) {
-//        guard let postId = postId else { return }
-//        if isHeart {
-//            deleteHeart(boardId: postId)
-//        }
-//        else {
-//            saveHeart(boardId: postId)
-//        }
-//    }
+    @objc func heartButtonTapped(_ sender: UIButton) {
+        guard let postId = postId else { return }
+        if isHeart {
+            deleteHeart(boardId: postId)
+        }
+        else {
+            saveHeart(boardId: postId)
+        }
+    }
     @objc func scrapButtonTapped(_ sender: UIButton) {
         guard let postId = postId else { return }
         if isScrap {
@@ -414,34 +436,10 @@ final class DetailBoardViewController: UIViewController {
             saveScrap(boardId: postId)
         }
     }
+    @objc func commentButtonTapped(_ sender: UIButton) {
+        let boardCommentVC = BoardCommentViewController()
+        // 필요한 경우 여기에서 boardCommentVC의 프로퍼티를 설정x
+        boardCommentVC.postId = postId
+        self.navigationController?.pushViewController(boardCommentVC, animated: true)
+    }
 }
-
-//extension DetailBoardViewController: UITableViewDelegate, UITableViewDataSource {
-//    private func setDelegate() {
-//        commentTableView.delegate = self
-//        commentTableView.dataSource = self
-//    }
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return filteredComments?.count ?? 0
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: commentTableViewCell.identifier, for: indexPath) as? commentTableViewCell else {
-//            return UITableViewCell()
-//        }
-//        
-//        let post: CommentData
-//        if indexPath.row < filteredComments.count {
-//            post = filteredComments[indexPath.row]
-//        } else {
-//            post = Comments[indexPath.row]
-//        }
-//        
-//        cell.configureCell(post)
-//        
-//        return cell
-//    }
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 87
-//    }
-//}
