@@ -54,22 +54,58 @@ final class MainViewController: UIViewController {
       vc.view.translatesAutoresizingMaskIntoConstraints = false
       return vc
     }()
+    
+    private lazy var addPostButton: UIButton = {
+        
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
+        btn.backgroundColor = UIColor(hex: "#2577FE")
+        btn.layer.cornerRadius = 20
+        btn.setImage(UIImage(systemName: "plus"), for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 17)
+        btn.setTitle("글쓰기", for: .normal)
+        btn.contentEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: 1)
+        btn.imageEdgeInsets = .init(top: 0, left: -1, bottom: 0, right: 1)
+        btn.titleEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: -1)
+        btn.clipsToBounds = true
+        btn.tintColor = .white
+        btn.addTarget(self, action: #selector(addButtonDidTapped), for: .touchUpInside)
+
+        return btn
+    }()
       
     var dataViewControllers: [UIViewController] {
         [recruitVC, self.vc2, self.vc3]
     }
     var currentPage: Int = 0 {
-      didSet {
-        // from segmentedControl -> pageViewController 업데이트
-        print(oldValue, self.currentPage)
-        let direction: UIPageViewController.NavigationDirection = oldValue <= self.currentPage ? .forward : .reverse
-        self.pageViewController.setViewControllers(
-          [dataViewControllers[self.currentPage]],
-          direction: direction,
-          animated: true,
-          completion: nil
-        )
-      }
+        didSet {
+            // from segmentedControl -> pageViewController 업데이트
+            print(oldValue, self.currentPage)
+            let direction: UIPageViewController.NavigationDirection = oldValue <= self.currentPage ? .forward : .reverse
+            self.pageViewController.setViewControllers(
+                [dataViewControllers[self.currentPage]],
+                direction: direction,
+                animated: true,
+                completion: nil
+            )
+            switch currentPage {
+            case 0:
+                // currentPage가 0이면 버튼을 보이게 함
+                addPostButton.isHidden = false
+                // a 페이지로 이동하는 코드
+                break
+            case 1:
+                // currentPage가 1이면 버튼을 보이게 함
+                addPostButton.isHidden = false
+                // b 페이지로 이동하는 코드
+                break
+            case 2:
+                // currentPage가 2이면 버튼을 숨김
+                addPostButton.isHidden = true
+                break
+            default:
+                break
+            }
+        }
     }
     
     //MARK: - LifeCycle
@@ -86,6 +122,7 @@ final class MainViewController: UIViewController {
         setupScrollView()
         setupPageControl()
         view.bringSubviewToFront(bottomSheetView)
+        view.bringSubviewToFront(addPostButton)
     }
 }
 
@@ -143,12 +180,6 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.top.equalTo(scrollView.snp.bottom)
             $0.centerX.equalTo(self.view.snp.centerX)
         }
-//        noticeBoardView.snp.makeConstraints {
-//            $0.top.equalTo(pageControl.snp.bottom)
-//            $0.height.equalTo(300)
-//            $0.width.equalTo(UIScreen.main.bounds.width)
-//        }
-
         bottomSheetView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -166,18 +197,22 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.bottom.equalToSuperview().offset(-4)
             $0.top.equalTo(segmentedControl.snp.bottom).offset(5)
         }
+        view.addSubview(addPostButton)
+        addPostButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-91)
+            $0.width.equalTo(91)
+            $0.height.equalTo(37)
+        }
     }
     private func setDelegate() {
         pageViewController.delegate = self
         scrollView.delegate = self
+        recruitVC.delegate = self
     }
     private func setRegister() {
 
     }
-//    private func setGesture(){
-//        panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGestureHandler))
-//        self.grabberView.addGestureRecognizer(panGesture)
-//    }
     private func setAddTarget() {
         self.segmentedControl.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
         self.changeValue(control: self.segmentedControl)
@@ -248,39 +283,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
       self.segmentedControl.selectedSegmentIndex = index
     }
 
-//    // MARK: - @objc Method
-//    @objc func panGestureHandler(recognizer: UIPanGestureRecognizer) {
-//        let translation = recognizer.translation(in: noticeBoardView)
-//        let maxHeight = view.frame.size.height - navigationController!.navigationBar.frame.size.height - UIApplication.shared.statusBarFrame.height
-//        if recognizer.state == .changed {
-//            let newY = max(self.noticeBoardView.frame.origin.y + translation.y, 0)
-//            self.noticeBoardView.frame.origin.y = newY
-//            recognizer.setTranslation(CGPoint.zero, in: self.view)
-//        }
-//        else if recognizer.state == .ended {
-////            if self.noticeBoardView.frame.origin.y < halfHeight {
-////                openDrawer(maxHeight: maxHeight)
-////            }
-////            else {
-////                closeDrawer(halfHeight: halfHeight)
-////            }
-//            openDrawer(maxHeight: maxHeight)
-//        }
-//    }
-//
-//    func openDrawer(maxHeight: CGFloat) {
-//        noticeBoardView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: maxHeight)
-//        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
-//            self.view.layoutIfNeeded()
-//        }, completion: nil)
-//    }
-//
-//    func closeDrawer(halfHeight: CGFloat) {
-//        noticeBoardView.frame = CGRect(x: 0, y: halfHeight, width: view.frame.width, height: halfHeight)
-//        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
-//            self.view.layoutIfNeeded()
-//        }, completion: nil)
-//    }
+    // MARK: - @objc Method
+
 
     @objc private func changeValue(control: UISegmentedControl) {
       // 코드로 값을 변경하면 해당 메소드 호출 x
@@ -295,5 +299,30 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         let secondViewController = SearchBarViewController()
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }
+    
+    @objc func addButtonDidTapped() {
+        switch currentPage {
+            case 0:
+                // currentPage가 0일 때의 동작
+                // a 페이지로 이동하는 코드
+                break
+            case 1:
+            let addPostVC = AddPostViewController()
+                let navigationController = UINavigationController(rootViewController: addPostVC)
+                navigationController.modalPresentationStyle = .fullScreen
+                self.present(navigationController, animated: true, completion: nil)
+                break
+            default:
+                break
+            }
+    }
 }
     
+extension MainViewController: RecruitVCDelegate {
+    func didSelectItem(withId id: Int) {
+            let detailVC = DetailBoardViewController()
+            detailVC.postId = id
+            print("hello")
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
+}

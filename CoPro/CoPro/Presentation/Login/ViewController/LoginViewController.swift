@@ -14,8 +14,9 @@ import SnapKit
 import SafariServices
 import Alamofire
 import KeychainSwift
+import CryptoKit
 
-class LoginViewController: BaseViewController {
+class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationControllerDelegate {
     
     var loginView: LoginView!
     override func loadView() {
@@ -45,34 +46,6 @@ class LoginViewController: BaseViewController {
         }
     }
     let keychain = KeychainSwift()
-    func sendTokenToServer(token: String) {
-        // 요청을 보낼 서버의 URL을 생성합니다.
-        guard let url = URL(string: "server Url") else {
-            print("Invalid URL")
-            return
-        }
-        
-        // URL 쿼리 파라미터에 토큰을 추가합니다.
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(token)",
-        ]
-        
-        
-        // Alamofire를 사용하여 GET 요청을 보냅니다.
-        AF.request(url, method: .get, headers: headers).response { response in
-            switch response.result {
-            case .success(let data):
-                // 서버로부터 받은 응답을 처리합니다.
-                // 이 예시에서는 응답을 그대로 출력합니다.
-                if let data = data {
-                    let str = String(data: data, encoding: .utf8)
-                    print("Received data:\n\(str ?? "")")
-                }
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
     @objc private func signOut() {
         if Auth.auth().currentUser != nil{
             do {
@@ -137,7 +110,6 @@ class LoginViewController: BaseViewController {
                         }
                         print("User ID token: \(idToken)!!!")
                         self.keychain.set(idToken, forKey: "idToken")
-                        self.sendTokenToServer(token: idToken)
                     }
                 }
             }
@@ -151,84 +123,71 @@ class LoginViewController: BaseViewController {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
-        
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
-    
-    class gitHubLoginManager {
-        
-        static let shared = gitHubLoginManager()
-        
-        private init() {}
-        
-        private let client_id = ""
-        private let client_secret = ""
-        
-        func requestCode() {
-            let scope = "read:user"
-            let urlString = "https://github.com/login/oauth/authorize?client_id=\(client_id)&scope=\(scope)"
-            if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-                print(urlString)
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return
             }
-            //            let safariViewController = SFSafariViewController(url: urlString)
-            //            self.present(safariViewController, animated: true, completion: nil)
-        }
-        
-        func requestAccessToken(with code: String) {
-            let url = "https://github.com/login/oauth/access_token"
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return
+            }
             
-            let parameters = ["client_id": client_id,
-                              "client_secret": client_secret,
-                              "code": code]
-            
-            let headers: HTTPHeaders = ["Accept": "application/json"]
-            
-            AF.request(url, method: .post, parameters: parameters, headers: headers).responseJSON { (response) in
-                switch response.result {
-                case let .success(json):
-                    if let dic = json as? [String: String] {
-                        let accessToken = dic["access_token"] ?? ""
-                        KeychainSwift().set(accessToken, forKey: "accessToken")
-                    }
-                case let .failure(error):
-                    print(error)
+            let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nil)
+            Auth.auth().signIn(with: credential) { (authResult, error) in
+                if (error != nil) {
+                    print(error?.localizedDescription)
+                    return
                 }
+                
+                print("User is signed in")
+                print("UserToken\(idTokenString)")
+                self.keychain.set(idTokenString, forKey: "idToken")
             }
         }
-        
-        func logout() {
-            KeychainSwift().clear()
-        }
     }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error.
+        print("Sign in with Apple errored: \(error)")
+    }
+    
     @objc private func handleGitHubSignIn() {
-        gitHubLoginManager.shared.requestCode()
+        print("github SignIn Tapped")
+        let provider = OAuthProvider(providerID: "github.com")
+        provider.scopes = ["public_repo"] // 이 예에서는 public_repo 권한을 요청합니다. 필요에 따라 변경하세요.
+        provider.getCredentialWith(nil, completion: { credential, error in
+            
+            if let error = error {
+                print("Failed to get credential: \(error.localizedDescription)")
+                return
+            }
+            
+            // Firebase에 로그인
+            if let credential = credential {
+                Auth.auth().signIn(with: credential, completion: { authResult, error in
+                    if let error = error {
+                        print("Login error: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    print("User is signed in")
+                    // 여기서 메인 화면으로 이동하도록 코드를 추가하세요.
+                })
+            }
+        })
     }
-    
-    
 }
 
-extension LoginViewController: ASAuthorizationControllerDelegate {
-    //    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-    //        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-    //            let credential = OAuthProvider.credential(withProviderID: "apple.com",
-    //                                                      idToken: String(data: appleIDCredential.identityToken!, encoding: .utf8)!,
-    //                                                      rawNonce: nonce)
-    //            Auth.auth().signIn(with: credential) { (authResult, error) in
-    //                if let error = error {
-    //                    print("Failed to sign in with Apple: ", error)
-    //                    return
-    //                }
-    //                // User is signed in
-    //                // ...
-    //            }
-    //        }
-    //    }
-    //
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        // Handle error
-        print("Sign in with Apple errored: ", error)
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        // Apple 로그인 인증 창 띄우기
+        return self.view.window ?? UIWindow()
     }
 }

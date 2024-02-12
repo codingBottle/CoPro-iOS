@@ -11,10 +11,31 @@ import SnapKit
 import Then
 import KeychainSwift
 
-final class recruitViewController: UIViewController {
+protocol RecruitVCDelegate: AnyObject {
+    func didSelectItem(withId id: Int)
+}
+protocol radioDelegate: AnyObject {
+    func sendDefaultSelect(withOpt opt: String)
+}
+
+final class recruitViewController: UIViewController, SendStringData {
+    func radioButtonDidSelect() {
+        print("라디오버튼눌림")
+    }
+    
+    func sendData(mydata: String, groupId: Int) {
+        sortButton.setTitle(mydata, for: .normal)
+        offset = 1
+        posts.removeAll()
+        filteredPosts.removeAll()
+        getAllBoard(category: "공지사항", page: offset, standard: getStandard())
+    }
+    
     
     // MARK: - UI Components
     
+    weak var delegate1: radioDelegate?
+    weak var delegate: RecruitVCDelegate?
     private let sortButton = UIButton()
     private lazy var tableView = UITableView()
     private let keychain = KeychainSwift()
@@ -27,7 +48,7 @@ final class recruitViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getAllBoard(category: "공지사항", page: 1)
+        getAllBoard(category: "프로젝트", page: offset, standard: "create_at")
         setUI()
         setLayout()
         setDelegate()
@@ -106,16 +127,15 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailBoardViewController()
-        
         if indexPath.row < filteredPosts.count {
             print(filteredPosts[indexPath.row].title)
+            print("\(filteredPosts[indexPath.row].boardId)")
             detailVC.postId = filteredPosts[indexPath.row].boardId
+            delegate?.didSelectItem(withId: detailVC.postId!)
         } else {
             print("Invalid index")
             detailVC.postId = posts[indexPath.row].boardId
         }
-        
-        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
@@ -125,14 +145,16 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc func sortButtonPressed() {
         let bottomSheetVC = SortBottomSheetViewController()
-        present(bottomSheetVC, animated: true, completion: nil)
+        bottomSheetVC.delegate = self
+        bottomSheetVC.tmp = sortButton.titleLabel?.text ?? "최신순"
+            present(bottomSheetVC, animated: true, completion: nil)
     }
 }
 extension recruitViewController {
-    func getAllBoard(category: String, page: Int) {
+    func getAllBoard(category: String, page: Int, standard: String) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
-            BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: "create_at") { result in
+            BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: standard) { result in
                 switch result {
                 case .success(let data):
                     if let data = data as? BoardDTO {
@@ -140,7 +162,7 @@ extension recruitViewController {
                         var mappedData: [BoardDataModel] = []
                         
                         for serverItem in serverData {
-                            let mappedItem = BoardDataModel (boardId: serverItem.id,title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "")
+                            let mappedItem = BoardDataModel (boardId: serverItem.id,title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "", commentCount: serverItem.commentCount)
                             mappedData.append(mappedItem)
                         }
                         
@@ -178,8 +200,19 @@ extension recruitViewController {
                 if isInfiniteScroll {
                     isInfiniteScroll = false
                     offset += 1
-                    getAllBoard(category: "공지사항", page: offset)
+                    getAllBoard(category: "공지사항", page: offset, standard: getStandard())
                 }
             }
         }
+    
+    func getStandard() -> String {
+        switch sortButton.title(for: .normal) {
+        case "최신순":
+            return "create_at"
+        case "인기순":
+            return "count"
+        default:
+            return "create_at" // 기본값
+        }
+    }
 }

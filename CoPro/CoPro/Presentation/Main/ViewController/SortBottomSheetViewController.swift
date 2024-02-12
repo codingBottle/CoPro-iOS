@@ -10,24 +10,42 @@ import UIKit
 import SnapKit
 import Then
 
-final class SortBottomSheetViewController: UIViewController {
-
+final class SortBottomSheetViewController: UIViewController, SendStringData, radioDelegate {
+    func sendDefaultSelect(withOpt opt: String) {
+        tmp = opt
+    }
+    
+    func sendData(mydata: String, groupId: Int) {
+        delegate?.sendData(mydata: mydata, groupId: groupId)
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func radioButtonDidSelect() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
     // MARK: - UI Components
     
     private let sortRadioButton = RadioButtonsStack(groupId: 1)
-
+    weak var delegate: SendStringData?
+    var tmp = String()
+    
     // MARK: - Properties
-                    
+    
     // MARK: - Initializer
-
+    
     
     // MARK: - View Life Cycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let options = ["최신순", "인기순"]
+        sortRadioButton.set(options, defaultSelection: tmp)
         setUI()
         setLayout()
         addTarget()
+        setDelegate()
     }
 }
 
@@ -35,6 +53,9 @@ extension SortBottomSheetViewController {
     
     // MARK: - UI Components Property
     
+    private func setDelegate() {
+        sortRadioButton.delegate = self
+    }
     private func setUI() {
         
         view.backgroundColor = UIColor(hex: "#FFFFFF")
@@ -47,8 +68,6 @@ extension SortBottomSheetViewController {
             }]
             
             sortRadioButton.do {
-                let options = ["최신순", "인기순"]
-                $0.set(options, defaultSelection: "최신순")
                 $0.translatesAutoresizingMaskIntoConstraints = false
             }
             
@@ -79,5 +98,5 @@ extension SortBottomSheetViewController {
     @objc
     private func dismissToCreateEvaluateViewController() {
         dismiss(animated: true, completion: nil)
-    }
+    } 
 }

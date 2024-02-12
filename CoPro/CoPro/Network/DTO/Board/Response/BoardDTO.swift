@@ -27,10 +27,12 @@ struct Board: Codable {
     let title, nickName, createAt: String?
     let count, heart: Int
     let imageURL: String?
+    let commentCount: Int
 
     enum CodingKeys: String, CodingKey {
         case id, title, nickName, createAt, count, heart
         case imageURL = "imageUrl"
+        case commentCount
     }
 }
 
