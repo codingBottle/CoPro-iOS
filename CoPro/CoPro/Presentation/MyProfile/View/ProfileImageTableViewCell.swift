@@ -9,43 +9,57 @@ import UIKit
 import SnapKit
 import Then
 
+protocol EditProfileButtonDelegate: AnyObject {
+    func didTapEditProfileButton(in cell: ProfileImageTableViewCell)
+}
+
 class ProfileImageTableViewCell: UITableViewCell {
     
+    weak var delegate: EditProfileButtonDelegate?
+    
     let containerView = UIView()
-    
-    let editImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        if let image = UIImage(systemName: "square.and.pencil.circle") {
-            imageView.image = image
-        }
-        return imageView
-    }()
-    
     let profileImage = UIImageView(image : Image.coproLogo)
     let informationContainer = UIView()
     
-    let nameLabel: UILabel = {
+    let nickname: UILabel = {
         let label = UILabel()
+        label.text = "테스트"
         return label
     }()
     
     let developmentJobLabel: UILabel = {
         let label = UILabel()
+        label.text = "테스트"
         return label
     }()
     
     let usedLanguageLabel: UILabel = {
         let label = UILabel()
+        label.text = "테스트"
         return label
     }()
     
-    let buttonContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.init(hex: "#767680")
-        return view
-    }()
-    let buttonImage = UIImageView(image:Image.edit_Profile)
+    let buttonContainerView = UIView().then {
+        $0.layer.backgroundColor = UIColor(red: 0.463, green: 0.463, blue: 0.502, alpha: 0.2).cgColor
+        $0.clipsToBounds = true
+        $0.backgroundColor = .lightGray
+        $0.layer.cornerRadius = 25 // 반지름은 너비의 절반으로 설정합니다.
+    }
+    
+    var editButton = UIButton().then {
+        let symbolConfiguration = UIImage.SymbolConfiguration(scale: .large)
+        let image = UIImage(systemName: "square.and.pencil", withConfiguration: symbolConfiguration)
+        
+        var buttonConfiguration = UIButton.Configuration.gray()
+        buttonConfiguration.image = image
+        buttonConfiguration.imagePadding = 10
+        buttonConfiguration.background.backgroundColor = UIColor(red: 0.463, green: 0.463, blue: 0.502, alpha: 0.2)
+        buttonConfiguration.cornerStyle = .capsule
+        $0.configuration = buttonConfiguration
+    }
+
+
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -54,24 +68,27 @@ class ProfileImageTableViewCell: UITableViewCell {
         
     }
     
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func setLayout() {
-        addSubview(containerView)
+        
+        contentView.addSubview(containerView)
         containerView.addSubview(profileImage)
         profileImage.addSubview(informationContainer)
-        informationContainer.addSubviews(nameLabel, developmentJobLabel, usedLanguageLabel, buttonContainerView)
-//        buttonContainerView.addSubview(buttonImage)
-        buttonContainerView.addSubview(editImageView)
+        informationContainer.addSubviews(nickname, developmentJobLabel, usedLanguageLabel, editButton)
+//        buttonContainerView.addSubview(editButton)
         
-        
-        containerView.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+        profileImage.isUserInteractionEnabled = true
+        editButton.addTarget(self, action: #selector(didTapEditProfileButton), for: .touchUpInside)
         
         containerView.snp.makeConstraints {
-            $0.width.equalToSuperview()
-            $0.height.equalToSuperview()
+            $0.top.equalToSuperview().offset(10)
+            $0.bottom.equalToSuperview().offset(-10)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         profileImage.do {
@@ -95,14 +112,14 @@ class ProfileImageTableViewCell: UITableViewCell {
             $0.height.equalTo(profileImage.snp.height).multipliedBy(0.28)
         }
         
-        nameLabel.snp.makeConstraints {
+        nickname.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview()
             $0.width.equalTo(informationContainer.snp.width).multipliedBy(0.3)
         }
         
         developmentJobLabel.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(20)
+            $0.top.equalTo(nickname.snp.bottom).offset(20)
             $0.leading.equalToSuperview()
             $0.width.equalTo(informationContainer.snp.width).multipliedBy(0.13)
         }
@@ -113,20 +130,22 @@ class ProfileImageTableViewCell: UITableViewCell {
             $0.width.equalTo(informationContainer.snp.width).multipliedBy(0.4)
         }
         
-        buttonContainerView.do {
-            $0.layer.cornerRadius = buttonContainerView.frame.size.width / 2
-            $0.clipsToBounds = true
-        }
         
-        buttonContainerView.snp.makeConstraints {
-            $0.width.equalTo(informationContainer.snp.width).multipliedBy(1.0/7)
-            $0.height.equalTo(informationContainer.snp.height).multipliedBy(1.0 / 2.7)
+        editButton.snp.makeConstraints {
+            $0.width.equalTo(60)
+            $0.height.equalTo(60)
             $0.bottom.equalToSuperview()
             $0.trailing.equalToSuperview()
         }
         
-        editImageView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+//        editButton.snp.makeConstraints {
+//            $0.leading.trailing.top.bottom.equalToSuperview()
+//        }
     }
+    
+    @objc func didTapEditProfileButton(_ sender: UIButton) {
+        print("🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
+        delegate?.didTapEditProfileButton(in: self)
+    }
+    
 }

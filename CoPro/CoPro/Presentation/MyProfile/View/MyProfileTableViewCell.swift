@@ -9,18 +9,22 @@ import UIKit
 import SnapKit
 import Then
 
+protocol MyProfileTableViewButtonDelegate: AnyObject {
+    func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell)
+    func didTapWritebyMeButtonTapped(in cell: MyProfileTableViewCell)
+    func didTapMyWrittenCommentButtonTapped(in cell: MyProfileTableViewCell)
+    func didTapInterestedPostButtonTapped(in cell: MyProfileTableViewCell)
+    func didTapInterestedProfileButtonTapped(in cell: MyProfileTableViewCell)
+}
+
 class MyProfileTableViewCell: UITableViewCell {
+    
+    weak var delegate: MyProfileTableViewButtonDelegate?
     
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Pretendard-Regular", size: 17)
         return label
-    }()
-    
-    let button: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
     }()
     
     let heartContainer: UIView = UIView()
@@ -43,22 +47,11 @@ class MyProfileTableViewCell: UITableViewCell {
     
     let greaterthanContainer: UIView = UIView()
     
-//    let greaterthanLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = ">"
-//        label.font = UIFont(name: "Pretendard-Regular", size: 17)
-//        label.font = .systemFont(ofSize: 17, weight: .bold)
-//        label.textColor = UIColor.init(hex: "#2577FE")
-//        return label
-//    }()
-    let greaterthanImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        if let image = UIImage(systemName: "greaterthan") {
-            imageView.image = image
-        }
-        return imageView
-    }()
+    let greaterthanButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "greaterthan"), for: .normal)
+        $0.contentVerticalAlignment = .fill
+        $0.contentHorizontalAlignment = .fill
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -74,9 +67,10 @@ class MyProfileTableViewCell: UITableViewCell {
 
 extension MyProfileTableViewCell {
     private func setLayout() {
-        addSubviews(titleLabel, heartContainer, greaterthanContainer)
+        contentView.addSubviews(titleLabel, heartContainer, greaterthanContainer)
+        
         heartContainer.addSubviews(heartImageView, heartCountLabel)
-        greaterthanContainer.addSubviews(greaterthanImageView)
+        greaterthanContainer.addSubviews(greaterthanButton)
         
         titleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -97,26 +91,71 @@ extension MyProfileTableViewCell {
         }
         
         heartCountLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(heartImageView.snp.trailing).offset(6)
-            $0.width.equalTo(28)
+            $0.centerY.equalTo(heartImageView)
+            $0.leading.equalTo(heartImageView.snp.trailing).offset(3)
+            $0.trailing.equalToSuperview()
         }
         
         greaterthanContainer.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(54)
+            $0.height.equalTo(50)
         }
         
-        greaterthanImageView.snp.makeConstraints {
+        greaterthanButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview()
             $0.width.equalTo(12)
-            $0.height.equalTo(17)
+            $0.height.equalToSuperview().dividedBy(6)
         }
         
-//        heartContainer.isHidden
-//        greaterthanContainer.isHidden
-        
+    }
+    
+    func configureButton(at index: Int) {
+            
+            // 인덱스에 따라 버튼에 다른 액션을 부여합니다.
+            switch index {
+            case 1:
+                greaterthanButton.addTarget(self, action: #selector(didTapEditGitHubURLButtonTapped), for: .touchUpInside)
+            case 2:
+                greaterthanButton.addTarget(self, action: #selector(didTapMyWrittenPostButtonTapped), for: .touchUpInside)
+                
+            case 3:
+                greaterthanButton.addTarget(self, action: #selector(didTapMyWrittenCommentButtonTapped), for: .touchUpInside)
+                
+            case 4:
+                greaterthanButton.addTarget(self, action: #selector(didTapInterestedPostButtonTapped), for: .touchUpInside)
+                
+            case 5:
+                greaterthanButton.addTarget(self, action: #selector(didTapInterestedProfileButtonTapped), for: .touchUpInside)
+            default:
+                break
+            }
+        }
+    
+    // githuburl 수정
+    @objc func didTapEditGitHubURLButtonTapped(_ sender: UIButton) {
+        delegate?.didTapEditGitHubURLButton(in: self)
+    }
+    
+    // 작성한 게시물
+    @objc func didTapMyWrittenPostButtonTapped(_ sender: UIButton) {
+        delegate?.didTapWritebyMeButtonTapped(in: self)
+    }
+    
+    // 작성한 댓글
+    @objc func didTapMyWrittenCommentButtonTapped(_ sender: UIButton) {
+        delegate?.didTapMyWrittenCommentButtonTapped(in: self)
+    }
+    
+    // 관심 게시물
+    @objc func didTapInterestedPostButtonTapped(_ sender: UIButton) {
+        delegate?.didTapInterestedPostButtonTapped(in: self)
+    }
+    
+    // 관심 프로필
+    @objc func didTapInterestedProfileButtonTapped(_ sender: UIButton) {
+        delegate?.didTapInterestedProfileButtonTapped(in: self)
     }
 }
