@@ -29,6 +29,18 @@
 		9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2F72AD5226300F4CA43 /* UIButton++.swift */; };
 		9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2F92AD5227500F4CA43 /* UIColor++.swift */; };
 		9E05D2FC2AD5228300F4CA43 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E05D2FB2AD5228300F4CA43 /* Image.swift */; };
+		9E0B9CA52B6A08E800A5EACB /* EditCardTypeRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CA42B6A08E800A5EACB /* EditCardTypeRequestBody.swift */; };
+		9E0B9CA72B6A09FB00A5EACB /* EditCardTypeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CA62B6A09FB00A5EACB /* EditCardTypeDTO.swift */; };
+		9E0B9CA92B6B44DB00A5EACB /* WritebyMeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CA82B6B44DB00A5EACB /* WritebyMeDTO.swift */; };
+		9E0B9CAB2B6B466B00A5EACB /* MyContributionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CAA2B6B466B00A5EACB /* MyContributionsViewController.swift */; };
+		9E0B9CAD2B6BFAE400A5EACB /* WritebyMeDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CAC2B6BFAE400A5EACB /* WritebyMeDataModel.swift */; };
+		9E0B9CAF2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CAE2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift */; };
+		9E0B9CB12B6C336C00A5EACB /* MyCommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB02B6C336C00A5EACB /* MyCommentsTableViewCell.swift */; };
+		9E0B9CB32B6C355D00A5EACB /* MyWrittenCommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB22B6C355D00A5EACB /* MyWrittenCommentDTO.swift */; };
+		9E0B9CB52B6C365700A5EACB /* MyWrittenCommentDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB42B6C365700A5EACB /* MyWrittenCommentDataModel.swift */; };
+		9E0B9CB72B6C9E0E00A5EACB /* EditMyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */; };
+		9E0B9CB92B6DC6E000A5EACB /* ScrapPostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB82B6DC6DF00A5EACB /* ScrapPostDTO.swift */; };
+		9E0B9CBB2B6DC74200A5EACB /* ScrapPostDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CBA2B6DC74200A5EACB /* ScrapPostDataModel.swift */; };
 		9E7401C02B3BE1C80030C8EC /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7401BF2B3BE1C80030C8EC /* MessageKit */; };
 		9E7401C62B3BF48D0030C8EC /* NSObject++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401C52B3BF48D0030C8EC /* NSObject++.swift */; };
 		9E7401C82B3BF4B80030C8EC /* UIImage++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401C72B3BF4B80030C8EC /* UIImage++.swift */; };
@@ -49,15 +61,21 @@
 		9E7401ED2B3C18FD0030C8EC /* Sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401E92B3C18FD0030C8EC /* Sender.swift */; };
 		9E7401EE2B3C18FD0030C8EC /* ChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401EA2B3C18FD0030C8EC /* ChannelTableViewCell.swift */; };
 		9E7401EF2B3C18FD0030C8EC /* CustomMessageContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401EB2B3C18FD0030C8EC /* CustomMessageContentCell.swift */; };
+		9E7462D92B755D38006693B6 /* EditMyProfileRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7462D82B755D38006693B6 /* EditMyProfileRequestBody.swift */; };
+		9E7462DB2B756899006693B6 /* EditMyProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7462DA2B756899006693B6 /* EditMyProfileDTO.swift */; };
+		9E7462DD2B78951F006693B6 /* getNickNameDuplicationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7462DC2B78951F006693B6 /* getNickNameDuplicationDTO.swift */; };
 		9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */; };
 		9E8FB6EF2B5CF4CA00C02028 /* MyProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6EE2B5CF4CA00C02028 /* MyProfileDTO.swift */; };
 		9E8FB6F22B5CF5AE00C02028 /* MyProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6F12B5CF5AE00C02028 /* MyProfileRouter.swift */; };
 		9E8FB6F52B5CF64A00C02028 /* MyProfileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6F42B5CF64A00C02028 /* MyProfileAPI.swift */; };
-		9E8FB6F72B5CFBF300C02028 /* MyProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6F62B5CFBF300C02028 /* MyProfileModel.swift */; };
+		9E8FB6F72B5CFBF300C02028 /* MyProfileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6F62B5CFBF300C02028 /* MyProfileDataModel.swift */; };
+		9E8FB6F92B5FF56C00C02028 /* EditGithubModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6F82B5FF56C00C02028 /* EditGithubModalViewController.swift */; };
+		9E8FB6FB2B616F4400C02028 /* EditGitHubURLRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6FA2B616F4400C02028 /* EditGitHubURLRequestBody.swift */; };
+		9E8FB6FD2B6171FA00C02028 /* EditGitHubURLDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8FB6FC2B6171FA00C02028 /* EditGitHubURLDTO.swift */; };
 		9E98F2F12B4A49CE00A6756A /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F02B4A49CE00A6756A /* MyProfileViewController.swift */; };
 		9E98F2F32B4A49DC00A6756A /* MyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F22B4A49DC00A6756A /* MyProfileView.swift */; };
 		9E98F2F52B4FA46B00A6756A /* MyProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */; };
-		9E98F2F72B4FC64600A6756A /* ConversionSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F62B4FC64600A6756A /* ConversionSettingsTableViewCell.swift */; };
+		9E98F2F72B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */; };
 		9E98F2F92B5145A300A6756A /* ProfileImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */; };
 		B517514E2B427161003453B5 /* CardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B517514D2B427161003453B5 /* CardDTO.swift */; };
 		B58A4A632B68F82C00793160 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */; };
@@ -194,6 +212,18 @@
 		9E05D2F72AD5226300F4CA43 /* UIButton++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton++.swift"; sourceTree = "<group>"; };
 		9E05D2F92AD5227500F4CA43 /* UIColor++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor++.swift"; sourceTree = "<group>"; };
 		9E05D2FB2AD5228300F4CA43 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		9E0B9CA42B6A08E800A5EACB /* EditCardTypeRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCardTypeRequestBody.swift; sourceTree = "<group>"; };
+		9E0B9CA62B6A09FB00A5EACB /* EditCardTypeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCardTypeDTO.swift; sourceTree = "<group>"; };
+		9E0B9CA82B6B44DB00A5EACB /* WritebyMeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritebyMeDTO.swift; sourceTree = "<group>"; };
+		9E0B9CAA2B6B466B00A5EACB /* MyContributionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContributionsViewController.swift; sourceTree = "<group>"; };
+		9E0B9CAC2B6BFAE400A5EACB /* WritebyMeDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritebyMeDataModel.swift; sourceTree = "<group>"; };
+		9E0B9CAE2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedPostsToMeTavleViewCell.swift; sourceTree = "<group>"; };
+		9E0B9CB02B6C336C00A5EACB /* MyCommentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentsTableViewCell.swift; sourceTree = "<group>"; };
+		9E0B9CB22B6C355D00A5EACB /* MyWrittenCommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWrittenCommentDTO.swift; sourceTree = "<group>"; };
+		9E0B9CB42B6C365700A5EACB /* MyWrittenCommentDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWrittenCommentDataModel.swift; sourceTree = "<group>"; };
+		9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileViewController.swift; sourceTree = "<group>"; };
+		9E0B9CB82B6DC6DF00A5EACB /* ScrapPostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostDTO.swift; sourceTree = "<group>"; };
+		9E0B9CBA2B6DC74200A5EACB /* ScrapPostDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostDataModel.swift; sourceTree = "<group>"; };
 		9E7401C52B3BF48D0030C8EC /* NSObject++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject++.swift"; sourceTree = "<group>"; };
 		9E7401C72B3BF4B80030C8EC /* UIImage++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage++.swift"; sourceTree = "<group>"; };
 		9E7401CA2B3BF5670030C8EC /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
@@ -213,15 +243,21 @@
 		9E7401E92B3C18FD0030C8EC /* Sender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sender.swift; sourceTree = "<group>"; };
 		9E7401EA2B3C18FD0030C8EC /* ChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelTableViewCell.swift; sourceTree = "<group>"; };
 		9E7401EB2B3C18FD0030C8EC /* CustomMessageContentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMessageContentCell.swift; sourceTree = "<group>"; };
+		9E7462D82B755D38006693B6 /* EditMyProfileRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileRequestBody.swift; sourceTree = "<group>"; };
+		9E7462DA2B756899006693B6 /* EditMyProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileDTO.swift; sourceTree = "<group>"; };
+		9E7462DC2B78951F006693B6 /* getNickNameDuplicationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getNickNameDuplicationDTO.swift; sourceTree = "<group>"; };
 		9E76B89D2AFB4E6700338E2C /* BaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRouter.swift; sourceTree = "<group>"; };
 		9E8FB6EE2B5CF4CA00C02028 /* MyProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileDTO.swift; sourceTree = "<group>"; };
 		9E8FB6F12B5CF5AE00C02028 /* MyProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileRouter.swift; sourceTree = "<group>"; };
 		9E8FB6F42B5CF64A00C02028 /* MyProfileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileAPI.swift; sourceTree = "<group>"; };
-		9E8FB6F62B5CFBF300C02028 /* MyProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileModel.swift; sourceTree = "<group>"; };
+		9E8FB6F62B5CFBF300C02028 /* MyProfileDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileDataModel.swift; sourceTree = "<group>"; };
+		9E8FB6F82B5FF56C00C02028 /* EditGithubModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGithubModalViewController.swift; sourceTree = "<group>"; };
+		9E8FB6FA2B616F4400C02028 /* EditGitHubURLRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGitHubURLRequestBody.swift; sourceTree = "<group>"; };
+		9E8FB6FC2B6171FA00C02028 /* EditGitHubURLDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGitHubURLDTO.swift; sourceTree = "<group>"; };
 		9E98F2F02B4A49CE00A6756A /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		9E98F2F22B4A49DC00A6756A /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
 		9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTableViewCell.swift; sourceTree = "<group>"; };
-		9E98F2F62B4FC64600A6756A /* ConversionSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionSettingsTableViewCell.swift; sourceTree = "<group>"; };
+		9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTypeSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageTableViewCell.swift; sourceTree = "<group>"; };
 		B517514D2B427161003453B5 /* CardDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDTO.swift; sourceTree = "<group>"; };
 		B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
@@ -386,8 +422,8 @@
 		9E05D2C22AD5090400F4CA43 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				9E76B89B2AFB4E4F00338E2C /* Router */,
 				9E05D2CA2AD5095600F4CA43 /* Foundation */,
+				9E76B89B2AFB4E4F00338E2C /* Router */,
 				9E05D2C92AD5094E00F4CA43 /* DTO */,
 				9E05D2C82AD5094A00F4CA43 /* API */,
 				9E05D2C72AD5094500F4CA43 /* Config */,
@@ -621,6 +657,16 @@
 			isa = PBXGroup;
 			children = (
 				9E8FB6EE2B5CF4CA00C02028 /* MyProfileDTO.swift */,
+				9E8FB6FC2B6171FA00C02028 /* EditGitHubURLDTO.swift */,
+				9E0B9CA62B6A09FB00A5EACB /* EditCardTypeDTO.swift */,
+				9E0B9CA82B6B44DB00A5EACB /* WritebyMeDTO.swift */,
+				9E0B9CB22B6C355D00A5EACB /* MyWrittenCommentDTO.swift */,
+				9E0B9CB82B6DC6DF00A5EACB /* ScrapPostDTO.swift */,
+				9E7462D82B755D38006693B6 /* EditMyProfileRequestBody.swift */,
+				9E8FB6FA2B616F4400C02028 /* EditGitHubURLRequestBody.swift */,
+				9E0B9CA42B6A08E800A5EACB /* EditCardTypeRequestBody.swift */,
+				9E7462DA2B756899006693B6 /* EditMyProfileDTO.swift */,
+				9E7462DC2B78951F006693B6 /* getNickNameDuplicationDTO.swift */,
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -655,9 +701,11 @@
 			isa = PBXGroup;
 			children = (
 				9E98F2F22B4A49DC00A6756A /* MyProfileView.swift */,
-				9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */,
-				9E98F2F62B4FC64600A6756A /* ConversionSettingsTableViewCell.swift */,
 				9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */,
+				9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */,
+				9E0B9CAE2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift */,
+				9E0B9CB02B6C336C00A5EACB /* MyCommentsTableViewCell.swift */,
+				9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -666,6 +714,9 @@
 			isa = PBXGroup;
 			children = (
 				9E98F2F02B4A49CE00A6756A /* MyProfileViewController.swift */,
+				9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */,
+				9E8FB6F82B5FF56C00C02028 /* EditGithubModalViewController.swift */,
+				9E0B9CAA2B6B466B00A5EACB /* MyContributionsViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -673,7 +724,10 @@
 		9E98F2EF2B4A493500A6756A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9E8FB6F62B5CFBF300C02028 /* MyProfileModel.swift */,
+				9E8FB6F62B5CFBF300C02028 /* MyProfileDataModel.swift */,
+				9E0B9CAC2B6BFAE400A5EACB /* WritebyMeDataModel.swift */,
+				9E0B9CBA2B6DC74200A5EACB /* ScrapPostDataModel.swift */,
+				9E0B9CB42B6C365700A5EACB /* MyWrittenCommentDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1046,25 +1100,30 @@
 				E36717BD2B70B3F700CBCD8B /* AlbumInfo.swift in Sources */,
 				E37AE7FE2B3C27B1002ABDCD /* recruitViewController.swift in Sources */,
 				E314AD192B5E735300BDB6AD /* DetailBoardDateModel.swift in Sources */,
+				9E7462DB2B756899006693B6 /* EditMyProfileDTO.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				E36717B92B70B35100CBCD8B /* PhotoAuthManager.swift in Sources */,
 				E37AE7F62B3C272A002ABDCD /* PassThroughView.swift in Sources */,
+				9E8FB6FB2B616F4400C02028 /* EditGitHubURLRequestBody.swift in Sources */,
 				E32B671E2B566C4100EBB5AC /* BoardAPI.swift in Sources */,
 				E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */,
 				E363D5C42B60D8B100FE6A9C /* CommentDataModel.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
 				9E8FB6F22B5CF5AE00C02028 /* MyProfileRouter.swift in Sources */,
+				9E0B9CA72B6A09FB00A5EACB /* EditCardTypeDTO.swift in Sources */,
 				E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */,
 				9E7401E12B3C18A60030C8EC /* ChatFirestoreStream.swift in Sources */,
 				9E7401C62B3BF48D0030C8EC /* NSObject++.swift in Sources */,
 				9E7401E52B3C18A60030C8EC /* Message.swift in Sources */,
 				9E7401CB2B3BF5670030C8EC /* UserDefaultManager.swift in Sources */,
+				9E8FB6F92B5FF56C00C02028 /* EditGithubModalViewController.swift in Sources */,
 				9E7401E42B3C18A60030C8EC /* ChannelFirestoreStream.swift in Sources */,
 				9E05D2CD2AD5097800F4CA43 /* Config.swift in Sources */,
 				9E98F2F12B4A49CE00A6756A /* MyProfileViewController.swift in Sources */,
 				E37AE7F02B3C25BD002ABDCD /* UISegmented++.swift in Sources */,
 				E32B67252B56783400EBB5AC /* DetailBoardDTO.swift in Sources */,
+				9E0B9CAD2B6BFAE400A5EACB /* WritebyMeDataModel.swift in Sources */,
 				B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */,
 				E32B67402B56EE6300EBB5AC /* SearchBoardRequestBody.swift in Sources */,
 				E36717BB2B70B39200CBCD8B /* AlbumManager.swift in Sources */,
@@ -1075,11 +1134,18 @@
 				9E7401CF2B3C108C0030C8EC /* AppController.swift in Sources */,
 				9E7401EF2B3C18FD0030C8EC /* CustomMessageContentCell.swift in Sources */,
 				9E7401EE2B3C18FD0030C8EC /* ChannelTableViewCell.swift in Sources */,
+				9E7462DD2B78951F006693B6 /* getNickNameDuplicationDTO.swift in Sources */,
+				9E0B9CA92B6B44DB00A5EACB /* WritebyMeDTO.swift in Sources */,
+				9E0B9CA52B6A08E800A5EACB /* EditCardTypeRequestBody.swift in Sources */,
 				E3C64F932B634F87000BB5D6 /* AddPostViewController.swift in Sources */,
 				E37AE7FC2B3C2785002ABDCD /* BottomSheetView.swift in Sources */,
 				E32B672B2B56792900EBB5AC /* VoidDTO.swift in Sources */,
+				9E0B9CB52B6C365700A5EACB /* MyWrittenCommentDataModel.swift in Sources */,
 				E33379A52B4402DA0097ED0D /* SearchBarViewController.swift in Sources */,
+				9E0B9CB92B6DC6E000A5EACB /* ScrapPostDTO.swift in Sources */,
 				E3D6D15C2AEFACE6003269FF /* BaseAPI.swift in Sources */,
+				9E0B9CB72B6C9E0E00A5EACB /* EditMyProfileViewController.swift in Sources */,
+				9E0B9CB32B6C355D00A5EACB /* MyWrittenCommentDTO.swift in Sources */,
 				E37B20972B71DDFC00308158 /* DetailFreeViewController.swift in Sources */,
 				9E7401E62B3C18A60030C8EC /* Channel.swift in Sources */,
 				9E7401D92B3C187F0030C8EC /* ChatViewController.swift in Sources */,
@@ -1088,7 +1154,7 @@
 				9E05D2D12AD5098D00F4CA43 /* DTO.swift in Sources */,
 				E36717BF2B70B40600CBCD8B /* MediaType.swift in Sources */,
 				9E7401D72B3C18040030C8EC /* ChannelViewController.swift in Sources */,
-				9E98F2F72B4FC64600A6756A /* ConversionSettingsTableViewCell.swift in Sources */,
+				9E98F2F72B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift in Sources */,
 				9E7401ED2B3C18FD0030C8EC /* Sender.swift in Sources */,
 				9E7401C82B3BF4B80030C8EC /* UIImage++.swift in Sources */,
 				9E98F2F32B4A49DC00A6756A /* MyProfileView.swift in Sources */,
@@ -1097,9 +1163,12 @@
 				E32B672F2B567B4B00EBB5AC /* MostIncreasedLikesDTO.swift in Sources */,
 				E3C64F972B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift in Sources */,
 				9E7401E72B3C18A60030C8EC /* DatabaseRepresentation.swift in Sources */,
+				9E0B9CB12B6C336C00A5EACB /* MyCommentsTableViewCell.swift in Sources */,
 				9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */,
 				E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */,
 				E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */,
+				9E0B9CBB2B6DC74200A5EACB /* ScrapPostDataModel.swift in Sources */,
+				9E8FB6FD2B6171FA00C02028 /* EditGitHubURLDTO.swift in Sources */,
 				B5D3E5322AFB7C2E0021DDA0 /* LoginViewController.swift in Sources */,
 				9E05D2D32AD5099E00F4CA43 /* BaseResponse.swift in Sources */,
 				B517514E2B427161003453B5 /* CardDTO.swift in Sources */,
@@ -1109,6 +1178,8 @@
 				E32B67212B566CF600EBB5AC /* BoardDTO.swift in Sources */,
 				9E05D2D32AD5099E00F4CA43 /* BaseResponse.swift in Sources */,
 				E32B673C2B56AD6700EBB5AC /* CreateBoardRequestBody.swift in Sources */,
+				9E0B9CAF2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift in Sources */,
+				9E0B9CAB2B6B466B00A5EACB /* MyContributionsViewController.swift in Sources */,
 				9E7401CD2B3C0FB50030C8EC /* BaseNavigationController.swift in Sources */,
 				9E05D2EA2AD521CB00F4CA43 /* Font.swift in Sources */,
 				E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */,
@@ -1128,12 +1199,13 @@
 				9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */,
 				B58B8D332B4D3E2100FB98F9 /* CardAPI.swift in Sources */,
 				9E05D2EE2AD5221500F4CA43 /* UIView++.swift in Sources */,
-				9E8FB6F72B5CFBF300C02028 /* MyProfileModel.swift in Sources */,
+				9E8FB6F72B5CFBF300C02028 /* MyProfileDataModel.swift in Sources */,
 				9E7401D12B3C176E0030C8EC /* FirebaseStorageManager.swift in Sources */,
 				9E05D2D72AD509D100F4CA43 /* BaseView.swift in Sources */,
 				B58A4A6E2B6907E300793160 /* Color.swift in Sources */,
 				B58B8D372B4D3F0900FB98F9 /* CardRouter.swift in Sources */,
 				9E7401E32B3C18A60030C8EC /* StreamError.swift in Sources */,
+				9E7462D92B755D38006693B6 /* EditMyProfileRequestBody.swift in Sources */,
 				9E8FB6F52B5CF64A00C02028 /* MyProfileAPI.swift in Sources */,
 				E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */,
 				E36717AB2B70A2B800CBCD8B /* PhotoViewController.swift in Sources */,
