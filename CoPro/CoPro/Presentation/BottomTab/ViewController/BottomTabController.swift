@@ -54,17 +54,17 @@ class BottomTabController: UITabBarController {
         chatVC.navigationItem.title = nil
         profileVC.navigationItem.title = nil
         // 기본상태 아이콘 설정
-        notificationVC.tabBarItem.image = UIImage.init(systemName: "bell")/*?.resizeImage(targetSize: CGSize(width: 20, height: 20))*/
-        cardVC.tabBarItem.image = UIImage.init(systemName: "rectangle.stack.badge.person.crop")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
-        homeVC.tabBarItem.image = UIImage.init(systemName: "house")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
-        chatVC.tabBarItem.image = UIImage.init(systemName: "ellipsis.message")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
-        profileVC.tabBarItem.image = UIImage.init(systemName: "person.crop.circle")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
+        notificationVC.tabBarItem.image = UIImage.init(systemName: "bell")
+        cardVC.tabBarItem.image = UIImage.init(systemName: "rectangle.stack.badge.person.crop")
+        homeVC.tabBarItem.image = UIImage.init(systemName: "house")
+        chatVC.tabBarItem.image = UIImage.init(systemName: "ellipsis.message")
+        profileVC.tabBarItem.image = UIImage.init(systemName: "person.crop.circle")
         //선택 상태 아이콘 설정
-        notificationVC.tabBarItem.selectedImage = UIImage(systemName: "bell.fill")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
-        cardVC.tabBarItem.selectedImage = UIImage(systemName: "rectangle.stack.badge.person.crop.fill")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
-        homeVC.tabBarItem.selectedImage = UIImage(systemName: "house.fill")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
-        chatVC.tabBarItem.selectedImage = UIImage(systemName: "ellipsis.message.fill")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
-        profileVC.tabBarItem.selectedImage = UIImage(systemName: "person.crop.circle.fill")?.resizeImage(targetSize: CGSize(width: 20, height: 20))
+        notificationVC.tabBarItem.selectedImage = UIImage(systemName: "bell.fill")
+        cardVC.tabBarItem.selectedImage = UIImage(systemName: "rectangle.stack.badge.person.crop.fill")
+        homeVC.tabBarItem.selectedImage = UIImage(systemName: "house.fill")
+        chatVC.tabBarItem.selectedImage = UIImage(systemName: "ellipsis.message.fill")
+        profileVC.tabBarItem.selectedImage = UIImage(systemName: "person.crop.circle.fill")
         
 
         // self.tabBarItem.imageInsets = UIEdgeInsets(top: 20, left: 0, bottom: -6, right: 0);
@@ -77,29 +77,5 @@ class BottomTabController: UITabBarController {
         let navigationProfile = UINavigationController(rootViewController: profileVC)
         
         setViewControllers([navigationNotification, navigationCard, navigationHome,navigationChat,navigationProfile], animated: false)
-    }
-}
-extension UIImage {
-    func resizeImage(targetSize: CGSize) -> UIImage {
-        let size = self.size
-
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-
-        let newSize: CGSize
-        if(widthRatio > heightRatio) {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        }
-
-        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        self.draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return newImage!
     }
 }
