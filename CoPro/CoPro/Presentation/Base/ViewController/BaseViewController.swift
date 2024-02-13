@@ -25,6 +25,7 @@ class BaseViewController: UIViewController {
         self.setUI()
         self.setLayout()
         self.setAddTarget()
+        self.setUpKeyboard()
     }
     
     
@@ -34,6 +35,8 @@ class BaseViewController: UIViewController {
     func setLayout() {}
     // MARK: - Add Target
     func setAddTarget() {}
+    
+    func setUpKeyboard() {}
     
     func showAlert(title: String? = nil,
                    message: String? = nil,
