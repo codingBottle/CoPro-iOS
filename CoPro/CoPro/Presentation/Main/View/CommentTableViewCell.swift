@@ -24,7 +24,7 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
     private let recommentButton = UIButton()
-    
+    var levelConstraint = NSLayoutConstraint()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setStyle()
@@ -83,7 +83,8 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         addSubviews(cellStackView)
         cellStackView.addArrangedSubviews(nameJobStackView,contentLabel,dateTimeStackView)
         cellStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+//            $0.leading.equalToSuperview()
+            var levelConstraint = $0.leading.equalToSuperview().offset(0).constraint
             $0.top.equalToSuperview().offset(12)
             $0.bottom.equalToSuperview().offset(-12)
         }
@@ -100,5 +101,8 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         if data.level != 0 {
             recommentButton.isHidden = true
         }
+        
+        let indentationWidth: CGFloat = 30
+            levelConstraint.constant = indentationWidth * CGFloat(data.level)
     }
 }

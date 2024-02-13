@@ -212,19 +212,35 @@ extension BoardCommentViewController {
             print("\(token)")
             BoardAPI.shared.addComment(token: token, boardId: boardId, parentId: parentId, content: content) { result in
                 switch result {
-                case .success:
-//                    if let data = data as? DetailBoardDTO{
-//                        let serverData = data.data
-//                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category!, contents: data.data.contents, tag: data.data.tag, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: "nil")
-//                        self.isHeart = data.data.isHeart
-//                        self.isScrap = data.data.isScrap
-//                        var mappedData: [CommentData] = []
-//                        DispatchQueue.main.async {
-//                            self.setUI()
-//                            self.updateView(with: mappedItem)
-//                            self.commentTableView.reloadData()
-//                                        }
-//                    }
+                case .success(let data):
+                    if let data = data as? CommentDTO {
+                        let serverData = data.data.content
+                        var mappedData: [CommentData] = []
+                        
+                        for serverItem in serverData {
+                            
+                            let writerData = WriterData(nickName: serverItem.writer?.nickName ?? "", occupation: serverItem.writer?.occupation ?? "")
+                            
+                            var childrenData: [CommentData]?
+                            if !serverItem.children.isEmpty {
+                                childrenData = serverItem.children.map { child in
+                                    let childWriterData = WriterData(nickName: child.writer?.nickName ?? "", occupation: child.writer?.occupation ?? "")
+                                    return CommentData(parentId: child.parentID, commentId: child.commentID, createAt: child.createAt, content: child.content, writer: childWriterData, children: nil)
+                                }
+                            }
+                            
+                            let mappedItem = CommentData(parentId: serverItem.parentID, commentId: serverItem.commentID, createAt: serverItem.createAt, content: serverItem.content, writer: writerData, children: childrenData)
+                            mappedData.append(mappedItem)
+                        }
+                        self.comments = self.flattenComments(mappedData, level: 0)
+                        self.filteredComments = self.comments
+                        
+                        // 테이블 뷰 업데이트
+                        self.tableView.reloadData()
+                        self.isInfiniteScroll = !data.data.last
+                    } else {
+                                            print("Failed to decode the response.")
+                                        }
                     print("success")
                 case .requestErr(let message):
                     print("Request error: \(message)")
@@ -273,7 +289,8 @@ extension BoardCommentViewController: UITableViewDelegate, UITableViewDataSource
         } else {
             comment = comments[indexPath.row]
         }
-        
+        cell.indentationWidth = 30
+        cell.indentationLevel = comment.level
         cell.configureCell(comment)
         
         return cell

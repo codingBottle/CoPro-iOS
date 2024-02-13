@@ -43,11 +43,13 @@ final class recruitViewController: UIViewController, SendStringData {
     var posts = [BoardDataModel]()
     var isInfiniteScroll = true
     var offset = 1
+    private let idToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkZXZwYXJrNDM1QGdtYWlsLmNvbSIsImlhdCI6MTcwNzcxNjg0MCwiZXhwIjoxNzA3NzE4NjQwfQ.xda8PHE2M92wLsSXjcdImceBXJVzdpmxWA8HPuolXcxZG0-l8ObBWuwoumFtyYWSyBqlRFIDKO4lk7CYJO3sFw"
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.keychain.set(idToken, forKey: "idToken")
         getAllBoard(category: "공지사항", page: offset, standard: "create_at")
         setUI()
         setLayout()

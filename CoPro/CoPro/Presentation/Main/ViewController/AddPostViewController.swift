@@ -21,16 +21,8 @@ class AddPostViewController: UIViewController {
     private let lineView1 = UIView()
     private let lineView2 = UIView()
     let textViewPlaceHolder = "내용을 입력하세요"
-    lazy var remainCountLabel: UILabel = {
-            let label = UILabel()
-            label.textColor = .black
-            label.text = "0/500"
-            label.font = .systemFont(ofSize: 30)
-            label.textColor = .lightGray
-            label.textAlignment = .center
-
-            return label
-        }()
+    lazy var remainCountLabel = UILabel()
+    private let warnLabel = UILabel()
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigate()
@@ -40,6 +32,22 @@ class AddPostViewController: UIViewController {
     
     private func setUI() {
         self.view.backgroundColor = .white
+        stackView.do {
+            $0.axis = .vertical
+            $0.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: .zero, right: 16)
+            $0.isLayoutMarginsRelativeArrangement = true
+        }
+        remainCountLabel.do {
+            $0.text = "0/500"
+            $0.font = .pretendard(size: 11, weight: .regular)
+            $0.textColor = .G4()
+            $0.textAlignment = .center
+        }
+        warnLabel.do {
+            $0.text = "500자 이내로 간단히 입력해주세요."
+            $0.font = .pretendard(size: 11, weight: .regular)
+            $0.textColor = .G4()
+        }
         sortStackView.do {
             $0.axis = .horizontal
         }
@@ -61,11 +69,13 @@ class AddPostViewController: UIViewController {
             $0.backgroundColor = UIColor(hex: "#D1D1D2")
         }
         contentTextField.do {
-            $0.textContainerInset = UIEdgeInsets(top: 16.0, left: 16.0, bottom: 16.0, right: 16.0)
+            $0.textContainerInset = UIEdgeInsets(top: 16.0, left: 0, bottom: 16.0, right: 0)
             $0.font = .systemFont(ofSize: 17)
             $0.text = textViewPlaceHolder
             $0.textColor = .lightGray
             $0.delegate = self
+            $0.isScrollEnabled = false
+            $0.sizeToFit()
         }
         attachButton.do {
             $0.setImage(UIImage(systemName: "camera.fill"), for: .normal)
@@ -78,53 +88,66 @@ class AddPostViewController: UIViewController {
     }
     
     private func setLayout() {
-        view.addSubviews(sortStackView, lineView1, titleTextField, lineView2, contentTextField, remainCountLabel, attachButton)
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        scrollView.addSubview(stackView)
+        stackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        stackView.addArrangedSubviews(sortStackView, lineView1, titleTextField, lineView2, contentTextField, remainCountLabel,warnLabel, attachButton)
         sortStackView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            $0.leading.trailing.equalToSuperview()
+//            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+//            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(57)
         }
         sortStackView.addSubviews(sortLabel, sortButton)
         sortLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview()
         }
 
         sortButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview()
             $0.height.width.equalTo(24)
         }
         lineView1.snp.makeConstraints {
-            $0.top.equalTo(sortStackView.snp.bottom)
+//            $0.top.equalTo(sortStackView.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(0.5)
         }
         titleTextField.snp.makeConstraints {
-            $0.top.equalTo(lineView1.snp.bottom)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+//            $0.top.equalTo(lineView1.snp.bottom)
+//            $0.leading.equalToSuperview().offset(16)
+//            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(57)
         }
         lineView2.snp.makeConstraints {
-            $0.top.equalTo(titleTextField.snp.bottom)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
+//            $0.top.equalTo(titleTextField.snp.bottom)
+//            $0.leading.equalToSuperview().offset(16)
+//            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(0.5)
         }
-        contentTextField.snp.makeConstraints {
-            $0.top.equalTo(lineView2.snp.bottom)
-            $0.trailing.leading.equalToSuperview()
-            $0.height.equalTo(420)
-        }
-        remainCountLabel.snp.makeConstraints {
-            $0.top.equalTo(contentTextField.snp.bottom)
-            $0.centerX.equalToSuperview()
-        }
+//        contentTextField.snp.makeConstraints {
+//            $0.top.equalTo(lineView2.snp.bottom)
+//            $0.trailing.leading.equalToSuperview()
+//            $0.height.equalTo(420)
+//        }
+//        remainCountLabel.snp.makeConstraints {
+//            $0.top.equalTo(contentTextField.snp.bottom).offset(16)
+//            $0.trailing.equalToSuperview().inset(16)
+//        }
+//        warnLabel.snp.makeConstraints {
+//            $0.top.equalTo(remainCountLabel.snp.bottom).offset(4)
+//            $0.trailing.equalToSuperview().inset(16)
+//        }
         attachButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(25)
-            $0.bottom.equalToSuperview().offset(-30)
+//            $0.leading.equalToSuperview().offset(25)
+//            $0.bottom.equalToSuperview().offset(-30)
             $0.width.height.equalTo(45)
         }
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTextView(_:)))
@@ -186,7 +209,7 @@ extension AddPostViewController: UITextViewDelegate {
         let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
 
         let characterCount = newString.count
-        guard characterCount <= 700 else { return false }
+        guard characterCount <= 500 else { return false }
         updateCountLabel(characterCount: characterCount)
 
         return true
@@ -199,7 +222,7 @@ extension AddPostViewController: UITextViewDelegate {
 
         private func updateCountLabel(characterCount: Int) {
             remainCountLabel.text = "\(characterCount)/500"
-            remainCountLabel.asColor(targetString: "\(characterCount)", color: characterCount == 0 ? .lightGray : .blue)
+//            remainCountLabel.asColor(targetString: "\(characterCount)", color: characterCount == 0 ? .lightGray : .blue)
         }
 }
 
