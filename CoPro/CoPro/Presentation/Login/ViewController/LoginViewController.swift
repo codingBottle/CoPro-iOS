@@ -42,7 +42,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             // Google 로그인 버튼
             loginView.googleSignInButton.addTarget(self, action: #selector(handleGoogleSignIn), for: .touchUpInside)
             // GitHub 로그인 버튼
-            loginView.githubSignInButton.addTarget(self, action: #selector(handleGitHubSignIn), for: .touchUpInside)
+//            loginView.githubSignInButton.addTarget(self, action: #selector(handleGoogleSignIn2), for: .touchUpInside)
         }
     }
     let keychain = KeychainSwift()
@@ -108,8 +108,12 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
                             print("User doesn't have an ID token.")
                             return
                         }
-                        print("User ID token: \(idToken)!!!")
+                        print("User ID token: \(idToken)")
                         self.keychain.set(idToken, forKey: "idToken")
+                        DispatchQueue.main.async {
+                            let vc = BottomTabController()
+                            self.navigationController?.setViewControllers([vc], animated: true)
+                        }
                     }
                 }
             }
@@ -147,7 +151,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
                 }
                 
                 print("User is signed in")
-                print("UserToken\(idTokenString)")
+                print("UserToken: \(idTokenString)")
                 self.keychain.set(idTokenString, forKey: "idToken")
             }
         }
