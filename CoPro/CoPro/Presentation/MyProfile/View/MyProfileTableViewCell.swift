@@ -79,7 +79,7 @@ extension MyProfileTableViewCell {
         
         heartContainer.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.leading.equalToSuperview().offset(340)
             $0.width.equalTo(54)
         }
         

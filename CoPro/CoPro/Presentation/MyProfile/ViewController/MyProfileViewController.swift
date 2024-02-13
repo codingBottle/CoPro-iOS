@@ -19,7 +19,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     private let keychain = KeychainSwift()
     var myProfileView = MyProfileView()
     var myProfileData: MyProfileDataModel?
-    
+    var languageArr: Array<Substring>?
     
     let bottomTabBarView = UIView()
     
@@ -28,8 +28,6 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
         
         myProfileView.tableView.delegate = self
         myProfileView.tableView.dataSource = self
-        let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzaW55b3VuZzQwOEBnbWFpbC5jb20iLCJpYXQiOjE3MDc3NjE3MjksImV4cCI6MTcwNzc2MzUyOX0.ka3erC7uRFbCMwW9oA9yuXnxvqltzAZe2AwPNf4cri7nu4xJ-QcCAVxgaGjeuFK6GnP_p6W7hdFqVyR5WqPHDQ"
-        self.keychain.set(token, forKey: "idToken")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +69,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                     DispatchQueue.main.async {
                         if let data = data as? MyProfileDTO {
                             self.myProfileData = MyProfileDataModel(from: data.data)
+                            self.languageArr = self.myProfileData?.language.split(separator: ",")
                             let indexPath0 = IndexPath(row: 0, section: 0)
                             let indexPath1 = IndexPath(row: 1, section: 0)
                             self.myProfileView.tableView.reloadRows(at: [indexPath0, indexPath1], with: .none)
@@ -173,10 +172,11 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileImageTableViewCell", for: indexPath) as! ProfileImageTableViewCell
             cell.delegate = self
             
+//            cell.im
+            cell.loadProfileImage(url: myProfileData?.picture ?? "")
             cell.nickname.text = myProfileData?.nickName
             cell.developmentJobLabel.text = myProfileData?.occupation
-            cell.usedLanguageLabel.text = myProfileData?.language
-            
+            cell.usedLanguageLabel.text = "\(languageArr?[0] ?? "") / \(languageArr?[1] ?? "")"
             cell.selectionStyle = .none
             return cell
             
@@ -191,7 +191,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             cell.delegate = self
             
             // 모든 셀에 대한 공통 설정
-            cell.titleLabel.text = "텍스트"
+            cell.titleLabel.setPretendardFont(text: "test", size: 17, weight: .regular, letterSpacing: 1.23)
             cell.heartContainer.isHidden = true
             cell.greaterthanContainer.isHidden = false
             cell.selectionStyle = .none
@@ -201,9 +201,8 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             case 1:
                 cell.titleLabel.text = "좋아요 수"
                 if let data = myProfileData?.likeMembersCount {
+                    print("성공으로 들어와짐")
                     cell.heartCountLabel.text = String(data)
-                } else {
-                    print("실패")
                 }
                 cell.heartContainer.isHidden = false
                 cell.greaterthanContainer.isHidden = true
@@ -213,8 +212,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                 cell.configureButton(at: 1)
                 
             case 3:
-                cell.titleLabel.text = "활동내역"
-                cell.titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
+                cell.titleLabel.setPretendardFont(text: "활동내역", size: 17, weight: .bold, letterSpacing: 1.23)
                 cell.heartContainer.isHidden = true
                 cell.greaterthanContainer.isHidden = true
                 
@@ -235,8 +233,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                 cell.configureButton(at: 5)
                 
             case 8:
-                cell.titleLabel.text = "사용자 설정"
-                cell.titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
+                cell.titleLabel.setPretendardFont(text: "사용자 설정", size: 17, weight: .bold, letterSpacing: 1.23)
                 cell.heartContainer.isHidden = true
                 cell.greaterthanContainer.isHidden = true
                 
@@ -255,6 +252,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     func didTapEditProfileButton(in cell: ProfileImageTableViewCell) {
         print("didTapEditProfileButtondidTapEditProfileButton")
         let alertVC = EditMyProfileViewController()
+        alertVC.beforeEditMyProfileData = myProfileData
         alertVC.initialUserName = myProfileData?.nickName
         present(alertVC, animated: true, completion: nil)
     }
