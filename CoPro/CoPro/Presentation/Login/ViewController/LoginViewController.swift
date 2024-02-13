@@ -42,7 +42,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             // Google 로그인 버튼
             loginView.googleSignInButton.addTarget(self, action: #selector(handleGoogleSignIn), for: .touchUpInside)
             // GitHub 로그인 버튼
-//            loginView.githubSignInButton.addTarget(self, action: #selector(handleGoogleSignIn2), for: .touchUpInside)
+            //            loginView.githubSignInButton.addTarget(self, action: #selector(handleGoogleSignIn2), for: .touchUpInside)
         }
     }
     let keychain = KeychainSwift()
@@ -62,66 +62,41 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             print("로그인 된 계정없음")
         }
     }
-    
     @objc private func handleGoogleSignIn() {
         print("Google Sign in button tapped")
         
-        
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        // Create Google Sign In configuration object.
-        let config = GIDConfiguration(clientID: clientID)
-        
         // Start the sign in flow!
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+            guard error == nil else { return }
+            guard let signInResult = signInResult else { return }
             
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            guard let user = signInResult?.user,
-                  let idToken = user.idToken?.tokenString else { return }
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.accessToken.tokenString)
-            Auth.auth().addStateDidChangeListener { (auth, user) in
-                if let user = user {
-                    // 사용자가 로그인한 상태
-                    print("User \(user.uid) is signed in.")
-                } else {
-                    // 사용자가 로그아웃한 상태
-                    print("User is not signed in.")
-                }
-            }
-            //파이어베이스에 로그인 정보 추가
-            Auth.auth().signIn(with: credential) { (authResult, error) in
-                if let error = error {
-                    print(error.localizedDescription)
-                } else {
-                    print("Login Successful")
-                    
-                    Auth.auth().currentUser?.getIDTokenResult { idTokenResult, error in
-                        if let error = error {
-                            print("Error fetching ID token: \(error)")
-                            return
-                        }
-                        guard let idToken = idTokenResult?.token else {
-                            print("User doesn't have an ID token.")
-                            return
-                        }
-                        print("User ID token: \(idToken)")
-                        self.keychain.set(idToken, forKey: "idToken")
+            signInResult.user.refreshTokensIfNeeded { user, error in
+                guard error == nil else { return }
+                guard let user = user else { return }
+                
+                let idToken = user.idToken?.tokenString
+                LoginAPI.shared.getAccessToken(authCode: user.idToken?.tokenString, provider: "google") { result in
+                    switch result {
+                    case .success(let response):
+                        print("구글 로그인 성공")
+                        print(response.data.accessToken)
+                        print(response.data.refreshToken)
+                        self.keychain.set(response.data.accessToken, forKey: "accessToken")
+                        self.keychain.set(response.data.refreshToken, forKey: "refreshToken")
                         DispatchQueue.main.async {
                             let vc = BottomTabController()
                             self.navigationController?.setViewControllers([vc], animated: true)
                         }
+                    case .failure(let error):
+                        print("구글 로그인 실패")
+                        print(error)
                     }
                 }
+                print(idToken!)
             }
-            
-            
         }
-        
     }
+    
     
     @objc private func handleAppleSignIn() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
