@@ -2,25 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>사진 앨범에 접근 가능하도록 허용 버튼을 눌러주세요.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>카메라에 접근 가능하도록 허용 버튼을 눌러주세요.</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Pretendard-Black.otf</string>
-		<string>Pretendard-Bold.otf</string>
-		<string>Pretendard-ExtraBold.otf</string>
-		<string>Pretendard-ExtraLight.otf</string>
-		<string>Pretendard-Light.otf</string>
-		<string>Pretendard-Medium.otf</string>
-		<string>Pretendard-Regular.otf</string>
-		<string>Pretendard-SemiBold.otf</string>
-		<string>Pretendard-Thin.otf</string>
-	</array>
-
-
 	<key>BASE_URL</key>
 	<string>$(BASE_URL)</string>
 	<key>CFBundleURLTypes</key>
@@ -49,6 +30,14 @@
 				<string>com.test.CoPro</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>994954719923-uhpc7edlvk6cnfe25iscnmdsnlbhtpmr.apps.googleusercontent.com</string>
+			</array>
+		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>103359214072-qmefojfagc5pl92b8i3ef7jjv9fjln8l.apps.googleusercontent.com</string>
@@ -57,7 +46,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Black.otf</string>
@@ -70,7 +58,6 @@
 		<string>Pretendard-SemiBold.otf</string>
 		<string>Pretendard-Thin.otf</string>
 	</array>
-
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
