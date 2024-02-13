@@ -9,6 +9,7 @@ import UIKit
 import Then
 import SnapKit
 import Photos
+import KeychainSwift
 
 final class PhotoViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     private enum Const {
@@ -19,11 +20,14 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
         static let scale = UIScreen.main.scale
     }
     
+    private let keychain = KeychainSwift()
+
     // MARK: UI
     private let submitButton = UIButton(type: .system).then {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.blue, for: .normal)
         $0.setTitleColor(.systemBlue, for: [.normal, .highlighted])
+        $0.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
     }
     private let dismissButton = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "xmark"), for: .normal)
@@ -52,6 +56,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     private let albumService: AlbumManager = MyAlbumManager()
     private let photoService: PhotoManager = MyPhotoManager()
     private var selectedIndexArray = [Int]() // Index: count
+    private var selectedImages: [PHAsset] = []
     
     // album 여러개에 대한 예시는 생략 (UIPickerView와 같은 것을 이용하여 currentAlbumIndex를 바꾸어주면 됨)
     private var albums = [PHFetchResult<PHAsset>]()
@@ -107,6 +112,57 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     @objc func dismissButtonTapped() {
         self.dismiss(animated: true)
     }
+    @objc func submitButtonTapped() {
+            // NotificationCenter를 사용하여 선택된 이미지들을 전달
+        NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": selectedImages])
+            loadImages(from: selectedImages) { images in
+                
+                self.addPhoto(images: images)
+            }
+            // 현재 뷰 컨트롤러를 dismiss
+            self.dismiss(animated: true, completion: nil)
+        }
+    func loadImages(from assets: [PHAsset], completion: @escaping ([UIImage]) -> ()) {
+        let manager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.isSynchronous = true
+        options.deliveryMode = .highQualityFormat
+
+        var images = [UIImage]()
+        for asset in assets {
+            manager.requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFit, options: options) { (image, _) in
+                if let image = image {
+                    images.append(image)
+                }
+            }
+        }
+        completion(images)
+    }
+    func addPhoto(images: [UIImage]) {
+        if let token = self.keychain.get("idToken") {
+            print("\(token)")
+            BoardAPI.shared.addPhoto(token: token, imageId: images) { result in
+                switch result {
+                case .success:
+                    print("success")
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                    
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
 }
 
 extension PhotoViewController: UICollectionViewDataSource {
@@ -114,17 +170,6 @@ extension PhotoViewController: UICollectionViewDataSource {
         dataSource.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        //        if indexPath.item == 0 {
-        //            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CameraCell", for: indexPath)
-        //            cell.backgroundColor = .white
-        //            let cameraIcon = UIImageView(image: UIImage(systemName: "camera.fill"))
-        //            cameraIcon.contentMode = .center
-        //            cameraIcon.tintColor = UIColor(hex: "#6D6E72")
-        //            cell.addSubview(cameraIcon)
-        //            cameraIcon.frame = cell.bounds
-        //            return cell
-        //        } else {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.id, for: indexPath) as? PhotoCell
         else { return UICollectionViewCell() }
         let imageInfo = dataSource[indexPath.item]
@@ -142,22 +187,17 @@ extension PhotoViewController: UICollectionViewDataSource {
         return cell
     }
 }
-//}
 
 extension PhotoViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //        if indexPath.item == 0 {
-        //            let picker = UIImagePickerController()
-        //            picker.delegate = self
-        //            picker.sourceType = .camera
-        //            present(picker, animated: true, completion: nil)
-        //        } else { 
         let info = dataSource[indexPath.item ]
         let updatingIndexPaths: [IndexPath]
         
         if case .selected = info.selectedOrder {
             dataSource[indexPath.item] = .init(phAsset: info.phAsset, image: info.image, selectedOrder: .none)
-            
+            if let index = selectedImages.firstIndex(of: info.phAsset) {
+                        selectedImages.remove(at: index)
+                    }
             selectedIndexArray
                 .removeAll(where: { $0 == indexPath.item })
             
@@ -170,6 +210,7 @@ extension PhotoViewController: UICollectionViewDelegate {
                 }
             updatingIndexPaths = [indexPath] + selectedIndexArray
                 .map { IndexPath(row: $0, section: 0) }
+            print(info)
         } else {
             selectedIndexArray
                 .append(indexPath.item)
@@ -184,10 +225,13 @@ extension PhotoViewController: UICollectionViewDelegate {
             
             updatingIndexPaths = selectedIndexArray
                 .map { IndexPath(row: $0, section: 0) }
+            selectedImages.append(info.phAsset)
+            print(info)
+
         }
-        
+//        selectedImages = selectedIndexArray.compactMap { dataSource[$0].phAsset }
+        print(selectedImages)
         update(indexPaths: updatingIndexPaths)
-        //        }
     }
     private func update(indexPaths: [IndexPath]) {
         collectionView.performBatchUpdates {

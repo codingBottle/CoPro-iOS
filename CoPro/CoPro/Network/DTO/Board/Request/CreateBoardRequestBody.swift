@@ -8,13 +8,16 @@
 import Foundation
 
 // MARK: - CreateBoardRequestBody
-struct CreateBoardRequestBody: Codable {
-    let title, category, contents, tag: String
-    let count, heart: Int
+struct CreatePostRequestBody: Codable {
+    let title, category, contents: String
     let imageID: [String]
 
     enum CodingKeys: String, CodingKey {
-        case title, category, contents, tag, count, heart
+        case title, category, contents
         case imageID = "imageId"
     }
+}
+
+struct uploadImageRequestBody: Codable {
+    let files: [String]
 }

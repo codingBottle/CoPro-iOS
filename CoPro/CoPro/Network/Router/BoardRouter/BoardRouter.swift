@@ -8,13 +8,15 @@
 import Foundation
 
 import Alamofire
+import UIKit
 
 enum BoardRouter {
     case reportBoard(token: String, boardId: Int, contents: String)
     case getAllBoard(token: String, category: String, page: Int, standard: String)
     case getDetailBoard(token: String, boardId: Int)
-    case editBoard(token: String, boardId: Int, requestBody: CreateBoardRequestBody)
-    case addBoard(token: String, requestBody: CreateBoardRequestBody)
+    case editBoard(token: String, boardId: Int, requestBody: CreatePostRequestBody)
+    case addPhoto(token: String, images: [UIImage])
+    case addPost(token: String, title: String, category: String, contents: String, imageid: [String])
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
     case saveHeart(token: String, boardId: Int)
@@ -40,7 +42,9 @@ extension BoardRouter: BaseTargetType {
             return .get
         case .editBoard:
             return .put
-        case .addBoard:
+        case .addPhoto:
+            return .post
+        case .addPost:
             return .post
         case .deleteBoard:
             return .delete
@@ -75,7 +79,9 @@ extension BoardRouter: BaseTargetType {
             return "/api/board"
         case .editBoard:
             return "/api/board"
-        case .addBoard:
+        case .addPhoto:
+            return "/api/v1/images"
+        case .addPost:
             return "/api/board"
         case .deleteBoard:
             return "/api/board"
@@ -111,7 +117,12 @@ extension BoardRouter: BaseTargetType {
             return .query(requestModel)
         case .editBoard(_, let boardId, let requestBody):
             return .both(boardId, _parameter: requestBody)
-        case .addBoard(_, let requestBody):
+        case .addPhoto(_, let images):
+            let base64Images = images.compactMap { $0.jpegData(compressionQuality: 1.0)?.base64EncodedString() }
+            let requestModel = uploadImageRequestBody(files: base64Images)
+            return .body(requestModel)
+        case .addPost(_, let title, let category, let contents, let imageId):
+            let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, imageID: imageId)
             return .body(requestBody)
         case .deleteBoard(_, let boardId):
             return .query(boardId)
@@ -154,7 +165,9 @@ extension BoardRouter: BaseTargetType {
             return ["Authorization": "Bearer \(token)"]
         case .editBoard(let token, _, _):
             return ["Authorization": "Bearer \(token)"]
-        case .addBoard(let token, _):
+        case .addPhoto(let token, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .addPost(let token, _, _, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .deleteBoard(let token, _):
             return ["Authorization": "Bearer \(token)"]

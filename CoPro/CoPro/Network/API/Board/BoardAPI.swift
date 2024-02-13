@@ -8,6 +8,7 @@
 import Foundation
 
 import Alamofire
+import UIKit
 
 final class BoardAPI: BaseAPI {
     static let shared = BoardAPI()
@@ -42,7 +43,7 @@ extension BoardAPI {
     // 3. 게시글 수정하기
     
     public func editBoard(token: String,
-                          boardId: Int, requestBody: CreateBoardRequestBody,
+                          boardId: Int, requestBody: CreatePostRequestBody,
                           completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.editBoard(token: token, boardId: boardId, requestBody: requestBody)).responseData { response in
             self.disposeNetwork(response,
@@ -63,10 +64,19 @@ extension BoardAPI {
     
     // 4. 게시글 추가하기
     
-    public func addBoard(token: String, requestBody: CreateBoardRequestBody,                         completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.addBoard(token: token, requestBody: requestBody)).responseData { response in
+    public func addPost(token: String, title: String, category: String, contents: String, imageId: [String],                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.addPost(token: token, title: title, category: category, contents: contents, imageid: imageId)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: DetailBoardDTO.self,
+                                completion: completion)
+            
+        }
+    }
+    
+    public func addPhoto(token: String, imageId: [UIImage],                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.addPhoto(token: token, images: imageId)).responseData { response in
+            self.disposeNetwork(response,
+                                dataModel: ImageUploadDTO.self,
                                 completion: completion)
             
         }

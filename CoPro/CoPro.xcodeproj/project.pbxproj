@@ -146,6 +146,7 @@
 		E3C64F932B634F87000BB5D6 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */; };
 		E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */; };
 		E3C64F972B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */; };
+		E3CEC8442B7BA73E00ABEBF5 /* imageUploadDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEC8432B7BA73E00ABEBF5 /* imageUploadDTO.swift */; };
 		E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1552AEFACA3003269FF /* URLConst.swift */; };
 		E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1572AEFACB6003269FF /* NetworkResult.swift */; };
 		E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */; };
@@ -276,6 +277,7 @@
 		E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeartDataModel.swift; sourceTree = "<group>"; };
 		E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBottomSheetViewController.swift; sourceTree = "<group>"; };
+		E3CEC8432B7BA73E00ABEBF5 /* imageUploadDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageUploadDTO.swift; sourceTree = "<group>"; };
 		E3D6D1552AEFACA3003269FF /* URLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConst.swift; sourceTree = "<group>"; };
 		E3D6D1572AEFACB6003269FF /* NetworkResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResult.swift; sourceTree = "<group>"; };
 		E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
@@ -739,6 +741,7 @@
 				E32B67242B56783400EBB5AC /* DetailBoardDTO.swift */,
 				E32B672A2B56792900EBB5AC /* VoidDTO.swift */,
 				E32B672E2B567B4B00EBB5AC /* MostIncreasedLikesDTO.swift */,
+				E3CEC8432B7BA73E00ABEBF5 /* imageUploadDTO.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -992,6 +995,7 @@
 				E32B671E2B566C4100EBB5AC /* BoardAPI.swift in Sources */,
 				E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */,
 				E363D5C42B60D8B100FE6A9C /* CommentDataModel.swift in Sources */,
+				E3CEC8442B7BA73E00ABEBF5 /* imageUploadDTO.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
 				E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */,

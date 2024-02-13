@@ -6,12 +6,21 @@
 //
 
 import UIKit
+import KeychainSwift
+import Photos
 
 class AddPostViewController: UIViewController {
-
+    private enum Const {
+        static let numberOfColumns = 3.0
+        static let cellSpace = 1.0
+        static let length = (UIScreen.main.bounds.size.width - cellSpace * (numberOfColumns - 1)) / numberOfColumns
+        static let cellSize = CGSize(width: length, height: length)
+        static let scale = UIScreen.main.scale
+    }
     private let authService: PhotoAuthManager = MyPhotoAuthManager()
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
+    private let keychain = KeychainSwift()
     private let sortStackView = UIStackView()
     private let sortLabel = UILabel()
     private let sortButton = UIButton()
@@ -21,13 +30,20 @@ class AddPostViewController: UIViewController {
     private let lineView1 = UIView()
     private let lineView2 = UIView()
     let textViewPlaceHolder = "내용을 입력하세요"
+    private let warnView = UIView()
     lazy var remainCountLabel = UILabel()
     private let warnLabel = UILabel()
+    private let imageScrollView = UIScrollView()
+    var imageViews: [UIImageView] = []
+    private let photoService: PhotoManager = MyPhotoManager()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigate()
         setUI()
         setLayout()
+        view.bringSubviewToFront(attachButton)
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveImages(_:)), name: NSNotification.Name("SelectedImages"), object: nil)
     }
     
     private func setUI() {
@@ -85,9 +101,13 @@ class AddPostViewController: UIViewController {
             $0.tintColor = .white
             $0.layer.cornerRadius = 45 / 2
         }
+        imageScrollView.do {
+            $0.showsHorizontalScrollIndicator = false
+        }
     }
     
     private func setLayout() {
+        view.addSubview(attachButton)
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
@@ -97,7 +117,10 @@ class AddPostViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        stackView.addArrangedSubviews(sortStackView, lineView1, titleTextField, lineView2, contentTextField, remainCountLabel,warnLabel, attachButton)
+        stackView.addArrangedSubviews(sortStackView, lineView1, titleTextField, lineView2, contentTextField, warnView, imageScrollView)
+        imageScrollView.snp.makeConstraints {
+            $0.height.equalTo(144)
+        }
         sortStackView.snp.makeConstraints {
 //            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
 //            $0.leading.trailing.equalToSuperview()
@@ -137,17 +160,21 @@ class AddPostViewController: UIViewController {
 //            $0.trailing.leading.equalToSuperview()
 //            $0.height.equalTo(420)
 //        }
-//        remainCountLabel.snp.makeConstraints {
-//            $0.top.equalTo(contentTextField.snp.bottom).offset(16)
-//            $0.trailing.equalToSuperview().inset(16)
-//        }
-//        warnLabel.snp.makeConstraints {
-//            $0.top.equalTo(remainCountLabel.snp.bottom).offset(4)
-//            $0.trailing.equalToSuperview().inset(16)
-//        }
+        warnView.snp.makeConstraints {
+            $0.height.equalTo(50)
+        }
+        warnView.addSubviews(remainCountLabel, warnLabel)
+        remainCountLabel.snp.makeConstraints {
+            $0.top.equalTo(contentTextField.snp.bottom).offset(16)
+            $0.trailing.equalToSuperview()
+        }
+        warnLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.trailing.equalToSuperview()
+        }
         attachButton.snp.makeConstraints {
-//            $0.leading.equalToSuperview().offset(25)
-//            $0.bottom.equalToSuperview().offset(-30)
+            $0.leading.equalToSuperview().offset(25)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             $0.width.height.equalTo(45)
         }
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTextView(_:)))
@@ -162,7 +189,7 @@ class AddPostViewController: UIViewController {
         button.layer.cornerRadius = 18
         button.setTitleColor(.white, for: .normal)
         button.frame = CGRect(x: 0, y: 0, width: 60, height: 33) // 버튼 크기 설정
-
+        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         let barButtonItem = UIBarButtonItem(customView: button)
         self.navigationItem.rightBarButtonItem = barButtonItem
         }
@@ -182,6 +209,49 @@ class AddPostViewController: UIViewController {
                 present(vc, animated: true)
             case .failure:
                 return
+            }
+        }
+    }
+    @objc private func addButtonTapped() {
+        
+    }
+
+    @objc func receiveImages(_ notification: Notification) {
+        print("receiveImagebuttontapped")
+        
+        // userInfo에서 PHAsset 배열을 가져옴
+        if let assets = notification.userInfo?["images"] as? [PHAsset] {
+            // 기존의 모든 이미지 뷰 제거
+            imageViews.forEach { $0.removeFromSuperview() }
+            imageViews.removeAll()
+            
+            // 받은 모든 PHAsset을 UIImageView로 생성하여 UIScrollView에 추가
+            var xOffset: CGFloat = 0
+            for asset in assets {
+                // 비동기적으로 이미지 로드
+                photoService.fetchImage(
+                    phAsset: asset,
+                    size: CGSize(width: 144 * Const.scale, height: 144 * Const.scale),
+                    contentMode: .aspectFit,
+                    completion: { [weak self] image in
+                        DispatchQueue.main.async {
+                            // 이미지 뷰 생성 및 추가
+                            let imageView = UIImageView(image: image)
+                            imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
+                            self?.imageScrollView.addSubview(imageView)
+                            self?.imageViews.append(imageView)
+                            imageView.do {
+                                $0.layer.cornerRadius = 10
+                                $0.clipsToBounds = true
+                            }
+                            
+                            xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
+                            
+                            // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
+                            self?.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
+                        }
+                    }
+                )
             }
         }
     }
@@ -233,5 +303,33 @@ extension UILabel {
         let attributedString = NSMutableAttributedString(string: fullText)
         attributedString.addAttribute(.foregroundColor, value: color as Any, range: range)
         attributedText = attributedString
+    }
+}
+
+extension AddPostViewController {
+    func addPost( title: String, category: String, content: String, image: UIImage) {
+        if let token = self.keychain.get("idToken") {
+            print("\(token)")
+            BoardAPI.shared.addPost(token: token, title: titleTextField.text ?? "", category: "프로젝트", contents: contentTextField.text, imageId: ["hi", "hello"]) { result in
+                switch result {
+                case .success:
+                    print("success")
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                    
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
     }
 }
