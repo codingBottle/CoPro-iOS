@@ -14,6 +14,8 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     
     private let keychain = KeychainSwift()
     
+    
+    var beforeEditMyProfileData: MyProfileDataModel?
     let container = UIView()
     var languageStackView: UIStackView?
     var careerStackView: UIStackView?
@@ -31,16 +33,13 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     
     
     private let nickNameLabel = UILabel().then({
-        $0.font = .systemFont(ofSize: 17, weight: .bold)
-        $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-        $0.text = "닉네임"
+        $0.setPretendardFont(text: "닉네임", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.Black()
     })
     
     private var nicknameDuplicateCheckLabel = UILabel().then {
-        $0.textColor = UIColor(red: 0.98, green: 0.161, blue: 0.145, alpha: 1)
-        $0.font = .systemFont(ofSize: 11)
-//        $0.font = UIFont(name: "Pretendard-Regular", size: 11)
-        $0.text = "사용 가능한 닉네임입니다."
+        $0.setPretendardFont(text: "사용 가능한 닉네임입니다.", size: 11, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.P1()
     }
     
     let nickNameTextField = UITextField().then {
@@ -52,62 +51,52 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     }
     
     let textFieldContainer = UIView().then {
-        $0.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
+        $0.layer.backgroundColor = UIColor.G1().cgColor
         $0.layer.cornerRadius = 10
     }
     
-    private let languageUsedLabel = UILabel().then({
-        $0.font = .systemFont(ofSize: 17, weight: .bold)
-        $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-        $0.text = "사용 언어"
-    })
+    private let languageUsedLabel = UILabel().then {
+        $0.setPretendardFont(text: "사용 언어", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.Black()
+    }
     
-    private let myJobLabel = UILabel().then({
-        $0.font = .systemFont(ofSize: 17, weight: .bold)
-        $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-        $0.text = "나의 직무"
-    })
+    private let myJobLabel = UILabel().then {
+        $0.setPretendardFont(text: "나의 직무", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.Black()
+    }
     
-    private let careerLabel = UILabel().then({
-        $0.font = .systemFont(ofSize: 17, weight: .bold)
-        $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-        $0.text = "개발 경력"
-    })
+    private let careerLabel = UILabel().then {
+        $0.setPretendardFont(text: "개발 경력", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.Black()
+    }
     
     lazy var jobButtonsStackView = UIStackView().then { stackView in
-        let buttonTitles = ["Frontend", "Backend", "Mobile", "AI"]
-        let buttons = buttonTitles.map { title -> UIButton in
-            let button = UIButton()
-            button.setTitle(title, for: .normal)
-            button.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
-            button.layer.cornerRadius = 10
-            button.setTitleColor(UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1), for: .normal)
-            button.setTitleColor(UIColor.blue, for: .selected)
-            button.addTarget(self, action: #selector(handleJobButtonSelection(_:)), for: .touchUpInside)
-            stackView.addArrangedSubview(button)
-            return button
-        }
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 11
+        let buttonTitles = ["Frontend", "Backend", "Mobile", "AI"]
+        
+        for job in buttonTitles {
+            stackView.addArrangedSubview(createButton(withTitle: job))
+        }
     }
     
     lazy var nextButton = UIButton().then {
-        $0.layer.backgroundColor = UIColor(.gray).cgColor
+        $0.layer.backgroundColor = UIColor.G1().cgColor
         $0.layer.cornerRadius = 10
         $0.addTarget(self, action: #selector(didNextButtonAlert), for: .touchUpInside)
         $0.setTitle("다음", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        $0.titleLabel?.textColor = .white
+        $0.titleLabel?.setPretendardFont(text: "다음", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.titleLabel?.textColor = UIColor.White()
     }
     
     lazy var doneButton = UIButton().then {
-        $0.layer.backgroundColor = UIColor(.gray).cgColor
+        $0.layer.backgroundColor = UIColor.G1().cgColor
         $0.layer.cornerRadius = 10
         $0.addTarget(self, action: #selector(didDoneButton), for: .touchUpInside)
         $0.setTitle("선택 완료", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        $0.titleLabel?.textColor = .white
+        $0.titleLabel?.setPretendardFont(text: "선택 완료", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.titleLabel?.textColor = UIColor.White()
         $0.isEnabled = false
     }
     
@@ -115,11 +104,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: "#FFFFFF")
+        view.backgroundColor = UIColor.White()
         nickNameTextField.delegate = self
-        nickNameTextField.text = initialUserName
+        nickNameTextField.text = beforeEditMyProfileData?.nickName
         isJobsButtonTap = false
-//        getNickNameDuplication(nickname: initialUserName ?? "")
     }
     
     override func setUI() {
@@ -228,7 +216,8 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         }
         else {
             let screenHeight = UIScreen.main.bounds.height
-            let heightRatio = 661.0 / 852.0
+//            let heightRatio = 661.0 / 852.0
+            let heightRatio = 550 / 852.0
             let cellHeight = screenHeight * heightRatio
             return cellHeight
         }
@@ -267,24 +256,24 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     
     func addLanguageButtonsForJobType(jobType: String) {
         let jobTypeTechnologies = [
-            "Front": ["React.js", "Vue.js", "Angular.js", "TypeScript"],
+            "Frontend": ["React.js", "Vue.js", "Angular.js", "TypeScript"],
             "Backend": ["Spring", "Django", "Flask", "Node.js", "Go"],
             "Mobile": ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java"],
             "AI": ["TensorFlow", "Keras", "PyTorch"]
         ]
-        
-        guard let technologies = jobTypeTechnologies[jobType] else { return }
-        languageStackView = UIStackView().then { stackView in
-            stackView.axis = .horizontal
-            stackView.distribution = .fillEqually
-            stackView.spacing = 11
-            
-            for technology in technologies {
-                stackView.addArrangedSubview(createButton(withTitle: technology))
-            }
-        }
-        
         DispatchQueue.main.async { [self] in
+            guard let technologies = jobTypeTechnologies[jobType] else { return }
+            languageStackView = UIStackView().then { stackView in
+                stackView.axis = .horizontal
+                stackView.distribution = .fillEqually
+                stackView.spacing = 11
+                
+                for technology in technologies {
+                    stackView.addArrangedSubview(createButton(withTitle: technology))
+                    
+                }
+            }
+            
             guard let stackView = languageStackView else { return print("languageStackView failed") }
             
             container.addSubviews(languageUsedLabel, stackView)
@@ -305,33 +294,35 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     }
     
     @objc func handleJobButtonSelection(_ sender: UIButton) {
+        print("handleJobButtonSelection")
         for subview in jobButtonsStackView.arrangedSubviews {
             if let button = subview as? UIButton {
                 button.isSelected = false
-                button.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
+                button.layer.backgroundColor = UIColor.G1().cgColor
             }
         }
         isJobsButtonTap = true
         sender.isSelected = true
-        sender.layer.backgroundColor = UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1).cgColor
+        sender.layer.backgroundColor = UIColor.P7().cgColor
         selectedJob = sender.currentTitle
         updateButtonState(type: "First")
     }
     
     @objc func handleLanguageButtonSelection(_ sender: UIButton) {
+        print(selectedLanguageButtons)
         if selectedLanguageButtons.count < 2 {
             // 선택된 버튼이 2개 미만일 때
             sender.isSelected = true
-            sender.layer.backgroundColor = UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1).cgColor
+            sender.layer.backgroundColor = UIColor.P7().cgColor
             selectedLanguageButtons.append(sender)
         } else {
             // 선택된 버튼이 이미 2개일 때
             let firstButton = selectedLanguageButtons.removeFirst()   // 첫 번째로 선택된 버튼을 제거
             firstButton.isSelected = false
-            firstButton.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
+            firstButton.layer.backgroundColor = UIColor.G1().cgColor
             
             sender.isSelected = true
-            sender.layer.backgroundColor = UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1).cgColor
+            sender.layer.backgroundColor = UIColor.P7().cgColor
             selectedLanguageButtons.append(sender)   // 새로 선택된 버튼을 추가
         }
         updateButtonState(type: "End")
@@ -342,11 +333,11 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         for subview in careerStackView.arrangedSubviews {
             if let button = subview as? UIButton {
                 button.isSelected = false
-                button.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
+                button.layer.backgroundColor = UIColor.G1().cgColor
             }
         }
         sender.isSelected = true
-        sender.layer.backgroundColor = UIColor(red: 0.71, green: 0.769, blue: 0.866, alpha: 1).cgColor
+        sender.layer.backgroundColor = UIColor.P7().cgColor
         selectedCareer = sender.currentTitle
         updateButtonState(type: "End")
     }
@@ -358,7 +349,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             let isSelectedJobNotEmpty = selectedJob?.isEmpty == false
             DispatchQueue.main.async { [self] in
                 if isTextFieldNotEmpty && isSelectedJobNotEmpty {
-                    nextButton.backgroundColor = UIColor(red: 0.145, green: 0.467, blue: 0.996, alpha: 1)
+                    nextButton.backgroundColor = UIColor.P2()
                     editFlag = true
                 } else {
                     nextButton.backgroundColor = .gray
@@ -370,13 +361,13 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             let isSelectedCareerNotEmpty = selectedCareer?.isEmpty == false
             DispatchQueue.main.async { [self] in
                 if isSelectedButtonsNotEmpty && isSelectedCareerNotEmpty {
-                    doneButton.backgroundColor = UIColor(red: 0.145, green: 0.467, blue: 0.996, alpha: 1)
+                    doneButton.backgroundColor = UIColor.P2()
                     let languageArr = selectedLanguageButtons.map { $0.currentTitle ?? "" }
                     editMyProfileBody.language = languageArr.joined(separator: ",")
                     editMyProfileBody.career = convertCareerToInt(selectedCareer: selectedCareer ?? "")
                     doneButton.isEnabled = true
                 } else {
-                    doneButton.backgroundColor = .gray
+                    doneButton.backgroundColor = UIColor.G1()
                     doneButton.isEnabled = false
                 }
             }
@@ -420,53 +411,62 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                 }
             }
             sheetPresentationController?.animateChanges { [self] in
-                        self.sheetPresentationController?.detents = [.custom {context in
-                            return self.returnEditMyProfileUIHeight(type: "Secound")
-                        }]
-                    }
+                self.sheetPresentationController?.detents = [.custom {context in
+                    return self.returnEditMyProfileUIHeight(type: "Secound")
+                }]
+            }
+            
+            addLanguageButtonsForJobType(jobType: jobType)
+            addCareerButtons()
+            addDoneButton()
         }
-        addLanguageButtonsForJobType(jobType: jobType)
-        addCareerButtons()
-        addDoneButton()
     }
     
     
     
     func addCareerButtons() {
         careerStackView = UIStackView().then { stackView in
-            let careerType = ["신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"]
-
-            let buttons = careerType.map { title -> UIButton in
-                let button = UIButton()
-                button.setTitle(title, for: .normal)
-                button.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
-                button.layer.cornerRadius = 10
-                button.setTitleColor(UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1), for: .normal)
-                button.setTitleColor(UIColor.blue, for: .selected)
-                button.addTarget(self, action: #selector(handleCareerButtonSelection(_:)), for: .touchUpInside)
-                stackView.addArrangedSubview(button)
-                return button
-            }
             stackView.axis = .horizontal
             stackView.distribution = .fillEqually
             stackView.spacing = 11
+            let careerType = ["신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"]
+            
+            for career in careerType {
+                stackView.addArrangedSubview(createButton(withTitle: career))
+            }
+            
+//            let buttons = careerType.map { title -> UIButton in
+//                let button = UIButton()
+//                button.setTitle(title, for: .normal)
+//                button.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
+//                button.layer.cornerRadius = 10
+//                button.setTitleColor(UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1), for: .normal)
+//                button.setTitleColor(UIColor.blue, for: .selected)
+//                button.addTarget(self, action: #selector(handleCareerButtonSelection(_:)), for: .touchUpInside)
+//                stackView.addArrangedSubview(button)
+//                return button
+//            }
+            
         }
         
         DispatchQueue.main.async { [self] in
             guard let stackView = careerStackView else { return print("careerStackView failed") }
-            
-            container.addSubviews(careerLabel, stackView)
-            
-            careerLabel.snp.makeConstraints {
-                $0.top.equalTo(languageStackView!.snp.bottom).offset(18)
-                $0.leading.equalToSuperview().offset(8)
-                $0.width.equalTo(79)
-            }
-            
-            stackView.snp.makeConstraints {
-                $0.top.equalTo(careerLabel.snp.bottom).offset(8)
-                $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(41)
+            if let languageStackView = languageStackView {
+                container.addSubviews(careerLabel, stackView)
+                
+                careerLabel.snp.makeConstraints {
+                    $0.top.equalTo(languageStackView.snp.bottom).offset(18)
+                    $0.leading.equalToSuperview().offset(8)
+                    $0.width.equalTo(79)
+                }
+                
+                stackView.snp.makeConstraints {
+                    $0.top.equalTo(careerLabel.snp.bottom).offset(8)
+                    $0.leading.trailing.equalToSuperview()
+                    $0.height.equalTo(41)
+                }
+            } else {
+                // languageStackView가 nil일 때의 처리를 여기에 작성합니다.
             }
         }
     }
@@ -476,11 +476,12 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             container.addSubview(doneButton)
             
             doneButton.snp.makeConstraints {
-                $0.top.equalToSuperview().offset(530)
+                $0.top.equalToSuperview().offset(440)
                 $0.bottom.equalToSuperview().offset(-47)
                 $0.leading.equalToSuperview().offset(16)
                 $0.trailing.equalToSuperview().offset(-16)
             }
+            updateButtonState(type: "didTapNextButton")
         }
     }
     
@@ -490,11 +491,30 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     func createButton(withTitle title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
-        button.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
+        button.titleLabel?.setPretendardFont(text: title, size: 15, weight: .regular, letterSpacing: 1.23)
+        button.layer.backgroundColor = UIColor.G1().cgColor
         button.layer.cornerRadius = 10
-        button.setTitleColor(UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1), for: .normal)
-        button.setTitleColor(UIColor.blue, for: .selected)
-        button.addTarget(self, action: #selector(handleLanguageButtonSelection(_:)), for: .touchUpInside)
+        button.setTitleColor(UIColor.G4(), for: .normal)
+        button.setTitleColor(UIColor.P5(), for: .selected)
+        if ["Frontend", "Backend", "Mobile", "AI"].contains(title) {
+            button.addTarget(self, action: #selector(handleJobButtonSelection(_:)), for: .touchUpInside)
+        } else if ["신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"].contains(title) {
+            button.addTarget(self, action: #selector(handleCareerButtonSelection(_:)), for: .touchUpInside)
+        } else {
+            button.addTarget(self, action: #selector(handleLanguageButtonSelection(_:)), for: .touchUpInside)
+        }
+        
+        if beforeEditMyProfileData?.language.contains(title) == true ||
+            beforeEditMyProfileData?.career == convertCareerToInt(selectedCareer: title) {
+            if beforeEditMyProfileData?.language.contains(title) == true {
+                selectedLanguageButtons.append(button)
+            } else {
+                selectedCareer = title
+            }
+            button.isSelected = true
+            button.layer.backgroundColor = UIColor.P7().cgColor
+        }
+        
         return button
     }
     
@@ -567,9 +587,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         showAlert(title: "프로필 수정을 완료하였습니다.",
                   confirmButtonName: "확인",
                   confirmButtonCompletion: { [self] in
-            // 먼저 열린 창을 닫기
                     self.navigationController?.popViewController(animated: true)
-                    // 그 다음 모달을 닫기
                     self.dismiss(animated: true, completion: nil)
         })
     }
@@ -578,19 +596,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         showAlert(title: "프로필 수정을 실패하였습니다.",
                   confirmButtonName: "확인",
                   confirmButtonCompletion: { [self] in
-            // 먼저 열린 창을 닫기
                     self.navigationController?.popViewController(animated: true)
-                    // 그 다음 모달을 닫기
                     self.dismiss(animated: true, completion: nil)
         })
     }
-
-    
-    /* textField의 값 변경을 바로바로 감지해주는 친구
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return true
-    }
-     */
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
