@@ -13,20 +13,23 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     
     //MARK: - UI Components
     
-    private let containerView = UIView().then {
-        $0.layer.borderColor = UIColor.red.cgColor
-        $0.layer.borderWidth = 1
-    }
+    private let containerView = UIView()
+//        .then {
+//        $0.layer.borderColor = UIColor.red.cgColor
+//        $0.layer.borderWidth = 1
+//    }
     
-    private let leftContainerView = UIView().then {
-        $0.layer.borderColor = UIColor.blue.cgColor
-        $0.layer.borderWidth = 1
-    }
+    private let leftContainerView = UIView()
+//        .then {
+//        $0.layer.borderColor = UIColor.blue.cgColor
+//        $0.layer.borderWidth = 1
+//    }
 
-    private let postImage = UIImageView().then({
-        $0.layer.borderColor = UIColor.brown.cgColor
-        $0.layer.borderWidth = 1
-    })
+    private let postImage = UIImageView()
+//        .then({
+//        $0.layer.borderColor = UIColor.brown.cgColor
+//        $0.layer.borderWidth = 1
+//    })
     
     private let postTitleLabel = UILabel()
     private let writerNameLabel = UILabel()
@@ -45,9 +48,8 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
         setLayout()
     }
     
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     

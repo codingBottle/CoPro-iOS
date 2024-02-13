@@ -143,7 +143,7 @@ class ProfileImageTableViewCell: UITableViewCell {
             $0.top.equalTo(developmentJobLabel.snp.bottom).offset(10)
             $0.bottom.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.trailing.equalTo(nickname)
+            $0.trailing.equalTo(editButton.snp.leading).offset(-10)
         }
         
         

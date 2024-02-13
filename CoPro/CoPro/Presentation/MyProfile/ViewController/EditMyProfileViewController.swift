@@ -10,10 +10,14 @@ import SnapKit
 import Then
 import KeychainSwift
 
+protocol ProfileUpdateDelegate: AnyObject {
+    func didUpdateProfile()
+}
+
 class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     
     private let keychain = KeychainSwift()
-    
+    weak var profileUpdateDelegate: ProfileUpdateDelegate?
     
     var beforeEditMyProfileData: MyProfileDataModel?
     let container = UIView()
@@ -38,7 +42,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     })
     
     private var nicknameDuplicateCheckLabel = UILabel().then {
-        $0.setPretendardFont(text: "사용 가능한 닉네임입니다.", size: 11, weight: .bold, letterSpacing: 1.23)
+        $0.setPretendardFont(text: "사용 가능한 닉네임입니다.", size: 11, weight: .regular, letterSpacing: 1.23)
         $0.textColor = UIColor.P1()
     }
     
@@ -108,6 +112,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         nickNameTextField.delegate = self
         nickNameTextField.text = beforeEditMyProfileData?.nickName
         isJobsButtonTap = false
+        updateButtonState(type: "First")
     }
     
     override func setUI() {
@@ -434,19 +439,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             for career in careerType {
                 stackView.addArrangedSubview(createButton(withTitle: career))
             }
-            
-//            let buttons = careerType.map { title -> UIButton in
-//                let button = UIButton()
-//                button.setTitle(title, for: .normal)
-//                button.layer.backgroundColor = UIColor(red: 0.82, green: 0.82, blue: 0.824, alpha: 1).cgColor
-//                button.layer.cornerRadius = 10
-//                button.setTitleColor(UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1), for: .normal)
-//                button.setTitleColor(UIColor.blue, for: .selected)
-//                button.addTarget(self, action: #selector(handleCareerButtonSelection(_:)), for: .touchUpInside)
-//                stackView.addArrangedSubview(button)
-//                return button
-//            }
-            
         }
         
         DispatchQueue.main.async { [self] in
@@ -505,11 +497,13 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         }
         
         if beforeEditMyProfileData?.language.contains(title) == true ||
-            beforeEditMyProfileData?.career == convertCareerToInt(selectedCareer: title) {
+            beforeEditMyProfileData?.career == convertCareerToInt(selectedCareer: title) || beforeEditMyProfileData?.occupation.contains(title) == true {
             if beforeEditMyProfileData?.language.contains(title) == true {
                 selectedLanguageButtons.append(button)
-            } else {
+            } else if beforeEditMyProfileData?.career == convertCareerToInt(selectedCareer: title) {
                 selectedCareer = title
+            } else {
+                selectedJob = title
             }
             button.isSelected = true
             button.layer.backgroundColor = UIColor.P7().cgColor
@@ -587,8 +581,8 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         showAlert(title: "프로필 수정을 완료하였습니다.",
                   confirmButtonName: "확인",
                   confirmButtonCompletion: { [self] in
-                    self.navigationController?.popViewController(animated: true)
-                    self.dismiss(animated: true, completion: nil)
+            self.profileUpdateDelegate?.didUpdateProfile()
+            self.dismiss(animated: true)
         })
     }
     
@@ -596,7 +590,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         showAlert(title: "프로필 수정을 실패하였습니다.",
                   confirmButtonName: "확인",
                   confirmButtonCompletion: { [self] in
-                    self.navigationController?.popViewController(animated: true)
+//                    self.navigationController?.popViewController(animated: true)
                     self.dismiss(animated: true, completion: nil)
         })
     }

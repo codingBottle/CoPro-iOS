@@ -25,7 +25,6 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         myProfileView.tableView.delegate = self
         myProfileView.tableView.dataSource = self
     }
@@ -34,7 +33,6 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         getMyProfile()
-        
     }
     
     override func setUI() {
@@ -246,7 +244,11 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     }
 }
 
-extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate{
+extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate{
+    func didUpdateProfile() {
+        getMyProfile()
+    }
+    
     
     // 프로필 수정
     func didTapEditProfileButton(in cell: ProfileImageTableViewCell) {
@@ -254,6 +256,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         let alertVC = EditMyProfileViewController()
         alertVC.beforeEditMyProfileData = myProfileData
         alertVC.initialUserName = myProfileData?.nickName
+        alertVC.profileUpdateDelegate = self
         present(alertVC, animated: true, completion: nil)
     }
     
@@ -319,4 +322,5 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
 
         self.present(alertController, animated: true, completion: nil)
     }
+    
 }
