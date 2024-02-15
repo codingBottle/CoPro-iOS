@@ -28,7 +28,10 @@ class CardCollectionCellView: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(slideCardView)
         slideCardView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.left.right.equalToSuperview().inset(10)
+                $0.bottom.equalToSuperview().inset(40)
         }
     }
     override func prepareForReuse() {
@@ -59,6 +62,7 @@ class CardCollectionCellView: UICollectionViewCell {
     }
     //Chat버튼 동작 메소드
     @objc func chatButtonTapped() {
+        //MARK: - Chat버튼 동작 메소드
         print("Chat 버튼이 눌렸습니다.")
     }
     //좋아요 아이콘을 터치했을 때 실행되는 메서드

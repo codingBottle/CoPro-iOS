@@ -38,9 +38,19 @@
 				<string>994954719923-uhpc7edlvk6cnfe25iscnmdsnlbhtpmr.apps.googleusercontent.com</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>copro</string>
+			</array>
+		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>103359214072-qmefojfagc5pl92b8i3ef7jjv9fjln8l.apps.googleusercontent.com</string>
+	<key>GITHUB_CLIENT_ID</key>
+	<string>${GITHUB_CLIENT_ID}</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

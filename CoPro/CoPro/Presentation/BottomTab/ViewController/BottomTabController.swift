@@ -77,5 +77,6 @@ class BottomTabController: UITabBarController {
         let navigationProfile = UINavigationController(rootViewController: profileVC)
         
         setViewControllers([navigationNotification, navigationCard, navigationHome,navigationChat,navigationProfile], animated: false)
+        selectedIndex = 2
     }
 }

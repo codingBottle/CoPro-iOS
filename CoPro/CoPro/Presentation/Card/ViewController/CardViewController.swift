@@ -33,10 +33,10 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
             }
             
             // 유효한 경우, 정상적으로 셀을 구성
-            cell.configure(with: contents[indexPath.item].picture,
-                           name: contents[indexPath.item].name,
+            cell.configure(with: contents[indexPath.item].picture ?? "",
+                           name: contents[indexPath.item].name ?? "",
                            occupation: contents[indexPath.item].occupation ?? " ",
-                           language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount,memberId: contents[indexPath.item].memberId,isLike: contents[indexPath.item].isLikeMembers)
+                           language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers)
             return cell
         }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MiniCardGridView", for: indexPath) as? MiniCardGridView else {
@@ -51,16 +51,18 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         }
         
         // 유효한 경우, 정상적으로 셀을 구성
-        cell.configure(with: contents[indexPath.item].picture,
-                       name: contents[indexPath.item].name,
+        cell.configure(with: contents[indexPath.item].picture ?? "",
+                       name: contents[indexPath.item].name ?? "",
                        occupation: contents[indexPath.item].occupation ?? " ",
-                       language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount,memberId: contents[indexPath.item].memberId,isLike: contents[indexPath.item].isLikeMembers)
+                       language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers)
         return cell
     }
     //셀 사이즈 정의
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         if myViewType == 0{
+            
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+            
         }
         else{
             let numberOfItemsInRow: CGFloat = 2
@@ -77,12 +79,13 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     }
     // 셀사이 여백 값 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        if myViewType == 1 {
-            return 10
-        }else{
+        if myViewType == 0 {
             return 0
+        }else{
+            return 10
         }
     }
+    
     //셀 스크롤 에니메이션
     //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
     //           let center = CGPoint(x: scrollView.contentOffset.x + scrollView.bounds.width / 2, y: scrollView.bounds.height / 2)
@@ -111,7 +114,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
             if last == true && index >= contents.count {
                 print("가로 마지막 페이지 - 처음 페이지로 돌아갑니다.")
                 DispatchQueue.main.async {
-                    self.loadFirstPage()
+//                    self.loadFirstPage()
                 }
             } else if index == contents.count - 1 {
                 DispatchQueue.main.async {
@@ -139,30 +142,30 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         if last {
             print("마지막 페이지")
             DispatchQueue.main.async {
-                self.loadFirstPage()
+//                self.loadFirstPage()
             }
         }else{
             // 페이지 번호를 증가시키고 데이터를 불러옴
-            page += 1
+            self.page += 1
             let part = self.cardView.partLabel.text ?? " "
             let lang = self.cardView.langLabel.text ?? " "
             let old = self.oldIndex
             
-            self.loadCardDataFromAPI(part: part, lang: lang, old: old,page: page)
+            self.loadCardDataFromAPI(part: part, lang: lang, old: old,page: self.page)
             
-            print("page value: \(page)")
+            print("page value: \(self.page)")
         }
     }
     //첫 페이지로 돌아가는 메소드
-    func loadFirstPage() {
-        self.page = 0
-        self.contents.removeAll()
-        let part = self.cardView.partLabel.text ?? " "
-        let lang = self.cardView.langLabel.text ?? " "
-        let old = self.oldIndex
-        loadCardDataFromAPI(part: part, lang: lang, old: old, page: 0)
-        print("첫 페이지로 돌아갔습니다.")
-    }
+//    func loadFirstPage() {
+//        self.page = 0
+//        self.contents.removeAll()
+//        let part = self.cardView.partLabel.text ?? " "
+//        let lang = self.cardView.langLabel.text ?? " "
+//        let old = self.oldIndex
+//        loadCardDataFromAPI(part: part, lang: lang, old: old, page: 0)
+//        print("첫 페이지로 돌아갔습니다.")
+//    }
     
     var myViewType = 0
     var last = false
@@ -226,13 +229,14 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         collectionView.dataSource = self
         collectionView.delegate = self
     }
+    func reloadData() {
+        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: page)
+    }
     //API호출
     func loadCardDataFromAPI(part: String, lang: String, old: Int, page: Int) {
         CardAPI.shared.getUserData(part: part, lang: lang, old: old, page: page) { [weak self] result in
             switch result {
             case .success(let cardDTO):
-                
-                
                 DispatchQueue.main.async {
                     self?.contents.append(contentsOf: cardDTO.data.memberResDto.content)
                     self?.last = cardDTO.data.memberResDto.last
@@ -358,4 +362,5 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         }
     }
 }
+
 

@@ -25,4 +25,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // 4.
         self.window?.makeKeyAndVisible()
     }
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            if url.absoluteString.starts(with: "copro://") {
+                if let code = url.absoluteString.split(separator: "=").last.map({ String($0) }) {
+                    GitHubLoginManager.shared.requestAccessToken(with: code)
+                }
+            }
+        }
+    }
 }

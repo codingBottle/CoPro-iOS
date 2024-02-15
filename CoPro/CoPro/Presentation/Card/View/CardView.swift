@@ -115,7 +115,7 @@ class CardView: BaseView{
             $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
             $0.centerX.equalTo(self.safeAreaLayoutGuide)
             $0.width.equalTo(self.safeAreaLayoutGuide).offset(-20)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(100)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(0)
         }
     }
     
