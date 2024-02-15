@@ -28,7 +28,10 @@ class CardCollectionCellView: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(slideCardView)
         slideCardView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.left.right.equalToSuperview().inset(10)
+                $0.bottom.equalToSuperview().inset(40)
         }
     }
     override func prepareForReuse() {
