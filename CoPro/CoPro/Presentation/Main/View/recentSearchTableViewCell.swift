@@ -109,6 +109,10 @@ class recentSearchTableViewCell: UITableViewCell {
         self.searchLabel.text = text
     }
     
+    public func getSearchLabelText() -> String? {
+            return searchLabel.text
+        }
+    
     @objc private func didTapDeleteButton() {
             delegate?.recentSearchTableViewCellDidRequestDelete(self)
         }

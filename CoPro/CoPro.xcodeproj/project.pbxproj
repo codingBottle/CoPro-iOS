@@ -152,6 +152,7 @@
 		E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */; };
 		E3D6D15C2AEFACE6003269FF /* BaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D15B2AEFACE6003269FF /* BaseAPI.swift */; };
 		E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D15D2AEFACFE003269FF /* AFLogger.swift */; };
+		E3E2B83B2B7DFC650022E5D0 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -283,6 +284,7 @@
 		E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
 		E3D6D15B2AEFACE6003269FF /* BaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAPI.swift; sourceTree = "<group>"; };
 		E3D6D15D2AEFACFE003269FF /* AFLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLogger.swift; sourceTree = "<group>"; };
+		E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -818,6 +820,7 @@
 				E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */,
 				E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */,
 				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
+				E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */,
 				E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */,
 				E37B20982B72311600308158 /* BoardCommentViewController.swift */,
 				E37B20962B71DDFC00308158 /* DetailFreeViewController.swift */,
@@ -998,6 +1001,7 @@
 				E3CEC8442B7BA73E00ABEBF5 /* imageUploadDTO.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
+				E3E2B83B2B7DFC650022E5D0 /* SearchResultViewController.swift in Sources */,
 				E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */,
 				9E7401E12B3C18A60030C8EC /* ChatFirestoreStream.swift in Sources */,
 				9E7401C62B3BF48D0030C8EC /* NSObject++.swift in Sources */,

@@ -10,6 +10,7 @@ import Then
 import SnapKit
 import Photos
 import KeychainSwift
+import Alamofire
 
 final class PhotoViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     private enum Const {
@@ -116,9 +117,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
             // NotificationCenter를 사용하여 선택된 이미지들을 전달
         NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": selectedImages])
             loadImages(from: selectedImages) { images in
-                
-                self.addPhoto(images: images)
-            }
+                self.addPhoto(images: images)            }
             // 현재 뷰 컨트롤러를 dismiss
             self.dismiss(animated: true, completion: nil)
         }
@@ -138,6 +137,32 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
         }
         completion(images)
     }
+//    func addPhoto(images: [UIImage], completionHandler: @escaping () -> Void) {
+//        let url = Config.baseURL
+//        let header: HTTPHeaders = ["Content-Type": "multipart/form-data"]
+//
+//        AF.upload(multipartFormData: { multipartFormData in
+//
+//            for (idx,image) in images.enumerated() {
+//                // UIImage 처리
+//                multipartFormData.append(image.jpegData(compressionQuality: 1) ?? Data(),
+//                                         withName: "files",
+//                                         fileName: "image\(idx).jpeg",
+//                                         mimeType: "image/jpeg")
+//            }
+//
+//        }, to: url, method: .post, headers: header)
+//        .responseData { response in
+//            guard let statusCode = response.response?.statusCode else { return }
+//
+//            switch statusCode {
+//            case 200:
+//                print("게시물 등록 성공")
+//                completionHandler()
+//            default:
+//                print("게시물 등록 실패")
+//            }
+//        }
     func addPhoto(images: [UIImage]) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
