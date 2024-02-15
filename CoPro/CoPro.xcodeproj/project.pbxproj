@@ -99,6 +99,7 @@
 		B5B5110E2B74CCE400A1B74D /* CardCollectionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B511082B74CCE400A1B74D /* CardCollectionCellView.swift */; };
 		B5B511112B7B6B6400A1B74D /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B511102B7B6B6400A1B74D /* LoginAPI.swift */; };
 		B5B511142B7B6D6800A1B74D /* LoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B511132B7B6D6800A1B74D /* LoginDTO.swift */; };
+		B5B511162B7CDF1D00A1B74D /* GitHubLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B511152B7CDF1D00A1B74D /* GitHubLoginManager.swift */; };
 		B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D3E4F32AFB73B00021DDA0 /* LoginView.swift */; };
 		B5D3E4F72AFB76250021DDA0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E4F62AFB76250021DDA0 /* FirebaseAnalytics */; };
 		B5D3E4F92AFB76250021DDA0 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E4F82AFB76250021DDA0 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -290,6 +291,7 @@
 		B5B511082B74CCE400A1B74D /* CardCollectionCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardCollectionCellView.swift; sourceTree = "<group>"; };
 		B5B511102B7B6B6400A1B74D /* LoginAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
 		B5B511132B7B6D6800A1B74D /* LoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDTO.swift; sourceTree = "<group>"; };
+		B5B511152B7CDF1D00A1B74D /* GitHubLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubLoginManager.swift; sourceTree = "<group>"; };
 		B5D3E4F32AFB73B00021DDA0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 			isa = PBXGroup;
 			children = (
 				B5B511102B7B6B6400A1B74D /* LoginAPI.swift */,
+				B5B511152B7CDF1D00A1B74D /* GitHubLoginManager.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1182,6 +1185,7 @@
 				9E0B9CA72B6A09FB00A5EACB /* EditCardTypeDTO.swift in Sources */,
 				E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */,
 				9E7401E12B3C18A60030C8EC /* ChatFirestoreStream.swift in Sources */,
+				B5B511162B7CDF1D00A1B74D /* GitHubLoginManager.swift in Sources */,
 				9E7401C62B3BF48D0030C8EC /* NSObject++.swift in Sources */,
 				9E7401E52B3C18A60030C8EC /* Message.swift in Sources */,
 				9E7401CB2B3BF5670030C8EC /* UserDefaultManager.swift in Sources */,
@@ -1433,6 +1437,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A95XXD5WT7;
 				GENERATE_INFOPLIST_FILE = YES;
+				GITHUB_CLIENT_ID = e0abaf8660ab93c1bfe3;
 				INFOPLIST_FILE = CoPro/Application/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라에 접근 가능하도록 허용 버튼을 눌러주세요.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "접근을 허용하시겠습니까?";
@@ -1464,6 +1469,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A95XXD5WT7;
 				GENERATE_INFOPLIST_FILE = YES;
+				GITHUB_CLIENT_ID = e0abaf8660ab93c1bfe3;
 				INFOPLIST_FILE = CoPro/Application/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라에 접근 가능하도록 허용 버튼을 눌러주세요.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "접근을 허용하시겠습니까?";
