@@ -49,7 +49,7 @@ extension ReportBottomSheetViewController {
     }
     private func setUI() {
         
-        view.backgroundColor = UIColor(hex: "#FFFFFF")
+        view.backgroundColor = UIColor.White()
         
         if let sheetPresentationController = sheetPresentationController {
             sheetPresentationController.preferredCornerRadius = 20
@@ -180,7 +180,7 @@ extension ReportBottomSheetViewController: UITextViewDelegate {
     
     private func updateButtonState(isEnabled: Bool) {
             reportButton.isEnabled = isEnabled
-            reportButton.backgroundColor = isEnabled ? UIColor(hex: "#2577FE") : UIColor(hex: "#ACACAE")
+        reportButton.backgroundColor = isEnabled ? UIColor.P2() : UIColor.G2()
         }
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -202,7 +202,7 @@ extension ReportBottomSheetViewController: UITextViewDelegate {
 
         private func updateCountLabel(characterCount: Int) {
             remainCountLabel.text = "\(characterCount)/500"
-            remainCountLabel.asColor(targetString: "\(characterCount)", color: characterCount == 0 ? UIColor(hex: "#ACACAE") : UIColor(hex: "#2577FE"))
+            remainCountLabel.asColor(targetString: "\(characterCount)", color: characterCount == 0 ? UIColor.G2() : UIColor.P2())
         }
 }
 

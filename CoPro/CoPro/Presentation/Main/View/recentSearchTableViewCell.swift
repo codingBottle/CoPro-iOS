@@ -46,13 +46,13 @@ class recentSearchTableViewCell: UITableViewCell {
         circleView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.layer.cornerRadius = 24 / 2
-            $0.layer.borderColor = UIColor(hex: "#949598").cgColor
+            $0.layer.borderColor = UIColor.G3().cgColor
             $0.layer.borderWidth = 0.2
         }
         clockImageView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.image = UIImage(systemName: "clock")
-            $0.tintColor = UIColor(hex: "6D6E72")
+            $0.tintColor = UIColor.G4()
         }
         searchLabel.do {
             $0.font = UIFont.systemFont(ofSize: 13)
@@ -60,7 +60,7 @@ class recentSearchTableViewCell: UITableViewCell {
         }
         deleteButton.do {
             $0.setImage(UIImage(systemName: "xmark"), for: .normal)
-            $0.tintColor = UIColor(hex: "6D6E72")
+            $0.tintColor = UIColor.G4()
             $0.addTarget(self, action: #selector(didTapDeleteButton), for: .touchUpInside)
         }
     }

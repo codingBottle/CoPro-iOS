@@ -50,14 +50,14 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             $0.spacing = 5
         }
         nicknameLabel.do {
-            $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
+            $0.textColor = UIColor.G4()
             $0.font = UIFont(name: "Pretendard-Regular", size: 13)
         }
         jobLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            $0.textColor = UIColor.Black()
             $0.font = UIFont(name: "Pretendard-Regular", size: 13)        }
         contentLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            $0.textColor = UIColor.Black()
             $0.font = UIFont(name: "Pretendard-Regular", size: 17)
         }
         dateTimeStackView.do {
@@ -65,15 +65,15 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             $0.spacing = 8
         }
         dateLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
             $0.font = UIFont(name: "Pretendard-Regular", size: 12)
         }
         timeLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
             $0.font = UIFont(name: "Pretendard-Regular", size: 12)
         }
         recommentButton.do {
-            $0.setTitleColor(UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1), for: .normal)
+            $0.setTitleColor(UIColor.G2(), for: .normal)
             $0.titleLabel?.font = UIFont(name: "Pretendard-Regular", size: 12)
             $0.contentHorizontalAlignment = .right
             $0.setTitle("답글쓰기", for: .normal)

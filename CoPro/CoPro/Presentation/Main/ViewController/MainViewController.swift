@@ -58,7 +58,7 @@ final class MainViewController: UIViewController {
     private lazy var addPostButton: UIButton = {
         
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
-        btn.backgroundColor = UIColor(hex: "#2577FE")
+        btn.backgroundColor = UIColor.P2()
         btn.layer.cornerRadius = 20
         btn.setImage(UIImage(systemName: "plus"), for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 17)
@@ -141,7 +141,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
             $0.setTitleTextAttributes(
               [
-                NSAttributedString.Key.foregroundColor: UIColor(hex: "#2577FE"),
+                NSAttributedString.Key.foregroundColor: UIColor.P2(),
                 .font: UIFont.systemFont(ofSize: 17)
               ],
               for: .selected
@@ -153,8 +153,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.view.translatesAutoresizingMaskIntoConstraints = false
         }
         segmentedControl.do {
-            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#6D6E72"), .font: UIFont.systemFont(ofSize: 15, weight: .bold)], for: .normal)
-            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2577FE"),.font: UIFont.systemFont(ofSize: 15, weight: .bold)],for: .selected)
+            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.G4(), .font: UIFont.systemFont(ofSize: 15, weight: .bold)], for: .normal)
+            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.P2(),.font: UIFont.systemFont(ofSize: 15, weight: .bold)],for: .selected)
             $0.selectedSegmentIndex = 0
         }
         self.changeValue(control: self.segmentedControl)
@@ -163,7 +163,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         let logoImage = UIImage(named: "logo_navigation")?.withRenderingMode(.alwaysOriginal)
         let leftButton = UIBarButtonItem(image: logoImage, style: .plain, target: self, action: #selector(popToWriteViewController))
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(pushToSearchBarViewController))
-        rightButton.tintColor = UIColor(hex: "212121")
+        rightButton.tintColor = UIColor.systemGray
         self.navigationItem.rightBarButtonItem = rightButton
         self.navigationItem.leftBarButtonItem = leftButton
     }

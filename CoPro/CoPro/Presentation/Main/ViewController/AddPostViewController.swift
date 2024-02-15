@@ -75,14 +75,14 @@ class AddPostViewController: UIViewController {
             $0.setImage(UIImage(systemName: "chevron.up"), for: .normal)
         }
         lineView1.do {
-            $0.backgroundColor = UIColor(hex: "#D1D1D2")
+            $0.backgroundColor = UIColor.G1()
         }
         titleTextField.do {
             $0.placeholder = "제목"
             $0.font = .systemFont(ofSize: 17)
         }
         lineView2.do {
-            $0.backgroundColor = UIColor(hex: "#D1D1D2")
+            $0.backgroundColor = UIColor.G1()
         }
         contentTextField.do {
             $0.textContainerInset = UIEdgeInsets(top: 16.0, left: 0, bottom: 16.0, right: 0)
@@ -185,7 +185,7 @@ class AddPostViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeButtonTapped))
         let button = UIButton(type: .system)
         button.setTitle("등록", for: .normal)
-        button.backgroundColor = UIColor(red: 0.145, green: 0.467, blue: 0.996, alpha: 1)
+        button.backgroundColor = UIColor.P2()
         button.layer.cornerRadius = 18
         button.setTitleColor(.white, for: .normal)
         button.frame = CGRect(x: 0, y: 0, width: 60, height: 33) // 버튼 크기 설정

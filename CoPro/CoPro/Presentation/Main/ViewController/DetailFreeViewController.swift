@@ -62,17 +62,17 @@ final class DetailFreeViewController: UIViewController {
             $0.isLayoutMarginsRelativeArrangement = true
         }
         titleLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            $0.textColor = UIColor.Black()
 //            $0.font = UIFont(name: "Pretendard-Medium", size : 22)
             $0.font = .systemFont(ofSize: 22)
         }
         nicknameLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G4()
 //            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
             $0.font = .systemFont(ofSize: 13)
         }
         jobLabel.do {
-                    $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
+            $0.textColor = UIColor.Black()
 //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
@@ -82,23 +82,23 @@ final class DetailFreeViewController: UIViewController {
 //            $0.font = .systemFont(ofSize: 13)
 //        }
         dateLabel.do {
-                    $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
 //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         timeLabel.do {
-                    $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
 //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         viewCountLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
             //            $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         
         lineView1.do {
-            $0.backgroundColor = UIColor(hex: "#D1D1D2")
+            $0.backgroundColor = UIColor.G4()
         }
         contentLabel.do {
             $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
@@ -121,7 +121,7 @@ final class DetailFreeViewController: UIViewController {
             $0.setTitle("채팅하기", for: .normal)
         }
         lineView2.do {
-            $0.backgroundColor = UIColor(hex: "#D1D1D2")
+            $0.backgroundColor = UIColor.G4()
         }
         scrapButton.do {
             $0.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
@@ -202,7 +202,7 @@ final class DetailFreeViewController: UIViewController {
     }
     private func setNavigate() {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
-        leftButton.tintColor = UIColor(hex: "121213")
+        leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         if #available(iOS 14.0, *) {
             let menuItem1 = UIAction(title: "신고", attributes: .destructive) { action in
@@ -215,7 +215,7 @@ final class DetailFreeViewController: UIViewController {
             let menu = UIMenu(title: "", children: [menuItem1])
             
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
-            navigationItem.rightBarButtonItem?.tintColor = UIColor(hex: "121213")
+            navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
 
         }
     }
@@ -324,7 +324,7 @@ final class DetailFreeViewController: UIViewController {
                 switch result {
                 case .success:
                         DispatchQueue.main.async {
-                            self.scrapButton.tintColor = UIColor(hex: "#2577FE")
+                            self.scrapButton.tintColor = UIColor.G5()
                         }
                         self.isScrap = true
                 case .requestErr(let message):
@@ -352,7 +352,7 @@ final class DetailFreeViewController: UIViewController {
                 switch result {
                 case .success:
                         DispatchQueue.main.async {
-                            self.scrapButton.tintColor = UIColor(hex: "#D1D1D2")
+                            self.scrapButton.tintColor = UIColor.G4()
                         }
                         self.isScrap = false
                 case .requestErr(let message):
@@ -382,7 +382,7 @@ final class DetailFreeViewController: UIViewController {
         timeLabel.text = data.getTimeString()
         viewCountLabel.text = "조회 \(data.count)"
         contentLabel.text = data.contents
-        scrapButton.tintColor = data.isScrap ? UIColor(hex: "#2577FE") : UIColor(hex: "#D1D1D2")
+        scrapButton.tintColor = data.isScrap ? UIColor.G5() : UIColor.G4()
 //        heartCountLabel.text = String(data.heart)
 //        heartButton.tintColor = data.isHeart ? UIColor(hex: "#2577FE") : UIColor(hex: "#D1D1D2")
     }

@@ -61,17 +61,17 @@ final class DetailBoardViewController: UIViewController {
             $0.isLayoutMarginsRelativeArrangement = true
         }
         titleLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            $0.textColor = UIColor.Black()
             //            $0.font = UIFont(name: "Pretendard-Medium", size : 22)
             $0.font = .systemFont(ofSize: 22)
         }
         nicknameLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G4()
             //            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
             $0.font = .systemFont(ofSize: 13)
         }
         jobLabel.do {
-            $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
+            $0.textColor = UIColor.Black()
             //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
@@ -81,26 +81,26 @@ final class DetailBoardViewController: UIViewController {
         //            $0.font = .systemFont(ofSize: 13)
         //        }
         dateLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
             //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         timeLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
             //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         viewCountLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
+            $0.textColor = UIColor.G2()
             //            $0.font = UIFont(name: "Pretendard-Regular", size : 13)
             $0.font = .systemFont(ofSize: 13)
         }
         
         lineView1.do {
-            $0.backgroundColor = UIColor(hex: "#D1D1D2")
+            $0.backgroundColor = UIColor.G1()
         }
         contentLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            $0.textColor = UIColor.Black()
             //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
             $0.font = .systemFont(ofSize: 17)
             $0.numberOfLines = 0
@@ -114,7 +114,7 @@ final class DetailBoardViewController: UIViewController {
             }
         }
         heartCountLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            $0.textColor = UIColor.Black()
             //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
             $0.font = .systemFont(ofSize: 17)
         }
@@ -123,7 +123,7 @@ final class DetailBoardViewController: UIViewController {
             $0.tintColor = UIColor.G4()
         }
         commentCountLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+            $0.textColor = UIColor.Black()
             //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
             $0.font = .systemFont(ofSize: 17)
         }

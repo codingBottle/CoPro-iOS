@@ -131,7 +131,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             button.setTitle(item, for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             button.setTitleColor(.black, for: .normal)
-            button.layer.borderColor = UIColor(hex: "#D1D1D2").cgColor
+            button.layer.borderColor = UIColor.G1().cgColor
             button.layer.borderWidth = 0.5
             button.layer.cornerRadius = 10
             button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
