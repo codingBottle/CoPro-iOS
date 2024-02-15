@@ -58,14 +58,14 @@ class MemberResDto: Codable {
 
 // MARK: - Content
 class Content: Codable {
-    let memberId: Int
-    let name, email, picture: String
+    let memberId: Int?
+    let name, email, picture: String?
     let occupation: String?
     let language: String?
     let career: Int?
     let gitHubURL: String?
     let nickName: String?
-    let likeMembersCount: Int
+    let likeMembersCount: Int?
     let isLikeMembers: Bool
     
     enum CodingKeys: String, CodingKey {
