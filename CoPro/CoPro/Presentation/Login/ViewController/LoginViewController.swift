@@ -125,10 +125,6 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
     
     @objc private func handleGitHubSignIn() {
         GitHubLoginManager.shared.requestCode()
-        DispatchQueue.main.async {
-            let vc = BottomTabController()
-            self.navigationController?.setViewControllers([vc], animated: true)
-        }
     }
     
 }
