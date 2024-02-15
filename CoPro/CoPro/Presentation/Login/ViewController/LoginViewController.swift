@@ -42,7 +42,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             // Google 로그인 버튼
             loginView.googleSignInButton.addTarget(self, action: #selector(handleGoogleSignIn), for: .touchUpInside)
             // GitHub 로그인 버튼
-            //            loginView.githubSignInButton.addTarget(self, action: #selector(handleGoogleSignIn2), for: .touchUpInside)
+            loginView.githubSignInButton.addTarget(self, action: #selector(handleGitHubSignIn), for: .touchUpInside)
         }
     }
     let keychain = KeychainSwift()
@@ -75,23 +75,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
                 guard let user = user else { return }
                 
                 let idToken = user.idToken?.tokenString
-                LoginAPI.shared.getAccessToken(authCode: user.idToken?.tokenString, provider: "google") { result in
-                    switch result {
-                    case .success(let response):
-                        print("구글 로그인 성공")
-                        print(response.data.accessToken)
-                        print(response.data.refreshToken)
-                        self.keychain.set(response.data.accessToken, forKey: "accessToken")
-                        self.keychain.set(response.data.refreshToken, forKey: "refreshToken")
-                        DispatchQueue.main.async {
-                            let vc = BottomTabController()
-                            self.navigationController?.setViewControllers([vc], animated: true)
-                        }
-                    case .failure(let error):
-                        print("구글 로그인 실패")
-                        print(error)
-                    }
-                }
+                LoginAPI.shared.getAccessToken(authCode: user.idToken?.tokenString, provider: "google")
                 print(idToken!)
             }
         }
@@ -117,17 +101,18 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
                 print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                 return
             }
-            
-            let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nil)
-            Auth.auth().signIn(with: credential) { (authResult, error) in
-                if (error != nil) {
-                    print(error?.localizedDescription)
-                    return
+            switch authorization.credential {
+            case let appleIDCredential as ASAuthorizationAppleIDCredential:
+                if  let authorizationCode = appleIDCredential.authorizationCode,
+                    let identityToken = appleIDCredential.identityToken,
+                    let authCodeString = String(data: authorizationCode, encoding: .utf8),
+                    let identifyTokenString = String(data: identityToken, encoding: .utf8) {
+                    print("authCodeString: \(authCodeString)")
+                    print("identifyTokenString: \(identifyTokenString)")
+                    LoginAPI.shared.getAccessToken(authCode: identifyTokenString, provider: "apple")
                 }
-                
-                print("User is signed in")
-                print("UserToken: \(idTokenString)")
-                self.keychain.set(idTokenString, forKey: "idToken")
+            default:
+                break
             }
         }
     }
@@ -137,31 +122,15 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         print("Sign in with Apple errored: \(error)")
     }
     
+    
     @objc private func handleGitHubSignIn() {
-        print("github SignIn Tapped")
-        let provider = OAuthProvider(providerID: "github.com")
-        provider.scopes = ["public_repo"] // 이 예에서는 public_repo 권한을 요청합니다. 필요에 따라 변경하세요.
-        provider.getCredentialWith(nil, completion: { credential, error in
-            
-            if let error = error {
-                print("Failed to get credential: \(error.localizedDescription)")
-                return
-            }
-            
-            // Firebase에 로그인
-            if let credential = credential {
-                Auth.auth().signIn(with: credential, completion: { authResult, error in
-                    if let error = error {
-                        print("Login error: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    print("User is signed in")
-                    // 여기서 메인 화면으로 이동하도록 코드를 추가하세요.
-                })
-            }
-        })
+        GitHubLoginManager.shared.requestCode()
+        DispatchQueue.main.async {
+            let vc = BottomTabController()
+            self.navigationController?.setViewControllers([vc], animated: true)
+        }
     }
+    
 }
 
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
