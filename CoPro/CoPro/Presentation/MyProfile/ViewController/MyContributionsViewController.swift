@@ -88,7 +88,7 @@ class MyContributionsViewController: BaseViewController {
     }
     
     private func getWriteByMe() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getWritebyMe(token: token) { result in
                 switch result {
                 case .success(let data):
@@ -126,7 +126,7 @@ class MyContributionsViewController: BaseViewController {
     }
     
     private func getMyWrittenComment() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getMyWrittenComment(token: token) { result in
                 switch result {
                 case .success(let data):
@@ -169,7 +169,7 @@ class MyContributionsViewController: BaseViewController {
     }
     
     private func getScrapPost() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getScrapPost(token: token) { result in
                 print("Result: \(result)")
                 switch result {

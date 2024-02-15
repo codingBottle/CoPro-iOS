@@ -25,42 +25,32 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        myProfileView.tableView.delegate = self
-        myProfileView.tableView.dataSource = self
+       myProfileView.tableView.delegate = self
+       myProfileView.tableView.dataSource = self
+       getMyProfile()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        getMyProfile()
+        
+       
     }
     
     override func setUI() {
-        view.addSubviews(myProfileView, bottomTabBarView)
-        bottomTabBarView.do {
-            $0.backgroundColor = .brown
-        }
+        view.addSubviews(myProfileView)
     }
     override func setLayout() {
-        let screenHeight = UIScreen.main.bounds.height
-        let heightRatio = 83.0 / 852.0
-        let cellHeight = screenHeight * heightRatio
-        
-        bottomTabBarView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(cellHeight)
-        }
         
         myProfileView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(bottomTabBarView.snp.top)
+           $0.bottom.equalToSuperview()
         }
     }
     
     private func getMyProfile() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getMyProfile(token: token) { result in
                 switch result {
                 case .success(let data):
@@ -99,7 +89,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     
     func postEditCardViewType(CardViewType: Int) {
         let requestCardViewType = EditCardTypeRequestBody(viewType: CardViewType)
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("token : \(token)")
             MyProfileAPI.shared.postEditCardType(token: token, requestBody: requestCardViewType) { result in
                 switch result {

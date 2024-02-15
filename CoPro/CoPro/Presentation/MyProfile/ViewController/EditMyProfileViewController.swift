@@ -180,7 +180,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     }
     
     private func postEditMyProfile() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
                 switch result {
                 case .success(let data):
@@ -513,7 +513,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     }
     
     private func getNickNameDuplication(nickname: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("현재 nickname : \(nickname)")
             MyProfileAPI.shared.getNickNameDuplication(token: token, nickname: nickname) { result in
                 print("Result: \(result)")
