@@ -24,3 +24,15 @@ struct Datum: Codable {
         case imageURL = "imageUrl"
     }
 }
+
+struct ImageUploadResponse: Decodable {
+    let statusCode: Int
+    let message: String
+    let data: [ImageData]
+    
+}
+
+struct ImageData: Decodable {
+    let imageId: Int
+    let imageUrl: String
+}

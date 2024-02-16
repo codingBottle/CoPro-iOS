@@ -5,6 +5,7 @@
 //  Created by 문인호 on 2/5/24.
 //
 
+import Alamofire
 import UIKit
 import Then
 import SnapKit
@@ -22,6 +23,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     private let keychain = KeychainSwift()
+    let imageUploader = ImageUploader()
 
     // MARK: UI
     private let submitButton = UIButton(type: .system).then {
@@ -117,7 +119,8 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
             // NotificationCenter를 사용하여 선택된 이미지들을 전달
         NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": selectedImages])
             loadImages(from: selectedImages) { images in
-                self.addPhoto(images: images)            }
+                self.uploadImages(images: images)
+            }
             // 현재 뷰 컨트롤러를 dismiss
             self.dismiss(animated: true, completion: nil)
         }
@@ -137,54 +140,47 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
         }
         completion(images)
     }
-//    func addPhoto(images: [UIImage], completionHandler: @escaping () -> Void) {
-//        let url = Config.baseURL
-//        let header: HTTPHeaders = ["Content-Type": "multipart/form-data"]
-//
-//        AF.upload(multipartFormData: { multipartFormData in
-//
-//            for (idx,image) in images.enumerated() {
-//                // UIImage 처리
-//                multipartFormData.append(image.jpegData(compressionQuality: 1) ?? Data(),
-//                                         withName: "files",
-//                                         fileName: "image\(idx).jpeg",
-//                                         mimeType: "image/jpeg")
-//            }
-//
-//        }, to: url, method: .post, headers: header)
-//        .responseData { response in
-//            guard let statusCode = response.response?.statusCode else { return }
-//
-//            switch statusCode {
-//            case 200:
-//                print("게시물 등록 성공")
-//                completionHandler()
-//            default:
-//                print("게시물 등록 실패")
-//            }
-//        }
-    func addPhoto(images: [UIImage]) {
+    func uploadImages(images: [UIImage]) {
+        let url = URL(string: Config.baseURL)!
         if let token = self.keychain.get("idToken") {
-            print("\(token)")
-            BoardAPI.shared.addPhoto(token: token, imageId: images) { result in
-                switch result {
-                case .success:
-                    print("success")
-                case .requestErr(let message):
-                    print("Request error: \(message)")
-                    
-                case .pathErr:
-                    print("Path error")
-                    
-                case .serverErr:
-                    print("Server error")
-                    
-                case .networkFail:
-                    print("Network failure")
-                    
-                default:
-                    break
+            let headers : HTTPHeaders = [
+                        "Content-Type" : "multipart/form-data",
+                        "Authorization": "Bearer \(token)" ]
+            AF.upload(multipartFormData: { multipartFormData in
+                for (index, image) in images.enumerated() {
+                    guard let imageData = image.jpegData(compressionQuality: 1.0) else {
+                        print("Could not get JPEG representation of UIImage")
+                        return
+                    }
+                    let sizeInMB = Double(imageData.count) / 1024.0 / 1024.0
+                                if sizeInMB > 10.0 { // 크기가 10MB를 초과할 경우
+                                    let alertController = UIAlertController(title: "업로드 오류", message: "10MB를 초과하는 이미지는 업로드할 수 없습니다.", preferredStyle: .alert)
+                                    alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                                    self.present(alertController, animated: true, completion: nil)
+                                    return
+                                }
+                    print("\(imageData)")
+                    multipartFormData.append(imageData, withName: "files", fileName: "image\(index).jpeg", mimeType: "image/jpeg")
                 }
+            }, to: url.appendingPathComponent("/api/v1/images"), headers: headers)
+            .responseJSON { response in
+                debugPrint(response)
+                switch response.result {
+                case .success:
+                    if let data = response.data {
+                        do {
+                            let decoder = JSONDecoder()
+                            let imageData = try decoder.decode(ImageUploadResponse.self, from: data)
+                            print(imageData)
+                        } catch {
+                            print("Error decoding data: \(error.localizedDescription)")
+                        }
+                    } else {
+                        print("Data is not of 'Data' type.")
+                    }
+                    case .failure(let error):
+                        print("Error uploading images: \(error.localizedDescription)")
+                    }
             }
         }
     }

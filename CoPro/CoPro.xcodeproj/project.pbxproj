@@ -153,6 +153,7 @@
 		E3D6D15C2AEFACE6003269FF /* BaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D15B2AEFACE6003269FF /* BaseAPI.swift */; };
 		E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D15D2AEFACFE003269FF /* AFLogger.swift */; };
 		E3E2B83B2B7DFC650022E5D0 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */; };
+		E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -285,6 +286,7 @@
 		E3D6D15B2AEFACE6003269FF /* BaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAPI.swift; sourceTree = "<group>"; };
 		E3D6D15D2AEFACFE003269FF /* AFLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLogger.swift; sourceTree = "<group>"; };
 		E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
+		E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -459,6 +461,7 @@
 				E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */,
 				E3D6D15B2AEFACE6003269FF /* BaseAPI.swift */,
 				E3D6D15D2AEFACFE003269FF /* AFLogger.swift */,
+				E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1061,6 +1064,7 @@
 				E37AE8002B3C27D0002ABDCD /* MainViewController.swift in Sources */,
 				9E05D2B02AD508B200F4CA43 /* SceneDelegate.swift in Sources */,
 				9E05D2CF2AD5098200F4CA43 /* API.swift in Sources */,
+				E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */,
 				E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */,
 				E32B673E2B56D16000EBB5AC /* heartRequestBody.swift in Sources */,
 				E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */,

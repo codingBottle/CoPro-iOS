@@ -120,7 +120,7 @@ extension BoardRouter: BaseTargetType {
         case .addPhoto(_, let images):
             let base64Images = images.compactMap { $0.jpegData(compressionQuality: 1.0)?.base64EncodedString() }
             let requestModel = uploadImageRequestBody(files: base64Images)
-            return .images(images)
+            return .body(requestModel)
         case .addPost(_, let title, let category, let contents, let imageId):
             let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, imageID: imageId)
             return .body(requestBody)
