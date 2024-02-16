@@ -29,7 +29,7 @@ final class popularSearchCollectionViewCell: UICollectionViewCell {
               $0.backgroundColor = .clear
               $0.setTitleColor(.black, for: .normal)
               $0.translatesAutoresizingMaskIntoConstraints = false
-              $0.titleLabel?.font = UIFont(name: "Pretendard-Regular", size: 17) ?? .systemFont(ofSize: 17)
+              $0.titleLabel?.font = UIFont.pretendard(size: 17, weight: .regular)
           }
         self.contentView.addSubview(self.searchButton)
         

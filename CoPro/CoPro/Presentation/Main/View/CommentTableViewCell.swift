@@ -24,10 +24,9 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
     private let recommentButton = UIButton()
-    
+    var levelConstraint = NSLayoutConstraint()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setStyle()
         setLayout()
     }
@@ -51,63 +50,60 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             $0.spacing = 5
         }
         nicknameLabel.do {
-            $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.textColor = UIColor.G4()
+            $0.font = .pretendard(size: 13, weight: .regular)
         }
         jobLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)        }
+            $0.textColor = UIColor.Black()
+            $0.font = .pretendard(size: 13, weight: .regular)
+        }
         contentLabel.do {
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+            $0.textColor = UIColor.Black()
+            $0.font = .pretendard(size: 17, weight: .regular)
         }
         dateTimeStackView.do {
             $0.axis = .horizontal
             $0.spacing = 8
         }
         dateLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+            $0.textColor = UIColor.G2()
+            $0.font = .pretendard(size: 12, weight: .regular)
         }
         timeLabel.do {
-            $0.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1)
-            $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+            $0.textColor = UIColor.G2()
+            $0.font = .pretendard(size: 12, weight: .regular)
         }
         recommentButton.do {
-            $0.setTitleColor(UIColor(red: 0.675, green: 0.675, blue: 0.682, alpha: 1), for: .normal)
-            $0.titleLabel?.font = UIFont(name: "Pretendard-Regular", size: 12)
+            $0.setTitleColor(UIColor.G2(), for: .normal)
+            $0.titleLabel?.font = UIFont.pretendard(size: 12, weight: .regular)
             $0.contentHorizontalAlignment = .right
             $0.setTitle("답글쓰기", for: .normal)
         }
-        
     }
     private func setLayout() {
         addSubviews(cellStackView)
         cellStackView.addArrangedSubviews(nameJobStackView,contentLabel,dateTimeStackView)
         cellStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+//            $0.leading.equalToSuperview()
+            var levelConstraint = $0.leading.equalToSuperview().offset(0).constraint
             $0.top.equalToSuperview().offset(12)
             $0.bottom.equalToSuperview().offset(-12)
         }
         nameJobStackView.addArrangedSubviews(nicknameLabel, jobLabel)
         dateTimeStackView.addArrangedSubviews(dateLabel,timeLabel,recommentButton)
     }
-    func configureCell(_ data: CommentData) {
-        nicknameLabel.text = data.writer.nickName
-        jobLabel.text = data.writer.occupation
-        contentLabel.text = data.content
+    func configureCell(_ data: DisplayComment) {
+        nicknameLabel.text = data.comment.writer.nickName
+        jobLabel.text = data.comment.writer.occupation
+        contentLabel.text = data.comment.content
+        dateLabel.text = data.comment.getDateString()
+        timeLabel.text = data.comment.getTimeString()
         
-        if data.parentId == -1 {
-                cellStackView.snp.updateConstraints {
-                    $0.leading.equalToSuperview().offset(30)  // 여기서 30은 원하는 들여쓰기 크기입니다.
-                }
-            } else {
-                cellStackView.snp.updateConstraints {
-                    $0.leading.equalToSuperview()
-                }
-            }
-
-            // 대댓글 버튼 표시 여부 결정 코드
-            recommentButton.isHidden = Bool(data.parentId == -1)
+        if data.level != 0 {
+            recommentButton.isHidden = true
+        }
+        
+        let indentationWidth: CGFloat = 30
+            levelConstraint.constant = indentationWidth * CGFloat(data.level)
     }
 }

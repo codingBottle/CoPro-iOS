@@ -50,43 +50,43 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.clipsToBounds = true
         }
         postTitleLabel.do {
-            $0.font = UIFont.boldSystemFont(ofSize: 15)
+            $0.font = .pretendard(size: 15, weight: .bold)
         }
         writerNameLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+            $0.font = .pretendard(size: 13, weight: .regular)
+            $0.textColor = UIColor.G4()
         }
         postDateLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+            $0.font = .pretendard(size: 13, weight: .regular)
+            $0.textColor = UIColor.G4()
         }
         postTimeLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+            $0.font = .pretendard(size: 13, weight: .regular)
+            $0.textColor = UIColor.G4()
         }
         likeCountIcon.do {
             $0.image = UIImage(systemName: "heart")
-            $0.tintColor = UIColor(hex: "6D6E71")
+            $0.tintColor = UIColor.G4()
         }
         likeCountLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+            $0.font = .pretendard(size: 13, weight: .regular)
+            $0.textColor = UIColor.G4()
         }
         sawPostIcon.do {
             $0.image = UIImage(systemName: "eye")
-            $0.tintColor = UIColor(hex: "6D6E71")
+            $0.tintColor = UIColor.G4()
         }
         sawPostLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+            $0.font = .pretendard(size: 13, weight: .regular)
+            $0.textColor = UIColor.G4()
         }
         commentCountIcon.do {
             $0.image = UIImage(systemName: "text.bubble")
-            $0.tintColor = UIColor(hex: "6D6E71")
+            $0.tintColor = UIColor.G4()
         }
         commentCountLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
-            $0.textColor = UIColor(hex: "6D6E71")
+            $0.font = .pretendard(size: 13, weight: .regular)
+            $0.textColor = UIColor.G4()
         }
     }
     private func setLayout() {

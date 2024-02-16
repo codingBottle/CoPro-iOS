@@ -14,37 +14,29 @@ final class MainViewController: UIViewController {
     
     //MARK: - UI Components
     private let recruitVC = recruitViewController()
+    private let freeVC = freeViewController()
+    private let noticeVC = noticeViewController()
+
     let grabberView = UIView()
 //    private lazy var noticeBoardView = UIView()
     private let bottomSheetView: BottomSheetView = {
-      let view = BottomSheetView()
-      view.bottomSheetColor = .white
-      view.barViewColor = .clear
-            view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOffset = CGSize(width: 0, height: 1)
-            view.layer.shadowOpacity = 0.3
-            view.layer.shadowRadius = 10
-      return view
+        let view = BottomSheetView()
+        view.bottomSheetColor = .white
+        view.barViewColor = .clear
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 1)
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowRadius = 10
+        return view
     }()
     var panGesture = UIPanGestureRecognizer()
     private let scrollView = UIScrollView()
     private let pageControl = UIPageControl()
     var images: [UIImage] = [UIImage(named: "bird")!, UIImage(named: "plant")!, UIImage(named: "fruit")!] // 사용할 이미지들
     private let segmentedControl: UISegmentedControl = {
-        let segmentedControl = UnderlineSegmentedControl(items: ["모집", "자유", "공지사항"])
+        let segmentedControl = UnderlineSegmentedControl(items: ["프로젝트", "자유", "공지사항"])
       segmentedControl.translatesAutoresizingMaskIntoConstraints = false
       return segmentedControl
-    }()
-
-    private let vc2: UIViewController = {
-      let vc = UIViewController()
-      vc.view.backgroundColor = .cyan
-      return vc
-    }()
-    private let vc3: UIViewController = {
-      let vc = UIViewController()
-      vc.view.backgroundColor = .yellow
-      return vc
     }()
     private lazy var pageViewController: UIPageViewController = {
       let vc = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -58,10 +50,10 @@ final class MainViewController: UIViewController {
     private lazy var addPostButton: UIButton = {
         
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
-        btn.backgroundColor = UIColor(hex: "#2577FE")
+        btn.backgroundColor = UIColor.P2()
         btn.layer.cornerRadius = 20
         btn.setImage(UIImage(systemName: "plus"), for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 17)
+        btn.titleLabel?.font = .pretendard(size: 17, weight: .bold)
         btn.setTitle("글쓰기", for: .normal)
         btn.contentEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: 1)
         btn.imageEdgeInsets = .init(top: 0, left: -1, bottom: 0, right: 1)
@@ -74,7 +66,7 @@ final class MainViewController: UIViewController {
     }()
       
     var dataViewControllers: [UIViewController] {
-        [recruitVC, self.vc2, self.vc3]
+        [recruitVC, freeVC, noticeVC]
     }
     var currentPage: Int = 0 {
         didSet {
@@ -141,8 +133,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
             $0.setTitleTextAttributes(
               [
-                NSAttributedString.Key.foregroundColor: UIColor(hex: "#2577FE"),
-                .font: UIFont.systemFont(ofSize: 17)
+                NSAttributedString.Key.foregroundColor: UIColor.P2(),
+                .font: UIFont.pretendard(size: 17, weight: .bold)
               ],
               for: .selected
             )
@@ -153,8 +145,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.view.translatesAutoresizingMaskIntoConstraints = false
         }
         segmentedControl.do {
-            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#6D6E72"), .font: UIFont.systemFont(ofSize: 15, weight: .bold)], for: .normal)
-            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(hex: "#2577FE"),.font: UIFont.systemFont(ofSize: 15, weight: .bold)],for: .selected)
+            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.G4(), .font: UIFont.pretendard(size: 17, weight: .bold)], for: .normal)
+            $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.P2(),.font: UIFont.pretendard(size: 17, weight: .bold)],for: .selected)
             $0.selectedSegmentIndex = 0
         }
         self.changeValue(control: self.segmentedControl)
@@ -163,7 +155,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         let logoImage = UIImage(named: "logo_navigation")?.withRenderingMode(.alwaysOriginal)
         let leftButton = UIBarButtonItem(image: logoImage, style: .plain, target: self, action: #selector(popToWriteViewController))
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(pushToSearchBarViewController))
-        rightButton.tintColor = UIColor(hex: "212121")
+        rightButton.tintColor = UIColor.systemGray
         self.navigationItem.rightBarButtonItem = rightButton
         self.navigationItem.leftBarButtonItem = leftButton
     }

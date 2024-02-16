@@ -12,18 +12,19 @@ struct DetailBoardDataModel {
     let title: String
     var createAt: Date
     let category: String
-    let contents: String
-    let tag: String
+    let contents: String?
+    let tag: String?
     let count: Int
     let heart: Int
     let imageUrl: [String]?
     let nickName: String
-    let occupation: String
+    let occupation: String?
+    let part: String?
     let isHeart: Bool
     let isScrap: Bool
-    let commentCount: Int?
+    let commentCount: Int
 
-    init(boardId: Int, title: String, createAt: String,category: String, contents: String, tag: String, count: Int, heart: Int, imageUrl: [String]?, nickName: String, occupation: String, isHeart: Bool, isScrap: Bool, commentCount: Int) {
+    init(boardId: Int, title: String, createAt: String,category: String, contents: String?, tag: String?, count: Int, heart: Int, imageUrl: [String]?, nickName: String, occupation: String?, isHeart: Bool, isScrap: Bool, commentCount: Int, part: String?) {
         self.boardId = boardId
         self.title = title
         let formatter = DateFormatter()
@@ -48,6 +49,7 @@ struct DetailBoardDataModel {
         self.isHeart = isHeart
         self.isScrap = isScrap
         self.commentCount = commentCount
+        self.part = part
     }
     
     func getDateString() -> String {
@@ -63,29 +65,3 @@ struct DetailBoardDataModel {
         }
     
 }
-
-//struct CommentData {
-//    let parentId: Int?
-//    let commentId: Int
-//    let content: String
-//    let writer: WriterData
-//    let children: [CommentData]?
-//
-//    init(parentId: Int?,commentId: Int, content: String, writer: WriterData, children: [CommentData]?) {
-//        self.parentId = parentId
-//        self.commentId = commentId
-//        self.content = content
-//        self.writer = writer
-//        self.children = children
-//    }
-//}
-//
-//struct WriterData {
-//    let nickName: String
-//    let occupation: String
-//
-//    init(nickName: String, occupation: String) {
-//        self.nickName = nickName
-//        self.occupation = occupation
-//    }
-//}
