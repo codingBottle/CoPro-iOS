@@ -43,7 +43,7 @@ final class recruitViewController: UIViewController, SendStringData {
     var posts = [BoardDataModel]()
     var isInfiniteScroll = true
     var offset = 1
-    private let idToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0eXVpb3A5MjlAZ21haWwuY29tIiwiaWF0IjoxNzA4MDgyMDg0LCJleHAiOjE3MDgwODM4ODR9.AenfBItjcdkWns_N655ulc1hSusMawyWE20cuEWDCuR9vvypI2PjYEwDpNCMsoMsMaXaHNZgk9IpZ1QxUW8HXA"
+    private let idToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0eXVpb3A5MjlAZ21haWwuY29tIiwiaWF0IjoxNzA4MDg4ODM1LCJleHAiOjE3MDgwOTA2MzV9.PC6SWnObO4kHLdpWK1Q1K7UoZgRgq27lEj6Uk-Kq3HbZW5_4BnPMr_wmUYoJfU9b8G8UciLIC-ddjYk9FYhcdg"
     
     // MARK: - LifeCycle
     

@@ -9,11 +9,11 @@ import Foundation
 
 // MARK: - CreateBoardRequestBody
 struct CreatePostRequestBody: Codable {
-    let title, category, contents: String
-    let imageID: [String]
+    let title, category, contents, part, tag: String
+    let imageID: [Int]
 
     enum CodingKeys: String, CodingKey {
-        case title, category, contents
+        case title, category, contents, part, tag
         case imageID = "imageId"
     }
 }

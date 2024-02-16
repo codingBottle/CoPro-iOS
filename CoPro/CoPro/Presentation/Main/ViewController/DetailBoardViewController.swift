@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Then
 import KeychainSwift
+import Kingfisher
 
 final class DetailBoardViewController: UIViewController {
     var postId: Int?
@@ -35,6 +36,8 @@ final class DetailBoardViewController: UIViewController {
     private let commentButton = UIButton()
     private let commentCountLabel = UILabel()
     private let bottomView = UIView()
+    var imageViews: [UIImageView] = []
+    private let imageScrollView = UIScrollView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +54,9 @@ final class DetailBoardViewController: UIViewController {
     }
     private func setUI() {
         self.view.backgroundColor = .white
-        
-        
+        imageScrollView.do {
+            $0.showsHorizontalScrollIndicator = false
+        }
         stackView.do {
             $0.axis = .vertical
             $0.spacing = 8
@@ -187,12 +191,14 @@ final class DetailBoardViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        stackView.addArrangedSubviews(titleLabel,infoView,contentLabel)
+        stackView.addArrangedSubviews(titleLabel,infoView,contentLabel,imageScrollView)
         infoView.addSubviews(nicknameLabel, jobLabel, dateLabel, timeLabel, viewCountLabel, lineView1)
         infoView.snp.makeConstraints {
             $0.height.equalTo(28)
         }
-        
+        imageScrollView.snp.makeConstraints {
+            $0.height.equalTo(144)
+        }
         nicknameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
@@ -407,6 +413,32 @@ final class DetailBoardViewController: UIViewController {
         heartCountLabel.text = String(data.heart)
         heartButton.tintColor = data.isHeart ? UIColor.G5() : UIColor.G4()
         commentCountLabel.text = String(data.commentCount)
+        imageViews.forEach { $0.removeFromSuperview() }
+        imageViews.removeAll()
+        
+        // 받은 모든 URL을 UIImageView로 생성하여 UIScrollView에 추가
+        var xOffset: CGFloat = 0
+        for url in data.imageUrl! {
+            // 비동기적으로 이미지 로드
+            let imageView = UIImageView()
+            imageView.kf.indicatorType = .activity
+            imageView.kf.setImage(with: URL(string:url), placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
+                DispatchQueue.main.async {
+                    // 이미지 뷰 생성 및 추가
+                    imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
+                    self.imageScrollView.addSubview(imageView)
+                    self.imageViews.append(imageView)
+                    imageView.do {
+                        $0.layer.cornerRadius = 10
+                        $0.clipsToBounds = true
+                    }
+                    
+                    xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
+                    
+                    // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
+                    self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
+                }
+        }
     }
     
     @objc

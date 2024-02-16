@@ -29,6 +29,7 @@ class AddPostViewController: UIViewController {
     private let attachButton = UIButton()
     private let lineView1 = UIView()
     private let lineView2 = UIView()
+    private var imageUrls = [Int]()
     let textViewPlaceHolder = "내용을 입력하세요"
     private let warnView = UIView()
     lazy var remainCountLabel = UILabel()
@@ -206,6 +207,7 @@ class AddPostViewController: UIViewController {
                 let vc = PhotoViewController().then {
                     $0.modalPresentationStyle = .fullScreen
                 }
+                vc.delegate = self
                 present(vc, animated: true)
             case .failure:
                 return
@@ -213,7 +215,7 @@ class AddPostViewController: UIViewController {
         }
     }
     @objc private func addButtonTapped() {
-        
+        addPost(title: titleTextField.text ?? "", category: "공지사항", content: contentTextField.text, image: imageUrls)
     }
 
     @objc func receiveImages(_ notification: Notification) {
@@ -307,13 +309,14 @@ extension UILabel {
 }
 
 extension AddPostViewController {
-    func addPost( title: String, category: String, content: String, image: UIImage) {
+    func addPost( title: String, category: String, content: String, image: [Int]) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
-            BoardAPI.shared.addPost(token: token, title: titleTextField.text ?? "", category: "프로젝트", contents: contentTextField.text, imageId: ["hi", "hello"]) { result in
+            BoardAPI.shared.addPost(token: token, title: titleTextField.text ?? "", category: category, contents: contentTextField.text, imageId: imageUrls) { result in
                 switch result {
                 case .success:
                     print("success")
+                    self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
                     print("Request error: \(message)")
                     
@@ -331,5 +334,11 @@ extension AddPostViewController {
                 }
             }
         }
+    }
+}
+
+extension AddPostViewController: ImageUploaderDelegate {
+    func didUploadImages(with urls: [Int]) {
+        self.imageUrls = urls
     }
 }

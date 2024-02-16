@@ -64,7 +64,7 @@ extension BoardAPI {
     
     // 4. 게시글 추가하기
     
-    public func addPost(token: String, title: String, category: String, contents: String, imageId: [String],                         completion: @escaping(NetworkResult<Any>) -> Void) {
+    public func addPost(token: String, title: String, category: String, contents: String, imageId: [Int],                         completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.addPost(token: token, title: title, category: category, contents: contents, imageid: imageId)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: DetailBoardDTO.self,

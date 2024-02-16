@@ -13,6 +13,10 @@ import Photos
 import KeychainSwift
 import Alamofire
 
+protocol ImageUploaderDelegate: AnyObject {
+    func didUploadImages(with urls: [Int])
+}
+
 final class PhotoViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     private enum Const {
         static let numberOfColumns = 3.0
@@ -60,6 +64,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     private let photoService: PhotoManager = MyPhotoManager()
     private var selectedIndexArray = [Int]() // Index: count
     private var selectedImages: [PHAsset] = []
+    weak var delegate: ImageUploaderDelegate?
     
     // album 여러개에 대한 예시는 생략 (UIPickerView와 같은 것을 이용하여 currentAlbumIndex를 바꾸어주면 됨)
     private var albums = [PHFetchResult<PHAsset>]()
@@ -118,11 +123,12 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     @objc func submitButtonTapped() {
             // NotificationCenter를 사용하여 선택된 이미지들을 전달
         NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": selectedImages])
-            loadImages(from: selectedImages) { images in
-                self.uploadImages(images: images)
+        loadImages(from: selectedImages) { images in
+                self.uploadImages(images: images) { urls in
+                    self.delegate?.didUploadImages(with: urls)
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
-            // 현재 뷰 컨트롤러를 dismiss
-            self.dismiss(animated: true, completion: nil)
         }
     func loadImages(from assets: [PHAsset], completion: @escaping ([UIImage]) -> ()) {
         let manager = PHImageManager.default()
@@ -140,7 +146,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
         }
         completion(images)
     }
-    func uploadImages(images: [UIImage]) {
+    func uploadImages(images: [UIImage], completion: @escaping ([Int]) -> Void) {
         let url = URL(string: Config.baseURL)!
         if let token = self.keychain.get("idToken") {
             let headers : HTTPHeaders = [
@@ -171,6 +177,8 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
                         do {
                             let decoder = JSONDecoder()
                             let imageData = try decoder.decode(ImageUploadResponse.self, from: data)
+                            let urls = imageData.data.map { $0.imageId }
+                            completion(urls)
                             print(imageData)
                         } catch {
                             print("Error decoding data: \(error.localizedDescription)")

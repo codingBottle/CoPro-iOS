@@ -16,7 +16,7 @@ enum BoardRouter {
     case getDetailBoard(token: String, boardId: Int)
     case editBoard(token: String, boardId: Int, requestBody: CreatePostRequestBody)
     case addPhoto(token: String, images: [UIImage])
-    case addPost(token: String, title: String, category: String, contents: String, imageid: [String])
+    case addPost(token: String, title: String, category: String, contents: String, imageid: [Int])
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
     case saveHeart(token: String, boardId: Int)
@@ -122,7 +122,7 @@ extension BoardRouter: BaseTargetType {
             let requestModel = uploadImageRequestBody(files: base64Images)
             return .body(requestModel)
         case .addPost(_, let title, let category, let contents, let imageId):
-            let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, imageID: imageId)
+            let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: "프론트엔드", tag: "수익창출", imageID: imageId)
             return .body(requestBody)
         case .deleteBoard(_, let boardId):
             return .query(boardId)
