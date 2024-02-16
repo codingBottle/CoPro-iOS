@@ -14,12 +14,12 @@ class BottomTabController: UITabBarController {
       separator.backgroundColor = UIColor.G3() // Set the color of the separator line
       tabBar.addSubview(separator)
    }
-   var currentUserData: LoginUserDataModel?
+   var currentUserData: String?
    var chatVC: ChannelViewController?
 
-      init(currentUserData: LoginUserDataModel) {
+      init(currentUserData: String) {
          self.currentUserData = currentUserData
-         self.chatVC = ChannelViewController(currentUser: currentUserData)
+         self.chatVC = ChannelViewController(currentUserNickName: self.currentUserData ?? "")
          super.init(nibName: nil, bundle: nil)
       }
    required init?(coder: NSCoder) {
@@ -91,5 +91,6 @@ class BottomTabController: UITabBarController {
       let navigationProfile = UINavigationController(rootViewController: profileVC)
       
       setViewControllers([navigationNotification, navigationCard, navigationHome,navigationChat,navigationProfile], animated: false)
+      selectedIndex = 2
    }
 }

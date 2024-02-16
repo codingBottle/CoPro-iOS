@@ -18,8 +18,9 @@ import CryptoKit
 
 class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationControllerDelegate {
     
-    var loginView: LoginView!
-    var loginUserData: LoginUserDataModel?
+   var loginView: LoginView!
+   var currentUserNickName: String?
+   var checkFirstLogin: Bool?
     override func loadView() {
         // LoginView를 생성하고 뷰에 추가합니다.
         view = LoginView()
@@ -30,12 +31,15 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         super.viewDidLoad()
         //view.signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
     }
+   
     override func setUI() {
         
     }
+   
     override func setLayout() {
         
     }
+   
     override func setAddTarget() {
         if let loginView = view as? LoginView {
             // Apple 로그인 버튼
@@ -46,6 +50,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             loginView.githubSignInButton.addTarget(self, action: #selector(handleGitHubSignIn), for: .touchUpInside)
         }
     }
+   
     let keychain = KeychainSwift()
     @objc private func signOut() {
         if Auth.auth().currentUser != nil{
@@ -63,44 +68,25 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             print("로그인 된 계정없음")
         }
     }
-    @objc private func handleGoogleSignIn() {
-        print("Google Sign in button tapped")
-        
-        // Start the sign in flow!
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+   
+   @objc private func handleGoogleSignIn() {
+      print("Google Sign in button tapped")
+      
+      // Start the sign in flow!
+      GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+         guard error == nil else { return }
+         guard let signInResult = signInResult else { return }
+         
+         signInResult.user.refreshTokensIfNeeded { user, error in
             guard error == nil else { return }
-            guard let signInResult = signInResult else { return }
+            guard let user = user else { return }
             
-            signInResult.user.refreshTokensIfNeeded { user, error in
-                guard error == nil else { return }
-                guard let user = user else { return }
-                
-                let idToken = user.idToken?.tokenString
-                LoginAPI.shared.getAccessToken(authCode: user.idToken?.tokenString, provider: "google") { result in
-                   switch result {
-                   case .success(let response):
-                      print("구글 로그인 성공")
-                      print(response.data.accessToken)
-                      print(response.data.refreshToken)
-                      self.keychain.set(response.data.accessToken, forKey: "accessToken")
-                      self.keychain.set(response.data.refreshToken, forKey: "refreshToken")
-                      self.getLoginUserData() {
-                         print("🔥🔥🔥")
-                         DispatchQueue.main.async {
-                            guard let loginUserData = self.loginUserData else {return print("🌊🌊🌊")}
-                            let vc = BottomTabController(currentUserData: loginUserData)
-                            self.navigationController?.setViewControllers([vc], animated: true)
-                         }
-                      }
-                   case .failure(let error):
-                      print("구글 로그인 실패")
-                      print(error)
-                   }
-                }
-                print(idToken!)
-            }
-        }
-    }
+            let idToken = user.idToken?.tokenString
+            LoginAPI.shared.getAccessToken(authCode: user.idToken?.tokenString, provider: "google")
+            print(idToken!)
+         }
+      }
+   }
     
     
     @objc private func handleAppleSignIn() {
@@ -112,6 +98,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
+   
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             guard let appleIDToken = appleIDCredential.identityToken else {
@@ -142,50 +129,12 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         // Handle error.
         print("Sign in with Apple errored: \(error)")
     }
-    
-    
-    @objc private func handleGitHubSignIn() {
-        GitHubLoginManager.shared.requestCode()
-        DispatchQueue.main.async {
-            let vc = BottomTabController()
-            self.navigationController?.setViewControllers([vc], animated: true)
-        }
-    }
    
-   private func getLoginUserData(completion: @escaping () -> Void) {
-       if let token = self.keychain.get("accessToken") {
-           MyProfileAPI.shared.getMyProfile(token: token) { result in
-               switch result {
-               case .success(let data):
-                   DispatchQueue.main.async {
-                       if let data = data as? MyProfileDTO {
-                           self.loginUserData = LoginUserDataModel(from: data.data)
-                           print("🔥",self.loginUserData)
-                           completion()
-                       } else {
-                           print("Failed to decode the response.")
-                       }
-                   }
-                   
-               case .requestErr(let message):
-                   // Handle request error here.
-                   print("Request error: \(message)")
-               case .pathErr:
-                   // Handle path error here.
-                   print("Path error")
-               case .serverErr:
-                   // Handle server error here.
-                   print("Server error")
-               case .networkFail:
-                   // Handle network failure here.
-                   print("Network failure")
-               default:
-                   break
-               }
-               
-           }
-       }
+    
+   @objc private func handleGitHubSignIn() {
+      GitHubLoginManager.shared.requestCode()
    }
+   
 }
 
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
