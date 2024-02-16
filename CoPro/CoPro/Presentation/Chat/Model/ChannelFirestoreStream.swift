@@ -18,8 +18,10 @@ class ChannelFirestoreStream {
         return firestoreDatabase.collection("channels")
     }()
     
-    func createChannel(with channelName: String, isProject: Bool) {
-        let channel = Channel(name: channelName, isProject: isProject)
+   
+   //여기에 채팅하기 눌린 사람의 값들이 들어가야함
+   func createChannel(with channelName: String, isProject: Bool, profileImage: String, occupation: String, unreadCount: Int) {
+      let channel = Channel(name: channelName, isProject: isProject, profileImage: profileImage, occupation: occupation, unreadCount: unreadCount)
         ChannelListener.addDocument(data: channel.representation) { error in
             if let error = error {
                 print("Error saving Channel: \(error.localizedDescription)")
@@ -35,6 +37,7 @@ class ChannelFirestoreStream {
 //        }
 //    }
     
+   
     // Read & Update
     func subscribe(completion: @escaping (Result<[(Channel, DocumentChangeType)], Error>) -> Void) {
         ChannelListener.addSnapshotListener { snaphot, error in

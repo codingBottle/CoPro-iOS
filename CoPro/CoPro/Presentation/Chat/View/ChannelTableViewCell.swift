@@ -18,29 +18,42 @@ class ChannelTableViewCell: UITableViewCell {
                 projectChip.isHidden = !channel.isProject
             }
         }
-    
+   var loadedImage: UIImage?
     var isProject = false
+   
+   var container = UIView().then({
+      $0.layer.borderWidth = 1
+      $0.layer.borderColor = UIColor.G2().cgColor
+   })
+   
+   var container2 = UIView().then({
+      $0.layer.borderWidth = 1
+      $0.layer.borderColor = UIColor.P2().cgColor
+   })
     
+   var avatarImage = UIImageView().then {
+      $0.clipsToBounds = true
+   }
+   
+   let imageUrl = UILabel().then{
+       $0.text = ""
+   }
     
-    lazy var chatRoomLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        return label
-    }()
+   lazy var chatRoomLabel = UILabel().then {
+      $0.setPretendardFont(text: "test", size: 15, weight: .bold, letterSpacing: 1.22)
+      $0.textAlignment = .center
+   }
     
-    lazy var projectChip: UILabel = {
-        let chipLabel = PaddingLabel()
-        chipLabel.text = "Project"
-        chipLabel.font = UIFont.systemFont(ofSize: 14)
-        chipLabel.backgroundColor = UIColor.lightGray
-        chipLabel.textColor = UIColor.black
-        chipLabel.textAlignment = .center
-        chipLabel.layer.cornerRadius = 15
-        chipLabel.clipsToBounds = true
-        chipLabel.sizeToFit()
-        return chipLabel
-    }()
+   var projectChipContainer = UIView().then {
+      $0.backgroundColor = UIColor.G1()
+      $0.layer.cornerRadius = 6
+  }
+   
+   lazy var projectChip = UILabel().then {
+      $0.setPretendardFont(text: "Project", size: 11, weight: .regular, letterSpacing: 1)
+      $0.textColor = UIColor.Black()
+      $0.textAlignment = .center
+   }
     
     lazy var detailButton: UIButton = {
         let button = UIButton()
@@ -48,7 +61,6 @@ class ChannelTableViewCell: UITableViewCell {
         button.isUserInteractionEnabled = false
         return button
     }()
-        
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -61,20 +73,53 @@ class ChannelTableViewCell: UITableViewCell {
     }
     
     private func configure() {
-        contentView.addSubview(chatRoomLabel)
-        contentView.addSubview(projectChip)
-        contentView.addSubview(detailButton)
+       
+       contentView.addSubview(container)
+       container.addSubviews(avatarImage, container2)
+       container2.addSubviews(chatRoomLabel, projectChipContainer, detailButton)
+       projectChipContainer.addSubview(projectChip)
+       avatarImage.isUserInteractionEnabled = true
+//       contentView.addSubview(avatarImage)
+//        contentView.addSubview(chatRoomLabel)
+//        contentView.addSubview(projectChip)
+//        contentView.addSubview(detailButton)
+       
+       container.snp.makeConstraints {
+          $0.top.leading.equalToSuperview().offset(16)
+          $0.bottom.trailing.equalToSuperview().offset(-16)
+       }
+       
+          avatarImage.snp.makeConstraints{
+             $0.top.leading.bottom.equalToSuperview()
+             $0.trailing.equalToSuperview().offset(-311)
+          }
+       
+          container2.snp.makeConstraints {
+             $0.leading.equalTo(avatarImage.snp.trailing).offset(12)
+             $0.top.equalToSuperview().offset(2)
+             $0.bottom.equalToSuperview().offset(-2)
+             $0.trailing.equalToSuperview()
+          }
+       
+      
+           chatRoomLabel.snp.makeConstraints {
+              $0.top.leading.equalToSuperview()
+              $0.width.lessThanOrEqualToSuperview().offset(-180)
+//              $0.bottom.equalToSuperview().offset(-22)
+//              $0.trailing.equalToSuperview().offset(-247)
+           }
         
-        chatRoomLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(24)
-            $0.centerY.equalToSuperview()
-        }
-        
-        projectChip.snp.makeConstraints {
-            $0.leading.equalTo(chatRoomLabel.snp.trailing).offset(10)
-            $0.centerY.equalToSuperview()
-            $0.trailing.lessThanOrEqualTo(detailButton).offset(-24)
-        }
+          projectChipContainer.snp.makeConstraints {
+             $0.leading.equalTo(chatRoomLabel.snp.trailing).offset(8)
+             $0.bottom.equalTo(chatRoomLabel)
+             $0.top.equalToSuperview().offset(5)
+             $0.trailing.equalToSuperview().offset(-185)
+          }
+         
+       projectChip.snp.makeConstraints {
+          $0.centerX.equalToSuperview()
+          $0.centerY.equalToSuperview()
+       }
         
         detailButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailButton.snp.makeConstraints {
@@ -82,6 +127,35 @@ class ChannelTableViewCell: UITableViewCell {
             $0.trailing.equalToSuperview().offset(-24)
         }
     }
+   
+   func loadChannelProfileImage(url: String) {
+      guard !url.isEmpty, let imageURL = URL(string: url) else {
+         print("채널 유저 프로필 이미지 불러오기 실패")
+         avatarImage.backgroundColor = .red
+         return
+      }
+      avatarImage.kf.setImage(
+          with: imageURL,
+          placeholder: nil,
+          options: [
+              .transition(.fade(1.0)),
+              .forceTransition,
+              .cacheOriginalImage,
+              .scaleFactor(UIScreen.main.scale),
+          ],
+          completionHandler: { result in
+              switch result {
+              case .success(let value):
+//                 print("Image: \(value.image). Got from: \(value.cacheType)")
+                 self.loadedImage = value.image
+//                 print("🔥\n",self.loadedImage ?? "")
+              case .failure(let error):
+                  print("Error: \(error)")
+              }
+          }
+      )
+
+   }
 }
 
 

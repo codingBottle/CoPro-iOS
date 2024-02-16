@@ -15,17 +15,14 @@ import SnapKit
 
 class ChatVC: MessagesViewController {
     
-    let customAvatarView = CustomAvatarView()
-    
-    lazy var cameraBarButtonItem: InputBarButtonItem = {
-        let button = InputBarButtonItem(type: .system)
-        button.tintColor = .primary
-        button.image = UIImage(systemName: "camera")
-        button.addTarget(self, action: #selector(didTapCameraButton), for: .touchUpInside)
-        return button
-    }()
-    
-    private let user: User
+   var customAvatarView = CustomAvatarView()
+   var avatarView: AvatarView?
+   
+   var chatAvatarImage = AvatarView().then {
+      $0.clipsToBounds = true
+   }
+   
+   private let user: LoginUserDataModel?
     let chatFirestoreStream = ChatFirestoreStream()
     let channel: Channel
     var messages = [Message]()
@@ -40,7 +37,7 @@ class ChatVC: MessagesViewController {
       }
     }
     
-    init(user: User, channel: Channel) {
+    init(user: LoginUserDataModel, channel: Channel) {
         self.user = user
         self.channel = channel
         super.init(nibName: nil, bundle: nil)
@@ -65,7 +62,7 @@ class ChatVC: MessagesViewController {
         configure()
         setupMessageInputBar()
         removeOutgoingMessageAvatars()
-        addCameraBarButtonToMessageInputBar()
+//        addCameraBarButtonToMessageInputBar()
         listenToMessages()
     }
 
@@ -81,17 +78,15 @@ class ChatVC: MessagesViewController {
     private func configure() {
         title = nil
 
-        let titleLabel = UILabel()
-        titleLabel.text = channel.name
-        titleLabel.textAlignment = .center
-        titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+       let titleLabel = UILabel().then {
+          $0.setPretendardFont(text: channel.name, size: 17, weight: .bold, letterSpacing: 1.25)
+          $0.textAlignment = .center
+       }
 
-        let subtitleLabel = UILabel()
-        subtitleLabel.text = "mobile"
-        subtitleLabel.textAlignment = .center
-        subtitleLabel.font = .systemFont(ofSize: 12, weight: .light)
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+       let subtitleLabel = UILabel().then {
+          $0.setPretendardFont(text: channel.occupation, size: 11, weight: .regular, letterSpacing: 1)
+          $0.textAlignment = .center
+       }
 
         let titleView = UIView()
         titleView.addSubview(titleLabel)
@@ -102,10 +97,15 @@ class ChatVC: MessagesViewController {
         }
         
         subtitleLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(0)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(3)
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview().offset(0)
         }
+       
+       titleView.snp.makeConstraints {
+           $0.width.equalTo(titleLabel.snp.width)
+           $0.centerX.equalTo(titleLabel.snp.centerX)
+       }
 
         navigationItem.titleView = titleView
     }
@@ -125,11 +125,12 @@ class ChatVC: MessagesViewController {
         layout.setMessageOutgoingMessageTopLabelAlignment(outgoingLabelAlignment)
     }
     
-    private func addCameraBarButtonToMessageInputBar() {
-        messageInputBar.leftStackView.alignment = .center
-        messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
-        messageInputBar.setStackViewItems([cameraBarButtonItem], forStack: .left, animated: false)
-    }
+   // 사진 직접 찍어 보내는 기능
+//    private func addCameraBarButtonToMessageInputBar() {
+//        messageInputBar.leftStackView.alignment = .center
+//        messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
+//        messageInputBar.setStackViewItems([cameraBarButtonItem], forStack: .left, animated: false)
+//    }
     
     private func insertNewMessage(_ message: Message) {
         messages.append(message)
@@ -185,7 +186,7 @@ class ChatVC: MessagesViewController {
 extension ChatVC: MessagesDataSource {
     
     var currentSender: MessageKit.SenderType {
-        return Sender(senderId: user.uid, displayName: UserDefaultManager.displayName)
+       return Sender(senderId: user?.nickName ?? "", displayName: UserDefaultManager.displayName)
     }
     
     func cellForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell {
@@ -209,62 +210,53 @@ extension ChatVC: MessagesDataSource {
 
 extension ChatVC: MessagesLayoutDelegate {
     
-    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
-        let isCurrentSender = isFromCurrentSender(message: message)
+   func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+      let isCurrentSender = isFromCurrentSender(message: message)
+      
+      // 내가 보낸 메세지 일 떄
+      if isCurrentSender {
+         return .custom { view in
+            let maskLayer = CAShapeLayer()
+            // UIBezierPath를 사용하여 모서리에 반경을 적용
+            let path = UIBezierPath(roundedRect: view.bounds,
+                                    byRoundingCorners: [.topLeft, .bottomLeft, .bottomRight],
+                                    cornerRadii: CGSize(width: 10, height: 10))
             
-        // 내가 보낸 메세지 일 떄
-        if isCurrentSender {
-            return .custom { view in
-                let maskLayer = CAShapeLayer()
-
-                // UIBezierPath를 사용하여 모서리에 반경을 적용
-                let path = UIBezierPath(roundedRect: view.bounds,
-                                        byRoundingCorners: [.topLeft, .bottomLeft, .bottomRight],
-                                        cornerRadii: CGSize(width: 10, height: 10))
-                
-                // 우측 상단 모서리에 2의 반경 적용
-                path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
-                                         byRoundingCorners: .topRight,
-                                         cornerRadii: CGSize(width: 2, height: 2)))
-
-                maskLayer.path = path.cgPath
-                view.layer.mask = maskLayer
-
-                // 그림자 설정
-                view.layer.shadowColor = UIColor.black.cgColor
-                view.layer.shadowOffset = CGSize(width: 0, height: 1)
-                view.layer.shadowRadius = 1
-                view.layer.shadowOpacity = 0.1
-            }
-        }
-        
-        // 상대가 보낸 메세지 일 떄
-        else {
-            return .custom { view in
-                // 상대 보낸 메시지의 스타일
-                let maskLayer = CAShapeLayer()
-
-                // UIBezierPath를 사용하여 모서리에 반경을 적용
-                let path = UIBezierPath(roundedRect: view.bounds,
-                                        byRoundingCorners: [.topRight, .bottomLeft, .bottomRight],
-                                        cornerRadii: CGSize(width: 10, height: 10))
-                
-                // 우측 상단 모서리에 2의 반경 적용
-                path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
-                                         byRoundingCorners: .topLeft,
-                                         cornerRadii: CGSize(width: 2, height: 2)))
-
-                maskLayer.path = path.cgPath
-                view.layer.mask = maskLayer
-
-                // 그림자 설정
-                view.layer.shadowColor = UIColor.black.cgColor
-                view.layer.shadowOffset = CGSize(width: 0, height: 1)
-                view.layer.shadowRadius = 1
-                view.layer.shadowOpacity = 0.1
-            }
-        }
-    }
+            // 우측 상단 모서리에 2의 반경 적용
+            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
+                                     byRoundingCorners: .topRight,
+                                     cornerRadii: CGSize(width: 2, height: 2)))
+            
+            maskLayer.path = path.cgPath
+            view.layer.mask = maskLayer
+            
+            // 그림자 설정 (추후 해야함 현재 레이아웃 깨짐)
+         }
+      }
+      
+      // 상대가 보낸 메세지 일 떄
+      else {
+         return .custom { view in
+            // 상대 보낸 메시지의 스타일
+            let maskLayer = CAShapeLayer()
+            
+            // UIBezierPath를 사용하여 모서리에 반경을 적용
+            let path = UIBezierPath(roundedRect: view.bounds,
+                                    byRoundingCorners: [.topRight, .bottomLeft, .bottomRight],
+                                    cornerRadii: CGSize(width: 10, height: 10))
+            
+            // 우측 상단 모서리에 2의 반경 적용
+            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
+                                     byRoundingCorners: .topLeft,
+                                     cornerRadii: CGSize(width: 2, height: 2)))
+            
+            maskLayer.path = path.cgPath
+            view.layer.mask = maskLayer
+            
+            // 그림자 설정 (추후 해야함 현재 레이아웃 깨짐)
+         }
+      }
+   }
     
     // 아래 여백
     func footerViewSize(for section: Int, in messagesCollectionView: MessagesCollectionView) -> CGSize {
@@ -314,15 +306,20 @@ extension ChatVC: MessagesDisplayDelegate {
         return !isSameTimeGroup
     }
     
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        avatarView.frame.origin.y = 0 // 아바타뷰를 메시지 맨 위에 배치
-        
-        let isFirstMessageInGroup = isFirstMessageInTimeGroup(at: indexPath)
-        if isFirstMessageInGroup {
+   func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+      print("configureAvatarView is called")
+      DispatchQueue.main.async {
+         avatarView.frame.origin.y = 0 // 아바타뷰를 동일 시간대 메시지 맨 위에 배치
+         
+         let isFirstMessageInGroup = self.isFirstMessageInTimeGroup(at: indexPath)
+         if isFirstMessageInGroup {
             avatarView.isHidden = false
-        } else {
+            avatarView.image = self.chatAvatarImage.image
+         } else {
             avatarView.isHidden = true
-        }
+         }
+      }
+      
     }
     
     // 말풍선의 배경 색상
@@ -365,8 +362,6 @@ extension ChatVC: MessagesDisplayDelegate {
             return nil
         }
     }
-
-    
     
     func messageContainerSize(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize {
         return MessageSizeCalculator().messageContainerSize(for: message, at: indexPath)
@@ -374,18 +369,19 @@ extension ChatVC: MessagesDisplayDelegate {
 }
 
 extension ChatVC: InputBarAccessoryViewDelegate {
-    func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-        let message = Message(user: user, content: text)
-        
-        chatFirestoreStream.save(message) { [weak self] error in
-            if let error = error {
-                print(error)
-                return
-            }
-            self?.messagesCollectionView.scrollToLastItem()
-        }
-        inputBar.inputTextView.text.removeAll()
-    }
+   func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+      guard let user = self.user else {return print("inputBar 함수에서 user 에러")}
+      let message = Message(user: user, content: text)
+      
+      chatFirestoreStream.save(message) { [weak self] error in
+         if let error = error {
+            print(error)
+            return
+         }
+         self?.messagesCollectionView.scrollToLastItem()
+      }
+      inputBar.inputTextView.text.removeAll()
+   }
 }
 
 extension ChatVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -411,7 +407,6 @@ extension ChatVC: UIImagePickerControllerDelegate, UINavigationControllerDelegat
         FirebaseStorageManager.uploadImage(image: image, channel: channel) { [weak self] url in
             self?.isSendingPhoto = false
             guard let user = self?.user, let url = url else { return }
-            
             var message = Message(user: user, image: image)
             message.downloadURL = url
             self?.chatFirestoreStream.save(message)
