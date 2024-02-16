@@ -29,6 +29,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    }
    
    lazy var doneButton = UIButton().then {
+      $0.setTitle("확인", for: .normal)
       $0.titleLabel?.setPretendardFont(text: "확인", size: 17, weight: .bold, letterSpacing: 1.25)
       $0.titleLabel?.textColor = UIColor.White()
       $0.layer.backgroundColor = UIColor(.gray).cgColor
