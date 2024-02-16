@@ -15,11 +15,12 @@ final class CardAPI : BaseAPI {
     private override init() {}
 }
 extension CardAPI {
+    var baseURL: String { return Config.baseURL }
     // CardViewController User API 데이터를 불러오는 메서드
     func getUserData(part: String, lang: String, old: Int, page: Int,completion: @escaping (Result<CardDTO, AFError>) -> Void){
         //keychain 토큰가저오기
         let keychain = KeychainSwift()
-        guard let token = keychain.get("idToken") else {
+        guard let token = keychain.get("accessToken") else {
             print("No token found in keychain.")
             return
         }
@@ -38,9 +39,29 @@ extension CardAPI {
             "size":10
             
         ]
-        AF.request("BASE_API/api/infos", method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+        AF.request("\(baseURL)/api/infos", method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
             .responseDecodable(of: CardDTO.self) { response in
-                completion(response.result)
+                if let statusCode = response.response?.statusCode {
+                            if statusCode == 401 {
+                                // 토큰 재요청 함수 호출
+                                LoginAPI.shared.refreshAccessToken { result in
+                                    switch result {
+                                    case .success(let loginDTO):
+                                        print("토큰 재발급 성공: \(loginDTO)")
+                                        
+                                        DispatchQueue.main.async {
+                                            // 토큰 재발급이 성공한 후 reloadData() 호출
+                                            CardViewController().reloadData()
+                                        }
+                                    case .failure(let error):
+                                        print("토큰 재발급 실패: \(error)")
+                                    }
+                                }
+                            } else {
+                                // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                                completion(response.result)
+                            }
+                        }
             }
         
         
@@ -61,7 +82,7 @@ extension CardAPI {
         let parameters: [String: Any] = ["likeMemberId": MemberId]
         
         // Alamofire를 사용하여 POST 요청
-        AF.request("BASE_API/api/add-like", method: .post, parameters: parameters, encoding: JSONEncoding.default,headers: headers)
+        AF.request("\(baseURL)/api/add-like", method: .post, parameters: parameters, encoding: JSONEncoding.default,headers: headers)
             .validate() // 서버 응답이 성공적인지 확인
             .responseJSON { response in
                 switch response.result {
@@ -91,7 +112,7 @@ extension CardAPI {
         let parameters: [String: Any] = ["likeMemberId": MemberId]
         
         // Alamofire를 사용하여 POST 요청
-        AF.request("BASE_API/api/cancel-like", method: .post, parameters: parameters, encoding: JSONEncoding.default,headers: headers)
+        AF.request("\(baseURL)/api/cancel-like", method: .post, parameters: parameters, encoding: JSONEncoding.default,headers: headers)
             .validate() // 서버 응답이 성공적인지 확인
             .responseJSON { response in
                 switch response.result {
