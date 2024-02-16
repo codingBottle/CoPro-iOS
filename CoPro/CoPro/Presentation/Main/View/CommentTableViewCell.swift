@@ -51,14 +51,15 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         }
         nicknameLabel.do {
             $0.textColor = UIColor.G4()
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
+            $0.font = .pretendard(size: 13, weight: .regular)
         }
         jobLabel.do {
             $0.textColor = UIColor.Black()
-            $0.font = UIFont(name: "Pretendard-Regular", size: 13)        }
+            $0.font = .pretendard(size: 13, weight: .regular)
+        }
         contentLabel.do {
             $0.textColor = UIColor.Black()
-            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
+            $0.font = .pretendard(size: 17, weight: .regular)
         }
         dateTimeStackView.do {
             $0.axis = .horizontal
@@ -66,15 +67,15 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         }
         dateLabel.do {
             $0.textColor = UIColor.G2()
-            $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+            $0.font = .pretendard(size: 12, weight: .regular)
         }
         timeLabel.do {
             $0.textColor = UIColor.G2()
-            $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+            $0.font = .pretendard(size: 12, weight: .regular)
         }
         recommentButton.do {
             $0.setTitleColor(UIColor.G2(), for: .normal)
-            $0.titleLabel?.font = UIFont(name: "Pretendard-Regular", size: 12)
+            $0.titleLabel?.font = UIFont.pretendard(size: 12, weight: .regular)
             $0.contentHorizontalAlignment = .right
             $0.setTitle("답글쓰기", for: .normal)
         }

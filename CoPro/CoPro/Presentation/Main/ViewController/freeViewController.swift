@@ -1,8 +1,8 @@
 //
-//  recruitViewController.swift
+//  freeViewController.swift
 //  CoPro
 //
-//  Created by 문인호 on 12/27/23.
+//  Created by 문인호 on 2/16/24.
 //
 
 import UIKit
@@ -11,14 +11,7 @@ import SnapKit
 import Then
 import KeychainSwift
 
-protocol RecruitVCDelegate: AnyObject {
-    func didSelectItem(withId id: Int)
-}
-protocol radioDelegate: AnyObject {
-    func sendDefaultSelect(withOpt opt: String)
-}
-
-final class recruitViewController: UIViewController, SendStringData {
+final class freeViewController: UIViewController, SendStringData {
     func radioButtonDidSelect() {
         print("라디오버튼눌림")
     }
@@ -28,7 +21,7 @@ final class recruitViewController: UIViewController, SendStringData {
         offset = 1
         posts.removeAll()
         filteredPosts.removeAll()
-        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+        getAllBoard(category: "자유", page: offset, standard: getStandard())
     }
     
     
@@ -50,7 +43,7 @@ final class recruitViewController: UIViewController, SendStringData {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.keychain.set(idToken, forKey: "idToken")
-        getAllBoard(category: "프로젝트", page: offset, standard: "create_at")
+        getAllBoard(category: "자유", page: offset, standard: "create_at")
         setUI()
         setLayout()
         setDelegate()
@@ -59,7 +52,7 @@ final class recruitViewController: UIViewController, SendStringData {
     }
 }
 
-extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
+extension freeViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - UI Components Property
     private func setUI() {
@@ -152,7 +145,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
             present(bottomSheetVC, animated: true, completion: nil)
     }
 }
-extension recruitViewController {
+extension freeViewController {
     func getAllBoard(category: String, page: Int, standard: String) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
@@ -202,7 +195,7 @@ extension recruitViewController {
                 if isInfiniteScroll {
                     isInfiniteScroll = false
                     offset += 1
-                    getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+                    getAllBoard(category: "자유", page: offset, standard: getStandard())
                 }
             }
         }

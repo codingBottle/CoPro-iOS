@@ -9,7 +9,11 @@ import UIKit
 import KeychainSwift
 import Photos
 
-class AddPostViewController: UIViewController {
+class AddPostViewController: UIViewController, SendStringData {
+    func sendData(mydata: String, groupId: Int) {
+        sortLabel.text = mydata
+    }
+    
     private enum Const {
         static let numberOfColumns = 3.0
         static let cellSpace = 1.0
@@ -69,25 +73,26 @@ class AddPostViewController: UIViewController {
             $0.axis = .horizontal
         }
         sortLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 17)
+            $0.font = UIFont.pretendard(size: 17, weight: .regular)
             $0.text = "게시판 선택"
         }
         sortButton.do {
             $0.setImage(UIImage(systemName: "chevron.up"), for: .normal)
+            $0.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
         }
         lineView1.do {
             $0.backgroundColor = UIColor.G1()
         }
         titleTextField.do {
             $0.placeholder = "제목"
-            $0.font = .systemFont(ofSize: 17)
+            $0.font = .pretendard(size: 17, weight: .bold)
         }
         lineView2.do {
             $0.backgroundColor = UIColor.G1()
         }
         contentTextField.do {
             $0.textContainerInset = UIEdgeInsets(top: 16.0, left: 0, bottom: 16.0, right: 0)
-            $0.font = .systemFont(ofSize: 17)
+            $0.font = .pretendard(size: 17, weight: .regular)
             $0.text = textViewPlaceHolder
             $0.textColor = .lightGray
             $0.delegate = self
@@ -194,7 +199,12 @@ class AddPostViewController: UIViewController {
         let barButtonItem = UIBarButtonItem(customView: button)
         self.navigationItem.rightBarButtonItem = barButtonItem
         }
-    
+    @objc func sortButtonPressed() {
+        let bottomSheetVC = SortBottomSheetViewController()
+        bottomSheetVC.delegate = self
+        bottomSheetVC.tmp = sortButton.titleLabel?.text ?? "최신순"
+            present(bottomSheetVC, animated: true, completion: nil)
+    }
     @objc private func closeButtonTapped() {
             dismiss(animated: true, completion: nil)
         }
@@ -215,7 +225,7 @@ class AddPostViewController: UIViewController {
         }
     }
     @objc private func addButtonTapped() {
-        addPost(title: titleTextField.text ?? "", category: "공지사항", content: contentTextField.text, image: imageUrls)
+        addPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: contentTextField.text, image: imageUrls)
     }
 
     @objc func receiveImages(_ notification: Notification) {

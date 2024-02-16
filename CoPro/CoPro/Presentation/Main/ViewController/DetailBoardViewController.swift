@@ -66,38 +66,28 @@ final class DetailBoardViewController: UIViewController {
         }
         titleLabel.do {
             $0.textColor = UIColor.Black()
-            //            $0.font = UIFont(name: "Pretendard-Medium", size : 22)
-            $0.font = .systemFont(ofSize: 22)
+            $0.font = .pretendard(size: 22, weight: .regular)
         }
         nicknameLabel.do {
             $0.textColor = UIColor.G4()
-            //            $0.font = UIFont(name: "Pretendard-Regular", size: 13)
-            $0.font = .systemFont(ofSize: 13)
+            $0.font = .pretendard(size: 13, weight: .regular)
         }
         jobLabel.do {
             $0.textColor = UIColor.Black()
-            //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
-            $0.font = .systemFont(ofSize: 13)
+            $0.font = .pretendard(size: 13, weight: .regular)
         }
-        //        tagLabel.do {
-        //                    $0.textColor = UIColor(red: 0.429, green: 0.432, blue: 0.446, alpha: 1)
-        ////                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
-        //            $0.font = .systemFont(ofSize: 13)
-        //        }
+
         dateLabel.do {
             $0.textColor = UIColor.G2()
-            //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
-            $0.font = .systemFont(ofSize: 13)
+            $0.font = .pretendard(size: 13, weight: .regular)
         }
         timeLabel.do {
             $0.textColor = UIColor.G2()
-            //                    $0.font = UIFont(name: "Pretendard-Regular", size : 13)
-            $0.font = .systemFont(ofSize: 13)
+            $0.font = .pretendard(size: 13, weight: .regular)
         }
         viewCountLabel.do {
             $0.textColor = UIColor.G2()
-            //            $0.font = UIFont(name: "Pretendard-Regular", size : 13)
-            $0.font = .systemFont(ofSize: 13)
+            $0.font = .pretendard(size: 13, weight: .regular)
         }
         
         lineView1.do {
@@ -105,8 +95,7 @@ final class DetailBoardViewController: UIViewController {
         }
         contentLabel.do {
             $0.textColor = UIColor.Black()
-            //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
-            $0.font = .systemFont(ofSize: 17)
+            $0.font = .pretendard(size: 17, weight: .regular)
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
         }
@@ -119,8 +108,7 @@ final class DetailBoardViewController: UIViewController {
         }
         heartCountLabel.do {
             $0.textColor = UIColor.Black()
-            //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
-            $0.font = .systemFont(ofSize: 17)
+            $0.font = .pretendard(size: 17, weight: .regular)
         }
         commentButton.do {
             $0.setImage(UIImage(systemName: "text.bubble"), for: .normal)
@@ -128,14 +116,8 @@ final class DetailBoardViewController: UIViewController {
         }
         commentCountLabel.do {
             $0.textColor = UIColor.Black()
-            //            $0.font = UIFont(name: "Pretendard-Regular", size: 17)
-            $0.font = .systemFont(ofSize: 17)
+            $0.font = .pretendard(size: 17, weight: .regular)
         }
-        //        chatButton.do {
-        //            $0.layer.backgroundColor = UIColor(red: 0.145, green: 0.467, blue: 0.996, alpha: 1).cgColor
-        //            $0.layer.cornerRadius = 10
-        //            $0.setTitle("채팅하기", for: .normal)
-        //        }
         lineView2.do {
             $0.backgroundColor = UIColor.G4()
         }

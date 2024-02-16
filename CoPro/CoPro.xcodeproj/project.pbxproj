@@ -154,6 +154,8 @@
 		E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D15D2AEFACFE003269FF /* AFLogger.swift */; };
 		E3E2B83B2B7DFC650022E5D0 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */; };
 		E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */; };
+		E3E2B8412B7F9AFA0022E5D0 /* freeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */; };
+		E3E2B8432B7F9B040022E5D0 /* noticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -287,6 +289,8 @@
 		E3D6D15D2AEFACFE003269FF /* AFLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLogger.swift; sourceTree = "<group>"; };
 		E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
+		E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = freeViewController.swift; sourceTree = "<group>"; };
+		E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -820,7 +824,9 @@
 			children = (
 				E37AE7F92B3C2766002ABDCD /* SortBottomSheetViewController.swift */,
 				E37AE7FD2B3C27B1002ABDCD /* recruitViewController.swift */,
+				E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */,
 				E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */,
+				E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */,
 				E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */,
 				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
 				E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */,
@@ -1033,6 +1039,7 @@
 				E37B20972B71DDFC00308158 /* DetailFreeViewController.swift in Sources */,
 				9E7401E62B3C18A60030C8EC /* Channel.swift in Sources */,
 				9E7401D92B3C187F0030C8EC /* ChatViewController.swift in Sources */,
+				E3E2B8412B7F9AFA0022E5D0 /* freeViewController.swift in Sources */,
 				9E7401E22B3C18A60030C8EC /* ImageMediaItem.swift in Sources */,
 				E36717AD2B70A45F00CBCD8B /* PhotoCollectionViewCell.swift in Sources */,
 				9E05D2D12AD5098D00F4CA43 /* DTO.swift in Sources */,
@@ -1056,6 +1063,7 @@
 				E32B67232B566D7900EBB5AC /* BoardRouter.swift in Sources */,
 				E32B67212B566CF600EBB5AC /* BoardDTO.swift in Sources */,
 				9E05D2D32AD5099E00F4CA43 /* BaseResponse.swift in Sources */,
+				E3E2B8432B7F9B040022E5D0 /* noticeViewController.swift in Sources */,
 				E32B673C2B56AD6700EBB5AC /* CreateBoardRequestBody.swift in Sources */,
 				9E7401CD2B3C0FB50030C8EC /* BaseNavigationController.swift in Sources */,
 				9E05D2EA2AD521CB00F4CA43 /* Font.swift in Sources */,

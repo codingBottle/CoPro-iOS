@@ -62,11 +62,11 @@ extension ReportBottomSheetViewController {
         }
         reportLabel.do {
             $0.text = "신고"
-            $0.font = .systemFont(ofSize: 17)
+            $0.font = .pretendard(size: 17, weight: .bold)
         }
         contentLabel.do {
             $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-            $0.font = .systemFont(ofSize: 12)
+            $0.font = .pretendard(size: 12, weight: .regular)
             $0.text = "이 게시물을 신고하는 이유를 작성해주세요. 무분별한 신고나 허위신고로\n판별날 시, 앱 사용에 제한이 있을 수 있습니다."
             $0.numberOfLines = 0
         }
@@ -77,7 +77,7 @@ extension ReportBottomSheetViewController {
             $0.layer.cornerRadius = 10
             $0.layer.borderWidth = 0.5
             $0.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3).cgColor
-            $0.font = .systemFont(ofSize: 17)
+            $0.font = .pretendard(size: 17, weight: .regular)
         }
         reportButton.do {
             $0.setTitle("접수", for: .normal)

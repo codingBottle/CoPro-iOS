@@ -55,7 +55,7 @@ class recentSearchTableViewCell: UITableViewCell {
             $0.tintColor = UIColor.G4()
         }
         searchLabel.do {
-            $0.font = UIFont.systemFont(ofSize: 13)
+            $0.font = .pretendard(size: 13, weight: .regular)
             $0.textColor = .black
         }
         deleteButton.do {

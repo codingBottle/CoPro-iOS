@@ -86,7 +86,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
         }
         popularLabel.do {
             $0.text = "인기 검색"
-            $0.font = UIFont(name: "Pretendard-Bold", size: 17)
+            $0.font = .pretendard(size: 17, weight: .bold)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         recentSearchLabel.do {
@@ -129,7 +129,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
         for item in self.items {
             let button = UIButton()
             button.setTitle(item, for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            button.titleLabel?.font = .pretendard(size: 17, weight: .regular)
             button.setTitleColor(.black, for: .normal)
             button.layer.borderColor = UIColor.G1().cgColor
             button.layer.borderWidth = 0.5

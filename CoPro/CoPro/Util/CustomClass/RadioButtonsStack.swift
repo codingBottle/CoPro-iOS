@@ -105,7 +105,7 @@ class RadioButtonsStack: UIView {
             label.translatesAutoresizingMaskIntoConstraints = false
             label.numberOfLines = 0
             label.textAlignment = .left
-            label.font = .systemFont(ofSize: 14)
+            label.font = .pretendard(size: 15, weight: .regular)
             return label
         }()
 
