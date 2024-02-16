@@ -21,11 +21,9 @@ class MyProfileTableViewCell: UITableViewCell {
     
     weak var delegate: MyProfileTableViewButtonDelegate?
     
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Pretendard-Regular", size: 17)
-        return label
-    }()
+   let titleLabel = UILabel().then {
+      $0.setPretendardFont(text: "test", size: 17, weight: .regular, letterSpacing: 1.25)
+   }
     
     let heartContainer: UIView = UIView()
         
@@ -38,12 +36,10 @@ class MyProfileTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let heartCountLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Pretendard-Regular", size: 17)
-        label.textColor = UIColor.init(hex: "#2577FE")
-        return label
-    }()
+    let heartCountLabel = UILabel().then {
+       $0.setPretendardFont(text: "test", size: 17, weight: .regular, letterSpacing: 1.25)
+       $0.textColor = UIColor.P2()
+    }
     
     let greaterthanContainer: UIView = UIView()
     

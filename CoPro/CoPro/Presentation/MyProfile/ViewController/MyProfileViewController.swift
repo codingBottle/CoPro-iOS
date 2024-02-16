@@ -93,8 +93,18 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             print("token : \(token)")
             MyProfileAPI.shared.postEditCardType(token: token, requestBody: requestCardViewType) { result in
                 switch result {
-                case .success(_):
-                    print("성공")
+                case .success(let data):
+                   if let data = data as? EditCardTypeDTO {
+                       if data.statusCode != 200 {
+                          self.showAlert(title: "프로필 타입 변경에 실패하였습니다",
+                                    confirmButtonName: "확인")
+                       } else {
+                           print("프로필 수정 성공")
+                          self.showAlert(title: "프로필 타입 변경에 성공하였습니다",
+                                    confirmButtonName: "확인")
+                       }
+                   }
+                   
                 case .requestErr(let message):
                     // Handle request error here.
                     print("Request error: \(message)")
@@ -254,6 +264,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
         print("현재 뷰컨에서 깃헙 눌림")
         let alertVC = EditGithubModalViewController()
+       alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
         present(alertVC, animated: true, completion: nil)
     }
     
