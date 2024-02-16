@@ -13,7 +13,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import SnapKit
 
-class ChatVC: MessagesViewController {
+class ChatViewController: MessagesViewController {
     
    var customAvatarView = CustomAvatarView()
    var avatarView: AvatarView?
@@ -22,7 +22,7 @@ class ChatVC: MessagesViewController {
       $0.clipsToBounds = true
    }
    
-   private let user: LoginUserDataModel?
+   private let currentUserNickName: String
     let chatFirestoreStream = ChatFirestoreStream()
     let channel: Channel
     var messages = [Message]()
@@ -37,8 +37,8 @@ class ChatVC: MessagesViewController {
       }
     }
     
-    init(user: LoginUserDataModel, channel: Channel) {
-        self.user = user
+    init(currentUserNickName: String, channel: Channel) {
+        self.currentUserNickName = currentUserNickName
         self.channel = channel
         super.init(nibName: nil, bundle: nil)
         
@@ -183,10 +183,10 @@ class ChatVC: MessagesViewController {
     }
 }
 
-extension ChatVC: MessagesDataSource {
+extension ChatViewController: MessagesDataSource {
     
     var currentSender: MessageKit.SenderType {
-       return Sender(senderId: user?.nickName ?? "", displayName: UserDefaultManager.displayName)
+       return Sender(senderId: currentUserNickName, displayName: UserDefaultManager.displayName)
     }
     
     func cellForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell {
@@ -208,7 +208,7 @@ extension ChatVC: MessagesDataSource {
     }
 }
 
-extension ChatVC: MessagesLayoutDelegate {
+extension ChatViewController: MessagesLayoutDelegate {
     
    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
       let isCurrentSender = isFromCurrentSender(message: message)
@@ -287,7 +287,7 @@ extension ChatVC: MessagesLayoutDelegate {
 }
 
 // 상대방이 보낸 메시지, 내가 보낸 메시지를 구분하여 색상과 모양 지정
-extension ChatVC: MessagesDisplayDelegate {
+extension ChatViewController: MessagesDisplayDelegate {
     
     func isFirstMessageInTimeGroup(at indexPath: IndexPath) -> Bool {
         guard indexPath.section > 0 else {
@@ -368,10 +368,10 @@ extension ChatVC: MessagesDisplayDelegate {
     }
 }
 
-extension ChatVC: InputBarAccessoryViewDelegate {
+extension ChatViewController: InputBarAccessoryViewDelegate {
    func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-      guard let user = self.user else {return print("inputBar 함수에서 user 에러")}
-      let message = Message(user: user, content: text)
+//      guard let currentUserNickName = self.currentUserNickName else {return print("inputBar 함수에서 user 에러")}
+      let message = Message(user: currentUserNickName, content: text)
       
       chatFirestoreStream.save(message) { [weak self] error in
          if let error = error {
@@ -384,7 +384,7 @@ extension ChatVC: InputBarAccessoryViewDelegate {
    }
 }
 
-extension ChatVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
         
@@ -406,8 +406,8 @@ extension ChatVC: UIImagePickerControllerDelegate, UINavigationControllerDelegat
         isSendingPhoto = true
         FirebaseStorageManager.uploadImage(image: image, channel: channel) { [weak self] url in
             self?.isSendingPhoto = false
-            guard let user = self?.user, let url = url else { return }
-            var message = Message(user: user, image: image)
+//            guard let user = self?.user, let url = url else { return }
+           var message = Message(user: self?.currentUserNickName  ?? "", image: image)
             message.downloadURL = url
             self?.chatFirestoreStream.save(message)
             self?.messagesCollectionView.scrollToLastItem()

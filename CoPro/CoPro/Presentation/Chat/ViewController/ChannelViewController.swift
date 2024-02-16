@@ -22,7 +22,7 @@ class ChannelViewController: BaseViewController {
     }()
     
     var channels = [Channel]()
-    private let currentUser: LoginUserDataModel
+    private let currentUserNickName: String
     private let channelStream = ChannelFirestoreStream()
     private var currentChannelAlertController: UIAlertController?
     
@@ -67,8 +67,8 @@ class ChannelViewController: BaseViewController {
         }
     }
     
-    init(currentUser: LoginUserDataModel) {
-        self.currentUser = currentUser
+    init(currentUserNickName: String) {
+        self.currentUserNickName = currentUserNickName
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -93,12 +93,14 @@ class ChannelViewController: BaseViewController {
    
    private func configureViews() {
           view.addSubview(topContainerView)
+      topContainerView.isUserInteractionEnabled = true
           topContainerView.addSubview(toggleLabel)
           topContainerView.addSubview(projectToggleSwitch)
 
           topContainerView.snp.makeConstraints {
               $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
               $0.trailing.leading.equalToSuperview().inset(10)
+             $0.height.equalTo(50)  // 높이 제약 추가
           }
 
           toggleLabel.snp.makeConstraints {
@@ -142,7 +144,7 @@ class ChannelViewController: BaseViewController {
     private func addToolBarItems() {
         toolbarItems = [
           UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-          UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddItem))
+//          UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddItem))
         ]
     }
     
@@ -160,34 +162,6 @@ class ChannelViewController: BaseViewController {
            }
        }
    }
-    
-//    @objc private func didTapSignOutItem() {
-//        showAlert(message: "로그아웃 하시겠습니까?",
-//                  cancelButtonName: "취소",
-//                  confirmButtonName: "확인",
-//                  confirmButtonCompletion: {
-//            do {
-//               print("이제 로그아웃 없지롱")
-////                try Auth.auth().signOut()
-//            } catch {
-//                print("Error signing out: \(error.localizedDescription)")
-//            }
-//        })
-//    }
-    
-   
-   // 추후 채팅하기 클릭당한 유저의 정보들을 넘기는 것으로 생성해야함
-    @objc private func didTapAddItem() {
-        showAlert(title: "새로운 채널 생성",
-                  cancelButtonName: "취소",
-                  confirmButtonName: "확인",
-                  isExistsTextField: true,
-                  confirmButtonCompletion: { [weak self] in
-//           self?.channelEmptyFlag = true
-           self?.channelStream.createChannel(with: self?.alertController?.textFields?.first?.text ?? "", isProject: true, profileImage: "", occupation: "", unreadCount: 0)
-//           self?.configureViews()
-        })
-    }
     
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .began {
@@ -209,7 +183,6 @@ class ChannelViewController: BaseViewController {
     @objc private func didToggleSwitch(_ sender: UISwitch) {
         isProjectEnabled = sender.isOn
         print("토글버튼 눌림! : \(isProjectEnabled)")
-        // 필요한 동작 수행 (예: isProjectEnabled 값 변경에 따른 작업)
         channelTableView.reloadData()
     }
     
@@ -267,7 +240,7 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
       let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.className, for: indexPath) as! ChannelTableViewCell
       
-         
+//      filteredChannels[indexPath.row].representation.create
          
          cell.chatRoomLabel.text = filteredChannels[indexPath.row].name
          cell.isProject = filteredChannels[indexPath.row].isProject
@@ -293,7 +266,7 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
          guard let profileImage = cell.loadedImage else {return print("엑시던트")}
          // 채널 정보를 가져옵니다.
          let channel = channels[indexPath.row]
-         let viewController = ChatVC(user: currentUser, channel: channel)
+         let viewController = ChatViewController(currentUserNickName: currentUserNickName, channel: channel)
          viewController.chatAvatarImage.image = profileImage
          print("🌊\n",viewController.chatAvatarImage.image as Any)
          

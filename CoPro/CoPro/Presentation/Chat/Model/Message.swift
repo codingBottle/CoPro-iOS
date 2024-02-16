@@ -32,15 +32,15 @@ struct Message: MessageType {
     var image: UIImage?
     var downloadURL: URL?
     
-   init(user: LoginUserDataModel, content: String) {
-      sender = Sender(senderId: user.nickName, displayName: UserDefaultManager.displayName)
+   init(user: String, content: String) {
+      sender = Sender(senderId: user, displayName: UserDefaultManager.displayName)
       self.content = content
       sentDate = Date()
       id = nil
    }
     
-    init(user: LoginUserDataModel, image: UIImage) {
-        sender = Sender(senderId: user.nickName, displayName: UserDefaultManager.displayName)
+    init(user: String, image: UIImage) {
+        sender = Sender(senderId: user, displayName: UserDefaultManager.displayName)
         self.image = image
         sentDate = Date()
         content = ""

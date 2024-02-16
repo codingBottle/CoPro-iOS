@@ -13,50 +13,93 @@ import Alamofire
 import KeychainSwift
 
 
-class CardViewController: BaseViewController,UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+class CardViewController: BaseViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, CardCollectionCellViewDelegate, MiniCardGridViewDelegate {
+   
+   func didTapChatButtonOnMiniCardGridView(in cell: MiniCardGridView, success: Bool) {
+      if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+         let window = windowScene.windows.first,
+         let tabBarController = window.rootViewController as? BottomTabController {
+         tabBarController.selectedIndex = 3
+      }
+      DispatchQueue.main.async {
+         if success {
+            self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                           message: "채팅을 보내 대화를 시작해보세요",
+                           confirmButtonName: "확인")
+         }
+         else {
+            self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                           message: "채팅 리스트에서 확인하여주세요",
+                           confirmButtonName: "확인")
+         }
+      }
+   }
+   
+   func didTapChatButtonOnCardCollectionCellView(in cell: CardCollectionCellView, success: Bool) {
+      if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+         let window = windowScene.windows.first,
+         let tabBarController = window.rootViewController as? BottomTabController {
+         tabBarController.selectedIndex = 3
+      }
+      DispatchQueue.main.async {
+         if success {
+            self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                           message: "채팅을 보내 대화를 시작해보세요",
+                           confirmButtonName: "확인")
+         }
+         else {
+            self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                           message: "채팅 리스트에서 확인하여주세요",
+                           confirmButtonName: "확인")
+         }
+      }
+   }
+   
     //셀 갯수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         contents.count
     }
     //셀 데이터
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if myViewType == 0{
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CardCollectionCellView", for: indexPath) as? CardCollectionCellView else {
-                return UICollectionViewCell()
-            }
-            
-            // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
-            guard indexPath.item < contents.count else {
-                // 유효하지 않은 경우, 빈 데이터로 셀을 구성하거나 다른 처리를 수행
-                // 예: cell.configure(with: "", name: "", occupation: "", language: "")
-                return cell
-            }
-            
-            // 유효한 경우, 정상적으로 셀을 구성
-            cell.configure(with: contents[indexPath.item].picture ?? "",
-                           name: contents[indexPath.item].name ?? "",
-                           occupation: contents[indexPath.item].occupation ?? " ",
-                           language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers)
-            return cell
-        }
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MiniCardGridView", for: indexPath) as? MiniCardGridView else {
+   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+      if myViewType == 0{
+         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CardCollectionCellView", for: indexPath) as? CardCollectionCellView else {
             return UICollectionViewCell()
-        }
-        
-        // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
-        guard indexPath.item < contents.count else {
+         }
+         
+         // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
+         guard indexPath.item < contents.count else {
             // 유효하지 않은 경우, 빈 데이터로 셀을 구성하거나 다른 처리를 수행
             // 예: cell.configure(with: "", name: "", occupation: "", language: "")
             return cell
-        }
-        
-        // 유효한 경우, 정상적으로 셀을 구성
-        cell.configure(with: contents[indexPath.item].picture ?? "",
-                       name: contents[indexPath.item].name ?? "",
-                       occupation: contents[indexPath.item].occupation ?? " ",
-                       language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers)
-        return cell
-    }
+         }
+         
+         // 유효한 경우, 정상적으로 셀을 구성
+         cell.configure(with: contents[indexPath.item].picture ?? "",
+                        name: contents[indexPath.item].name ?? "",
+                        occupation: contents[indexPath.item].occupation ?? " ",
+                        language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers)
+         cell.CardCollectionCellViewdelegate = self
+         return cell
+      }
+      guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MiniCardGridView", for: indexPath) as? MiniCardGridView else {
+         return UICollectionViewCell()
+      }
+      
+      // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
+      guard indexPath.item < contents.count else {
+         // 유효하지 않은 경우, 빈 데이터로 셀을 구성하거나 다른 처리를 수행
+         // 예: cell.configure(with: "", name: "", occupation: "", language: "")
+         return cell
+      }
+      
+      // 유효한 경우, 정상적으로 셀을 구성
+      cell.configure(with: contents[indexPath.item].picture ?? "",
+                     name: contents[indexPath.item].name ?? "",
+                     occupation: contents[indexPath.item].occupation ?? " ",
+                     language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers)
+      cell.MiniCardGridViewdelegate = self
+      return cell
+   }
     //셀 사이즈 정의
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         if myViewType == 0{
@@ -362,5 +405,3 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         }
     }
 }
-
-

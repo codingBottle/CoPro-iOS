@@ -21,15 +21,17 @@ class ChannelTableViewCell: UITableViewCell {
    var loadedImage: UIImage?
     var isProject = false
    
-   var container = UIView().then({
-      $0.layer.borderWidth = 1
-      $0.layer.borderColor = UIColor.G2().cgColor
-   })
+   var container = UIView()
+//      .then({
+//      $0.layer.borderWidth = 1
+//      $0.layer.borderColor = UIColor.G2().cgColor
+//   })
    
-   var container2 = UIView().then({
-      $0.layer.borderWidth = 1
-      $0.layer.borderColor = UIColor.P2().cgColor
-   })
+   var container2 = UIView()
+//      .then({
+//      $0.layer.borderWidth = 1
+//      $0.layer.borderColor = UIColor.P2().cgColor
+//   })
     
    var avatarImage = UIImageView().then {
       $0.clipsToBounds = true
@@ -76,13 +78,9 @@ class ChannelTableViewCell: UITableViewCell {
        
        contentView.addSubview(container)
        container.addSubviews(avatarImage, container2)
-       container2.addSubviews(chatRoomLabel, projectChipContainer, detailButton)
-       projectChipContainer.addSubview(projectChip)
+       container2.addSubviews(chatRoomLabel, detailButton)
+//       projectChipContainer.addSubview(projectChip)
        avatarImage.isUserInteractionEnabled = true
-//       contentView.addSubview(avatarImage)
-//        contentView.addSubview(chatRoomLabel)
-//        contentView.addSubview(projectChip)
-//        contentView.addSubview(detailButton)
        
        container.snp.makeConstraints {
           $0.top.leading.equalToSuperview().offset(16)
@@ -103,23 +101,22 @@ class ChannelTableViewCell: UITableViewCell {
        
       
            chatRoomLabel.snp.makeConstraints {
-              $0.top.leading.equalToSuperview()
+              $0.leading.equalToSuperview().offset(10)
               $0.width.lessThanOrEqualToSuperview().offset(-180)
-//              $0.bottom.equalToSuperview().offset(-22)
-//              $0.trailing.equalToSuperview().offset(-247)
+              $0.centerY.equalToSuperview()
            }
         
-          projectChipContainer.snp.makeConstraints {
-             $0.leading.equalTo(chatRoomLabel.snp.trailing).offset(8)
-             $0.bottom.equalTo(chatRoomLabel)
-             $0.top.equalToSuperview().offset(5)
-             $0.trailing.equalToSuperview().offset(-185)
-          }
-         
-       projectChip.snp.makeConstraints {
-          $0.centerX.equalToSuperview()
-          $0.centerY.equalToSuperview()
-       }
+//          projectChipContainer.snp.makeConstraints {
+//             $0.leading.equalTo(chatRoomLabel.snp.trailing).offset(8)
+//             $0.bottom.equalTo(chatRoomLabel)
+//             $0.top.equalToSuperview().offset(5)
+//             $0.trailing.equalToSuperview().offset(-185)
+//          }
+//         
+//       projectChip.snp.makeConstraints {
+//          $0.centerX.equalToSuperview()
+//          $0.centerY.equalToSuperview()
+//       }
         
         detailButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailButton.snp.makeConstraints {
