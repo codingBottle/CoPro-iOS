@@ -114,7 +114,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
             if last == true && index >= contents.count {
                 print("가로 마지막 페이지 - 처음 페이지로 돌아갑니다.")
                 DispatchQueue.main.async {
-//                    self.loadFirstPage()
+                    //                    self.loadFirstPage()
                 }
             } else if index == contents.count - 1 {
                 DispatchQueue.main.async {
@@ -142,7 +142,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         if last {
             print("마지막 페이지")
             DispatchQueue.main.async {
-//                self.loadFirstPage()
+                //                self.loadFirstPage()
             }
         }else{
             // 페이지 번호를 증가시키고 데이터를 불러옴
@@ -157,15 +157,15 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
         }
     }
     //첫 페이지로 돌아가는 메소드
-//    func loadFirstPage() {
-//        self.page = 0
-//        self.contents.removeAll()
-//        let part = self.cardView.partLabel.text ?? " "
-//        let lang = self.cardView.langLabel.text ?? " "
-//        let old = self.oldIndex
-//        loadCardDataFromAPI(part: part, lang: lang, old: old, page: 0)
-//        print("첫 페이지로 돌아갔습니다.")
-//    }
+    //    func loadFirstPage() {
+    //        self.page = 0
+    //        self.contents.removeAll()
+    //        let part = self.cardView.partLabel.text ?? " "
+    //        let lang = self.cardView.langLabel.text ?? " "
+    //        let old = self.oldIndex
+    //        loadCardDataFromAPI(part: part, lang: lang, old: old, page: 0)
+    //        print("첫 페이지로 돌아갔습니다.")
+    //    }
     
     var myViewType = 0
     var last = false
@@ -196,6 +196,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // DropDown 설정
         setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["Mobile", "Server", "Web"])
         setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["Swift", "Java", "Flutter"])
@@ -251,12 +252,35 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
                     self?.collectionView.reloadData()
                     if self?.contents.count == 0 {
                         // contents가 비어있을 때 메시지 라벨을 추가합니다.
-                        let messageLabel = UILabel().then{
-                            $0.setPretendardFont(text: "조건에 맞는 개발자를 찾을 수 없어요.", size: 17, weight: .bold, letterSpacing: 1.35)
+                        let messageLabel = UILabel().then {
+                            $0.setPretendardFont(text: "조건에 맞는 개발자가 없어요!", size: 17, weight: .regular, letterSpacing: 1.25)
+                            $0.textColor = .black
+                            $0.textAlignment = .center
                         }
-                        messageLabel.textColor = .black
-                        messageLabel.textAlignment = .center
-                        self?.collectionView.backgroundView = messageLabel
+                        let messageLabel2 = UILabel().then {
+                            $0.setPretendardFont(text: "조건을 수정해보세요.", size: 17, weight: .regular, letterSpacing: 1.25)
+                            $0.textColor = .black
+                            $0.textAlignment = .center
+                        }
+                        
+                        let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
+                        imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
+                        
+                        let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel,messageLabel2]) // 이미지와 라벨을 포함하는 스택 뷰 생성
+                        stackView.axis = .vertical // 세로 방향으로 정렬
+                        stackView.alignment = .center // 가운데 정렬
+                        stackView.spacing = 10 // 이미지와 라벨 사이의 간격 설정
+                        
+                        self?.collectionView.backgroundView = UIView() // 배경 뷰 생성
+                        
+                        if let backgroundView = self?.collectionView.backgroundView {
+                            backgroundView.addSubview(stackView) // 스택 뷰를 배경 뷰에 추가
+                            
+                            stackView.snp.makeConstraints {
+                                $0.centerX.equalTo(backgroundView) // 스택 뷰의 가로 중앙 정렬
+                                $0.centerY.equalTo(backgroundView) // 스택 뷰의 세로 중앙 정렬
+                            }
+                        }
                     } else {
                         // contents가 비어있지 않을 때 메시지 라벨을 제거합니다.
                         self?.collectionView.backgroundView = nil
@@ -286,21 +310,28 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
     
     //DropDown button동작 설정
     func setupDropDown(dropDown: DropDown, anchorView: UIView, button: UIButton, items: [String]) {
+        
         dropDown.anchorView = anchorView
         dropDown.dataSource = items
         //        var oldIndex = 0
-        
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             if dropDown == self.partDropDown {
                 self.cardView.partLabel.text = item
+                self.cardView.partLabel.textColor = UIColor.P2()
+                self.cardView.partButton.tintColor = UIColor.P2()
                 print(self.cardView.partLabel.text!)
                 updateLangDropDown(part: item)
                 
             } else if dropDown == self.langDropDown {
                 self.cardView.langLabel.text = item
-                print(self.cardView.langLabel.text!)
+                self.cardView.langLabel.textColor = UIColor.P2()
+                self.cardView.langButton.tintColor = UIColor.P2()
+                print(self.cardView.partLabel.text!)
+                
             } else if dropDown == self.oldDropDown {
                 self.cardView.oldLabel.text = item
+                self.cardView.oldLabel.textColor = UIColor.P2()
+                self.cardView.oldButton.tintColor = UIColor.P2()
                 switch item {
                 case "~ 6개월":
                     self.oldIndex = 1
@@ -325,8 +356,7 @@ class CardViewController: BaseViewController,UICollectionViewDataSource, UIColle
                 self.contents.removeAll()
                 let part = self.cardView.partLabel.text ?? " "
                 let lang = self.cardView.langLabel.text ?? " "
-                let old = self.cardView.oldLabel.text == " " ? 0 : 1
-                self.loadCardDataFromAPI(part: part, lang: lang, old: oldIndex, page: self.page)
+                self.loadCardDataFromAPI(part: part, lang: lang, old: self.oldIndex, page: self.page)
             }
         }
         
