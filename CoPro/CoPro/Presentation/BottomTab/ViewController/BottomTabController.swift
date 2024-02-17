@@ -23,7 +23,7 @@ class BottomTabController: UITabBarController {
         super.viewDidLoad()
         addTabBarSeparator()
         navigationController?.isNavigationBarHidden = true
-        UITabBar.appearance().unselectedItemTintColor = UIColor.G3()
+//        UITabBar.appearance().unselectedItemTintColor = UIColor.White()
         UITabBar.appearance().tintColor = UIColor.Black()
         // Do any additional setup after loading the view.
         let notificationVC = CardViewController() //MARK: TODO) 알림화면VC등록
@@ -40,7 +40,7 @@ class BottomTabController: UITabBarController {
         profileVC.title = "프로필"
         
         let attributes: [NSAttributedString.Key: Any] = [
-          .font: UIFont(name: "Pretendard-Bold", size: 11)!, // 폰트 설정
+          .font: UIFont(name: "Pretendard", size: 10)!, // 폰트 설정
         ]
         notificationVC.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
         cardVC.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
@@ -53,18 +53,20 @@ class BottomTabController: UITabBarController {
         homeVC.navigationItem.title = nil
         chatVC.navigationItem.title = nil
         profileVC.navigationItem.title = nil
+//        let namSvgImgVar: SVGKImage = SVGKImage(named: "home_icon.svg")
+//        let namImjVar: UIImage = namSvgImgVar.uiImage
         // 기본상태 아이콘 설정
-        notificationVC.tabBarItem.image = UIImage.init(systemName: "bell")
-        cardVC.tabBarItem.image = UIImage.init(systemName: "rectangle.stack.badge.person.crop")
-        homeVC.tabBarItem.image = UIImage.init(systemName: "house")
-        chatVC.tabBarItem.image = UIImage.init(systemName: "ellipsis.message")
-        profileVC.tabBarItem.image = UIImage.init(systemName: "person.crop.circle")
+        notificationVC.tabBarItem.image = UIImage.init(named: "noti_icon")?.withRenderingMode(.alwaysOriginal)
+        cardVC.tabBarItem.image = UIImage.init(named: "card_icon")?.withRenderingMode(.alwaysOriginal)
+        homeVC.tabBarItem.image = UIImage.init(named: "home_icon")?.withRenderingMode(.alwaysOriginal)
+        chatVC.tabBarItem.image = UIImage(named: "chat_icon")?.withRenderingMode(.alwaysOriginal)
+        profileVC.tabBarItem.image = UIImage.init(named: "profile_icon")?.withRenderingMode(.alwaysOriginal)
         //선택 상태 아이콘 설정
-        notificationVC.tabBarItem.selectedImage = UIImage(systemName: "bell.fill")
-        cardVC.tabBarItem.selectedImage = UIImage(systemName: "rectangle.stack.badge.person.crop.fill")
-        homeVC.tabBarItem.selectedImage = UIImage(systemName: "house.fill")
-        chatVC.tabBarItem.selectedImage = UIImage(systemName: "ellipsis.message.fill")
-        profileVC.tabBarItem.selectedImage = UIImage(systemName: "person.crop.circle.fill")
+        notificationVC.tabBarItem.selectedImage = UIImage.init(named: "noti_icon_tap")?.withRenderingMode(.alwaysOriginal)
+        cardVC.tabBarItem.selectedImage = UIImage.init(named: "card_icon_tap")?.withRenderingMode(.alwaysOriginal)
+        homeVC.tabBarItem.selectedImage =  UIImage.init(named: "home_icon_tap")?.withRenderingMode(.alwaysOriginal)
+        chatVC.tabBarItem.selectedImage = UIImage.init(named: "chat_icon_tap")?.withRenderingMode(.alwaysOriginal)
+        profileVC.tabBarItem.selectedImage = UIImage.init(named: "profile_icon_tap")?.withRenderingMode(.alwaysOriginal)
         
 
         // self.tabBarItem.imageInsets = UIEdgeInsets(top: 20, left: 0, bottom: -6, right: 0);
