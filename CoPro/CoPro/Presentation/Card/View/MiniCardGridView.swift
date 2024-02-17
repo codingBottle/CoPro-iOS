@@ -36,7 +36,11 @@ class MiniCardGridView: UICollectionViewCell {
         miniCardView.gitButton.addTarget(self, action: #selector(gitButtonTapped), for: .touchUpInside)
         miniCardView.chatButton.addTarget(self, action: #selector(chatButtonTapped), for: .touchUpInside)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(likeIconTapped))
-        miniCardView.likeIcon.addGestureRecognizer(tapGesture)
+        miniCardView.likeIcon.addTarget(self, action: #selector(likeIconTapped), for: .touchUpInside)
+        miniCardView.likeLabel.isUserInteractionEnabled = true
+        miniCardView.likeLabel.addGestureRecognizer(tapGesture)
+//        miniCardView.likeIcon.addGestureRecognizer(tapGesture)
+        
     }
     
     //Github버튼 동작 메소드
