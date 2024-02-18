@@ -127,16 +127,6 @@ extension ReportBottomSheetViewController {
                 case .success:
                     self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
-                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
-                                            switch result {
-                                            case .success(let loginDTO):
-                                                print("토큰 재발급 성공: \(loginDTO)")
-                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
-                                                self.reportBoard(boardId: boardId, contents: contents)
-                                            case .failure(let error):
-                                                print("토큰 재발급 실패: \(error)")
-                                            }
-                                        }
                     print("Request error: \(message)")
                     
                 case .pathErr:

@@ -170,16 +170,6 @@ extension noticeViewController {
                         print("Failed to decode the response.")
                     }
                 case .requestErr(let message):
-                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
-                                            switch result {
-                                            case .success(let loginDTO):
-                                                print("토큰 재발급 성공: \(loginDTO)")
-                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
-                                                self.getAllBoard(category: category, page: page, standard: standard)
-                                            case .failure(let error):
-                                                print("토큰 재발급 실패: \(error)")
-                                            }
-                                        }
                     print("Request error: \(message)")
                 case .pathErr:
                     // Handle path error here.
