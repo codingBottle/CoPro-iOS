@@ -38,6 +38,40 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         return true
     }
+   
+   //소셜 로그인 관련
+      
+   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+      if GIDSignIn.sharedInstance.handle(url) {
+         return true
+      } else if let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+                sourceApplication == "com.apple.SafariViewService" {
+         let provider = OAuthProvider(providerID: "github.com")
+         provider.getCredentialWith(nil) { credential, error in
+            print("github Login")
+            if let error = error {
+               print("깃허브 로그인 에러: \(error.localizedDescription)")
+               return
+            }
+            
+            guard let credential = credential else {
+               print("Credential is nil")
+               return
+            }
+            
+            Auth.auth().signIn(with: credential) { authResult, error in
+               if let error = error {
+                  print("파이어베이스에 로그인 정보 추가 에러: \(error.localizedDescription)")
+               } else {
+                  print("Login Successful \n이후 네비게이션은 추후 한 번에 진행")
+                  //                        AppController.shared.checkSignIn() // 로그인 성공 후 checkSignIn 메서드를 호출합니다.
+               }
+            }
+         }
+         return true
+      }
+      return false
+   }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
