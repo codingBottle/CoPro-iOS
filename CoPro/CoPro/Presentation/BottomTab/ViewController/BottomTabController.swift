@@ -43,7 +43,7 @@ class BottomTabController: UITabBarController {
       // Do any additional setup after loading the view.
       let notificationVC = CardViewController() //MARK: TODO) 알림화면VC등록
       let cardVC = CardViewController()
-      let homeVC = MyProfileViewController()//MARK: TODO) 홈화면VC등록
+      let homeVC = MainViewController()//MARK: TODO) 홈화면VC등록
       let profileVC = MyProfileViewController() //MARK: TODO) ProfileVC등록
       guard let chatVC = chatVC else { return }
       

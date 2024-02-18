@@ -1208,7 +1208,7 @@
 				E36717BD2B70B3F700CBCD8B /* AlbumInfo.swift in Sources */,
 				E37AE7FE2B3C27B1002ABDCD /* recruitViewController.swift in Sources */,
 				E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */,
-				E314AD192B5E735300BDB6AD /* DetailBoardDateModel.swift in Sources */,
+				E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */,
 				9E7462DB2B756899006693B6 /* EditMyProfileDTO.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				E36717B92B70B35100CBCD8B /* PhotoAuthManager.swift in Sources */,
