@@ -191,6 +191,7 @@
 		E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */; };
 		E3E2B8412B7F9AFA0022E5D0 /* freeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */; };
 		E3E2B8432B7F9B040022E5D0 /* noticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */; };
+		E3E2B8452B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8442B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -358,6 +359,7 @@
 		E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = freeViewController.swift; sourceTree = "<group>"; };
 		E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeViewController.swift; sourceTree = "<group>"; };
+		E3E2B8442B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectBoardBottomSheetViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1018,6 +1020,7 @@
 			isa = PBXGroup;
 			children = (
 				E37AE7F92B3C2766002ABDCD /* SortBottomSheetViewController.swift */,
+				E3E2B8442B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift */,
 				E37AE7FD2B3C27B1002ABDCD /* recruitViewController.swift */,
 				E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */,
 				E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */,
@@ -1194,7 +1197,7 @@
 				E36717BD2B70B3F700CBCD8B /* AlbumInfo.swift in Sources */,
 				E37AE7FE2B3C27B1002ABDCD /* recruitViewController.swift in Sources */,
 				E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */,
-				E314AD192B5E735300BDB6AD /* DetailBoardDateModel.swift in Sources */,
+				E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */,
 				9E7462DB2B756899006693B6 /* EditMyProfileDTO.swift in Sources */,
 				9E05D2B22AD508B200F4CA43 /* BaseViewController.swift in Sources */,
 				E36717B92B70B35100CBCD8B /* PhotoAuthManager.swift in Sources */,
@@ -1305,6 +1308,7 @@
 				E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */,
 				B5B5110B2B74CCE400A1B74D /* MiniCardGridView.swift in Sources */,
 				B5B511002B74CA1000A1B74D /* BottomTabController.swift in Sources */,
+				E3E2B8452B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift in Sources */,
 				E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,
 				E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */,

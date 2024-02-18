@@ -91,12 +91,14 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
         }
         recentSearchLabel.do {
             $0.text = "최근 검색"
+            $0.font = .pretendard(size: 17, weight: .bold)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         recentSearchDeleteButton.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.setTitle("전체 삭제", for: .normal)
-            $0.setTitleColor(.gray, for: .normal)
+            $0.titleLabel?.font = .pretendard(size: 15, weight: .regular)
+            $0.setTitleColor(.G3(), for: .normal)
         }
         recentSearchStackView.do {
             $0.axis = .horizontal
@@ -204,7 +206,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: recentSearchTableViewCell.id, for: indexPath) as! recentSearchTableViewCell
-
+        cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
         // items 배열의 데이터를 셀에 표시합니다.
         cell.prepare(text: items1[indexPath.row])
         return cell
@@ -214,6 +216,22 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     }
 
     // MARK: - @objc Method
+    
+    @objc func deleteButtonTapped(_ sender: UIButton) {
+        guard let cell = sender.superview?.superview?.superview as? UITableViewCell,
+              let indexPath = recentSearchTableView.indexPath(for: cell) else { return }
+
+        if var savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
+            // 해당 항목을 삭제합니다.
+            savedItems.remove(at: indexPath.row)
+            
+            // 변경된 데이터를 다시 UserDefaults에 저장합니다.
+            UserDefaults.standard.set(savedItems, forKey: "recentSearches")
+        }
+        
+        // 테이블 뷰에서 해당 셀을 삭제합니다.
+        recentSearchTableView.deleteRows(at: [indexPath], with: .fade)
+    }
     
     @objc func keywordButtonTapped(_ sender: UIButton) {
         // 버튼의 타이틀을 가져와서 검색 바의 텍스트로 설정

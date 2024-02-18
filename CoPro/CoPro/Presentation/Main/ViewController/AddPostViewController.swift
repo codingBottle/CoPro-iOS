@@ -200,9 +200,9 @@ class AddPostViewController: UIViewController, SendStringData {
         self.navigationItem.rightBarButtonItem = barButtonItem
         }
     @objc func sortButtonPressed() {
-        let bottomSheetVC = SortBottomSheetViewController()
+        let bottomSheetVC = SelectBoardBottomSheetViewController()
         bottomSheetVC.delegate = self
-        bottomSheetVC.tmp = sortButton.titleLabel?.text ?? "최신순"
+        bottomSheetVC.tmp = sortLabel.text ?? "게시판 선택"
             present(bottomSheetVC, animated: true, completion: nil)
     }
     @objc private func closeButtonTapped() {
