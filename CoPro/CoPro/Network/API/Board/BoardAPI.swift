@@ -8,6 +8,7 @@
 import Foundation
 
 import Alamofire
+import UIKit
 
 final class BoardAPI: BaseAPI {
     static let shared = BoardAPI()
@@ -29,21 +30,21 @@ extension BoardAPI {
     // 2. 게시글 상세보기
     
     public func getDetailBoard(token: String,
-                                    boardId: Int,
-                                    completion: @escaping(NetworkResult<Any>) -> Void) {
+                               boardId: Int,
+                               completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.getDetailBoard(token: token, boardId: boardId)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: DetailBoardDTO.self,
                                 completion: completion)
         }
     }
-
+    
     
     // 3. 게시글 수정하기
     
     public func editBoard(token: String,
-                          boardId: Int, requestBody: CreateBoardRequestBody,
-                                   completion: @escaping(NetworkResult<Any>) -> Void) {
+                          boardId: Int, requestBody: CreatePostRequestBody,
+                          completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.editBoard(token: token, boardId: boardId, requestBody: requestBody)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: DetailBoardDTO.self,
@@ -63,10 +64,19 @@ extension BoardAPI {
     
     // 4. 게시글 추가하기
     
-    public func addBoard(token: String, requestBody: CreateBoardRequestBody,                         completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.addBoard(token: token, requestBody: requestBody)).responseData { response in
+    public func addPost(token: String, title: String, category: String, contents: String, imageId: [Int],                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.addPost(token: token, title: title, category: category, contents: contents, imageid: imageId)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: DetailBoardDTO.self,
+                                completion: completion)
+            
+        }
+    }
+    
+    public func addPhoto(token: String, imageId: [UIImage],                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.addPhoto(token: token, images: imageId)).responseData { response in
+            self.disposeNetwork(response,
+                                dataModel: ImageUploadDTO.self,
                                 completion: completion)
             
         }
@@ -75,7 +85,7 @@ extension BoardAPI {
     // 5. 게시글 삭제하기
     
     public func deleteBoard(token: String, boardId: Int,
-                             completion: @escaping(NetworkResult<Any>) -> Void) {
+                            completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.deleteBoard(token: token, boardId: boardId)).responseData { response in
             self.disposeNetwork(response,
                                 dataModel: VoidDTO.self,
@@ -123,7 +133,7 @@ extension BoardAPI {
                                 completion: completion)
         }
     }
-
+    
     // 11. 스크랩 추가
     public func saveScrap(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.saveScrap(token: token, boardId: boardID)).responseData { response in
@@ -141,6 +151,24 @@ extension BoardAPI {
                                 dataModel: BoardDTO.self,
                                 completion: completion)
             
+        }
+    }
+    
+    // 13. 댓글 가져오기
+    public func getAllComment(token: String, boardId: Int, page: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.getAllComment(token: token, boardId: boardId, page: page)).responseData { response in
+            self.disposeNetwork(response,
+                                dataModel: CommentDTO.self,
+                                completion: completion)
+        }
+    }
+    
+    // 14. 댓글 작성하기
+    public func addComment(token: String, boardId: Int, parentId: Int, content: String, completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.addComment(token: token, boardId: boardId, parentId: parentId, contents: content)).responseData { response in
+            self.disposeNetwork(response,
+                                dataModel: CommentDTO.self,
+                                completion: completion)
         }
     }
 }

@@ -18,23 +18,50 @@ class ChannelFirestoreStream {
         return firestoreDatabase.collection("channels")
     }()
     
-    func createChannel(with channelName: String, isProject: Bool) {
-        let channel = Channel(name: channelName, isProject: isProject)
-        ChannelListener.addDocument(data: channel.representation) { error in
-            if let error = error {
-                print("Error saving Channel: \(error.localizedDescription)")
-            }
-        }
-    }
-//    func createChannel(with channelName: String) {
-//        let channel = Channel(name: channelName)
-//        ChannelListener.addDocument(data: channel.representation) { error in
-//            if let error = error {
-//                print("Error saving Channel: \(error.localizedDescription)")
-//            }
-//        }
-//    }
-    
+   
+   //여기에 채팅하기 눌린 사람의 값들이 들어가야함
+//   func createChannel(with channelName: String, isProject: Bool, profileImage: String, occupation: String, unreadCount: Int, completion: @escaping () -> Void) {
+//       let channel = Channel(name: channelName, isProject: isProject, profileImage: profileImage, occupation: occupation, unreadCount: unreadCount)
+//       ChannelListener.addDocument(data: channel.representation) { error in
+//           if let error = error {
+//               print("Error saving Channel: \(error.localizedDescription)")
+//           }
+//           print("개설 끝")
+//           completion()
+//       }
+//   }
+   
+   func createChannel(with channelName: String, isProject: Bool, profileImage: String, occupation: String, unreadCount: Int, completion: @escaping (Error?) -> Void) {
+       // Firestore 참조 생성
+       let db = Firestore.firestore()
+       
+       // 'channelName'이 일치하는 문서 조회
+       db.collection("channels").whereField("name", isEqualTo: channelName).getDocuments { (querySnapshot, error) in
+           if let error = error {
+               // Firestore 에러 처리
+               completion(error)
+           } else if let querySnapshot = querySnapshot, !querySnapshot.documents.isEmpty {
+               // 문서가 이미 존재하는 경우 오류 반환
+              print("제발")
+              
+               completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Channel already exists"]))
+           } else {
+               // 새로운 채널 생성
+               let channel = Channel(name: channelName, isProject: isProject, profileImage: profileImage, occupation: occupation, unreadCount: unreadCount)
+               self.ChannelListener.addDocument(data: channel.representation) { error in
+                   if let error = error {
+                       print("Error saving Channel: \(error.localizedDescription)")
+                   }
+                   print("개설 끝")
+                  completion(nil)
+               }
+           }
+       }
+   }
+
+
+   
+   
     // Read & Update
     func subscribe(completion: @escaping (Result<[(Channel, DocumentChangeType)], Error>) -> Void) {
         ChannelListener.addSnapshotListener { snaphot, error in

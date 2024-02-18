@@ -14,12 +14,12 @@ class MyCommentsTableViewCell: UITableViewCell {
     //MARK: - UI Components
 
     private let contentLabel = UILabel().then {
-        $0.font = UIFont.boldSystemFont(ofSize: 15)
+       $0.setPretendardFont(text: "", size: 15, weight: .bold, letterSpacing: 1.22)
     }
     
     private let commentTimeLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 13)
-        $0.textColor = UIColor(hex: "6D6E71")
+       $0.setPretendardFont(text: "", size: 13, weight: .regular, letterSpacing: 1)
+       $0.textColor = UIColor.G4()
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

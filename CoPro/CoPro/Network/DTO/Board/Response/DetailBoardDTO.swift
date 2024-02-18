@@ -17,7 +17,8 @@ struct DetailBoardDTO: Codable {
 
     struct BoardData: Codable {
         let boardId: Int
-        let title, createAt, category, contents, part,tag: String
+        let title, createAt: String
+        let category, contents, part,tag: String?
         let count: Int
         let heart: Int
         let imageUrl: [String]?

@@ -12,7 +12,6 @@ import Then
 
 protocol SendStringData: AnyObject {
     func sendData(mydata: String, groupId: Int)
-    func radioButtonDidSelect()
 }
 
 
@@ -84,11 +83,10 @@ class RadioButtonsStack: UIView {
         if let radioButtonView = radioViews.first(where: { $0.radioButton.tag == desiredTag }) {
             let labelText = radioButtonView.label.text ?? ""
             print("Label Text: \(labelText)")
-            self.delegate?.sendData(mydata: labelText, groupId: groupId ?? 0)
             radioViews.forEach {
                 $0.select($0.radioButton.tag == sender.tag)
             }
-            delegate?.radioButtonDidSelect()
+            self.delegate?.sendData(mydata: labelText, groupId: groupId ?? 0)
         }
     }
 
@@ -107,7 +105,7 @@ class RadioButtonsStack: UIView {
             label.translatesAutoresizingMaskIntoConstraints = false
             label.numberOfLines = 0
             label.textAlignment = .left
-            label.font = .systemFont(ofSize: 14)
+            label.font = .pretendard(size: 15, weight: .regular)
             return label
         }()
 

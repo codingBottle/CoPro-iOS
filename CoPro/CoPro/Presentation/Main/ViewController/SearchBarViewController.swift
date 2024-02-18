@@ -13,7 +13,7 @@ import Then
 final class SearchBarViewController: UIViewController, UISearchControllerDelegate {
     
     // MARK: - UI Components
-    private let searchController = UISearchController(searchResultsController: nil)
+//    private let searchController = UISearchController(searchResultsController: nil)
     private let customView = UIView()
     private let backButton = UIButton()
     private let searchBar = UISearchBar()
@@ -25,7 +25,7 @@ final class SearchBarViewController: UIViewController, UISearchControllerDelegat
     private let recentSearchDeleteButton = UIButton()
     private let recentSearchStackView = UIStackView()
     private lazy var recentSearchTableView = UITableView()
-    var items: [String] = ["안녕", "나는", "문인호임룰루","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕"]
+    var items: [String] = ["title", "나는", "문인호임룰루","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕"]
     var items1: [String] = []
 
     // MARK: - LifeCycle
@@ -86,7 +86,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
         }
         popularLabel.do {
             $0.text = "인기 검색"
-            $0.font = UIFont(name: "Pretendard-Bold", size: 17)
+            $0.font = .pretendard(size: 17, weight: .bold)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         recentSearchLabel.do {
@@ -129,9 +129,9 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
         for item in self.items {
             let button = UIButton()
             button.setTitle(item, for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            button.titleLabel?.font = .pretendard(size: 17, weight: .regular)
             button.setTitleColor(.black, for: .normal)
-            button.layer.borderColor = UIColor(hex: "#D1D1D2").cgColor
+            button.layer.borderColor = UIColor.G1().cgColor
             button.layer.borderWidth = 0.5
             button.layer.cornerRadius = 10
             button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -217,10 +217,11 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     
     @objc func keywordButtonTapped(_ sender: UIButton) {
         // 버튼의 타이틀을 가져와서 검색 바의 텍스트로 설정
-        searchBar.text = sender.titleLabel?.text
-
-        // 검색 수행    
-        // TODO: 검색 로직을 여기에 추가
+        guard let query = sender.titleLabel?.text else { return }
+        searchBar.text = query        // 검색 수행
+        let searchResultVC = SearchResultViewController()
+        searchResultVC.searchText = query
+        self.navigationController?.pushViewController(searchResultVC, animated: true)
     }
     
     @objc func backButtonTapped() {
@@ -237,7 +238,11 @@ extension SearchBarViewController {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             // 검색 버튼을 눌렀을 때의 동작을 정의합니다.
         saveSearchKeyword(keyword: searchBar.text!)
-
+        let query = searchBar.text!
+        let searchResultVC = SearchResultViewController()
+        searchResultVC.searchText = query
+        self.navigationController?.pushViewController(searchResultVC, animated: true)
+        
             // 키보드를 내립니다.
             searchBar.resignFirstResponder()
         }
@@ -278,4 +283,13 @@ extension SearchBarViewController: RecentSearchTableViewCellDelegate {
         // 테이블 뷰에서 해당 셀을 삭제합니다.
         recentSearchTableView.deleteRows(at: [indexPath], with: .automatic)
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? recentSearchTableViewCell {
+            let query = cell.getSearchLabelText()
+            let searchResultVC = SearchResultViewController()
+            searchResultVC.searchText = query
+            self.navigationController?.pushViewController(searchResultVC, animated: true)
+            }
+    }
+
 }

@@ -1,8 +1,8 @@
 //
-//  recruitViewController.swift
+//  SearchResultViewController.swift
 //  CoPro
 //
-//  Created by 문인호 on 12/27/23.
+//  Created by 문인호 on 2/15/24.
 //
 
 import UIKit
@@ -11,14 +11,7 @@ import SnapKit
 import Then
 import KeychainSwift
 
-protocol RecruitVCDelegate: AnyObject {
-    func didSelectItem(withId id: Int)
-}
-protocol radioDelegate: AnyObject {
-    func sendDefaultSelect(withOpt opt: String)
-}
-
-final class recruitViewController: UIViewController, SendStringData {
+class SearchResultViewController: UIViewController, SendStringData {
     func radioButtonDidSelect() {
         print("라디오버튼눌림")
     }
@@ -28,12 +21,13 @@ final class recruitViewController: UIViewController, SendStringData {
         offset = 1
         posts.removeAll()
         filteredPosts.removeAll()
-        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+        searchBoard(search: searchText ?? "", page: offset, standard: getStandard())
     }
     
     
     // MARK: - UI Components
     
+    var searchText: String?
     weak var delegate1: radioDelegate?
     weak var delegate: RecruitVCDelegate?
     private let sortButton = UIButton()
@@ -43,14 +37,12 @@ final class recruitViewController: UIViewController, SendStringData {
     var posts = [BoardDataModel]()
     var isInfiniteScroll = true
     var offset = 1
-    private let idToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0eXVpb3A5MjlAZ21haWwuY29tIiwiaWF0IjoxNzA4MDkxMjM2LCJleHAiOjE3MDgwOTMwMzZ9.Q5WIW1oxKerEBtTP0o9DXNd2DWCEOEsMhbQAM4u9lZXupOM8eGyNI-QH_glpc9VMYJvwBXUb1TCJSFXZc8oMtA"
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.keychain.set(idToken, forKey: "idToken")
-        getAllBoard(category: "프로젝트", page: offset, standard: "create_at")
+        searchBoard(search: searchText ?? "", page: offset, standard: "create_at")
         setUI()
         setLayout()
         setDelegate()
@@ -59,7 +51,7 @@ final class recruitViewController: UIViewController, SendStringData {
     }
 }
 
-extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
+extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - UI Components Property
     private func setUI() {
@@ -87,7 +79,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         view.addSubviews(sortButton,tableView)
         
         sortButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(5)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(5)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(25)
         }
@@ -134,6 +126,10 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
             print("\(filteredPosts[indexPath.row].boardId)")
             detailVC.postId = filteredPosts[indexPath.row].boardId
             delegate?.didSelectItem(withId: detailVC.postId!)
+            let detailVC = DetailBoardViewController()
+            detailVC.postId = filteredPosts[indexPath.row].boardId
+            print("hello")
+            navigationController?.pushViewController(detailVC, animated: true)
         } else {
             print("Invalid index")
             detailVC.postId = posts[indexPath.row].boardId
@@ -152,11 +148,11 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
             present(bottomSheetVC, animated: true, completion: nil)
     }
 }
-extension recruitViewController {
-    func getAllBoard(category: String, page: Int, standard: String) {
+extension SearchResultViewController {
+    func searchBoard(search: String, page: Int, standard: String) {
         if let token = self.keychain.get("idToken") {
             print("\(token)")
-            BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: standard) { result in
+            BoardAPI.shared.searchBoard(token: token, query: search, page: page, standard: standard) { result in
                 switch result {
                 case .success(let data):
                     if let data = data as? BoardDTO {
@@ -202,7 +198,7 @@ extension recruitViewController {
                 if isInfiniteScroll {
                     isInfiniteScroll = false
                     offset += 1
-                    getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+                    searchBoard(search: searchText ?? "", page: offset, standard: getStandard())
                 }
             }
         }
