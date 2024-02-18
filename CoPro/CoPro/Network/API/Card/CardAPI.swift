@@ -42,33 +42,33 @@ extension CardAPI {
         AF.request("\(baseURL)/api/infos", method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
             .responseDecodable(of: CardDTO.self) { response in
                 if let statusCode = response.response?.statusCode {
-                            if statusCode == 401 {
-                                // 토큰 재요청 함수 호출
-                                LoginAPI.shared.refreshAccessToken { result in
-                                    switch result {
-                                    case .success(let loginDTO):
-                                        print("토큰 재발급 성공: \(loginDTO)")
-                                        
-                                        DispatchQueue.main.async {
-                                            // 토큰 재발급이 성공한 후 reloadData() 호출
-                                            CardViewController().reloadData()
-                                        }
-                                    case .failure(let error):
-                                        print("토큰 재발급 실패: \(error)")
-                                    }
+                    if statusCode == 401 {
+                        // 토큰 재요청 함수 호출
+                        LoginAPI.shared.refreshAccessToken { result in
+                            switch result {
+                            case .success(let loginDTO):
+                                print("토큰 재발급 성공: \(loginDTO)")
+                                
+                                DispatchQueue.main.async {
+                                    // 토큰 재발급이 성공한 후 reloadData() 호출
+                                    CardViewController().reloadData()
                                 }
-                            } else {
-                                // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                                completion(response.result)
+                            case .failure(let error):
+                                print("토큰 재발급 실패: \(error)")
                             }
                         }
+                    } else {
+                        // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                        completion(response.result)
+                    }
+                }
             }
         
         
     }
     func addLike(MemberId : Int, completion: @escaping (Bool) -> Void){
         let keychain = KeychainSwift()
-        guard let token = keychain.get("idToken") else {
+        guard let token = keychain.get("accessToken") else {
             print("No token found in keychain.")
             return
         }
@@ -84,21 +84,34 @@ extension CardAPI {
         // Alamofire를 사용하여 POST 요청
         AF.request("\(baseURL)/api/add-like", method: .post, parameters: parameters, encoding: JSONEncoding.default,headers: headers)
             .validate() // 서버 응답이 성공적인지 확인
-            .responseJSON { response in
-                switch response.result {
-                case .success:
-                    // 성공적으로 응답을 받았을 때
-                    completion(true)
-                case .failure(let error):
-                    // API 요청이 실패했을 때
-                    print("Error: \(error)")
-                    completion(false)
+            .responseJSON {response in
+                if let statusCode = response.response?.statusCode {
+                    if statusCode == 401 {
+                        // 토큰 재요청 함수 호출
+                        LoginAPI.shared.refreshAccessToken { result in
+                            switch result {
+                            case .success(let loginDTO):
+                                print("토큰 재발급 성공: \(loginDTO)")
+                                
+                                DispatchQueue.main.async {
+                                    // 토큰 재발급이 성공한 후 reloadData() 호출
+                                    CardViewController().reloadData()
+                                }
+                            case .failure(let error):
+                                print("토큰 재발급 실패: \(error)")
+                            }
+                        }
+                    } else {
+                        // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                        completion(true)
+                    }
                 }
             }
+        
     }
     func cancelLike(MemberId : Int, completion: @escaping (Bool) -> Void){
         let keychain = KeychainSwift()
-        guard let token = keychain.get("idToken") else {
+        guard let token = keychain.get("accessToken") else {
             print("No token found in keychain.")
             return
         }
@@ -115,15 +128,28 @@ extension CardAPI {
         AF.request("\(baseURL)/api/cancel-like", method: .post, parameters: parameters, encoding: JSONEncoding.default,headers: headers)
             .validate() // 서버 응답이 성공적인지 확인
             .responseJSON { response in
-                switch response.result {
-                case .success:
-                    // 성공적으로 응답을 받았을 때
-                    completion(true)
-                case .failure(let error):
-                    // API 요청이 실패했을 때
-                    print("Error: \(error)")
-                    completion(false)
+                if let statusCode = response.response?.statusCode {
+                    if statusCode == 401 {
+                        // 토큰 재요청 함수 호출
+                        LoginAPI.shared.refreshAccessToken { result in
+                            switch result {
+                            case .success(let loginDTO):
+                                print("토큰 재발급 성공: \(loginDTO)")
+                                
+                                DispatchQueue.main.async {
+                                    // 토큰 재발급이 성공한 후 reloadData() 호출
+                                    CardViewController().reloadData()
+                                }
+                            case .failure(let error):
+                                print("토큰 재발급 실패: \(error)")
+                            }
+                        }
+                    } else {
+                        // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                        completion(true)
+                    }
                 }
             }
     }
 }
+

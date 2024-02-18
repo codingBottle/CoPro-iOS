@@ -9,6 +9,7 @@ import UIKit
 import FirebaseAuth
 
 class BottomTabController: UITabBarController {
+
    private func addTabBarSeparator() {
       let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 1))
       separator.backgroundColor = UIColor.G3() // Set the color of the separator line
@@ -16,6 +17,7 @@ class BottomTabController: UITabBarController {
    }
    var currentUserData: String?
    var chatVC: ChannelViewController?
+
 
       init(currentUserData: String) {
          self.currentUserData = currentUserData

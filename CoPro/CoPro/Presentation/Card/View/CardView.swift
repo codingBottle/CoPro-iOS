@@ -22,12 +22,19 @@ class CardView: BaseView{
         $0.layer.cornerRadius = 20
     }
     let partLabel = UILabel().then {
-        $0.textAlignment = .left
+        $0.textAlignment = .center
         $0.setPretendardFont(text: "직군", size: 17, weight: .bold, letterSpacing: 1.23)
         $0.textColor = UIColor.G3()
     }
     let partButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        guard let originalImage = UIImage(systemName: "chevron.down") else {
+            return
+        }
+        // 이미지를 두꺼운 스타일로 생성
+        let symbolConfiguration = UIImage.SymbolConfiguration(weight: .bold) // 두꺼운 굵기를 적용
+        let boldImage = originalImage.withConfiguration(symbolConfiguration)
+        // 버튼에 이미지 설정
+        $0.setImage(boldImage, for: .normal)
         $0.tintColor = UIColor.G3()
     }
     let langContainerView = UIView().then {
@@ -35,12 +42,19 @@ class CardView: BaseView{
         $0.layer.cornerRadius = 20
     }
     let langLabel = UILabel().then {
-        $0.textAlignment = .left
+        $0.textAlignment = .center
         $0.setPretendardFont(text: "언어", size: 17, weight: .bold, letterSpacing: 1.23)
         $0.textColor = UIColor.G3()
     }
     let langButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        guard let originalImage = UIImage(systemName: "chevron.down") else {
+            return
+        }
+        // 이미지를 두꺼운 스타일로 생성
+        let symbolConfiguration = UIImage.SymbolConfiguration(weight: .bold) // 두꺼운 굵기를 적용
+        let boldImage = originalImage.withConfiguration(symbolConfiguration)
+        // 버튼에 이미지 설정
+        $0.setImage(boldImage, for: .normal)
         $0.tintColor = UIColor.G3()
     }
     let oldContainerView = UIView().then {
@@ -48,12 +62,19 @@ class CardView: BaseView{
         $0.layer.cornerRadius = 20
     }
     let oldLabel = UILabel().then {
-        $0.textAlignment = .left
+        $0.textAlignment = .center
         $0.setPretendardFont(text: "경력", size: 17, weight: .bold, letterSpacing: 1.23)
         $0.textColor = UIColor.G3()
     }
     let oldButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        guard let originalImage = UIImage(systemName: "chevron.down") else {
+            return
+        }
+        // 이미지를 두꺼운 스타일로 생성
+        let symbolConfiguration = UIImage.SymbolConfiguration(weight: .bold) // 두꺼운 굵기를 적용
+        let boldImage = originalImage.withConfiguration(symbolConfiguration)
+        // 버튼에 이미지 설정
+        $0.setImage(boldImage, for: .normal)
         $0.tintColor = UIColor.G3()
     }
     
@@ -84,13 +105,15 @@ class CardView: BaseView{
         partLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.centerY.equalToSuperview()
+            $0.centerX.equalToSuperview()
         }
-        
+
         partButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
             $0.trailing.equalTo(partLabel.snp.trailing).offset(20)
             $0.centerY.equalToSuperview()
         }
+
         langLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.centerY.equalToSuperview()

@@ -20,6 +20,7 @@ final class LoginAPI : BaseAPI {
 extension LoginAPI {
     var baseURL: String { return Config.baseURL }
     // 로그인 API
+
    public func getAccessToken(authCode: String?, provider: String) {
       let headers: HTTPHeaders = [
          "Accept": "application/json"
@@ -114,6 +115,7 @@ extension LoginAPI {
          }
    }
    
+
     public func refreshAccessToken(completion: @escaping (Result<LoginDTO, Error>) -> Void){
         let keychain = KeychainSwift()
         guard let refreshToken = keychain.get("refreshToken") else {

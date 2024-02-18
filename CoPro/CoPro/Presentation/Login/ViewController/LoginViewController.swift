@@ -129,12 +129,12 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         // Handle error.
         print("Sign in with Apple errored: \(error)")
     }
-   
-    
+
    @objc private func handleGitHubSignIn() {
       GitHubLoginManager.shared.requestCode()
    }
    
+
 }
 
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
