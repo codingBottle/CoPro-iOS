@@ -148,7 +148,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     }
     func uploadImages(images: [UIImage], completion: @escaping ([Int]) -> Void) {
         let url = URL(string: Config.baseURL)!
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             let headers : HTTPHeaders = [
                         "Content-Type" : "multipart/form-data",
                         "Authorization": "Bearer \(token)" ]

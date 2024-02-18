@@ -226,7 +226,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func getDetailBoard( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.getDetailBoard(token: token, boardId: boardId) { result in
                 switch result {
@@ -242,6 +242,16 @@ final class DetailBoardViewController: UIViewController {
                         }
                     }
                 case .requestErr(let message):
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.getDetailBoard(boardId: boardId)
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
                     print("Request error: \(message)")
                     
                 case .pathErr:
@@ -260,7 +270,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func saveHeart( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.saveHeart(token: token, boardID: boardId) { result in
                 switch result {
@@ -274,8 +284,17 @@ final class DetailBoardViewController: UIViewController {
                         self.isHeart = true
                     }
                 case .requestErr(let message):
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.saveHeart(boardId: boardId)
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
                     print("Request error: \(message)")
-                    
                 case .pathErr:
                     print("Path error")
                     
@@ -292,7 +311,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func deleteHeart( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.deleteHeart(token: token, boardID: boardId) { result in
                 switch result {
@@ -307,7 +326,17 @@ final class DetailBoardViewController: UIViewController {
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
-                    
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.deleteHeart(boardId: boardId)
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
+                    print("Request error: \(message)")
                 case .pathErr:
                     print("Path error")
                     
@@ -325,7 +354,7 @@ final class DetailBoardViewController: UIViewController {
     }
     
     func saveScrap( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.saveScrap(token: token, boardID: boardId) { result in
                 switch result {
@@ -337,7 +366,17 @@ final class DetailBoardViewController: UIViewController {
                     self.isScrap = true
                 case .requestErr(let message):
                     print("Request error: \(message)")
-                    
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.saveHeart(boardId: boardId)
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
+                    print("Request error: \(message)")
                 case .pathErr:
                     print("Path error")
                     
@@ -354,7 +393,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func deleteScrap( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.deleteScrap(token: token, boardID: boardId) { result in
                 switch result {
@@ -366,7 +405,17 @@ final class DetailBoardViewController: UIViewController {
                     self.isScrap = false
                 case .requestErr(let message):
                     print("Request error: \(message)")
-                    
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.deleteScrap(boardId: boardId)
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
+                    print("Request error: \(message)")
                 case .pathErr:
                     print("Path error")
                     

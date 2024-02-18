@@ -220,7 +220,7 @@ final class DetailFreeViewController: UIViewController {
         }
     }
     func getDetailBoard( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.getDetailBoard(token: token, boardId: boardId) { result in
                 switch result {
@@ -256,7 +256,7 @@ final class DetailFreeViewController: UIViewController {
         }
     }
 //    func saveHeart( boardId: Int) {
-//        if let token = self.keychain.get("idToken") {
+//        if let token = self.keychain.get("accessToken") {
 //            print("\(token)")
 //            BoardAPI.shared.saveHeart(token: token, boardID: boardId) { result in
 //                switch result {
@@ -287,7 +287,7 @@ final class DetailFreeViewController: UIViewController {
 //        }
 //    }
 //    func deleteHeart( boardId: Int) {
-//        if let token = self.keychain.get("idToken") {
+//        if let token = self.keychain.get("accessToken") {
 //            print("\(token)")
 //            BoardAPI.shared.deleteHeart(token: token, boardID: boardId) { result in
 //                switch result {
@@ -318,7 +318,7 @@ final class DetailFreeViewController: UIViewController {
 //        }
 //    }
     func saveScrap( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.saveScrap(token: token, boardID: boardId) { result in
                 switch result {
@@ -346,7 +346,7 @@ final class DetailFreeViewController: UIViewController {
         }
     }
     func deleteScrap( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.deleteScrap(token: token, boardID: boardId) { result in
                 switch result {

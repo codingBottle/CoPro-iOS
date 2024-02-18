@@ -120,13 +120,23 @@ extension ReportBottomSheetViewController {
     }
  
     func reportBoard( boardId: Int, contents: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.reportBoard(token: token, boardId: boardId, contents: contents) { result in
                 switch result {
                 case .success:
                     self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.reportBoard(boardId: boardId, contents: contents)
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
                     print("Request error: \(message)")
                     
                 case .pathErr:

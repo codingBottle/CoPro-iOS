@@ -36,13 +36,11 @@ final class noticeViewController: UIViewController, SendStringData {
     var posts = [BoardDataModel]()
     var isInfiniteScroll = true
     var offset = 1
-    private let idToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0eXVpb3A5MjlAZ21haWwuY29tIiwiaWF0IjoxNzA4MTgwNzE0LCJleHAiOjE3MDgxODI1MTR9.KCXG4AEqi03Od8djlPILWAJOHXJDHOulzlcCe7RSJZfMadlUxlmcvc_TTPthvr8qwYPIaThNgMYjI-45ZoRZAA"    
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.keychain.set(idToken, forKey: "idToken")
         getAllBoard(category: "공지사항", page: offset, standard: "create_at")
         setUI()
         setLayout()
@@ -147,7 +145,7 @@ extension noticeViewController: UITableViewDelegate, UITableViewDataSource {
 }
 extension noticeViewController {
     func getAllBoard(category: String, page: Int, standard: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: standard) { result in
                 switch result {
@@ -172,7 +170,16 @@ extension noticeViewController {
                         print("Failed to decode the response.")
                     }
                 case .requestErr(let message):
-                    // Handle request error here.
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.getAllBoard(category: category, page: page, standard: standard)
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
                     print("Request error: \(message)")
                 case .pathErr:
                     // Handle path error here.

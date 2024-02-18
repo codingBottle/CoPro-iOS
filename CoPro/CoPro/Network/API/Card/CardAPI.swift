@@ -68,7 +68,7 @@ extension CardAPI {
     }
     func addLike(MemberId : Int, completion: @escaping (Bool) -> Void){
         let keychain = KeychainSwift()
-        guard let token = keychain.get("idToken") else {
+        guard let token = keychain.get("accessToken") else {
             print("No token found in keychain.")
             return
         }
@@ -98,7 +98,7 @@ extension CardAPI {
     }
     func cancelLike(MemberId : Int, completion: @escaping (Bool) -> Void){
         let keychain = KeychainSwift()
-        guard let token = keychain.get("idToken") else {
+        guard let token = keychain.get("accessToken") else {
             print("No token found in keychain.")
             return
         }

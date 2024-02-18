@@ -320,7 +320,7 @@ extension UILabel {
 
 extension AddPostViewController {
     func addPost( title: String, category: String, content: String, image: [Int]) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.addPost(token: token, title: titleTextField.text ?? "", category: category, contents: contentTextField.text, imageId: imageUrls) { result in
                 switch result {
@@ -328,8 +328,16 @@ extension AddPostViewController {
                     print("success")
                     self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
-                    print("Request error: \(message)")
-                    
+                    LoginAPI.shared.refreshAccessToken { result in // 토큰 재발급 요청
+                                            switch result {
+                                            case .success(let loginDTO):
+                                                print("토큰 재발급 성공: \(loginDTO)")
+                                                self.keychain.set(loginDTO.data.accessToken, forKey: "accessToken") // 새로 발급받은 토큰 저장
+                                                self.addPost(title: title, category: category, content: content, image: image) // addPost 함수 재호출
+                                            case .failure(let error):
+                                                print("토큰 재발급 실패: \(error)")
+                                            }
+                                        }
                 case .pathErr:
                     print("Path error")
                     

@@ -147,7 +147,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
     }
     
     private func postEditGitHubURL() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody) { result in
                 switch result {
                 case .success(_):
