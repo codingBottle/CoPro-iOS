@@ -18,7 +18,9 @@ import CryptoKit
 
 class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationControllerDelegate {
     
-    var loginView: LoginView!
+   var loginView: LoginView!
+   var currentUserNickName: String?
+   var checkFirstLogin: Bool?
     override func loadView() {
         // LoginView를 생성하고 뷰에 추가합니다.
         view = LoginView()
@@ -29,12 +31,15 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         super.viewDidLoad()
         //view.signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
     }
+   
     override func setUI() {
         
     }
+   
     override func setLayout() {
         
     }
+   
     override func setAddTarget() {
         if let loginView = view as? LoginView {
             // Apple 로그인 버튼
@@ -45,6 +50,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             loginView.githubSignInButton.addTarget(self, action: #selector(handleGitHubSignIn), for: .touchUpInside)
         }
     }
+   
     let keychain = KeychainSwift()
     @objc private func signOut() {
         if Auth.auth().currentUser != nil{
@@ -62,24 +68,25 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
             print("로그인 된 계정없음")
         }
     }
-    @objc private func handleGoogleSignIn() {
-        print("Google Sign in button tapped")
-        
-        // Start the sign in flow!
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+   
+   @objc private func handleGoogleSignIn() {
+      print("Google Sign in button tapped")
+      
+      // Start the sign in flow!
+      GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+         guard error == nil else { return }
+         guard let signInResult = signInResult else { return }
+         
+         signInResult.user.refreshTokensIfNeeded { user, error in
             guard error == nil else { return }
-            guard let signInResult = signInResult else { return }
+            guard let user = user else { return }
             
-            signInResult.user.refreshTokensIfNeeded { user, error in
-                guard error == nil else { return }
-                guard let user = user else { return }
-                
-                let idToken = user.idToken?.tokenString
-                LoginAPI.shared.getAccessToken(authCode: user.idToken?.tokenString, provider: "google")
-                print(idToken!)
-            }
-        }
-    }
+            let idToken = user.idToken?.tokenString
+            LoginAPI.shared.getAccessToken(authCode: user.idToken?.tokenString, provider: "google")
+            print(idToken!)
+         }
+      }
+   }
     
     
     @objc private func handleAppleSignIn() {
@@ -91,6 +98,7 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
+   
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             guard let appleIDToken = appleIDCredential.identityToken else {
@@ -121,21 +129,41 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
         // Handle error.
         print("Sign in with Apple errored: \(error)")
     }
+   
     
-    
-    @objc private func handleGitHubSignIn() {
-        GitHubLoginManager.shared.requestCode()
-        DispatchQueue.main.async {
-            let vc = BottomTabController()
-            self.navigationController?.setViewControllers([vc], animated: true)
-        }
-    }
-    
+   @objc private func handleGitHubSignIn() {
+      GitHubLoginManager.shared.requestCode()
+   }
+   
 }
 
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         // Apple 로그인 인증 창 띄우기
         return self.view.window ?? UIWindow()
+    }
+}
+
+
+struct LoginUserDataModel: Codable {
+    var picture, occupation, language: String
+    var gitHubURL, nickName: String
+    var career, viewType, likeMembersCount: Int
+    
+   init(from data: MyProfileData) {
+      self.picture = data.picture
+      self.occupation = data.occupation
+      self.language = data.language
+      self.career = data.career
+      self.gitHubURL = data.gitHubURL
+      self.nickName = data.nickName
+      self.viewType = data.viewType
+      self.likeMembersCount = data.likeMembersCount
+   }
+
+    enum CodingKeys: String, CodingKey {
+        case picture, occupation, language, career
+        case gitHubURL = "gitHubUrl"
+        case nickName, viewType, likeMembersCount
     }
 }

@@ -88,11 +88,10 @@ class MyContributionsViewController: BaseViewController {
     }
     
     private func getWriteByMe() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getWritebyMe(token: token) { result in
                 switch result {
                 case .success(let data):
-                    print("🔥🔥🔥🔥🔥🔥success🔥🔥🔥🔥🔥🔥")
                     if let data = data as? WritebyMeDTO {
                         self.myPostsData = data.data.boards.map {
                             return WritebyMeDataModel(id: $0.id, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL, commentCount: $0.commentCount)
@@ -126,11 +125,10 @@ class MyContributionsViewController: BaseViewController {
     }
     
     private func getMyWrittenComment() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getMyWrittenComment(token: token) { result in
                 switch result {
                 case .success(let data):
-                    print("🔥🔥🔥🔥🔥🔥success🔥🔥🔥🔥🔥🔥")
                     if let data = data as? MyWrittenCommentDTO {
                         self.myCommentData = data.data.content.map {
                             return MyWrittenCommentDataModel(
@@ -169,12 +167,10 @@ class MyContributionsViewController: BaseViewController {
     }
     
     private func getScrapPost() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getScrapPost(token: token) { result in
-                print("Result: \(result)")
                 switch result {
                 case .success(let data):
-                    print("🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊uccess🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
                     if let data = data as? ScrapPostDTO {
                         self.scrapPostData = data.data.content.map {
                             return ScrapPostDataModel(boardID: $0.boardID, title: $0.title, count: $0.count, createAt: $0.createAt, heart: $0.heart, imageURL: $0.imageURL, nickName: $0.nickName, commentCount: $0.commentCount)
@@ -188,16 +184,16 @@ class MyContributionsViewController: BaseViewController {
                     
                 case .requestErr(let message):
                     // Handle request error here.
-                    print("🌊🌊🌊🌊🌊🌊🌊Request error: \(message)")
+                    print("Request error: \(message)")
                 case .pathErr:
                     // Handle path error here.
-                    print("🌊🌊🌊🌊🌊🌊🌊Path error")
+                    print("Path error")
                 case .serverErr:
                     // Handle server error here.
-                    print("🌊🌊🌊🌊🌊🌊🌊Server error")
+                    print("Server error")
                 case .networkFail:
                     // Handle network failure here.
-                    print("🌊🌊🌊🌊🌊🌊🌊Network failure")
+                    print("Network failure")
                 default:
                     break
                 }
@@ -254,7 +250,6 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
             return cell
             
         case .comment:
-            // 댓글 셀을 반환하도록 수정
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCommentsTableViewCell", for: indexPath) as? MyCommentsTableViewCell
             else {
                 return UITableViewCell()

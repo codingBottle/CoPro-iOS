@@ -32,6 +32,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     var selectedLanguageButtons = [UIButton]()
     var selectedCareer: String?
     var isNicknameModificationSuccessful: Bool?
+   var isFirstLogin: Bool?
     
     var editMyProfileBody = EditMyProfileRequestBody()
     
@@ -180,18 +181,31 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     }
     
     private func postEditMyProfile() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
                 switch result {
                 case .success(let data):
                     if let data = data as? EditMyProfileDTO {
-                        if data.statusCode != 200 {
-                            print("프로필 수정 실패")
-                            self.faileEditProfile()
-                        } else {
-                            print("프로필 수정 성공")
-                            self.successEditProfile()
-                        }
+                       print("💪💪💪💪\n",self.isFirstLogin)
+                       if self.isFirstLogin == true {
+                          if data.statusCode != 200 {
+                              print("계정 정보 등록 실패")
+                              self.faileEditProfileInFirstLogin()
+                          } else {
+                             print("계정 정보 등록 성공")
+                             self.successEditProfileInFirstLogin(userNickName: data.data.nickName)
+                         }
+                       }
+                       else {
+                          if data.statusCode != 200 {
+                              print("프로필 수정 실패")
+                              self.faileEditProfile()
+                          } else {
+                              print("프로필 수정 성공")
+                              self.successEditProfile()
+                          }
+                       }
+                        
                     }
                 case .requestErr(let message):
                     // Handle request error here.
@@ -513,7 +527,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
     }
     
     private func getNickNameDuplication(nickname: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("현재 nickname : \(nickname)")
             MyProfileAPI.shared.getNickNameDuplication(token: token, nickname: nickname) { result in
                 print("Result: \(result)")
@@ -590,10 +604,34 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
         showAlert(title: "프로필 수정을 실패하였습니다.",
                   confirmButtonName: "확인",
                   confirmButtonCompletion: { [self] in
-//                    self.navigationController?.popViewController(animated: true)
                     self.dismiss(animated: true, completion: nil)
         })
     }
+   
+   private func successEditProfileInFirstLogin(userNickName: String) {
+       showAlert(title: "계정 정보 등록을 완료하였습니다.",
+                 confirmButtonName: "확인",
+                 confirmButtonCompletion: { [self] in
+          DispatchQueue.main.async {
+             self.dismiss(animated: true)
+             let bottomTabController = BottomTabController(currentUserData: userNickName)
+             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                let delegate = windowScene.delegate as? SceneDelegate,
+                let window = delegate.window {
+                window.rootViewController = bottomTabController
+                window.makeKeyAndVisible()
+             }
+          }
+       })
+   }
+   
+   private func faileEditProfileInFirstLogin() {
+       showAlert(title: "계정 정보 등록을 실패하였습니다.",
+                 confirmButtonName: "확인",
+                 confirmButtonCompletion: { [self] in
+//                   self.dismiss(animated: true, completion: nil)
+       })
+   }
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {

@@ -19,10 +19,14 @@ class CardTypeSettingsTableViewCell: UITableViewCell {
     
     let labelContainer: UIView = UIView()
     
-    let titleLabel: UILabel = UILabel()
+   let titleLabel = UILabel().then {
+      $0.setPretendardFont(text: "개발자 프로필 화면 설정", size: 17, weight: .medium, letterSpacing: 1.25)
+   }
 
-    let subTitleLabel: UILabel = UILabel()
-    
+    let subTitleLabel = UILabel().then {
+       $0.setPretendardFont(text: "개발자 프로필을 카드뷰 혹은 목록으로 확인할 수 있습니다.", size: 13, weight: .regular, letterSpacing: 0.8)
+       $0.textColor = UIColor.G3()
+    }
     let greaterthanContainer: UIView = UIView()
     
     let greaterthanButton = UIButton().then {
@@ -43,20 +47,6 @@ class CardTypeSettingsTableViewCell: UITableViewCell {
     }
     
     func setLayout() {
-        titleLabel.do {
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineHeightMultiple = 1.23
-            $0.attributedText = NSMutableAttributedString(string: "개발자 프로필 화면 설정", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont(name: "Pretendard-Regular", size: 17) ?? UIFont.systemFont(ofSize: 17)])
-        }
-        
-        subTitleLabel.do {
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineHeightMultiple = 1.23
-            $0.attributedText = NSMutableAttributedString(string: "협업할 개발자 프로필을 카드뷰나 목록으로 확인할 수 있습니다.", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont(name: "Pretendard-Regular", size: 13) ?? UIFont.systemFont(ofSize: 13)])
-        }
-        
-        
-        
         contentView.addSubviews(labelContainer, greaterthanContainer)
         greaterthanContainer.isUserInteractionEnabled = true
         labelContainer.addSubviews(titleLabel, subTitleLabel)
@@ -96,7 +86,6 @@ class CardTypeSettingsTableViewCell: UITableViewCell {
     }
     
     @objc func didTapEditCardTypeButtonTapped(_ sender: UIButton) {
-        print("🔥🔥🔥🔥🔥🔥🔥🔥didTapEditGitHubURLButtonTapped🔥🔥🔥🔥🔥🔥🔥🔥")
         delegate?.didTapEditCardTypeButtonTapped(in: self)
     }
 }

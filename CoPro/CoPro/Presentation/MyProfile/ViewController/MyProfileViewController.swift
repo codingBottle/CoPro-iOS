@@ -25,42 +25,32 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        myProfileView.tableView.delegate = self
-        myProfileView.tableView.dataSource = self
+       myProfileView.tableView.delegate = self
+       myProfileView.tableView.dataSource = self
+       getMyProfile()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        getMyProfile()
+        
+       
     }
     
     override func setUI() {
-        view.addSubviews(myProfileView, bottomTabBarView)
-        bottomTabBarView.do {
-            $0.backgroundColor = .brown
-        }
+        view.addSubviews(myProfileView)
     }
     override func setLayout() {
-        let screenHeight = UIScreen.main.bounds.height
-        let heightRatio = 83.0 / 852.0
-        let cellHeight = screenHeight * heightRatio
-        
-        bottomTabBarView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(cellHeight)
-        }
         
         myProfileView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(bottomTabBarView.snp.top)
+           $0.bottom.equalToSuperview()
         }
     }
     
     private func getMyProfile() {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getMyProfile(token: token) { result in
                 switch result {
                 case .success(let data):
@@ -99,12 +89,22 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     
     func postEditCardViewType(CardViewType: Int) {
         let requestCardViewType = EditCardTypeRequestBody(viewType: CardViewType)
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("token : \(token)")
             MyProfileAPI.shared.postEditCardType(token: token, requestBody: requestCardViewType) { result in
                 switch result {
-                case .success(_):
-                    print("성공")
+                case .success(let data):
+                   if let data = data as? EditCardTypeDTO {
+                       if data.statusCode != 200 {
+                          self.showAlert(title: "프로필 타입 변경에 실패하였습니다",
+                                    confirmButtonName: "확인")
+                       } else {
+                           print("프로필 수정 성공")
+                          self.showAlert(title: "프로필 타입 변경에 성공하였습니다",
+                                    confirmButtonName: "확인")
+                       }
+                   }
+                   
                 case .requestErr(let message):
                     // Handle request error here.
                     print("Request error: \(message)")
@@ -264,6 +264,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
         print("현재 뷰컨에서 깃헙 눌림")
         let alertVC = EditGithubModalViewController()
+       alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
         present(alertVC, animated: true, completion: nil)
     }
     
