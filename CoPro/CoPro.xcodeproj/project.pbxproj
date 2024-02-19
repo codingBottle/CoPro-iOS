@@ -139,6 +139,8 @@
 		B5D3E54F2B0213370021DDA0 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54E2B0213370021DDA0 /* KeychainSwift */; };
 		B5D3E5512B06127C0021DDA0 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D3E5502B06127C0021DDA0 /* Image.xcassets */; };
 		B5D3E56F2B172A150021DDA0 /* DropDown in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E56E2B172A150021DDA0 /* DropDown */; };
+		B5F1C26A2B82009100791595 /* LikeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2692B82009100791595 /* LikeProfileViewController.swift */; };
+		B5F1C26C2B820A6500791595 /* LikeProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */; };
 		E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */; };
 		E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */; };
 		E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */; };
@@ -308,6 +310,8 @@
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B5D3E5502B06127C0021DDA0 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
+		B5F1C2692B82009100791595 /* LikeProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileViewController.swift; sourceTree = "<group>"; };
+		B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileDTO.swift; sourceTree = "<group>"; };
 		E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardViewController.swift; sourceTree = "<group>"; };
 		E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardDataModel.swift; sourceTree = "<group>"; };
@@ -716,6 +720,7 @@
 				9E0B9CA42B6A08E800A5EACB /* EditCardTypeRequestBody.swift */,
 				9E7462DA2B756899006693B6 /* EditMyProfileDTO.swift */,
 				9E7462DC2B78951F006693B6 /* getNickNameDuplicationDTO.swift */,
+				B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */,
 			);
 			path = MyProfile;
 			sourceTree = "<group>";
@@ -766,6 +771,7 @@
 				9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */,
 				9E8FB6F82B5FF56C00C02028 /* EditGithubModalViewController.swift */,
 				9E0B9CAA2B6B466B00A5EACB /* MyContributionsViewController.swift */,
+				B5F1C2692B82009100791595 /* LikeProfileViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1296,6 +1302,7 @@
 				E37AE8082B3C289B002ABDCD /* RadioButtonsStack.swift in Sources */,
 				E37AE7FA2B3C2766002ABDCD /* SortBottomSheetViewController.swift in Sources */,
 				E37B209D2B7258FF00308158 /* CommentRequestBody.swift in Sources */,
+				B5F1C26C2B820A6500791595 /* LikeProfileDTO.swift in Sources */,
 				B5B5110C2B74CCE400A1B74D /* CardView.swift in Sources */,
 				E32B67232B566D7900EBB5AC /* BoardRouter.swift in Sources */,
 				E32B67212B566CF600EBB5AC /* BoardDTO.swift in Sources */,
@@ -1325,6 +1332,7 @@
 				E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */,
 				E37B209B2B7252C900308158 /* CommentDTO.swift in Sources */,
 				9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */,
+				B5F1C26A2B82009100791595 /* LikeProfileViewController.swift in Sources */,
 				B58B8D332B4D3E2100FB98F9 /* CardAPI.swift in Sources */,
 				9E05D2EE2AD5221500F4CA43 /* UIView++.swift in Sources */,
 				9E8FB6F72B5CFBF300C02028 /* MyProfileDataModel.swift in Sources */,
