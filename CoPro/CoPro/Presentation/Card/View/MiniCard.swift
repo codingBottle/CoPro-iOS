@@ -64,7 +64,7 @@ class MiniCard: BaseView {
     
     let userPartLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 0.84)
+        $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.0)
     }
     
     let userLangLabel = UILabel().then {
@@ -74,7 +74,7 @@ class MiniCard: BaseView {
     
     let userCareerLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "hi", size: 11, weight: .regular, letterSpacing: 0.95)
+        $0.setPretendardFont(text: "hi", size: 11, weight: .regular, letterSpacing: 1.0)
     }
     
     let buttonStackView = UIStackView().then {
@@ -116,14 +116,17 @@ class MiniCard: BaseView {
         
         return button
     }()
+
     let likeIcon = UIButton().then {
-        $0.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium, scale: .large)
+        let largeBoldDoc = UIImage(systemName: "suit.heart.fill", withConfiguration: largeConfig)
+        $0.setImage(largeBoldDoc, for: .normal)
     }
     
     // 하트 갯수를 나타내는 레이블
     let likeLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "", size: 12, weight: .regular, letterSpacing: 1.54)
+        $0.setPretendardFont(text: "", size: 12, weight: .regular, letterSpacing: 1.0)
     }
     
     
@@ -133,7 +136,8 @@ class MiniCard: BaseView {
         addSubviews(buttonStackView)
         buttonStackView.addArrangedSubviews( gitButton,chatButton)
         chatButton.addSubview(chatLabel)
-        addSubviews(likeIcon, likeLabel)
+        addSubview(likeIcon)
+        addSubview(likeLabel)
         
         layer.do {
             $0.cornerRadius = 15
@@ -151,7 +155,7 @@ class MiniCard: BaseView {
         }
         
         likeLabel.snp.makeConstraints {
-            $0.top.equalTo(likeIcon.snp.bottom).offset(0)
+            $0.top.equalTo(likeIcon.snp.bottom).offset(-2)
             $0.trailing.equalTo(likeIcon.snp.trailing)
             $0.width.greaterThanOrEqualTo(20)
             $0.centerX.equalTo(likeIcon.snp.centerX)

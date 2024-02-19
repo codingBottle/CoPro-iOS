@@ -10,7 +10,8 @@ import SnapKit
 import FirebaseAuth
 import Firebase
 
-class ChannelVC: BaseViewController {
+class ChannelViewController: BaseViewController {
+   
     lazy var channelTableView: UITableView = {
         let view = UITableView()
         view.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.className)
@@ -21,36 +22,35 @@ class ChannelVC: BaseViewController {
     }()
     
     var channels = [Channel]()
-    private let currentUser: User
+    private let currentUserNickName: String
     private let channelStream = ChannelFirestoreStream()
     private var currentChannelAlertController: UIAlertController?
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "채팅"
-        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
-        return label
-    }()
+   private let titleLabel = UILabel().then {
+      $0.setPretendardFont(text: "채팅", size: 25, weight: .bold, letterSpacing: 1.25)
+   }
+   
+   private var topContainerView = UIView().then {
+      $0.isUserInteractionEnabled = true
+   }
     
-    private var topContainerView: UIView = {
-        let view = UIView()
-        view.isUserInteractionEnabled = true
-        return view
-    }()
+   private let toggleLabel = UILabel().then {
+       $0.setPretendardFont(text: "프로젝트 채팅만 보기", size: 13, weight: .semibold, letterSpacing: 1)
+    }
     
-    private let toggleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "프로젝트 채팅만 보기"
-        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        return label
-    }()
-    
-    lazy private var projectToggleSwitch: UISwitch = {
-        let toggleController = UISwitch()
-        toggleController.isOn = self.isProjectEnabled
-        toggleController.addTarget(self, action: #selector(didToggleSwitch(_:)), for: .valueChanged)
-        return toggleController
-    }()
+   lazy private var projectToggleSwitch = UISwitch().then {
+      $0.isOn = self.isProjectEnabled
+      $0.addTarget(self, action: #selector(didToggleSwitch(_:)), for: .valueChanged)
+   }
+   
+   private let containerToEmptyLabel = UIView()
+   
+   private let emptyLabel = UILabel().then {
+      $0.setPretendardFont(text: "개설된 채팅창이 없어요!\n프로젝트 모집글을 보고\n연락을 시작해보세요.", size: 17, weight: .regular, letterSpacing: 1.25)
+      $0.textColor = UIColor.Black()
+      $0.textAlignment = .center
+      $0.numberOfLines = 0
+   }
 
     
     private var isProjectEnabled: Bool = false {
@@ -67,10 +67,9 @@ class ChannelVC: BaseViewController {
         }
     }
     
-    init(currentUser: User) {
-        self.currentUser = currentUser
+    init(currentUserNickName: String) {
+        self.currentUserNickName = currentUserNickName
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -83,89 +82,86 @@ class ChannelVC: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        configureViews()
         addToolBarItems()
+       navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+       
+       navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)
+       navigationController?.navigationBar.prefersLargeTitles = false
+       navigationController?.isToolbarHidden = false // 툴바 보이게 설정
         setupListener()
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.isToolbarHidden = false // 툴바 보이게 설정
-        
     }
-    
-    private func configureViews() {
-        
-        view.addSubview(channelTableView)
-        view.addSubview(titleLabel)
-        view.addSubview(topContainerView)
-        topContainerView.addSubview(toggleLabel)
-        topContainerView.addSubview(projectToggleSwitch)
-        
-        topContainerView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            $0.trailing.equalToSuperview().offset(-10)
-            $0.leading.equalToSuperview().offset(10) // 왼쪽 제약 추가
-            $0.bottom.equalTo(topContainerView.snp.top).offset(20)  //아래쪽 제약 추가
-        }
-        
-        toggleLabel.snp.makeConstraints {
-            $0.trailing.equalTo(projectToggleSwitch.snp.leading).offset(-10)
-            $0.centerY.equalToSuperview()
-        }
-        
-        projectToggleSwitch.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
-            $0.centerY.equalToSuperview()
-        }
-        
-        channelTableView.snp.makeConstraints {
+   
+   private func configureViews() {
+          view.addSubview(topContainerView)
+      topContainerView.isUserInteractionEnabled = true
+          topContainerView.addSubview(toggleLabel)
+          topContainerView.addSubview(projectToggleSwitch)
+
+          topContainerView.snp.makeConstraints {
+              $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+              $0.trailing.leading.equalToSuperview().inset(10)
+             $0.height.equalTo(50)  // 높이 제약 추가
+          }
+
+          toggleLabel.snp.makeConstraints {
+              $0.trailing.equalTo(projectToggleSwitch.snp.leading).offset(-10)
+              $0.centerY.equalToSuperview()
+          }
+
+          projectToggleSwitch.snp.makeConstraints {
+              $0.trailing.equalToSuperview()
+              $0.centerY.equalToSuperview()
+          }
+
+      switch channels.count {
+      case 0:
+         channelTableView.removeFromSuperview()
+         view.addSubview(containerToEmptyLabel)
+         containerToEmptyLabel.addSubview(emptyLabel)
+         
+         containerToEmptyLabel.snp.makeConstraints {
             $0.top.equalTo(topContainerView.snp.bottom).offset(20)
             $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-    
+         }
+         
+         emptyLabel.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+         }
+      case 1...:
+         containerToEmptyLabel.removeFromSuperview() // 필요 없는 뷰를 제거합니다.
+
+                 view.addSubview(channelTableView)
+
+                 channelTableView.snp.makeConstraints {
+                     $0.top.equalTo(topContainerView.snp.bottom).offset(20)
+                     $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
+                 }
+      default:
+         break
+      }
+   }
+        
     private func addToolBarItems() {
         toolbarItems = [
-          UIBarButtonItem(title: "로그아웃", style: .plain, target: self, action: #selector(didTapSignOutItem)),
           UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-          UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddItem))
+//          UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddItem))
         ]
     }
     
-    private func setupListener() {
-        channelStream.subscribe { [weak self] result in
-            switch result {
-            case .success(let data):
-                self?.updateCell(to: data)
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    @objc private func didTapSignOutItem() {
-        showAlert(message: "로그아웃 하시겠습니까?",
-                  cancelButtonName: "취소",
-                  confirmButtonName: "확인",
-                  confirmButtonCompletion: {
-            do {
-                try Auth.auth().signOut()
-            } catch {
-                print("Error signing out: \(error.localizedDescription)")
-            }
-        })
-    }
-    
-    @objc private func didTapAddItem() {
-        showAlert(title: "새로운 채널 생성",
-                  cancelButtonName: "취소",
-                  confirmButtonName: "확인",
-                  isExistsTextField: true,
-                  confirmButtonCompletion: { [weak self] in
-            self?.channelStream.createChannel(with: self?.alertController?.textFields?.first?.text ?? "", isProject: true)
-        })
-    }
+   private func setupListener() {
+       channelStream.subscribe { [weak self] result in
+           switch result {
+           case .success(let data):
+               self?.updateCell(to: data)
+
+              DispatchQueue.main.async { [self] in
+                   self?.configureViews()
+               }
+           case .failure(let error):
+               print(error)
+           }
+       }
+   }
     
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .began {
@@ -187,7 +183,6 @@ class ChannelVC: BaseViewController {
     @objc private func didToggleSwitch(_ sender: UISwitch) {
         isProjectEnabled = sender.isOn
         print("토글버튼 눌림! : \(isProjectEnabled)")
-        // 필요한 동작 수행 (예: isProjectEnabled 값 변경에 따른 작업)
         channelTableView.reloadData()
     }
     
@@ -227,37 +222,56 @@ class ChannelVC: BaseViewController {
         channels.remove(at: index)
         channelTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
     }
+   
+   func returnChannelTableCellHeight() -> CGFloat {
+      let screenHeight = UIScreen.main.bounds.height
+      let heightRatio = 82.0 / 852.0
+      let cellHeight = screenHeight * heightRatio
+      return cellHeight
+   }
     
 }
 
-extension ChannelVC: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredChannels.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.className, for: indexPath) as! ChannelTableViewCell
-            cell.chatRoomLabel.text = filteredChannels[indexPath.row].name
-            cell.isProject = filteredChannels[indexPath.row].isProject
-            print("🔥🔥🔥🔥🔥🔥🔥🔥🔥\(cell.isProject)🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥")
-
-            cell.projectChip.isHidden = !cell.isProject
-        // Long press gesture recognizer를 추가합니다.
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        cell.addGestureRecognizer(longPressGesture)
-
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 55
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let channel = channels[indexPath.row]
-        let viewController = ChatVC(user: currentUser, channel: channel)
-        navigationController?.pushViewController(viewController, animated: true)
-        
-    }
+extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
+   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+      return filteredChannels.count
+   }
+   
+   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+      let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.className, for: indexPath) as! ChannelTableViewCell
+      
+//      filteredChannels[indexPath.row].representation.create
+         
+         cell.chatRoomLabel.text = filteredChannels[indexPath.row].name
+         cell.isProject = filteredChannels[indexPath.row].isProject
+         print(filteredChannels[indexPath.row].profileImage)
+         cell.loadChannelProfileImage(url: filteredChannels[indexPath.row].profileImage)
+         cell.projectChipContainer.isHidden = !cell.isProject
+         
+         
+         // Long press gesture recognizer를 추가합니다.
+         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+         cell.addGestureRecognizer(longPressGesture)
+         
+         return cell
+      
+   }
+   
+   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+      return returnChannelTableCellHeight()
+   }
+   
+   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      if let cell = tableView.cellForRow(at: indexPath) as? ChannelTableViewCell {
+         guard let profileImage = cell.loadedImage else {return print("엑시던트")}
+         // 채널 정보를 가져옵니다.
+         let channel = channels[indexPath.row]
+         let viewController = ChatViewController(currentUserNickName: currentUserNickName, channel: channel)
+         viewController.chatAvatarImage.image = profileImage
+         print("🌊\n",viewController.chatAvatarImage.image as Any)
+         
+         viewController.hidesBottomBarWhenPushed = true
+         navigationController?.pushViewController(viewController, animated: true)
+      }
+   }
 }
-

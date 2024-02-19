@@ -41,6 +41,8 @@
 		9E0B9CB72B6C9E0E00A5EACB /* EditMyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */; };
 		9E0B9CB92B6DC6E000A5EACB /* ScrapPostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB82B6DC6DF00A5EACB /* ScrapPostDTO.swift */; };
 		9E0B9CBB2B6DC74200A5EACB /* ScrapPostDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CBA2B6DC74200A5EACB /* ScrapPostDataModel.swift */; };
+		9E5C36182B7F8E440091884C /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C36172B7F8E440091884C /* LoginRouter.swift */; };
+		9E5C361A2B7F8F340091884C /* CheckInitialLoginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C36192B7F8F340091884C /* CheckInitialLoginDTO.swift */; };
 		9E7401C02B3BE1C80030C8EC /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7401BF2B3BE1C80030C8EC /* MessageKit */; };
 		9E7401C62B3BF48D0030C8EC /* NSObject++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401C52B3BF48D0030C8EC /* NSObject++.swift */; };
 		9E7401C82B3BF4B80030C8EC /* UIImage++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401C72B3BF4B80030C8EC /* UIImage++.swift */; };
@@ -242,6 +244,8 @@
 		9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileViewController.swift; sourceTree = "<group>"; };
 		9E0B9CB82B6DC6DF00A5EACB /* ScrapPostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostDTO.swift; sourceTree = "<group>"; };
 		9E0B9CBA2B6DC74200A5EACB /* ScrapPostDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostDataModel.swift; sourceTree = "<group>"; };
+		9E5C36172B7F8E440091884C /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
+		9E5C36192B7F8F340091884C /* CheckInitialLoginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInitialLoginDTO.swift; sourceTree = "<group>"; };
 		9E7401C52B3BF48D0030C8EC /* NSObject++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject++.swift"; sourceTree = "<group>"; };
 		9E7401C72B3BF4B80030C8EC /* UIImage++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage++.swift"; sourceTree = "<group>"; };
 		9E7401CA2B3BF5670030C8EC /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
@@ -616,6 +620,14 @@
 			path = NameSpace;
 			sourceTree = "<group>";
 		};
+		9E5C36162B7F8E2C0091884C /* LoginRouter */ = {
+			isa = PBXGroup;
+			children = (
+				9E5C36172B7F8E440091884C /* LoginRouter.swift */,
+			);
+			path = LoginRouter;
+			sourceTree = "<group>";
+		};
 		9E7401C92B3BF5570030C8EC /* Component */ = {
 			isa = PBXGroup;
 			children = (
@@ -677,6 +689,7 @@
 		9E76B89B2AFB4E4F00338E2C /* Router */ = {
 			isa = PBXGroup;
 			children = (
+				9E5C36162B7F8E2C0091884C /* LoginRouter */,
 				9E8FB6F02B5CF59700C02028 /* MyProfileRouter */,
 				B58B8D352B4D3EF800FB98F9 /* CardRouter */,
 				9E76B89C2AFB4E5800338E2C /* BaseRouter */,
@@ -871,6 +884,7 @@
 			isa = PBXGroup;
 			children = (
 				B5B511132B7B6D6800A1B74D /* LoginDTO.swift */,
+				9E5C36192B7F8F340091884C /* CheckInitialLoginDTO.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1253,6 +1267,7 @@
 				B5B511092B74CCE400A1B74D /* CardViewController.swift in Sources */,
 				9E0B9CB72B6C9E0E00A5EACB /* EditMyProfileViewController.swift in Sources */,
 				9E0B9CB32B6C355D00A5EACB /* MyWrittenCommentDTO.swift in Sources */,
+				9E5C36182B7F8E440091884C /* LoginRouter.swift in Sources */,
 				B5B5110E2B74CCE400A1B74D /* CardCollectionCellView.swift in Sources */,
 				9E7401E62B3C18A60030C8EC /* Channel.swift in Sources */,
 				9E7401D92B3C187F0030C8EC /* ChatViewController.swift in Sources */,
@@ -1328,6 +1343,7 @@
 				9E7401E32B3C18A60030C8EC /* StreamError.swift in Sources */,
 				9E7462D92B755D38006693B6 /* EditMyProfileRequestBody.swift in Sources */,
 				9E8FB6F52B5CF64A00C02028 /* MyProfileAPI.swift in Sources */,
+				9E5C361A2B7F8F340091884C /* CheckInitialLoginDTO.swift in Sources */,
 				E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */,
 				E36717AB2B70A2B800CBCD8B /* PhotoViewController.swift in Sources */,
 			);

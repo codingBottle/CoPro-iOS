@@ -14,23 +14,8 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     //MARK: - UI Components
     
     private let containerView = UIView()
-//        .then {
-//        $0.layer.borderColor = UIColor.red.cgColor
-//        $0.layer.borderWidth = 1
-//    }
-    
     private let leftContainerView = UIView()
-//        .then {
-//        $0.layer.borderColor = UIColor.blue.cgColor
-//        $0.layer.borderWidth = 1
-//    }
-
     private let postImage = UIImageView()
-//        .then({
-//        $0.layer.borderColor = UIColor.brown.cgColor
-//        $0.layer.borderWidth = 1
-//    })
-    
     private let postTitleLabel = UILabel()
     private let writerNameLabel = UILabel()
     private let postTimeLabel = UILabel()
@@ -61,20 +46,20 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
         let labels = [writerNameLabel, postTimeLabel, likeCountLabel, sawPostLabel, commentCountLabel]
         labels.forEach { label in
             label.do {
-                $0.font = UIFont.systemFont(ofSize: 13)
-                $0.textColor = UIColor(hex: "6D6E71")
+               $0.setPretendardFont(text: "", size: 13, weight: .regular, letterSpacing: 1)
+               $0.textColor = UIColor.G4()
             }
         }
 
         let icons = [likeCountIcon, sawPostIcon, commentCountIcon]
         icons.forEach { icon in
             icon.do {
-                $0.tintColor = UIColor(hex: "6D6E71")
+               $0.tintColor = UIColor.G3()
             }
         }
 
         postTitleLabel.do {
-            $0.font = UIFont.boldSystemFont(ofSize: 15)
+           $0.setPretendardFont(text: "", size: 15, weight: .bold, letterSpacing: 1.22)
         }
 
         likeCountIcon.do {

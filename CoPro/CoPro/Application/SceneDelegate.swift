@@ -8,30 +8,32 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    
-    var window: UIWindow?
-    
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        // 1.
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-    // 2.
-        self.window = UIWindow(windowScene: windowScene)
-    // 3.
 
-        let navigationController = UINavigationController(rootViewController: MainViewController())
-
-        self.window?.rootViewController = navigationController
-    // 4.
-        self.window?.makeKeyAndVisible()
-    }
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        if let url = URLContexts.first?.url {
-            if url.absoluteString.starts(with: "copro://") {
-                if let code = url.absoluteString.split(separator: "=").last.map({ String($0) }) {
-                    GitHubLoginManager.shared.requestAccessToken(with: code)
-                }
+   
+   var window: UIWindow?
+   
+   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+      guard let windowScene = (scene as? UIWindowScene) else { return }
+      
+      //        self.window = UIWindow(windowScene: windowScene)
+      //        let navigationController = UINavigationController(rootViewController: LoginViewController())
+      //        self.window?.rootViewController = navigationController
+      //        self.window?.makeKeyAndVisible()
+      self.window = UIWindow(windowScene: windowScene)
+      let loginVC = LoginViewController()
+      let navigationController = UINavigationController(rootViewController: loginVC)
+      self.window?.rootViewController = navigationController
+      self.window?.makeKeyAndVisible()
+      LoginAPI.shared.loginVC = loginVC
+   }
+   
+   func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+      if let url = URLContexts.first?.url {
+         if url.absoluteString.starts(with: "copro://") {
+            if let code = url.absoluteString.split(separator: "=").last.map({ String($0) }) {
+               GitHubLoginManager.shared.requestAccessToken(with: code)
             }
-        }
-    }
+         }
+      }
+   }
 }

@@ -19,7 +19,6 @@ class ChatFirestoreStream {
     
     func subscribe(id: String, completion: @escaping (Result<[Message], StreamError>) -> Void) {
         let streamPath = "channels/\(id)/thread"
-        
         removeListener()
         collectionListener = firestoreDataBase.collection(streamPath)
         
