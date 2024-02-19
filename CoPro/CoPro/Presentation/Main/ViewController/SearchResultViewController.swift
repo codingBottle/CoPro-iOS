@@ -150,7 +150,7 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
 }
 extension SearchResultViewController {
     func searchBoard(search: String, page: Int, standard: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.searchBoard(token: token, query: search, page: page, standard: standard) { result in
                 switch result {
@@ -175,7 +175,6 @@ extension SearchResultViewController {
                         print("Failed to decode the response.")
                     }
                 case .requestErr(let message):
-                    // Handle request error here.
                     print("Request error: \(message)")
                 case .pathErr:
                     // Handle path error here.

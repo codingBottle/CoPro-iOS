@@ -201,6 +201,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         pageViewController.delegate = self
         scrollView.delegate = self
         recruitVC.delegate = self
+        freeVC.delegate = self
+        noticeVC.delegate = self
     }
     private func setRegister() {
 
@@ -295,10 +297,11 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     @objc func addButtonDidTapped() {
         switch currentPage {
             case 0:
-                // currentPage가 0일 때의 동작
-                // a 페이지로 이동하는 코드
-                break
-            case 1:
+            let addPostVC = AddProjectPostViewController()
+                let navigationController = UINavigationController(rootViewController: addPostVC)
+                navigationController.modalPresentationStyle = .fullScreen
+                self.present(navigationController, animated: true, completion: nil)
+                break            case 1:
             let addPostVC = AddPostViewController()
                 let navigationController = UINavigationController(rootViewController: addPostVC)
                 navigationController.modalPresentationStyle = .fullScreen

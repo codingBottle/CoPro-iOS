@@ -21,10 +21,35 @@ extension BoardAPI {
     
     public func getAllBoard(token: String, category: String, page: Int, standard: String, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.getAllBoard(token: token, category: category, page: page, standard: standard)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: BoardDTO.self,
-                                completion: completion)
-        }
+               if let statusCode = response.response?.statusCode {
+                           if statusCode == 401 {
+                               // 토큰 재요청 함수 호출
+                               LoginAPI.shared.refreshAccessToken { result in
+                                   switch result {
+                                   case .success(let loginDTO):
+                                       print("토큰 재발급 성공: \(loginDTO)")
+                                       
+                                       DispatchQueue.main.async {
+                                           self.AFManager.request(BoardRouter.getAllBoard(token: loginDTO.data.accessToken, category: category, page: page, standard: standard)).responseData { response in
+                                               self.disposeNetwork(response,
+                                                                   dataModel: BoardDTO.self,
+                                                                   completion: completion)
+                                               
+                                           }
+                                       }
+                                   case .failure(let error):
+                                       print("토큰 재발급 실패: \(error)")
+                                   }
+                               }
+                           } else {
+                               // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                               self.disposeNetwork(response, dataModel: BoardDTO.self, completion: completion)
+                           }
+                       } else {
+                           // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                           self.disposeNetwork(response, dataModel: BoardDTO.self, completion: completion)
+                       }
+           }
     }
     
     // 2. 게시글 상세보기
@@ -33,9 +58,34 @@ extension BoardAPI {
                                boardId: Int,
                                completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.getDetailBoard(token: token, boardId: boardId)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: DetailBoardDTO.self,
-                                completion: completion)
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.getDetailBoard(token: loginDTO.data.accessToken, boardId: boardId)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: DetailBoardDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                    }
         }
     }
     
@@ -46,19 +96,69 @@ extension BoardAPI {
                           boardId: Int, requestBody: CreatePostRequestBody,
                           completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.editBoard(token: token, boardId: boardId, requestBody: requestBody)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: DetailBoardDTO.self,
-                                completion: completion)
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.editBoard(token: loginDTO.data.accessToken, boardId: boardId, requestBody: requestBody)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: DetailBoardDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                    }
         }
     }
     
     // 게시글 신고하기
     
     public func reportBoard(token: String, boardId: Int,contents: String,                         completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.reportBoard(token: token, boardId: boardId, contents: contents)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: VoidDTO.self,
-                                completion: completion)
+        AFManager.request(BoardRouter.reportBoard(token: token, boardId: boardId, contents: contents)).responseData {  response in
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.reportBoard(token: loginDTO.data.accessToken, boardId: boardId, contents: contents)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: VoidDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                    }
         }
     }
     
@@ -66,19 +166,100 @@ extension BoardAPI {
     
     public func addPost(token: String, title: String, category: String, contents: String, imageId: [Int],                         completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.addPost(token: token, title: title, category: category, contents: contents, imageid: imageId)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: DetailBoardDTO.self,
-                                completion: completion)
-            
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.addPost(token: loginDTO.data.accessToken, title: title, category: category, contents: contents, imageid: imageId)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: DetailBoardDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                    }
+        }
+    }
+    
+    public func addProjectPost(token: String, title: String, category: String, contents: String, imageId: [Int], tag: String, part: String,                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.addProjectPost(token: token, title: title, category: category, contents: contents, part: part, tag: tag, imageid: imageId)).responseData { response in
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.addProjectPost(token: loginDTO.data.accessToken, title: title, category: category, contents: contents, part: part, tag: tag, imageid: imageId)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: DetailBoardDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                    }
         }
     }
     
     public func addPhoto(token: String, imageId: [UIImage],                         completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.addPhoto(token: token, images: imageId)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: ImageUploadDTO.self,
-                                completion: completion)
-            
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.addPhoto(token: loginDTO.data.accessToken, images: imageId)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: ImageUploadDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: ImageUploadDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: ImageUploadDTO.self, completion: completion)
+                    }
         }
     }
     
@@ -104,17 +285,67 @@ extension BoardAPI {
     // 7. 좋아요 등록
     public func saveHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.saveHeart(token: token, boardId: boardID)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: DetailHeartDataModel.self,
-                                completion: completion)
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.saveHeart(token: loginDTO.data.accessToken, boardId: boardID)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: DetailHeartDataModel.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: DetailHeartDataModel.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: DetailHeartDataModel.self, completion: completion)
+                    }
         }
     }
     // 8. 좋아요 삭제
     public func deleteHeart(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.deleteHeart(token: token, boardId: boardID)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: DetailHeartDataModel.self,
-                                completion: completion)
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.deleteHeart(token: loginDTO.data.accessToken, boardId: boardID)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: DetailHeartDataModel.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: DetailHeartDataModel.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: DetailHeartDataModel.self, completion: completion)
+                    }
         }
     }
     // 9. 인기 글 조회
@@ -128,47 +359,170 @@ extension BoardAPI {
     // 10. 스크랩 삭제
     public func deleteScrap(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.deleteScrap(token: token, boardId: boardID)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: VoidDTO.self,
-                                completion: completion)
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.deleteScrap(token: loginDTO.data.accessToken, boardId: boardID)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: VoidDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                    }
         }
     }
     
     // 11. 스크랩 추가
     public func saveScrap(token: String, boardID: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.saveScrap(token: token, boardId: boardID)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: VoidDTO.self,
-                                completion: completion)
-            
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.saveScrap(token: loginDTO.data.accessToken, boardId: boardID)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: VoidDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                    }
         }
     }
     
     // 12. 게시물 검색
     public func searchBoard(token: String, query: String, page: Int, standard: String, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.searchBoard(token: token, query: query, page: page, standard: standard)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: BoardDTO.self,
-                                completion: completion)
-            
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.searchBoard(token: loginDTO.data.accessToken, query: query, page: page, standard: standard)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: BoardDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: BoardDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: BoardDTO.self, completion: completion)
+                    }
         }
     }
     
     // 13. 댓글 가져오기
     public func getAllComment(token: String, boardId: Int, page: Int, completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.getAllComment(token: token, boardId: boardId, page: page)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: CommentDTO.self,
-                                completion: completion)
+        AFManager.request(BoardRouter.getAllComment(token: token, boardId: boardId, page: page)).responseData {  response in
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.getAllComment(token: loginDTO.data.accessToken, boardId: boardId, page: page)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: CommentDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                    }
         }
     }
     
     // 14. 댓글 작성하기
     public func addComment(token: String, boardId: Int, parentId: Int, content: String, completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.addComment(token: token, boardId: boardId, parentId: parentId, contents: content)).responseData { response in
-            self.disposeNetwork(response,
-                                dataModel: CommentDTO.self,
-                                completion: completion)
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.addComment(token: loginDTO.data.accessToken, boardId: boardId, parentId: parentId, contents: content)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: CommentDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                    }
         }
     }
 }

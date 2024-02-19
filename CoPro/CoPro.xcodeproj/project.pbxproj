@@ -176,7 +176,6 @@
 		E37AE8002B3C27D0002ABDCD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */; };
 		E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8042B3C2878002ABDCD /* RadioButton.swift */; };
 		E37AE8082B3C289B002ABDCD /* RadioButtonsStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */; };
-		E37B20972B71DDFC00308158 /* DetailFreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B20962B71DDFC00308158 /* DetailFreeViewController.swift */; };
 		E37B20992B72311600308158 /* BoardCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B20982B72311600308158 /* BoardCommentViewController.swift */; };
 		E37B209B2B7252C900308158 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B209A2B7252C900308158 /* CommentDTO.swift */; };
 		E37B209D2B7258FF00308158 /* CommentRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B209C2B7258FF00308158 /* CommentRequestBody.swift */; };
@@ -193,6 +192,9 @@
 		E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */; };
 		E3E2B8412B7F9AFA0022E5D0 /* freeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */; };
 		E3E2B8432B7F9B040022E5D0 /* noticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */; };
+		E3E2B8452B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8442B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift */; };
+		E3E2B8472B8256F00022E5D0 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8462B8256F00022E5D0 /* Checkbox.swift */; };
+		E3E2B8492B8258DD0022E5D0 /* AddProjectPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8482B8258DD0022E5D0 /* AddProjectPostViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -345,7 +347,6 @@
 		E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		E37AE8042B3C2878002ABDCD /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsStack.swift; sourceTree = "<group>"; };
-		E37B20962B71DDFC00308158 /* DetailFreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailFreeViewController.swift; sourceTree = "<group>"; };
 		E37B20982B72311600308158 /* BoardCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCommentViewController.swift; sourceTree = "<group>"; };
 		E37B209A2B7252C900308158 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
 		E37B209C2B7258FF00308158 /* CommentRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRequestBody.swift; sourceTree = "<group>"; };
@@ -362,6 +363,9 @@
 		E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = freeViewController.swift; sourceTree = "<group>"; };
 		E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noticeViewController.swift; sourceTree = "<group>"; };
+		E3E2B8442B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectBoardBottomSheetViewController.swift; sourceTree = "<group>"; };
+		E3E2B8462B8256F00022E5D0 /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		E3E2B8482B8258DD0022E5D0 /* AddProjectPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectPostViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1032,16 +1036,17 @@
 			isa = PBXGroup;
 			children = (
 				E37AE7F92B3C2766002ABDCD /* SortBottomSheetViewController.swift */,
+				E3E2B8442B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift */,
 				E37AE7FD2B3C27B1002ABDCD /* recruitViewController.swift */,
 				E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */,
 				E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */,
 				E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */,
 				E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */,
+				E3E2B8482B8258DD0022E5D0 /* AddProjectPostViewController.swift */,
 				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
 				E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */,
 				E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */,
 				E37B20982B72311600308158 /* BoardCommentViewController.swift */,
-				E37B20962B71DDFC00308158 /* DetailFreeViewController.swift */,
 				E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */,
 			);
 			path = ViewController;
@@ -1063,6 +1068,7 @@
 			children = (
 				E37AE8042B3C2878002ABDCD /* RadioButton.swift */,
 				E37AE8072B3C289B002ABDCD /* RadioButtonsStack.swift */,
+				E3E2B8462B8256F00022E5D0 /* Checkbox.swift */,
 			);
 			path = CustomClass;
 			sourceTree = "<group>";
@@ -1261,7 +1267,6 @@
 				B5B511092B74CCE400A1B74D /* CardViewController.swift in Sources */,
 				9E0B9CB72B6C9E0E00A5EACB /* EditMyProfileViewController.swift in Sources */,
 				9E0B9CB32B6C355D00A5EACB /* MyWrittenCommentDTO.swift in Sources */,
-				E37B20972B71DDFC00308158 /* DetailFreeViewController.swift in Sources */,
 				9E5C36182B7F8E440091884C /* LoginRouter.swift in Sources */,
 				B5B5110E2B74CCE400A1B74D /* CardCollectionCellView.swift in Sources */,
 				9E7401E62B3C18A60030C8EC /* Channel.swift in Sources */,
@@ -1314,14 +1319,17 @@
 				9E05D2B02AD508B200F4CA43 /* SceneDelegate.swift in Sources */,
 				9E05D2CF2AD5098200F4CA43 /* API.swift in Sources */,
 				E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */,
+				E3E2B8492B8258DD0022E5D0 /* AddProjectPostViewController.swift in Sources */,
 				E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */,
 				E32B673E2B56D16000EBB5AC /* heartRequestBody.swift in Sources */,
 				E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */,
 				E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */,
 				B5B5110B2B74CCE400A1B74D /* MiniCardGridView.swift in Sources */,
 				B5B511002B74CA1000A1B74D /* BottomTabController.swift in Sources */,
+				E3E2B8452B80EC2E0022E5D0 /* selectBoardBottomSheetViewController.swift in Sources */,
 				E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,
+				E3E2B8472B8256F00022E5D0 /* Checkbox.swift in Sources */,
 				E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */,
 				E37B209B2B7252C900308158 /* CommentDTO.swift in Sources */,
 				9E05D2FA2AD5227500F4CA43 /* UIColor++.swift in Sources */,

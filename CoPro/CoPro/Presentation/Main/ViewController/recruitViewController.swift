@@ -43,13 +43,12 @@ final class recruitViewController: UIViewController, SendStringData {
     var posts = [BoardDataModel]()
     var isInfiniteScroll = true
     var offset = 1
-    private let idToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0eXVpb3A5MjlAZ21haWwuY29tIiwiaWF0IjoxNzA4MDkxMjM2LCJleHAiOjE3MDgwOTMwMzZ9.Q5WIW1oxKerEBtTP0o9DXNd2DWCEOEsMhbQAM4u9lZXupOM8eGyNI-QH_glpc9VMYJvwBXUb1TCJSFXZc8oMtA"
+
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.keychain.set(idToken, forKey: "idToken")
         getAllBoard(category: "프로젝트", page: offset, standard: "create_at")
         setUI()
         setLayout()
@@ -154,7 +153,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
 }
 extension recruitViewController {
     func getAllBoard(category: String, page: Int, standard: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.getAllBoard(token: token , category: category, page: page, standard: standard) { result in
                 switch result {
@@ -179,7 +178,6 @@ extension recruitViewController {
                         print("Failed to decode the response.")
                     }
                 case .requestErr(let message):
-                    // Handle request error here.
                     print("Request error: \(message)")
                 case .pathErr:
                     // Handle path error here.

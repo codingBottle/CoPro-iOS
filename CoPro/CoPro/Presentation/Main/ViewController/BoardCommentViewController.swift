@@ -156,7 +156,7 @@ extension BoardCommentViewController {
     }
     
     func getAllComment(boardId: Int, page: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.getAllComment(token: token, boardId: boardId, page: page) { result in
                 switch result {
@@ -190,7 +190,6 @@ extension BoardCommentViewController {
                                             print("Failed to decode the response.")
                                         }
                 case .requestErr(let message):
-                    // Handle request error here.
                     print("Request error: \(message)")
                 case .pathErr:
                     // Handle path error here.
@@ -208,7 +207,7 @@ extension BoardCommentViewController {
         }
     }
     func addComment( boardId: Int, parentId: Int, content: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.addComment(token: token, boardId: boardId, parentId: parentId, content: content) { result in
                 switch result {

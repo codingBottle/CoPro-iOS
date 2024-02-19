@@ -22,7 +22,7 @@ class recentSearchTableViewCell: UITableViewCell {
     private let circleView = UIView()
     private let clockImageView = UIImageView()
     private let searchLabel = UILabel()
-    private let deleteButton = UIButton()
+    let deleteButton = UIButton()
     weak var delegate: RecentSearchTableViewCellDelegate?
 
     

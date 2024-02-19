@@ -1,18 +1,15 @@
 //
-//  AddPostViewController.swift
+//  AddProjectPostViewController.swift
 //  CoPro
 //
-//  Created by 문인호 on 1/26/24.
+//  Created by 문인호 on 2/19/24.
 //
 
 import UIKit
 import KeychainSwift
 import Photos
 
-class AddPostViewController: UIViewController, SendStringData {
-    func sendData(mydata: String, groupId: Int) {
-        sortLabel.text = mydata
-    }
+class AddProjectPostViewController: UIViewController {
     
     private enum Const {
         static let numberOfColumns = 3.0
@@ -29,7 +26,7 @@ class AddPostViewController: UIViewController, SendStringData {
     private let sortLabel = UILabel()
     private let sortButton = UIButton()
     private let titleTextField = UITextField()
-    private lazy var contentTextField = UITextView()
+    private lazy var recruitContentTextField = UITextView()
     private let attachButton = UIButton()
     private let lineView1 = UIView()
     private let lineView2 = UIView()
@@ -41,9 +38,56 @@ class AddPostViewController: UIViewController, SendStringData {
     private let imageScrollView = UIScrollView()
     var imageViews: [UIImageView] = []
     private let photoService: PhotoManager = MyPhotoManager()
+    private let recruitLabel = UILabel()
+    private let recruitStackView = UIStackView()
+    private let partLabel = UILabel()
+    private let partContentLabel = UILabel()
+    private let partStackView = UIStackView()
+    private let tagLabel = UILabel()
+    private let tagRadioButton = RadioButtonsStack(groupId: 1)
+    private let tagStackView = UIStackView()
+    private let chatButton = UIButton()
+    private let contentStackView = UIStackView()
+    private lazy var checkboxes: [Checkbox] = [self.checkbox1, self.checkbox2, self.checkbox3]
+    private lazy var checkbox1: Checkbox = {
+        let checkbox = Checkbox(text: "AI")
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapCheckbox(_:)))
+        checkbox.addGestureRecognizer(gesture)
+        return checkbox
+    }()
+    private lazy var checkbox2: Checkbox = {
+        let checkbox = Checkbox(text: "프론트엔드")
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapCheckbox(_:)))
+        checkbox.addGestureRecognizer(gesture)
+        return checkbox
+    }()
+    
+    private lazy var checkbox3: Checkbox = {
+        let checkbox = Checkbox(text: "백엔드")
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapCheckbox(_:)))
+        checkbox.addGestureRecognizer(gesture)
+        return checkbox
+    }()
 
+    @objc private func didTapCheckbox(_ sender: UITapGestureRecognizer) {
+        guard let checkbox = sender.view as? Checkbox else { return }
+        checkbox.toggle()
+        if checkbox.isChecked {
+            if let checkBoxText = checkbox.label.text {
+                print("\(checkBoxText) is Checked")
+            }
+        } else {
+            if let checkBoxText = checkbox.label.text {
+                print("\(checkBoxText) is UnChecked")
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let options = ["수익창출", "포트폴리오"]
+        tagRadioButton.set(options, defaultSelection: nil)
+        tagRadioButton.delegate = self
         setNavigate()
         setUI()
         setLayout()
@@ -53,6 +97,35 @@ class AddPostViewController: UIViewController, SendStringData {
     
     private func setUI() {
         self.view.backgroundColor = .white
+        recruitStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+
+        }
+        partStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+        tagStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+            $0.isUserInteractionEnabled = true
+        }
+        contentStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 32
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+            $0.layoutMargins = UIEdgeInsets(top: 16, left: .zero, bottom: .zero, right: .zero)
+            $0.isLayoutMarginsRelativeArrangement = true
+            $0.isUserInteractionEnabled = true
+        }
         stackView.do {
             $0.axis = .vertical
             $0.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: .zero, right: 16)
@@ -74,7 +147,7 @@ class AddPostViewController: UIViewController, SendStringData {
         }
         sortLabel.do {
             $0.font = UIFont.pretendard(size: 17, weight: .regular)
-            $0.text = "자유"
+            $0.text = "프로젝트"
         }
 //        sortButton.do {
 //            $0.setImage(UIImage(systemName: "chevron.up"), for: .normal)
@@ -90,7 +163,7 @@ class AddPostViewController: UIViewController, SendStringData {
         lineView2.do {
             $0.backgroundColor = UIColor.G1()
         }
-        contentTextField.do {
+        recruitContentTextField.do {
             $0.textContainerInset = UIEdgeInsets(top: 16.0, left: 0, bottom: 16.0, right: 0)
             $0.font = .pretendard(size: 17, weight: .regular)
             $0.text = textViewPlaceHolder
@@ -110,6 +183,25 @@ class AddPostViewController: UIViewController, SendStringData {
         imageScrollView.do {
             $0.showsHorizontalScrollIndicator = false
         }
+        recruitLabel.do {
+            $0.setPretendardFont(text: "모집 내용", size: 17, weight: .bold, letterSpacing: 1.25)
+        }
+//        recruitContentLabel.do {
+//            $0.font = .pretendard(size: 17, weight: .regular)
+//        }
+        partLabel.do {
+            $0.setPretendardFont(text: "모집 분야", size: 17, weight: .bold, letterSpacing: 1.25)
+        }
+        partContentLabel.do {
+            $0.font = .pretendard(size: 17, weight: .regular)
+        }
+        tagLabel.do {
+            $0.setPretendardFont(text: "목적", size: 17, weight: .bold, letterSpacing: 1.25)
+        }
+        tagRadioButton.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.isUserInteractionEnabled = true
+        }
     }
     
     private func setLayout() {
@@ -123,7 +215,19 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        stackView.addArrangedSubviews(sortStackView, lineView1, titleTextField, lineView2, contentTextField, warnView, imageScrollView)
+        stackView.addArrangedSubviews(sortStackView, lineView1, titleTextField, lineView2, contentStackView)
+        contentStackView.addArrangedSubviews(recruitStackView, partStackView,tagStackView, imageScrollView)
+        recruitStackView.addArrangedSubviews(recruitLabel, recruitContentTextField, warnView)
+        partStackView.addArrangedSubview(partLabel)
+        for checkbox in checkboxes {
+            checkbox.snp.makeConstraints {
+                $0.height.equalTo(20)
+            }
+            partStackView.addArrangedSubview(checkbox)
+        }
+        tagStackView.addArrangedSubviews(tagLabel, tagRadioButton)
+        
+        tagRadioButton.delegate = self
         imageScrollView.snp.makeConstraints {
             $0.height.equalTo(144)
         }
@@ -137,7 +241,7 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview()
         }
-//
+
 //        sortButton.snp.makeConstraints {
 //            $0.centerY.equalToSuperview()
 //            $0.trailing.equalToSuperview()
@@ -161,21 +265,16 @@ class AddPostViewController: UIViewController, SendStringData {
 //            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(0.5)
         }
-//        contentTextField.snp.makeConstraints {
-//            $0.top.equalTo(lineView2.snp.bottom)
-//            $0.trailing.leading.equalToSuperview()
-//            $0.height.equalTo(420)
-//        }
         warnView.snp.makeConstraints {
             $0.height.equalTo(50)
         }
         warnView.addSubviews(remainCountLabel, warnLabel)
         remainCountLabel.snp.makeConstraints {
-            $0.top.equalTo(contentTextField.snp.bottom).offset(16)
+            $0.top.equalTo(recruitContentTextField.snp.bottom).offset(16)
             $0.trailing.equalToSuperview()
         }
         warnLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalTo(remainCountLabel.snp.bottom).offset(4)
             $0.trailing.equalToSuperview()
         }
         attachButton.snp.makeConstraints {
@@ -183,8 +282,9 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             $0.width.height.equalTo(45)
         }
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTextView(_:)))
-                view.addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTextView(_:)))
+//        tapGesture.delegate = self  // 이 부분 추가
+//        view.addGestureRecognizer(tapGesture)
     }
     
     private func setNavigate() {
@@ -225,7 +325,19 @@ class AddPostViewController: UIViewController, SendStringData {
         }
     }
     @objc private func addButtonTapped() {
-        addPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: contentTextField.text, image: imageUrls)
+        var checkedTexts = ""
+            for checkbox in checkboxes {
+                if checkbox.isChecked, let checkBoxText = checkbox.label.text {
+                    if checkedTexts == "" {
+                        checkedTexts += checkBoxText
+                    }
+                    else {
+                        checkedTexts += "," + checkBoxText
+                    }
+                }
+            }
+        print("\(checkedTexts)")
+        addProjectPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: recruitContentTextField.text, image: imageUrls, tag: tagRadioButton.getSelectedText() ?? "", part: checkedTexts)
     }
 
     @objc func receiveImages(_ notification: Notification) {
@@ -269,7 +381,7 @@ class AddPostViewController: UIViewController, SendStringData {
     }
 }
 
-extension AddPostViewController: UITextViewDelegate {
+extension AddProjectPostViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
@@ -308,21 +420,11 @@ extension AddPostViewController: UITextViewDelegate {
         }
 }
 
-extension UILabel {
-    func asColor(targetString: String, color: UIColor?) {
-        let fullText = text ?? ""
-        let range = (fullText as NSString).range(of: targetString)
-        let attributedString = NSMutableAttributedString(string: fullText)
-        attributedString.addAttribute(.foregroundColor, value: color as Any, range: range)
-        attributedText = attributedString
-    }
-}
-
-extension AddPostViewController {
-    func addPost( title: String, category: String, content: String, image: [Int]) {
+extension AddProjectPostViewController {
+    func addProjectPost( title: String, category: String, content: String, image: [Int], tag: String, part: String) {
         if let token = self.keychain.get("accessToken") {
             print("\(token)")
-            BoardAPI.shared.addPost(token: token, title: titleTextField.text ?? "", category: category, contents: contentTextField.text, imageId: imageUrls) { result in
+            BoardAPI.shared.addProjectPost(token: token, title: title, category: category, contents: content, imageId: image, tag: tag, part: part) { result in
                 switch result {
                 case .success:
                     print("success")
@@ -346,8 +448,15 @@ extension AddPostViewController {
     }
 }
 
-extension AddPostViewController: ImageUploaderDelegate {
+extension AddProjectPostViewController: ImageUploaderDelegate, SendStringData, UIGestureRecognizerDelegate {
     func didUploadImages(with urls: [Int]) {
         self.imageUrls = urls
+    }
+    
+    func sendData(mydata: String, groupId: Int) {
+        print("\(mydata)")
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

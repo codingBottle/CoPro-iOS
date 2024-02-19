@@ -17,6 +17,15 @@ protocol SendStringData: AnyObject {
 
 class RadioButtonsStack: UIView {
     
+    func getSelectedText() -> String? {
+        for radioView in radioViews {
+            if radioView.radioButton.isOn {
+                return radioView.label.text
+            }
+        }
+        return nil
+    }
+    
     weak var delegate: SendStringData?
     
     private let stackView: UIStackView = {
@@ -62,6 +71,7 @@ class RadioButtonsStack: UIView {
                     let view = RadioButtonView()
                     view.radioButton.tag = index
                     view.radioButton.addTarget(self, action: #selector(radioSelected(_:)), for: .valueChanged)
+                    print("add Target Completed")
                     view.set(text)
                     
                     if let defaultSelection = defaultSelection, text == defaultSelection {

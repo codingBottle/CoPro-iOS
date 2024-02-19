@@ -22,7 +22,6 @@ final class DetailBoardViewController: UIViewController {
     private let titleLabel = UILabel()
     private let nicknameLabel = UILabel()
     private let jobLabel = UILabel()
-    //    private let tagLabel = UILabel()
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
     private let viewCountLabel = UILabel()
@@ -38,12 +37,21 @@ final class DetailBoardViewController: UIViewController {
     private let bottomView = UIView()
     var imageViews: [UIImageView] = []
     private let imageScrollView = UIScrollView()
+    private let recruitLabel = UILabel()
+    private let recruitContentLabel = UILabel()
+    private let recruitStackView = UIStackView()
+    private let partLabel = UILabel()
+    private let partContentLabel = UILabel()
+    private let partStackView = UIStackView()
+    private let tagLabel = UILabel()
+    private let tagContentLabel = UILabel()
+    private let tagStackView = UIStackView()
+    private let chatButton = UIButton()
+    private let contentStackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getDetailBoard( boardId: postId!)
-        setUI()
-        setLayout()
         addTarget()
         setNavigate()
     }
@@ -53,6 +61,7 @@ final class DetailBoardViewController: UIViewController {
         commentButton.addTarget(self, action: #selector(commentButtonTapped(_: )), for: .touchUpInside)
     }
     private func setUI() {
+        
         self.view.backgroundColor = .white
         imageScrollView.do {
             $0.showsHorizontalScrollIndicator = false
@@ -64,6 +73,31 @@ final class DetailBoardViewController: UIViewController {
             $0.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: .zero, right: 16)
             $0.isLayoutMarginsRelativeArrangement = true
         }
+        recruitStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+        partStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+        tagStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+        contentStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 32
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+
         titleLabel.do {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 22, weight: .regular)
@@ -128,8 +162,33 @@ final class DetailBoardViewController: UIViewController {
                 scrapButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
             }
         }
+        recruitLabel.do {
+            $0.setPretendardFont(text: "모집 내용", size: 17, weight: .bold, letterSpacing: 1.25)
+        }
+        recruitContentLabel.do {
+            $0.font = .pretendard(size: 17, weight: .regular)
+        }
+        partLabel.do {
+            $0.setPretendardFont(text: "모집 분야", size: 17, weight: .bold, letterSpacing: 1.25)
+        }
+        partContentLabel.do {
+            $0.font = .pretendard(size: 17, weight: .regular)
+        }
+        tagLabel.do {
+            $0.setPretendardFont(text: "목적", size: 17, weight: .bold, letterSpacing: 1.25)
+        }
+        tagContentLabel.do {
+            $0.font = .pretendard(size: 17, weight: .regular)
+        }
+        chatButton.do {
+            $0.backgroundColor = .P2()
+            $0.setTitle("채팅하기", for: .normal)
+            $0.setTitleColor(.White(), for: .normal)
+            $0.titleLabel?.font = .pretendard(size: 17, weight: .bold)
+            $0.layer.cornerRadius = 10
+        }
     }
-    private func setLayout() {
+    private func setLayoutFree() {
         view.addSubviews(scrollView,lineView2 ,bottomView)
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -206,6 +265,79 @@ final class DetailBoardViewController: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
+    
+    private func setLayoutProject() {
+        view.addSubviews(scrollView,lineView2 ,bottomView)
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(lineView2.snp.top)
+        }
+        lineView2.snp.makeConstraints {
+            $0.bottom.equalTo(bottomView.snp.top)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        bottomView.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(64)
+        }
+        bottomView.addSubviews(scrapButton, chatButton)
+        scrapButton.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.centerY.equalToSuperview()
+            $0.width.height.equalTo(32)
+        }
+        chatButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.width.equalTo(151)
+            $0.height.equalTo(40)
+            $0.centerY.equalToSuperview()
+        }
+        scrollView.addSubview(stackView)
+        stackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        stackView.addArrangedSubviews(titleLabel,infoView, contentStackView)
+        contentStackView.addArrangedSubviews(recruitStackView, partStackView,tagStackView, imageScrollView)
+        recruitStackView.addArrangedSubviews(recruitLabel, recruitContentLabel)
+        partStackView.addArrangedSubviews(partLabel, partContentLabel)
+        tagStackView.addArrangedSubviews(tagLabel, tagContentLabel)
+        
+        infoView.addSubviews(nicknameLabel, jobLabel, dateLabel, timeLabel, viewCountLabel, lineView1)
+        infoView.snp.makeConstraints {
+            $0.height.equalTo(28)
+        }
+        imageScrollView.snp.makeConstraints {
+            $0.height.equalTo(144)
+        }
+        nicknameLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+        jobLabel.snp.makeConstraints {
+            $0.leading.equalTo(nicknameLabel.snp.trailing).offset(5)
+            $0.centerY.equalToSuperview()
+        }
+        viewCountLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+        timeLabel.snp.makeConstraints {
+            $0.trailing.equalTo(viewCountLabel.snp.leading).offset(-10)
+            $0.centerY.equalToSuperview()
+        }
+        dateLabel.snp.makeConstraints {
+            $0.trailing.equalTo(timeLabel.snp.leading).offset(-10)
+            $0.centerY.equalToSuperview()
+        }
+        lineView1.snp.makeConstraints {
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+    
     private func setNavigate() {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
         leftButton.tintColor = UIColor.G6()
@@ -226,7 +358,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func getDetailBoard( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.getDetailBoard(token: token, boardId: boardId) { result in
                 switch result {
@@ -236,8 +368,16 @@ final class DetailBoardViewController: UIViewController {
                         let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil")
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.async { [self] in
                             self.setUI()
+                            switch mappedItem.category {
+                                case "프로젝트":
+                                self.setLayoutProject()
+                                case "자유":
+                                self.setLayoutFree()
+                                default:
+                                break
+                            }
                             self.updateView(with: mappedItem)
                         }
                     }
@@ -260,7 +400,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func saveHeart( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.saveHeart(token: token, boardID: boardId) { result in
                 switch result {
@@ -275,7 +415,6 @@ final class DetailBoardViewController: UIViewController {
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
-                    
                 case .pathErr:
                     print("Path error")
                     
@@ -292,7 +431,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func deleteHeart( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.deleteHeart(token: token, boardID: boardId) { result in
                 switch result {
@@ -307,7 +446,6 @@ final class DetailBoardViewController: UIViewController {
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
-                    
                 case .pathErr:
                     print("Path error")
                     
@@ -325,7 +463,7 @@ final class DetailBoardViewController: UIViewController {
     }
     
     func saveScrap( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.saveScrap(token: token, boardID: boardId) { result in
                 switch result {
@@ -337,7 +475,6 @@ final class DetailBoardViewController: UIViewController {
                     self.isScrap = true
                 case .requestErr(let message):
                     print("Request error: \(message)")
-                    
                 case .pathErr:
                     print("Path error")
                     
@@ -354,7 +491,7 @@ final class DetailBoardViewController: UIViewController {
         }
     }
     func deleteScrap( boardId: Int) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.deleteScrap(token: token, boardID: boardId) { result in
                 switch result {
@@ -366,7 +503,6 @@ final class DetailBoardViewController: UIViewController {
                     self.isScrap = false
                 case .requestErr(let message):
                     print("Request error: \(message)")
-                    
                 case .pathErr:
                     print("Path error")
                     
@@ -386,7 +522,9 @@ final class DetailBoardViewController: UIViewController {
         titleLabel.text = data.title
         nicknameLabel.text = data.nickName
         jobLabel.text = data.occupation
-        //        tagLabel.text = data.tag
+        recruitContentLabel.text = data.contents
+        partContentLabel.text = data.part
+        tagContentLabel.text = data.tag
         dateLabel.text = data.getDateString()
         timeLabel.text = data.getTimeString()
         viewCountLabel.text = "조회 \(data.count)"

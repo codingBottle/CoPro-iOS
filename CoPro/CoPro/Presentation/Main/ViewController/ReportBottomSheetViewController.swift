@@ -120,7 +120,7 @@ extension ReportBottomSheetViewController {
     }
  
     func reportBoard( boardId: Int, contents: String) {
-        if let token = self.keychain.get("idToken") {
+        if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.reportBoard(token: token, boardId: boardId, contents: contents) { result in
                 switch result {
