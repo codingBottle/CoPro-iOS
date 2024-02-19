@@ -213,7 +213,13 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
                               message: "다시 시도해주세요",
                               confirmButtonName: "확인")
-            } else {
+            } 
+            
+            /** 정규식 대응하기*/
+//            else if {
+//               if editGitHubURLBody.gitHubURL.filter({ $0. })
+//            }
+            else {
                postEditGitHubURL()
             }
          }
@@ -248,16 +254,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
 
                case .requestErr(let message):
                   print("Error : \(message)")
-                  LoginAPI.shared.refreshAccessToken { result in
-                     switch result {
-                     case .success(_):
-                        DispatchQueue.main.async {
-                           self.postEditGitHubURL()
-                        }
-                     case .failure(let error):
-                        print("토큰 재발급 실패: \(error)")
-                     }
-                  }
                case .pathErr, .serverErr, .networkFail:
                   print("another Error")
                default:
@@ -272,22 +268,12 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                                  confirmButtonName: "확인",
                                  confirmButtonCompletion: { [self] in
                      DispatchQueue.main.async {
-//                        self.myProfileVC?.myProfileData?.gitHubURL = self.editGitHubURLBody.gitHubURL
+                        self.keychain.set(self.editGitHubURLBody.gitHubURL, forKey: "currentUserGithubURL")
                         self.dismiss(animated: true)
                      }
                   })
                case .requestErr(let message):
                   print("Error : \(message)")
-                  LoginAPI.shared.refreshAccessToken { result in
-                     switch result {
-                     case .success(_):
-                        DispatchQueue.main.async {
-                           self.postEditGitHubURL()
-                        }
-                     case .failure(let error):
-                        print("토큰 재발급 실패: \(error)")
-                     }
-                  }
                case .pathErr, .serverErr, .networkFail:
                   print("another Error")
                default:

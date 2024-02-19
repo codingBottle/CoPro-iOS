@@ -8,7 +8,7 @@
 import Foundation
 
 struct FcmTokenDTO: Codable {
-    let statusCode: Int
-    let message: String
+   let statusCode: Int
+   let message: String
    let data: String?
 }

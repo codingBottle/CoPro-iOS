@@ -21,8 +21,9 @@ class MiniCardGridView: UICollectionViewCell {
     var likeMemberId: Int?
     var likeCount: Int?
     var isLike: Bool!
-    var imageURL: String?
-    weak var MiniCardGridViewdelegate: MiniCardGridViewDelegate?
+   var imageURL: String?
+   var email: String?
+   weak var MiniCardGridViewdelegate: MiniCardGridViewDelegate?
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -66,38 +67,29 @@ class MiniCardGridView: UICollectionViewCell {
     }
     
     //Chat버튼 동작 메소드
-    @objc func chatButtonTapped(_ sender: UIButton) {
-        print("Chat 버튼이 눌렸습니다.")
-        let keychain = KeychainSwift()
-        guard let receiverurl = imageURL else { return print("chatButtonTapped의 imageURL 에러") }
-        guard let currentUserNickName = keychain.get("currentUserNickName") else {return print("컬렉션뷰에서 채팅방 생성할 때에 currentUserNickName 값 에러")}
-        guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return print("컬렉션뷰에서 채팅방 생성할 때에 currentUserNickName 값 에러")}
-        channelStream.createChannel(sender: currentUserNickName, receiver: miniCardView.userNameLabel.text ?? "", senderProfileImage: currentUserProfileImage, receiverProfileImage: receiverurl, occupation: miniCardView.userPartLabel.text ?? "", unreadCount: 0) {error in
-            if let error = error {
-                // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
-                print("Failed to create channel: \(error.localizedDescription)")
-                self.MiniCardGridViewdelegate?.didTapChatButtonOnMiniCardGridView(in: self, success: false)
-            } else {
-                // 성공: 채팅 버튼을 탭하거나 필요한 다른 동작을 수행합니다.
-                self.MiniCardGridViewdelegate?.didTapChatButtonOnMiniCardGridView(in: self, success: true)
-            }
-        }
-    }
-    //   @objc func chatButtonTapped(_ sender: UIButton) {
-    //      print("Chat 버튼이 눌렸습니다.")
-    //      guard let url = imageURL else { return print("chatButtonTapped의 imageURL 에러") }
-    //      channelStream.createChannel(with: miniCardView.userNameLabel.text ?? "", isProject: false, profileImage: url, occupation: miniCardView.userPartLabel.text ?? "", unreadCount: 0) {error in
-    //         if let error = error {
-    //            // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
-    //            print("Failed to create channel: \(error.localizedDescription)")
-    //            self.MiniCardGridViewdelegate?.didTapChatButtonOnMiniCardGridView(in: self, success: false)
-    //         } else {
-    //            // 성공: 채팅 버튼을 탭하거나 필요한 다른 동작을 수행합니다.
-    //            self.MiniCardGridViewdelegate?.didTapChatButtonOnMiniCardGridView(in: self, success: true)
-    //         }
-    //      }
-    //   }
-    
+   @objc func chatButtonTapped(_ sender: UIButton) {
+      print("Chat 버튼이 눌렸습니다.")
+      let keychain = KeychainSwift()
+      guard let receiverurl = imageURL, let receiverEmail = email else {return}
+          
+      guard let currentUserNickName = keychain.get("currentUserNickName") else {return}
+      guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
+      guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
+      var channelId = [currentUserNickName, miniCardView.userNameLabel.text ?? ""].sorted().joined(separator: "-")
+      
+      channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, receiver: miniCardView.userNameLabel.text ?? "", receiverJobTitle: miniCardView.userPartLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
+         if let error = error {
+            // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
+            print("Failed to create channel: \(error.localizedDescription)")
+            self.MiniCardGridViewdelegate?.didTapChatButtonOnMiniCardGridView(in: self, success: false)
+         } else {
+            // 성공: 채팅 버튼을 탭하거나 필요한 다른 동작을 수행합니다.
+            self.MiniCardGridViewdelegate?.didTapChatButtonOnMiniCardGridView(in: self, success: true)
+         }
+      }
+      
+   }
+   
     //좋아요 아이콘을 터치했을 때 실행되는 메서드
     @objc func likeIconTapped() {
         if isLike == true{
@@ -140,11 +132,12 @@ class MiniCardGridView: UICollectionViewCell {
         
     }
     
-    func configure(with imageUrl: String,name: String, occupation: String, language: String,old: Int,gitButtonURL: String,likeCount: Int,memberId: Int,isLike: Bool) {
+   func configure(with imageUrl: String,nickname: String, occupation: String, language: String,old: Int,gitButtonURL: String,likeCount: Int,memberId: Int,isLike: Bool, email: String) {
+      self.email = email
         self.gitButtonURL = gitButtonURL
         self.imageURL = imageUrl
         miniCardView.loadImage(url: imageUrl)
-        miniCardView.userNameLabel.text = name
+        miniCardView.userNameLabel.text = nickname
         miniCardView.userPartLabel.text = occupation
         miniCardView.userLangLabel.text = language
         switch old {

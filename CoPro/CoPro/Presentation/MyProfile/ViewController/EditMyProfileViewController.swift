@@ -187,80 +187,62 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    
    private func postEditMyProfile() {
-      if let token = self.keychain.get("accessToken") {
-         switch activeViewType {
-         case .FirstLogin:
-            MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
-               switch result {
-               case .success(let data):
-                  if let data = data as? EditMyProfileDTO {
-                     print("계정 정보 등록 성공, 따라서 깃헙url 등록하러 이동")
-                     self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
-                     self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
-                     DispatchQueue.main.async {
-                        if let parentViewController = self.presentingViewController {
-                           self.dismiss(animated: true, completion: {
-                              let alertVC = EditGithubModalViewController()
-                              alertVC.isFirstLoginUserName = self.editMyProfileBody.nickName
-                              alertVC.activeModalType = .FirstLogin
-                              parentViewController.present(alertVC, animated: true, completion: nil)
-                           })
-                        }
-                     }
-                  }
-               case .requestErr(let message):
-                  print("Error : \(message)")
-                  LoginAPI.shared.refreshAccessToken { result in
-                      switch result {
-                      case .success(_):
-                          DispatchQueue.main.async {
-                             self.postEditMyProfile()
-                          }
-                      case .failure(let error):
-                          print("토큰 재발급 실패: \(error)")
-                      }
-                  }
-               case .pathErr, .serverErr, .networkFail:
-                   print("another Error")
-               default:
-                   break
+       if let token = self.keychain.get("accessToken") {
+           switch activeViewType {
+              
+           case .FirstLogin:
+               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
+                   switch result {
+                   case .success(let data):
+                       if let data = data as? EditMyProfileDTO {
+                           self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
+                           self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
+                          self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
+                           DispatchQueue.main.async {
+                               if let parentViewController = self.presentingViewController {
+                                   self.dismiss(animated: true, completion: {
+                                       let alertVC = EditGithubModalViewController()
+                                       alertVC.isFirstLoginUserName = self.editMyProfileBody.nickName
+                                       alertVC.activeModalType = .FirstLogin
+                                       parentViewController.present(alertVC, animated: true, completion: nil)
+                                   })
+                               }
+                           }
+                       }
+                   case .requestErr(let message):
+                       print("Error : \(message)")
+                   case .pathErr, .serverErr, .networkFail:
+                       print("another Error")
+                   default:
+                       break
+                   }
                }
-            }
-         case .NotFirstLogin:
-            MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
-               switch result {
-               case .success(let data):
-                  if let data = data as? EditMyProfileDTO {
-                     if data.statusCode != 200 {
-                        print("프로필 수정 실패")
-                        self.faileEditProfile()
-                     } else {
-                        print("프로필 수정 성공")
-                        self.successEditProfile()
-                     }
-                  }
-               case .requestErr(let message):
-                  print("Error : \(message)")
-                  LoginAPI.shared.refreshAccessToken { result in
-                      switch result {
-                      case .success(_):
-                          DispatchQueue.main.async {
-                             self.postEditMyProfile()
-                          }
-                      case .failure(let error):
-                          print("토큰 재발급 실패: \(error)")
-                      }
-                  }
-               case .pathErr, .serverErr, .networkFail:
-                   print("another Error")
-               default:
-                   break
+              
+           case .NotFirstLogin:
+               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
+                   switch result {
+                   case .success(let data):
+                       if let data = data as? EditMyProfileDTO {
+                           if data.statusCode != 200 {
+                               print("프로필 수정 실패")
+                               self.faileEditProfile()
+                           } else {
+                               print("프로필 수정 성공")
+                               self.successEditProfile()
+                           }
+                       }
+                   case .requestErr(let message):
+                       print("Error : \(message)")
+                   case .pathErr, .serverErr, .networkFail:
+                       print("another Error")
+                   default:
+                       break
+                   }
                }
-            }
-         }
-         
-      }
+           }
+       }
    }
+
    
    
    private func returnEditMyProfileUIHeight(type: String) -> CGFloat {
@@ -292,7 +274,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          }
       }
       updateButtonState(type: "First")
-      
    }
    
    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {

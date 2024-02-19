@@ -13,7 +13,7 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     
     //MARK: - UI Components
     
-    private let containerView = UIView()
+   let containerView = UIView()
     private let leftContainerView = UIView()
     private let postImage = UIImageView()
     private let postTitleLabel = UILabel()
