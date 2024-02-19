@@ -31,7 +31,6 @@ extension CardAPI {
         
         // Body 설정
         let parameters: Parameters = [
-            "memberId" : 17,
             "occupation": part == "직군" ? " " : part,
             "language": lang == "언어" ? " " :lang,
             "career": old,
@@ -63,9 +62,54 @@ extension CardAPI {
                     }
                 }
             }
+    }
+    // MARK: - 프로필 관심프로필
+    func getLikeUser(page: Int,completion: @escaping (Result<LikeProfileDTO, AFError>) -> Void){
+        //keychain 토큰가저오기
+        let keychain = KeychainSwift()
+        guard let token = keychain.get("accessToken") else {
+            print("No token found in keychain.")
+            return
+        }
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "Accept": "application/json"
+        ]
+        
+        // Body 설정
+        let parameters: Parameters = [
+            "page":page,
+            "size":10
+            
+        ]
+        AF.request("\(baseURL)/api/likes", method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .responseDecodable(of: LikeProfileDTO.self) { response in
+                if let statusCode = response.response?.statusCode {
+                    if statusCode == 401 {
+                        // 토큰 재요청 함수 호출
+                        LoginAPI.shared.refreshAccessToken { result in
+                            switch result {
+                            case .success(let loginDTO):
+                                print("토큰 재발급 성공: \(loginDTO)")
+                                
+                                DispatchQueue.main.async {
+                                    // 토큰 재발급이 성공한 후 reloadData() 호출
+                                    CardViewController().reloadData()
+                                }
+                            case .failure(let error):
+                                print("토큰 재발급 실패: \(error)")
+                            }
+                        }
+                    } else {
+                        // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                        completion(response.result)
+                    }
+                }
+            }
         
         
     }
+    
     func addLike(MemberId : Int, completion: @escaping (Bool) -> Void){
         let keychain = KeychainSwift()
         guard let token = keychain.get("accessToken") else {

@@ -174,7 +174,11 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             cell.loadProfileImage(url: myProfileData?.picture ?? "")
             cell.nickname.text = myProfileData?.nickName
             cell.developmentJobLabel.text = myProfileData?.occupation
-            cell.usedLanguageLabel.text = "\(languageArr?[0] ?? "") / \(languageArr?[1] ?? "")"
+            if languageArr?.count ?? 0 > 1 {
+                          cell.usedLanguageLabel.text = "\(languageArr?[0] ?? "") / \(languageArr?[1] ?? "")"
+                       } else {
+                          cell.usedLanguageLabel.text = "\(languageArr?[0] ?? "")"
+                       }
             cell.selectionStyle = .none
             return cell
             
@@ -299,6 +303,9 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     // 관심 프로필
     func didTapInterestedProfileButtonTapped(in cell: MyProfileTableViewCell) {
         print("관심 프로필 클릭")
+        let vc = LikeProfileViewController()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
