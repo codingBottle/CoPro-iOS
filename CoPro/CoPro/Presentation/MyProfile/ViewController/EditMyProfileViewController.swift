@@ -197,6 +197,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                        if let data = data as? EditMyProfileDTO {
                            self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
                            self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
+                          self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
                            DispatchQueue.main.async {
                                if let parentViewController = self.presentingViewController {
                                    self.dismiss(animated: true, completion: {

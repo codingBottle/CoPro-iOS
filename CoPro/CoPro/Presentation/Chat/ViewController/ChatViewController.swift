@@ -12,11 +12,14 @@ import Photos
 import FirebaseFirestore
 import FirebaseAuth
 import SnapKit
+import KeychainSwift
 
 class ChatViewController: MessagesViewController {
     
+   let keychain = KeychainSwift()
    var customAvatarView = CustomAvatarView()
    var avatarView: AvatarView?
+   var targetEmail: String?
    
    var chatAvatarImage = AvatarView().then {
       $0.clipsToBounds = true
@@ -86,7 +89,7 @@ class ChatViewController: MessagesViewController {
        }
 
        let subtitleLabel = UILabel().then {
-          $0.setPretendardFont(text: channel.occupation, size: 11, weight: .regular, letterSpacing: 1)
+          $0.setPretendardFont(text: channel.receiverJobTitle, size: 11, weight: .regular, letterSpacing: 1)
           $0.textAlignment = .center
        }
 
@@ -375,15 +378,46 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 //      guard let currentUserNickName = self.currentUserNickName else {return print("inputBar 함수에서 user 에러")}
       let message = Message(user: currentUserNickName, content: text)
       
+      //여기가 chat 넘기는 곳.
       chatFirestoreStream.save(message) { [weak self] error in
          if let error = error {
             print(error)
             return
          }
+         self?.postChatNotification(content: message.content)
          self?.messagesCollectionView.scrollToLastItem()
       }
       inputBar.inputTextView.text.removeAll()
    }
+   
+   
+   func postChatNotification(content: String) {
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return }
+      guard let targetEmail = targetEmail else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      
+      NotificationAPI.shared.postChatNotification(token: token,
+                                                  requestBody: ChattingNotificationRequestBody(targetMemberEmail: targetEmail, title: currentUserNickName, body: content)) { result in
+           switch result {
+           case .success(_):
+              print("postChatNotification 보내기 성공")
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
+   }
+   
 }
 
 extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

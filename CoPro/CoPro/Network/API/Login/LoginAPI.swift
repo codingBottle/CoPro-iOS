@@ -242,6 +242,8 @@ extension LoginAPI {
                     DispatchQueue.main.async {
                         if let data = data as? MyProfileDTO {
                            keychain.set(data.data.nickName, forKey: "currentUserNickName")
+                           keychain.set(data.data.picture, forKey: "currentUserProfileImage")
+                           keychain.set(data.data.occupation, forKey: "currentUserOccupation")
                             completion()
                         } else {
                             print("Failed to decode the response.")

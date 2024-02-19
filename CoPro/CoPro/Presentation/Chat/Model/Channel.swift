@@ -10,51 +10,57 @@ import FirebaseFirestore
 
 struct Channel {
    var id: String?
+   let channelId: String
    let sender: String
-   let receiver: String
+   let senderJobTitle: String
    let senderProfileImage: String
+   let receiver: String
+   let receiverJobTitle: String
    let receiverProfileImage: String
-   let occupation: String
-//   let isProject: Bool  // 추가된 프로퍼티
-   
-   let unreadCount: Int
+   let receiverEmail: String
 
-   init(id: String? = nil, sender: String, senderProfileImage: String, receiver: String, receiverProfileImage: String, occupation: String, unreadCount: Int) {
+   init(id: String? = nil, channelId: String, sender: String, senderJobTitle: String, senderProfileImage: String, receiver: String, receiverJobTitle: String, receiverProfileImage: String, receiverEmail: String) {
       self.id = id
+      self.channelId = channelId
       self.sender = sender
-      self.receiver = receiver
+      self.senderJobTitle = senderJobTitle
       self.senderProfileImage = senderProfileImage
+      self.receiver = receiver
+      self.receiverJobTitle = receiverJobTitle
       self.receiverProfileImage = receiverProfileImage
-      self.occupation = occupation
-      self.unreadCount = unreadCount
+      self.receiverEmail = receiverEmail
    }
    
    init?(_ document: QueryDocumentSnapshot) {
       let data = document.data()
       
-      guard let sender = data["sender"] as? String,
-            let receiver = data["receiver"] as? String,
+      guard let channelId = data["channelId"] as? String,
+            let sender = data["sender"] as? String,
+            let senderJobTitle = data["senderJobTitle"] as? String,
             let senderProfileImage = data["senderProfileImage"] as? String,
+            let receiver = data["receiver"] as? String,
+            let receiverJobTitle = data["receiverJobTitle"] as? String,
             let receiverProfileImage = data["receiverProfileImage"] as? String,
-            let occupation = data["occupation"] as? String,
-            let unreadCount = data["unreadCount"] as? Int
+            let receiverEmail = data["receiverEmail"] as? String
       else {
          return nil
       }
       
       id = document.documentID
+      self.channelId = channelId
       self.sender = sender
-      self.receiver = receiver
+      self.senderJobTitle = senderJobTitle
       self.senderProfileImage = senderProfileImage
+      self.receiver = receiver
+      self.receiverJobTitle = receiverJobTitle
       self.receiverProfileImage = receiverProfileImage
-      self.occupation = occupation
-      self.unreadCount = unreadCount
+      self.receiverEmail = receiverEmail
    }
 }
 
 extension Channel: DatabaseRepresentation {
     var representation: [String: Any] {
-       var rep: [String : Any] = ["sender": sender, "receiver": receiver, "senderProfileImage": senderProfileImage, "receiverProfileImage": receiverProfileImage, "occupation": occupation, "unreadCount": unreadCount]
+       var rep: [String : Any] = ["channelId": channelId, "sender": sender, "senderJobTitle": senderJobTitle, "senderProfileImage": senderProfileImage, "receiver": receiver, "receiverJobTitle": receiverJobTitle, "receiverProfileImage": receiverProfileImage, "receiverEmail": receiverEmail]
         
         if let id = id {
             rep["id"] = id

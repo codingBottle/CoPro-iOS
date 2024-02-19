@@ -10,6 +10,7 @@ import Alamofire
 
 enum NotificationRouter {
    case postFcmToken(token: String, requestBody: FcmTokenRequestBody)
+   case postChatNotification(token: String, requestBody: ChattingNotificationRequestBody)
 }
 
 extension NotificationRouter: BaseTargetType {
@@ -20,6 +21,9 @@ extension NotificationRouter: BaseTargetType {
         switch self {
         case .postFcmToken:
             return .post
+           
+        case .postChatNotification:
+            return .post
         }
     }
 
@@ -27,6 +31,9 @@ extension NotificationRouter: BaseTargetType {
         switch self {
         case .postFcmToken:
             return "/api/fcm-token"
+           
+        case .postChatNotification:
+            return "/api/chatting/notification"
         }
     }
 
@@ -34,12 +41,18 @@ extension NotificationRouter: BaseTargetType {
         switch self {
         case .postFcmToken(_, let requestBody):
             return .body(requestBody)
+           
+        case .postChatNotification(_, let requestBody):
+            return .body(requestBody)
         }
     }
 
     var headers : HTTPHeaders?{
         switch self{
         case .postFcmToken(let token, _):
+            return ["Authorization": "Bearer \(token)"]
+           
+        case .postChatNotification(let token, _):
             return ["Authorization": "Bearer \(token)"]
         }
     }

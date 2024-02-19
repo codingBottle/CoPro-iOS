@@ -30,15 +30,18 @@ class ChannelFirestoreStream {
 //           completion()
 //       }
 //
+   /**
+    1. 송신자 / 송신자이미지 / 송신자 직군
+    2. 수신자 / 수신자이미지 / 수신자 직군 / 수신자 이메일
+    */
    
-   func createChannel(sender: String, receiver: String, senderProfileImage: String, receiverProfileImage: String, occupation: String, unreadCount: Int, completion: @escaping (Error?) -> Void) {
+   func createChannel(channelId: String, sender: String, senderJobTitle: String, senderProfileImage: String, receiver: String, receiverJobTitle: String, receiverProfileImage: String, receiverEmail: String, completion: @escaping (Error?) -> Void) {
        // Firestore 참조 생성
        let db = Firestore.firestore()
        
-       // 'channelName'이 일치하는 문서 조회
+       // 'channelId'가 일치하는 문서 조회
       db.collection("channels")
-        .whereField("receiver", isEqualTo: receiver)
-        .whereField("sender", isEqualTo: sender)
+        .whereField("channelId", isEqualTo: channelId)
         .getDocuments { (querySnapshot, error) in
            if let error = error {
                // Firestore 에러 처리
@@ -50,7 +53,7 @@ class ChannelFirestoreStream {
                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Channel already exists"]))
            } else {
                // 새로운 채널 생성
-              let channel = Channel(sender: sender, senderProfileImage: senderProfileImage, receiver: receiver, receiverProfileImage: receiverProfileImage, occupation: occupation, unreadCount: unreadCount)
+              let channel = Channel(channelId: channelId, sender: sender, senderJobTitle: senderJobTitle, senderProfileImage: senderProfileImage, receiver: receiver, receiverJobTitle: receiverJobTitle, receiverProfileImage: receiverProfileImage, receiverEmail: receiverEmail)
                self.ChannelListener.addDocument(data: channel.representation) { error in
                    if let error = error {
                        print("Error saving Channel: \(error.localizedDescription)")

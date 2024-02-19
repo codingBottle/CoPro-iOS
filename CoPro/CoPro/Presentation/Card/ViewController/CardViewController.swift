@@ -75,9 +75,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
          
          // 유효한 경우, 정상적으로 셀을 구성
          cell.configure(with: contents[indexPath.item].picture ?? "",
-                        name: contents[indexPath.item].nickName ?? "",
+                        nickname: contents[indexPath.item].nickName ?? "",
                         occupation: contents[indexPath.item].occupation ?? " ",
-                        language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers)
+                        language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
          cell.CardCollectionCellViewdelegate = self
          return cell
       }
@@ -94,9 +94,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
       
       // 유효한 경우, 정상적으로 셀을 구성
       cell.configure(with: contents[indexPath.item].picture ?? "",
-                     name: contents[indexPath.item].nickName ?? "",
+                     nickname: contents[indexPath.item].nickName ?? "",
                      occupation: contents[indexPath.item].occupation ?? " ",
-                     language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers)
+                     language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
       cell.MiniCardGridViewdelegate = self
       return cell
    }

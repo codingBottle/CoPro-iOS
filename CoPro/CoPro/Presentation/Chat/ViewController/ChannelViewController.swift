@@ -289,11 +289,13 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
          if self.currentUserNickName == channel.sender {
             let viewController = ChatViewController(currentUserNickName: self.currentUserNickName, channel: channel, titleName: channel.receiver)
             viewController.chatAvatarImage.image = profileImage
+            viewController.targetEmail = channel.receiverEmail
             viewController.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(viewController, animated: true)
          } else if self.currentUserNickName == channel.receiver {
             let viewController = ChatViewController(currentUserNickName: channel.receiver, channel: channel, titleName: channel.sender)
             viewController.chatAvatarImage.image = profileImage
+            viewController.targetEmail = channel.receiverEmail
             print("🌊\n",viewController.chatAvatarImage.image as Any)
             
             viewController.hidesBottomBarWhenPushed = true

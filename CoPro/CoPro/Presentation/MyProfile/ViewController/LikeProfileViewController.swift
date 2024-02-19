@@ -109,9 +109,9 @@ class LikeProfileViewController:UIViewController, UICollectionViewDataSource, UI
         
         // 유효한 경우, 정상적으로 셀을 구성
         cell.configure(with: contents[indexPath.item].picture ?? "",
-                       name: contents[indexPath.item].name ?? "",
+                       nickname: contents[indexPath.item].name ?? "",
                        occupation: contents[indexPath.item].occupation ?? " ",
-                       language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberLikeID ?? 0,isLike: contents[indexPath.item].isLike)
+                       language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberLikeID ?? 0,isLike: contents[indexPath.item].isLike, email: contents[indexPath.item].email)
         cell.MiniCardGridViewdelegate = self
         return cell
     }
