@@ -74,12 +74,12 @@ class AddPostViewController: UIViewController, SendStringData {
         }
         sortLabel.do {
             $0.font = UIFont.pretendard(size: 17, weight: .regular)
-            $0.text = "게시판 선택"
+            $0.text = "자유"
         }
-        sortButton.do {
-            $0.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-            $0.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
-        }
+//        sortButton.do {
+//            $0.setImage(UIImage(systemName: "chevron.up"), for: .normal)
+//            $0.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
+//        }
         lineView1.do {
             $0.backgroundColor = UIColor.G1()
         }
@@ -132,17 +132,17 @@ class AddPostViewController: UIViewController, SendStringData {
 //            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(57)
         }
-        sortStackView.addSubviews(sortLabel, sortButton)
+        sortStackView.addSubviews(sortLabel)
         sortLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview()
         }
-
-        sortButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.height.width.equalTo(24)
-        }
+//
+//        sortButton.snp.makeConstraints {
+//            $0.centerY.equalToSuperview()
+//            $0.trailing.equalToSuperview()
+//            $0.height.width.equalTo(24)
+//        }
         lineView1.snp.makeConstraints {
 //            $0.top.equalTo(sortStackView.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
