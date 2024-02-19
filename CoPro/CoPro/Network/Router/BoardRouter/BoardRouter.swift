@@ -17,6 +17,7 @@ enum BoardRouter {
     case editBoard(token: String, boardId: Int, requestBody: CreatePostRequestBody)
     case addPhoto(token: String, images: [UIImage])
     case addPost(token: String, title: String, category: String, contents: String, imageid: [Int])
+    case addProjectPost(token: String, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
     case saveHeart(token: String, boardId: Int)
@@ -45,6 +46,8 @@ extension BoardRouter: BaseTargetType {
         case .addPhoto:
             return .post
         case .addPost:
+            return .post
+        case .addProjectPost:
             return .post
         case .deleteBoard:
             return .delete
@@ -82,6 +85,8 @@ extension BoardRouter: BaseTargetType {
         case .addPhoto:
             return "/api/v1/images"
         case .addPost:
+            return "/api/board"
+        case .addProjectPost:
             return "/api/board"
         case .deleteBoard:
             return "/api/board"
@@ -123,6 +128,9 @@ extension BoardRouter: BaseTargetType {
             return .body(requestModel)
         case .addPost(_, let title, let category, let contents, let imageId):
             let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: "프론트엔드", tag: "수익창출", imageID: imageId)
+            return .body(requestBody)
+        case .addProjectPost(_, let title, let category, let contents, let part,let tag, let imageId):
+            let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: part, tag: tag, imageID: imageId)
             return .body(requestBody)
         case .deleteBoard(_, let boardId):
             return .query(boardId)
@@ -168,6 +176,8 @@ extension BoardRouter: BaseTargetType {
         case .addPhoto(let token, _):
             return ["Authorization": "Bearer \(token)"]
         case .addPost(let token, _, _, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .addProjectPost(let token, _, _, _, _, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .deleteBoard(let token, _):
             return ["Authorization": "Bearer \(token)"]

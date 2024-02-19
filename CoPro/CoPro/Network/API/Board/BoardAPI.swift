@@ -197,6 +197,39 @@ extension BoardAPI {
         }
     }
     
+    public func addProjectPost(token: String, title: String, category: String, contents: String, imageId: [Int], tag: String, part: String,                         completion: @escaping(NetworkResult<Any>) -> Void) {
+        AFManager.request(BoardRouter.addProjectPost(token: token, title: title, category: category, contents: contents, part: part, tag: tag, imageid: imageId)).responseData { response in
+            if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            // 토큰 재요청 함수 호출
+                            LoginAPI.shared.refreshAccessToken { result in
+                                switch result {
+                                case .success(let loginDTO):
+                                    print("토큰 재발급 성공: \(loginDTO)")
+                                    
+                                    DispatchQueue.main.async {
+                                        self.AFManager.request(BoardRouter.addProjectPost(token: loginDTO.data.accessToken, title: title, category: category, contents: contents, part: part, tag: tag, imageid: imageId)).responseData { response in
+                                            self.disposeNetwork(response,
+                                                                dataModel: DetailBoardDTO.self,
+                                                                completion: completion)
+                                            
+                                        }
+                                    }
+                                case .failure(let error):
+                                    print("토큰 재발급 실패: \(error)")
+                                }
+                            }
+                        } else {
+                            // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                            self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                        }
+                    } else {
+                        // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: DetailBoardDTO.self, completion: completion)
+                    }
+        }
+    }
+    
     public func addPhoto(token: String, imageId: [UIImage],                         completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(BoardRouter.addPhoto(token: token, images: imageId)).responseData { response in
             if let statusCode = response.response?.statusCode {

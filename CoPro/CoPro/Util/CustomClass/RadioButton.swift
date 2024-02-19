@@ -18,13 +18,13 @@ class RadioButton: UIControl {
         }
     }
 
-    var borderColor: UIColor = .gray {
+    var borderColor: UIColor = .P2() {
         didSet {
             updateState()
         }
     }
 
-    var selectedColor: UIColor = .black {
+    var selectedColor: UIColor = .P2() {
         didSet {
             updateState()
         }

@@ -297,7 +297,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     @objc func addButtonDidTapped() {
         switch currentPage {
             case 0:
-            let addPostVC = AddPostViewController()
+            let addPostVC = AddProjectPostViewController()
                 let navigationController = UINavigationController(rootViewController: addPostVC)
                 navigationController.modalPresentationStyle = .fullScreen
                 self.present(navigationController, animated: true, completion: nil)

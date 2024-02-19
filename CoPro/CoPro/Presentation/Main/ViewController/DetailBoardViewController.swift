@@ -22,7 +22,6 @@ final class DetailBoardViewController: UIViewController {
     private let titleLabel = UILabel()
     private let nicknameLabel = UILabel()
     private let jobLabel = UILabel()
-    //    private let tagLabel = UILabel()
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
     private let viewCountLabel = UILabel()
@@ -40,11 +39,15 @@ final class DetailBoardViewController: UIViewController {
     private let imageScrollView = UIScrollView()
     private let recruitLabel = UILabel()
     private let recruitContentLabel = UILabel()
+    private let recruitStackView = UIStackView()
     private let partLabel = UILabel()
     private let partContentLabel = UILabel()
+    private let partStackView = UIStackView()
     private let tagLabel = UILabel()
     private let tagContentLabel = UILabel()
+    private let tagStackView = UIStackView()
     private let chatButton = UIButton()
+    private let contentStackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +73,31 @@ final class DetailBoardViewController: UIViewController {
             $0.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: .zero, right: 16)
             $0.isLayoutMarginsRelativeArrangement = true
         }
+        recruitStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+        partStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+        tagStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+        contentStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 32
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.distribution = .equalSpacing
+        }
+
         titleLabel.do {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 22, weight: .regular)
@@ -157,6 +185,7 @@ final class DetailBoardViewController: UIViewController {
             $0.setTitle("채팅하기", for: .normal)
             $0.setTitleColor(.White(), for: .normal)
             $0.titleLabel?.font = .pretendard(size: 17, weight: .bold)
+            $0.layer.cornerRadius = 10
         }
     }
     private func setLayoutFree() {
@@ -260,7 +289,7 @@ final class DetailBoardViewController: UIViewController {
             $0.width.height.equalTo(32)
         }
         chatButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(151)
             $0.height.equalTo(40)
             $0.centerY.equalToSuperview()
@@ -270,7 +299,12 @@ final class DetailBoardViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        stackView.addArrangedSubviews(titleLabel,infoView,recruitLabel, recruitContentLabel, partLabel,partContentLabel,tagLabel,tagContentLabel,imageScrollView)
+        stackView.addArrangedSubviews(titleLabel,infoView, contentStackView)
+        contentStackView.addArrangedSubviews(recruitStackView, partStackView,tagStackView, imageScrollView)
+        recruitStackView.addArrangedSubviews(recruitLabel, recruitContentLabel)
+        partStackView.addArrangedSubviews(partLabel, partContentLabel)
+        tagStackView.addArrangedSubviews(tagLabel, tagContentLabel)
+        
         infoView.addSubviews(nicknameLabel, jobLabel, dateLabel, timeLabel, viewCountLabel, lineView1)
         infoView.snp.makeConstraints {
             $0.height.equalTo(28)
@@ -303,6 +337,7 @@ final class DetailBoardViewController: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
+    
     private func setNavigate() {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
         leftButton.tintColor = UIColor.G6()
