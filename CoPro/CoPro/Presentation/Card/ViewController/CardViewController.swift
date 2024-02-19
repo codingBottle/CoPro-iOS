@@ -244,9 +244,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         // DropDown 설정
-        setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["Mobile", "Server", "Web"])
-        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["Swift", "Java", "Flutter"])
-        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["~ 6개월", "6개월~1년", "1년~2년", "2년~3년", "3년~5년", "5년~10년", "10년 이상"])
+        setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
+        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["직무를 선택해주세요"])
+        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
         
         setupCollectionView()
         
@@ -365,6 +365,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         //        var oldIndex = 0
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             if dropDown == self.partDropDown {
+                
                 self.cardView.partLabel.text = item
                 self.cardView.partLabel.textColor = UIColor.P2()
                 self.cardView.partButton.tintColor = UIColor.P2()
@@ -382,20 +383,18 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.cardView.oldLabel.textColor = UIColor.P2()
                 self.cardView.oldButton.tintColor = UIColor.P2()
                 switch item {
-                case "~ 6개월":
+                case "전체":
+                    self.oldIndex = 0
+                case "신입":
                     self.oldIndex = 1
-                case "6개월~1년":
+                case "3년 미만":
                     self.oldIndex = 2
-                case "1년~2년":
+                case "3년 이상":
                     self.oldIndex = 3
-                case "2년~3년":
+                case "5년 이상":
                     self.oldIndex = 4
-                case "3년~5년":
-                    self.oldIndex = 5
-                case "5년~10년":
-                    self.oldIndex = 6
                 case "10년 이상":
-                    self.oldIndex = 7
+                    self.oldIndex = 5
                 default:
                     self.oldIndex = 0
                 }
@@ -403,9 +402,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
             }
             DispatchQueue.main.async {
                 self.contents.removeAll()
-                let part = self.cardView.partLabel.text ?? " "
-                let lang = self.cardView.langLabel.text ?? " "
-                self.loadCardDataFromAPI(part: part, lang: lang, old: self.oldIndex, page: self.page)
+                let part = self.cardView.partLabel.text != "전체" ? self.cardView.partLabel.text : " "
+                let lang = self.cardView.langLabel.text != "전체" ? self.cardView.langLabel.text : " "
+                self.loadCardDataFromAPI(part: part!, lang: lang!, old: self.oldIndex, page: self.page)
             }
         }
         
@@ -415,14 +414,17 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     // 두 번째 드롭다운 내용 업데이트 메서드
     func updateLangDropDown(part: String) {
         var langItems: [String] = []
-        
         // 첫 번째 드롭다운 선택값에 따라 두 번째 드롭다운 내용 설정
         if part == "Mobile" {
-            langItems = ["Flutter", "Kotlin", "Java", "Objective-C"]
-        } else if part == "Server" {
-            langItems = ["Java", "Node.js", "Python"]
-        } else if part == "Web" {
-            langItems = ["HTML", "CSS", "Angular", "Vue.js", "TypeScript", "JavaScript", "React", "Sass"]
+            langItems = ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN"]
+        } else if part == "Backend" {
+            langItems = ["Spring", "Django", "Flask", "Node.js", "Go"]
+        } else if part == "Frontend" {
+            langItems = ["React.js", "Vue.js", "Angular.js", "TypeScript"]
+        } else if part == "AI"{
+            langItems = ["TensorFlow", "Keras", "PyTorch"]
+        } else if part == "전체"{
+            langItems = ["직무를 선택해주세요."]
         }
         
         // 두 번째 드롭다운 업데이트
