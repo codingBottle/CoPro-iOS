@@ -21,7 +21,7 @@ class LikeProfileViewController:UIViewController, UICollectionViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         getLoadLikeProfileData(page: 0)
-        
+        // MARK: NavigationBar Custom Settings
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "Pretendard-Regular", size: 17)!, // Pretendard 폰트 적용
             .kern: 1.25, // 자간 조절
@@ -31,6 +31,7 @@ class LikeProfileViewController:UIViewController, UICollectionViewDataSource, UI
         self.navigationItem.title = "관심 프로필"
         
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
         self.navigationController?.navigationBar.tintColor = UIColor.Black()
         let backButton = UIButton(type: .custom)
         guard let originalImage = UIImage(systemName: "chevron.left") else {
@@ -40,22 +41,22 @@ class LikeProfileViewController:UIViewController, UICollectionViewDataSource, UI
         let boldImage = originalImage.withConfiguration(symbolConfiguration)
         
         backButton.setImage(boldImage, for: .normal)
-        backButton.contentMode = .scaleAspectFit // 이미지의 비율을 유지하면서 콘텐츠를 뷰의 경계에 맞춥니다.
-        backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24) // 버튼의 크기를 설정합니다.
+        backButton.contentMode = .scaleAspectFit
+        backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24) // 버튼의 크기설정
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         
         let backBarButtonItem = UIBarButtonItem(customView: backButton)
         self.navigationItem.leftBarButtonItem = backBarButtonItem
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spacer.width = 16 // 왼쪽 여백의 크기
+        spacer.width = 8 // 왼쪽 여백의 크기
         self.navigationItem.leftBarButtonItems?.insert(spacer, at: 0) // 왼쪽 여백 추가
         
         view.backgroundColor = .white
         view.addSubview(collectionView)
         
         collectionView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(100) // 위쪽 여백
+            $0.top.equalToSuperview().offset(16) // 위쪽 여백
             $0.bottom.equalToSuperview().offset(-16) // 아래쪽 여백
             $0.leading.equalToSuperview().offset(16) // 왼쪽 여백
             $0.trailing.equalToSuperview().offset(-16) // 오른쪽 여백
