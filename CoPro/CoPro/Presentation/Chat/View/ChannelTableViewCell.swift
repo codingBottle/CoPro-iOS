@@ -14,24 +14,15 @@ class ChannelTableViewCell: UITableViewCell {
     var channel: Channel? {
             didSet {
                 guard let channel = channel else { return }
-                chatRoomLabel.text = channel.name
-                projectChip.isHidden = !channel.isProject
+                chatRoomLabel.text = channel.sender
             }
         }
    var loadedImage: UIImage?
     var isProject = false
    
    var container = UIView()
-//      .then({
-//      $0.layer.borderWidth = 1
-//      $0.layer.borderColor = UIColor.G2().cgColor
-//   })
    
    var container2 = UIView()
-//      .then({
-//      $0.layer.borderWidth = 1
-//      $0.layer.borderColor = UIColor.P2().cgColor
-//   })
     
    var avatarImage = UIImageView().then {
       $0.clipsToBounds = true

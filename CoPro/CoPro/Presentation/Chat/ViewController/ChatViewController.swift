@@ -23,6 +23,7 @@ class ChatViewController: MessagesViewController {
    }
    
    private let currentUserNickName: String
+   private let titleName: String
     let chatFirestoreStream = ChatFirestoreStream()
     let channel: Channel
     var messages = [Message]()
@@ -37,12 +38,12 @@ class ChatViewController: MessagesViewController {
       }
     }
     
-    init(currentUserNickName: String, channel: Channel) {
+   init(currentUserNickName: String, channel: Channel, titleName: String) {
         self.currentUserNickName = currentUserNickName
         self.channel = channel
+      self.titleName = titleName
         super.init(nibName: nil, bundle: nil)
-        
-        title = channel.name
+        title = self.titleName
         
     }
     
@@ -76,11 +77,12 @@ class ChatViewController: MessagesViewController {
     
     //채팅창 상단 이름
     private func configure() {
-        title = nil
+//        title = nil
 
        let titleLabel = UILabel().then {
-          $0.setPretendardFont(text: channel.name, size: 17, weight: .bold, letterSpacing: 1.25)
+          $0.setPretendardFont(text: channel.sender, size: 17, weight: .bold, letterSpacing: 1.25)
           $0.textAlignment = .center
+          $0.text = self.titleName
        }
 
        let subtitleLabel = UILabel().then {
@@ -223,7 +225,7 @@ extension ChatViewController: MessagesLayoutDelegate {
                                     cornerRadii: CGSize(width: 10, height: 10))
             
             // 우측 상단 모서리에 2의 반경 적용
-            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
+            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 3, y: 0, width: 2, height: 2),
                                      byRoundingCorners: .topRight,
                                      cornerRadii: CGSize(width: 2, height: 2)))
             
@@ -246,7 +248,7 @@ extension ChatViewController: MessagesLayoutDelegate {
                                     cornerRadii: CGSize(width: 10, height: 10))
             
             // 우측 상단 모서리에 2의 반경 적용
-            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
+            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 3, y: 0, width: 2, height: 2),
                                      byRoundingCorners: .topLeft,
                                      cornerRadii: CGSize(width: 2, height: 2)))
             
@@ -353,7 +355,7 @@ extension ChatViewController: MessagesDisplayDelegate {
             let dateString = dateFormatter.string(from: sentDate)
             
             let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 13),
+                .font: UIFont.systemFont(ofSize: 11),
                 .foregroundColor: UIColor.gray
             ]
             

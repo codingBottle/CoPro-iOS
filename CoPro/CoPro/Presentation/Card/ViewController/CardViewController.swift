@@ -75,7 +75,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
          
          // 유효한 경우, 정상적으로 셀을 구성
          cell.configure(with: contents[indexPath.item].picture ?? "",
-                        name: contents[indexPath.item].name ?? "",
+                        name: contents[indexPath.item].nickName ?? "",
                         occupation: contents[indexPath.item].occupation ?? " ",
                         language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers)
          cell.CardCollectionCellViewdelegate = self
@@ -94,7 +94,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
       
       // 유효한 경우, 정상적으로 셀을 구성
       cell.configure(with: contents[indexPath.item].picture ?? "",
-                     name: contents[indexPath.item].name ?? "",
+                     name: contents[indexPath.item].nickName ?? "",
                      occupation: contents[indexPath.item].occupation ?? " ",
                      language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers)
       cell.MiniCardGridViewdelegate = self

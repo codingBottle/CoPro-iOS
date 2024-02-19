@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import KeychainSwift
 
 protocol CardCollectionCellViewDelegate: AnyObject {
     func didTapChatButtonOnCardCollectionCellView(in cell: CardCollectionCellView, success: Bool)
@@ -72,8 +73,11 @@ class CardCollectionCellView: UICollectionViewCell {
    
    @objc func chatButtonTapped(_ sender: UIButton) {
       print("Chat 버튼이 눌렸습니다.")
-      guard let url = imageURL else { return print("chatButtonTapped의 imageURL 에러") }
-      channelStream.createChannel(with: slideCardView.userNameLabel.text ?? "", isProject: false, profileImage: url, occupation: slideCardView.userPartLabel.text ?? "", unreadCount: 0) {error in
+      let keychain = KeychainSwift()
+      guard let receiverurl = imageURL else { return print("chatButtonTapped의 imageURL 에러") }
+      guard let currentUserNickName = keychain.get("currentUserNickName") else {return print("컬렉션뷰에서 채팅방 생성할 때에 currentUserNickName 값 에러")}
+      guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return print("컬렉션뷰에서 채팅방 생성할 때에 currentUserNickName 값 에러")}
+      channelStream.createChannel(sender: currentUserNickName, receiver: slideCardView.userNameLabel.text ?? "", senderProfileImage: currentUserProfileImage, receiverProfileImage: receiverurl, occupation: slideCardView.userPartLabel.text ?? "", unreadCount: 0) {error in
          if let error = error {
             // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
             print("Failed to create channel: \(error.localizedDescription)")

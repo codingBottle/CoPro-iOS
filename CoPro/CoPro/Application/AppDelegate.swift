@@ -8,9 +8,13 @@
 import UIKit
 import Firebase
 import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
 import GoogleSignIn
 import OAuthSwift
 import UserNotifications
+import FirebaseAnalytics
+import KeychainSwift
 
 
 @main
@@ -93,7 +97,10 @@ extension AppDelegate: MessagingDelegate {
     
     // 파이어베이스 MessagingDelegate 설정
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+       let keychain = KeychainSwift()
       print("Firebase registration token: \(String(describing: fcmToken))")
+       guard let fcmToken = fcmToken else {return print("fcmToken 설정 에러")}
+       keychain.set(fcmToken, forKey: "FcmToken")
 
       let dataDict: [String: String] = ["token": fcmToken ?? ""]
       NotificationCenter.default.post(
