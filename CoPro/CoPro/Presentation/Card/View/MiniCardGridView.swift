@@ -11,11 +11,11 @@ import Then
 import KeychainSwift
 
 protocol MiniCardGridViewDelegate: AnyObject {
-   func didTapChatButtonOnMiniCardGridView(in cell: MiniCardGridView, success: Bool)
+    func didTapChatButtonOnMiniCardGridView(in cell: MiniCardGridView, success: Bool)
 }
 
 class MiniCardGridView: UICollectionViewCell {
-   private let channelStream = ChannelFirestoreStream()
+    private let channelStream = ChannelFirestoreStream()
     let miniCardView = MiniCard()
     var gitButtonURL: String?
     var likeMemberId: Int?
@@ -47,7 +47,7 @@ class MiniCardGridView: UICollectionViewCell {
         miniCardView.likeIcon.addTarget(self, action: #selector(likeIconTapped), for: .touchUpInside)
         miniCardView.likeLabel.isUserInteractionEnabled = true
         miniCardView.likeLabel.addGestureRecognizer(tapGesture)
-//        miniCardView.likeIcon.addGestureRecognizer(tapGesture)
+        //        miniCardView.likeIcon.addGestureRecognizer(tapGesture)
         
     }
     
@@ -65,7 +65,7 @@ class MiniCardGridView: UICollectionViewCell {
             print("Git 버튼이 눌렸지만 URL이 없습니다.")
         }
     }
-   
+    
     //Chat버튼 동작 메소드
    @objc func chatButtonTapped(_ sender: UIButton) {
       print("Chat 버튼이 눌렸습니다.")
@@ -135,30 +135,25 @@ class MiniCardGridView: UICollectionViewCell {
    func configure(with imageUrl: String,nickname: String, occupation: String, language: String,old: Int,gitButtonURL: String,likeCount: Int,memberId: Int,isLike: Bool, email: String) {
       self.email = email
         self.gitButtonURL = gitButtonURL
-       self.imageURL = imageUrl
+        self.imageURL = imageUrl
         miniCardView.loadImage(url: imageUrl)
         miniCardView.userNameLabel.text = nickname
         miniCardView.userPartLabel.text = occupation
         miniCardView.userLangLabel.text = language
         switch old {
         case 1:
-            miniCardView.userCareerLabel.text = "~ 6개월"
+            miniCardView.userCareerLabel.text = "신입"
         case 2:
-            miniCardView.userCareerLabel.text = "6개월~1년"
+            miniCardView.userCareerLabel.text = "3년 미만"
         case 3:
-            miniCardView.userCareerLabel.text = "1년~2년"
+            miniCardView.userCareerLabel.text = "3년 이상"
         case 4:
-            miniCardView.userCareerLabel.text = "2년~3년"
+            miniCardView.userCareerLabel.text = "5년 이상"
         case 5:
-            miniCardView.userCareerLabel.text = "3년~5년"
-        case 6:
-            miniCardView.userCareerLabel.text = "5년~10년"
-        case 7:
             miniCardView.userCareerLabel.text = "10년 이상"
         default:
-            miniCardView.userCareerLabel.text = "~ 6개월"
+            miniCardView.userCareerLabel.text = "신입"
         }
-//        miniCardView.userCareerLabel.text = String(old)
         miniCardView.likeLabel.text = String(likeCount)
         self.likeCount = likeCount
         self.likeMemberId = memberId
