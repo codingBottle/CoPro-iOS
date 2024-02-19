@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import KeychainSwift
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     
@@ -24,32 +24,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseIn, animations: {
                 self.window?.rootViewController?.view.alpha = 0.0
             }, completion: { _ in
-                let keychain = KeychainSwift()
-                let refreshToken = keychain.get("refreshToken")
                 //MARK: - 로그인 상태에 따른 화면 전환
-                if refreshToken == nil {
-                    let loginVC = LoginViewController()
-                    loginVC.modalPresentationStyle = .custom
-                    loginVC.view.alpha = 0.0
-                    loginVC.modalPresentationStyle = .fullScreen
-                    
-                    self.window?.rootViewController?.present(loginVC, animated: false) {
-                        UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
-                            loginVC.view.alpha = 1.0 // fade-in 애니메이션
-                        }, completion: nil)
-                        LoginAPI.shared.loginVC = loginVC
-                    }
-                }else{
-                    //accessToken 재발급 요청 필요시 추가
-                    let bottomtabVC = BottomTabController()
-                    bottomtabVC.modalPresentationStyle = .custom
-                    bottomtabVC.view.alpha = 0.0
-                    bottomtabVC.modalPresentationStyle = .fullScreen
-                    
-                    self.window?.rootViewController?.present(bottomtabVC, animated: false) {
-                        UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
-                            bottomtabVC.view.alpha = 1.0 // fade-in 애니메이션
-                        }, completion: nil)
+                LoginAPI.shared.refreshAccessToken { result in
+                    switch result {
+                    case .success(let loginDTO):
+                        print("토큰 재발급 성공: \(loginDTO)")
+                        
+                        DispatchQueue.main.async {
+                            let bottomtabVC = BottomTabController()
+                            bottomtabVC.modalPresentationStyle = .custom
+                            bottomtabVC.view.alpha = 0.0
+                            bottomtabVC.modalPresentationStyle = .fullScreen
+
+                            self.window?.rootViewController?.present(bottomtabVC, animated: false) {
+                                UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
+                                    bottomtabVC.view.alpha = 1.0 // fade-in 애니메이션
+                                }, completion: nil)
+                            }
+                        }
+                    case .failure(let error):
+                        let loginVC = LoginViewController()
+                        loginVC.modalPresentationStyle = .custom
+                        loginVC.view.alpha = 0.0
+                        loginVC.modalPresentationStyle = .fullScreen
+                        
+                        self.window?.rootViewController?.present(loginVC, animated: false) {
+                            UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
+                                loginVC.view.alpha = 1.0 // fade-in 애니메이션
+                            }, completion: nil)
+                            LoginAPI.shared.loginVC = loginVC
+                        }
                     }
                 }
             })
