@@ -239,17 +239,30 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         self.contents.removeAll()
         self.page = 0
         loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: self.page)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        setDropDownText()
         // DropDown 설정
         setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
         setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["직무를 선택해주세요"])
         setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         
         setupCollectionView()
         
+    }
+    private func setDropDownText(){
+        self.cardView.partLabel.text = "직무"
+        self.cardView.partLabel.textColor = UIColor.G3()
+        self.cardView.partButton.tintColor = UIColor.G3()
+        self.cardView.langLabel.text = "언어"
+        self.cardView.langLabel.textColor = UIColor.G3()
+        self.cardView.langButton.tintColor = UIColor.G3()
+        self.cardView.oldLabel.text = "경력"
+        self.cardView.oldLabel.textColor = UIColor.G3()
+        self.cardView.oldButton.tintColor = UIColor.G3()
     }
     //컬렉션뷰 셋업 메소드
     private func setupCollectionView() {
