@@ -145,25 +145,25 @@ extension LoginViewController: ASAuthorizationControllerPresentationContextProvi
 }
 
 
-struct LoginUserDataModel: Codable {
-    var picture, occupation, language: String
-    var gitHubURL, nickName: String
-    var career, viewType, likeMembersCount: Int
-    
-   init(from data: MyProfileData) {
-      self.picture = data.picture
-      self.occupation = data.occupation
-      self.language = data.language
-      self.career = data.career
-      self.gitHubURL = data.gitHubURL
-      self.nickName = data.nickName
-      self.viewType = data.viewType
-      self.likeMembersCount = data.likeMembersCount
-   }
-
-    enum CodingKeys: String, CodingKey {
-        case picture, occupation, language, career
-        case gitHubURL = "gitHubUrl"
-        case nickName, viewType, likeMembersCount
-    }
-}
+//struct LoginUserDataModel: Codable {
+//    var picture, occupation, language: String
+//    var gitHubURL, nickName: String
+//    var career, viewType, likeMembersCount: Int
+//    
+//   init(from data: MyProfileData) {
+//      self.picture = data.picture
+//      self.occupation = data.occupation
+//      self.language = data.language
+//      self.career = data.career
+//      self.gitHubURL = data.gitHubURL
+//      self.nickName = data.nickName
+//      self.viewType = data.viewType
+//      self.likeMembersCount = data.likeMembersCount
+//   }
+//
+//    enum CodingKeys: String, CodingKey {
+//        case picture, occupation, language, career
+//        case gitHubURL = "gitHubUrl"
+//        case nickName, viewType, likeMembersCount
+//    }
+//}

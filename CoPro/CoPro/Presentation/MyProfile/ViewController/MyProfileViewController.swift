@@ -49,80 +49,109 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
         }
     }
     
-    private func getMyProfile() {
-        if let token = self.keychain.get("accessToken") {
-            MyProfileAPI.shared.getMyProfile(token: token) { result in
-                switch result {
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        if let data = data as? MyProfileDTO {
-                            self.myProfileData = MyProfileDataModel(from: data.data)
-                            self.languageArr = self.myProfileData?.language.split(separator: ",")
-                            let indexPath0 = IndexPath(row: 0, section: 0)
-                            let indexPath1 = IndexPath(row: 1, section: 0)
-                            self.myProfileView.tableView.reloadRows(at: [indexPath0, indexPath1], with: .none)
-                            
-                        } else {
-                            print("Failed to decode the response.")
-                        }
-                    }
-                    
-                case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
-                default:
-                    break
-                }
-                
-            }
-        }
-    }
-    
-    func postEditCardViewType(CardViewType: Int) {
-        let requestCardViewType = EditCardTypeRequestBody(viewType: CardViewType)
-        if let token = self.keychain.get("accessToken") {
-            print("token : \(token)")
-            MyProfileAPI.shared.postEditCardType(token: token, requestBody: requestCardViewType) { result in
-                switch result {
-                case .success(let data):
-                   if let data = data as? EditCardTypeDTO {
-                       if data.statusCode != 200 {
-                          self.showAlert(title: "프로필 타입 변경에 실패하였습니다",
-                                    confirmButtonName: "확인")
-                       } else {
-                           print("프로필 수정 성공")
-                          self.showAlert(title: "프로필 타입 변경에 성공하였습니다",
-                                    confirmButtonName: "확인")
-                       }
+   private func getMyProfile() {
+       // 액세스 토큰 가져오기
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+       print("🍎🍎🍎🍎🍎🍎🍎")
+       // MyProfileAPI를 사용하여 프로필 가져오기
+       MyProfileAPI.shared.getMyProfile(token: token) { result in
+           switch result {
+           case .success(let data):
+               DispatchQueue.main.async {
+                   if let data = data as? MyProfileDTO {
+                       // 성공적으로 프로필 데이터를 가져온 경우
+                       self.myProfileData = MyProfileDataModel(from: data.data)
+                       self.languageArr = self.myProfileData?.language.split(separator: ",")
+                       let indexPath0 = IndexPath(row: 0, section: 0)
+                       let indexPath1 = IndexPath(row: 1, section: 0)
+                       self.myProfileView.tableView.reloadRows(at: [indexPath0, indexPath1], with: .none)
+                   } else {
+                       print("Failed to decode the response.")
                    }
+               }
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+                 self.refreshAccessTokenAndRetry(type: "Profile")
+               }
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("Another Error")
+           default:
+               break
+           }
+       }
+   }
+    
+   func postEditCardViewType(CardViewType: Int) {
+       // 액세스 토큰 가져오기
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+       
+       // EditCardTypeRequestBody 생성
+       let requestCardViewType = EditCardTypeRequestBody(viewType: CardViewType)
+       
+       // MyProfileAPI를 사용하여 프로필 타입 변경 요청 보내기
+       MyProfileAPI.shared.postEditCardType(token: token, requestBody: requestCardViewType) { result in
+           switch result {
+           case .success(let data):
+               if let data = data as? EditCardTypeDTO {
+                   if data.statusCode != 200 {
+                       // 프로필 타입 변경에 실패한 경우
+                       self.showAlert(title: "프로필 타입 변경에 실패하였습니다", confirmButtonName: "확인")
+                   } else {
+                       // 프로필 타입 변경에 성공한 경우
+                       print("프로필 수정 성공")
+                       self.showAlert(title: "프로필 타입 변경에 성공하였습니다", confirmButtonName: "확인")
+                   }
+               }
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+               
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
+   }
+   
+   
+   // 액세스 토큰을 갱신하고 이전 요청을 다시 시도하는 함수
+   private func refreshAccessTokenAndRetry(type: String) {
+       LoginAPI.shared.refreshAccessToken { result in
+           switch result {
+           case .success(_):
+               DispatchQueue.main.async {
+                  
+                  // 토큰 재발급 성공 후 다시 프로필 요청 시도
+                  if type == "Profile" {
+                     self.getMyProfile()
+                  }
+                  else {
+//                     self.postEditCardViewType(CardViewType: )
+                  }
                    
-                case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
-                default:
-                    break
-                }
-            }
-        }
-    }
+               }
+           case .failure(let error):
+               // 토큰 재발급 실패
+               print("토큰 재발급 실패: \(error)")
+           }
+       }
+   }
     
     func cellType(for indexPath: IndexPath) -> CellType {
         switch indexPath.row {
@@ -139,7 +168,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
         let screenHeight = UIScreen.main.bounds.height
         switch _CellType {
         case .profile:
-            let heightRatio = 512.0 / 852.0
+           let heightRatio = 512.0 / 852.0
             let cellHeight = screenHeight * heightRatio
             return cellHeight
         case .cardChange:
@@ -169,8 +198,6 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
         case .profile:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileImageTableViewCell", for: indexPath) as! ProfileImageTableViewCell
             cell.delegate = self
-            
-//            cell.im
             cell.loadProfileImage(url: myProfileData?.picture ?? "")
             cell.nickname.text = myProfileData?.nickName
             cell.developmentJobLabel.text = myProfileData?.occupation
@@ -227,7 +254,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                 cell.configureButton(at: 3)
                 
             case 6:
-                cell.titleLabel.text = "스크랩"
+                cell.titleLabel.text = "저장한 게시물"
                 cell.configureButton(at: 4)
                 
             case 7:
@@ -260,6 +287,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         let alertVC = EditMyProfileViewController()
         alertVC.beforeEditMyProfileData = myProfileData
         alertVC.initialUserName = myProfileData?.nickName
+        alertVC.activeViewType = .NotFirstLogin
         alertVC.profileUpdateDelegate = self
         present(alertVC, animated: true, completion: nil)
     }
@@ -267,8 +295,10 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     // github url 수정
     func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
         print("현재 뷰컨에서 깃헙 눌림")
+       getMyProfile()
         let alertVC = EditGithubModalViewController()
        alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
+       alertVC.activeModalType = .NotFirstLogin
         present(alertVC, animated: true, completion: nil)
     }
     

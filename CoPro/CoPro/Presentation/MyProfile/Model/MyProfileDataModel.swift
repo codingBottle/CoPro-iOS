@@ -8,8 +8,8 @@
 import Foundation
 
 struct MyProfileDataModel: Codable {
-    var picture, occupation, language: String
-    var gitHubURL, nickName: String
+    var picture, occupation, language, nickName: String
+    var gitHubURL: String?
     var career, viewType, likeMembersCount: Int
     
    init(from data: MyProfileData) {

@@ -29,6 +29,7 @@ class MyContributionsViewController: BaseViewController {
     private lazy var tableView = UITableView().then({
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .singleLine
+       $0.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         $0.register(RelatedPostsToMeTableViewCell.self,
                     forCellReuseIdentifier:"RelatedPostsToMeTableViewCell")
         $0.register(MyCommentsTableViewCell.self,
@@ -40,6 +41,36 @@ class MyContributionsViewController: BaseViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         view.backgroundColor = .white
+       // MARK: NavigationBar Custom Settings
+               let attributes: [NSAttributedString.Key: Any] = [
+                   .font: UIFont(name: "Pretendard-Regular", size: 17)!, // Pretendard 폰트 적용
+                   .kern: 1.25, // 자간 조절
+                   .foregroundColor: UIColor.black // 폰트 색상
+               ]
+               self.navigationController?.navigationBar.titleTextAttributes = attributes
+               self.navigationItem.title = "관심 프로필"
+               
+               self.navigationController?.setNavigationBarHidden(false, animated: true)
+               
+               self.navigationController?.navigationBar.tintColor = UIColor.Black()
+               let backButton = UIButton(type: .custom)
+               guard let originalImage = UIImage(systemName: "chevron.left") else {
+                   return
+               }
+               let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24) // 이미지 크기 설정
+               let boldImage = originalImage.withConfiguration(symbolConfiguration)
+               
+               backButton.setImage(boldImage, for: .normal)
+               backButton.contentMode = .scaleAspectFit
+               backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24) // 버튼의 크기설정
+               backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+               
+               let backBarButtonItem = UIBarButtonItem(customView: backButton)
+               self.navigationItem.leftBarButtonItem = backBarButtonItem
+               
+               let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+               spacer.width = 8 // 왼쪽 여백의 크기
+               self.navigationItem.leftBarButtonItems?.insert(spacer, at: 0) // 왼쪽 여백 추가
         
         switch activeCellType {
         case .post:
@@ -50,7 +81,7 @@ class MyContributionsViewController: BaseViewController {
             getMyWrittenComment()
             
         case .scrap:
-            self.navigationItem.title = "스크랩"
+            self.navigationItem.title = "저장한 게시물"
             getScrapPost()
         }
         
@@ -105,17 +136,19 @@ class MyContributionsViewController: BaseViewController {
                     }
                     
                 case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
+                   print("Error : \(message)")
+                   LoginAPI.shared.refreshAccessToken { result in
+                       switch result {
+                       case .success(_):
+                           DispatchQueue.main.async {
+                              self.getWriteByMe()
+                           }
+                       case .failure(let error):
+                           print("토큰 재발급 실패: \(error)")
+                       }
+                   }
+                case .pathErr, .serverErr, .networkFail:
+                    print("another Error")
                 default:
                     break
                 }
@@ -147,17 +180,19 @@ class MyContributionsViewController: BaseViewController {
                     }
                     
                 case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
+                   print("Error : \(message)")
+                   LoginAPI.shared.refreshAccessToken { result in
+                       switch result {
+                       case .success(_):
+                           DispatchQueue.main.async {
+                              self.getMyWrittenComment()
+                           }
+                       case .failure(let error):
+                           print("토큰 재발급 실패: \(error)")
+                       }
+                   }
+                case .pathErr, .serverErr, .networkFail:
+                    print("another Error")
                 default:
                     break
                 }
@@ -183,17 +218,19 @@ class MyContributionsViewController: BaseViewController {
                     }
                     
                 case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
+                   print("Error : \(message)")
+                   LoginAPI.shared.refreshAccessToken { result in
+                       switch result {
+                       case .success(_):
+                           DispatchQueue.main.async {
+                              self.getScrapPost()
+                           }
+                       case .failure(let error):
+                           print("토큰 재발급 실패: \(error)")
+                       }
+                   }
+                case .pathErr, .serverErr, .networkFail:
+                    print("another Error")
                 default:
                     break
                 }
@@ -265,4 +302,13 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return returnTableCellHeight()
     }
+   
+   @objc func backButtonTapped() {
+               
+               if self.navigationController == nil {
+                   self.dismiss(animated: true, completion: nil)
+               } else {
+                   self.navigationController?.popViewController(animated: true)
+               }
+           }
 }
