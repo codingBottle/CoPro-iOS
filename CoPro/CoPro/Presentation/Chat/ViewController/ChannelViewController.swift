@@ -283,18 +283,16 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
          // 채널 정보를 가져옵니다. 수정해야함!
          let channel = channels[indexPath.row]
          print("🔥\(self.currentUserNickName)")
-         if self.currentUserNickName == channel.sender {
-            
          
+         //sender, receiver 둘 중 currentUserNickName이 어떤거든 간에 일단 채팅방 상대를 titlename에 넣어야함.
+         //왜냐하면 나는 고정이니까.
+         if self.currentUserNickName == channel.sender {
             let viewController = ChatViewController(currentUserNickName: self.currentUserNickName, channel: channel, titleName: channel.receiver)
             viewController.chatAvatarImage.image = profileImage
-            print("🌊\n",viewController.chatAvatarImage.image as Any)
-            
             viewController.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(viewController, animated: true)
-         } else if self.currentUserNickName != channel.sender {
-            
-            let viewController = ChatViewController(currentUserNickName: channel.receiver, channel: channel, titleName: self.currentUserNickName)
+         } else if self.currentUserNickName == channel.receiver {
+            let viewController = ChatViewController(currentUserNickName: channel.receiver, channel: channel, titleName: channel.sender)
             viewController.chatAvatarImage.image = profileImage
             print("🌊\n",viewController.chatAvatarImage.image as Any)
             

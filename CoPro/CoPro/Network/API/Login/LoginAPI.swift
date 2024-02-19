@@ -17,7 +17,6 @@ import KeychainSwift
 
 final class LoginAPI : BaseAPI {
     static let shared = LoginAPI()
-//    var currentUserNickName: String?
     var loginVC = LoginViewController()
     let keychain = KeychainSwift()
     private override init() {}
@@ -70,20 +69,21 @@ extension LoginAPI {
                                     print("나는야 non 첫 로그인")
                                     self.getLoginUserData() {
                                        print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+                                       DispatchQueue.main.async {
+                                          guard keychain.get("currentUserNickName") != nil else {return print("getLoginUserData 안에 currentUserNickName 설정 에러")}
+                                          let bottomTabController = BottomTabController()
+                                          // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+                                          if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                             let delegate = windowScene.delegate as? SceneDelegate,
+                                             let window = delegate.window {
+                                             window.rootViewController = bottomTabController
+                                             window.makeKeyAndVisible()
+                                          }
+                                       }
                                     }
                                  }
                               }
-                              DispatchQueue.main.async {
-                                 guard let currentUserNickName = keychain.get("currentUserNickName") else {return print("getLoginUserData 안에 currentUserNickName 설정 에러")}
-                                 let bottomTabController = BottomTabController()
-                                 // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
-                                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                    let delegate = windowScene.delegate as? SceneDelegate,
-                                    let window = delegate.window {
-                                    window.rootViewController = bottomTabController
-                                    window.makeKeyAndVisible()
-                                 }
-                              }
+                              
                            }
        
                                    
@@ -220,7 +220,7 @@ extension LoginAPI {
                 case .success(let data):
                     DispatchQueue.main.async {
                         if let data = data as? MyProfileDTO {
-//                            self.currentUserNickName = LoginUserDataModel(from: data.data).nickName
+                           keychain.set(data.data.nickName, forKey: "currentUserNickName")
                             completion()
                         } else {
                             print("Failed to decode the response.")
