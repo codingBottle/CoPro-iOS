@@ -172,7 +172,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
             if last == true {
                 print("세로 마지막 페이지")
                 return
-            }else if index == contents.count - 7 {
+            }else if index == contents.count - 8 {
                 DispatchQueue.main.async {
                     self.loadNextPage()
                     
@@ -235,19 +235,20 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         // View를 생성하고 추가합니다.
         view = cardView
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        self.contents.removeAll()
+        self.page = 0
+        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: self.page)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // DropDown 설정
         setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["Mobile", "Server", "Web"])
         setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["Swift", "Java", "Flutter"])
         setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["~ 6개월", "6개월~1년", "1년~2년", "2년~3년", "3년~5년", "5년~10년", "10년 이상"])
         
         setupCollectionView()
-        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: page)
-        //        getFontName()
         
     }
     //컬렉션뷰 셋업 메소드
@@ -272,9 +273,14 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         collectionView.register(MiniCardGridView.self, forCellWithReuseIdentifier: "MiniCardGridView")
         collectionView.dataSource = self
         collectionView.delegate = self
+        
     }
     func reloadData() {
-        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: page)
+        CardAPI.shared.getUserData(part: " ", lang: " ", old: 0,page: page) { [weak self] result in
+                       DispatchQueue.main.async {
+                           self?.collectionView.reloadData() // 컬렉션 뷰일 경우
+                       }
+                   }
     }
     //API호출
     func loadCardDataFromAPI(part: String, lang: String, old: Int, page: Int) {
