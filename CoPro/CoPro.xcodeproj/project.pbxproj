@@ -204,6 +204,7 @@
 		B5D3E56F2B172A150021DDA0 /* DropDown in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E56E2B172A150021DDA0 /* DropDown */; };
 		B5F1C26A2B82009100791595 /* LikeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2692B82009100791595 /* LikeProfileViewController.swift */; };
 		B5F1C26C2B820A6500791595 /* LikeProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */; };
+		B5F1C2702B83BDCE00791595 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */; };
 		E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */; };
 		E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */; };
 		E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */; };
@@ -381,6 +382,7 @@
 		B5D3E5502B06127C0021DDA0 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
 		B5F1C2692B82009100791595 /* LikeProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileViewController.swift; sourceTree = "<group>"; };
 		B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileDTO.swift; sourceTree = "<group>"; };
+		B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardViewController.swift; sourceTree = "<group>"; };
 		E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardDataModel.swift; sourceTree = "<group>"; };
@@ -604,6 +606,7 @@
 		9E05D2C32AD5090A00F4CA43 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				B5F1C26D2B83BD6400791595 /* Onboarding */,
 				B5B510FD2B74C9DE00A1B74D /* BottomTab */,
 				9E98F2EC2B4A473400A6756A /* MyProfile */,
 				E36717A62B709FE100CBCD8B /* Image */,
@@ -1081,6 +1084,22 @@
 			path = Card;
 			sourceTree = "<group>";
 		};
+		B5F1C26D2B83BD6400791595 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				B5F1C26E2B83BDA400791595 /* ViewController */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		B5F1C26E2B83BDA400791595 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		E32B671C2B566C3000EBB5AC /* Board */ = {
 			isa = PBXGroup;
 			children = (
@@ -1513,6 +1532,7 @@
 				9E7401E72B3C18A60030C8EC /* DatabaseRepresentation.swift in Sources */,
 				9E0B9CB12B6C336C00A5EACB /* MyCommentsTableViewCell.swift in Sources */,
 				9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */,
+				B5F1C2702B83BDCE00791595 /* OnboardingViewController.swift in Sources */,
 				E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */,
 				E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */,
 				9E0B9CBB2B6DC74200A5EACB /* ScrapPostDataModel.swift in Sources */,
