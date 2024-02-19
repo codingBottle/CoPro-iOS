@@ -12,9 +12,15 @@ import KeychainSwift
 
 class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
+   enum EditGitHubModalType {
+      case FirstLogin, NotFirstLogin
+   }
+   var activeModalType: EditGitHubModalType = .NotFirstLogin
    private let keychain = KeychainSwift()
    var editGitHubURLBody = EditGitHubURLRequestBody()
    var originalHeight: CGFloat = 0
+   var isFirstLoginUserName: String?
+   var readyForEdigithub: Bool?
    
    let container = UIView()
    
@@ -35,6 +41,11 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       $0.layer.backgroundColor = UIColor(.gray).cgColor
       $0.layer.cornerRadius = 10
       $0.addTarget(self, action: #selector(didTapdoneButton), for: .touchUpInside)
+   }
+   
+   let firstLoginInGithubModal = UILabel().then {
+      $0.setPretendardFont(text: "마지막 단계예요!", size: 17, weight: .bold, letterSpacing: 1.25)
+      $0.textColor = UIColor.P2()
    }
    
    let githubURLtextFieldLabel = UITextField().then {
@@ -68,42 +79,91 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       }
    }
    override func setLayout() {
-      view.addSubview(container)
-      container.addSubviews(githubLabel, textFieldContainer, doneButton)
-      textFieldContainer.addSubview(githubURLtextFieldLabel)
-      
-      container.snp.makeConstraints {
-         $0.leading.equalToSuperview().offset(16)
-         $0.trailing.equalToSuperview().offset(-16)
-         $0.top.equalToSuperview().offset(24)
-         $0.bottom.equalToSuperview().offset(-12)
+      switch activeModalType {
+      case .FirstLogin:
+         githubLabel.text = "깃허브 링크를 입력해주세요"
+         githubURLtextFieldLabel.placeholder = "http://examplegithub.com"
+         view.addSubview(container)
+         container.addSubviews(firstLoginInGithubModal, githubLabel, textFieldContainer, doneButton)
+         textFieldContainer.addSubview(githubURLtextFieldLabel)
+         
+         container.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.top.equalToSuperview().offset(24)
+            $0.bottom.equalToSuperview().offset(-12)
+         }
+         
+         firstLoginInGithubModal.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(0)
+//            $0.width.equalTo(60)
+         }
+         
+         githubLabel.snp.makeConstraints {
+            $0.top.equalTo(firstLoginInGithubModal.snp.bottom).offset(0)
+            $0.leading.equalToSuperview().offset(0)
+//            $0.width.equalTo(60)
+         }
+         
+         textFieldContainer.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(githubLabel.snp.bottom).offset(12)
+            $0.height.equalTo(returnTextFieldHeight())
+         }
+         
+         githubURLtextFieldLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview().offset(-6)
+         }
+         
+         doneButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(textFieldContainer.snp.bottom).offset(18)
+            $0.height.equalTo(textFieldContainer.snp.height)
+         }
+      case .NotFirstLogin:
+         view.addSubview(container)
+         container.addSubviews(githubLabel, textFieldContainer, doneButton)
+         textFieldContainer.addSubview(githubURLtextFieldLabel)
+         
+         container.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.top.equalToSuperview().offset(24)
+            $0.bottom.equalToSuperview().offset(-12)
+         }
+         
+         githubLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(8)
+            $0.width.equalTo(60)
+         }
+         
+         textFieldContainer.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(githubLabel.snp.bottom).offset(12)
+            $0.height.equalTo(returnTextFieldHeight())
+         }
+         
+         githubURLtextFieldLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(githubLabel.snp.leading)
+            $0.trailing.equalToSuperview().offset(-6)
+         }
+         
+         doneButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(textFieldContainer.snp.bottom).offset(18)
+            $0.height.equalTo(textFieldContainer.snp.height)
+         }
       }
       
-      githubLabel.snp.makeConstraints {
-         $0.top.equalToSuperview()
-         $0.leading.equalToSuperview().offset(8)
-         $0.width.equalTo(60)
-      }
-      
-      textFieldContainer.snp.makeConstraints {
-         $0.centerX.equalToSuperview()
-         $0.leading.trailing.equalToSuperview()
-         $0.top.equalTo(githubLabel.snp.bottom).offset(12)
-         $0.height.equalTo(returnTextFieldHeight())
-      }
-      
-      githubURLtextFieldLabel.snp.makeConstraints {
-         $0.centerY.equalToSuperview()
-         $0.leading.equalTo(githubLabel.snp.leading)
-         $0.trailing.equalToSuperview().offset(-6)
-      }
-      
-      doneButton.snp.makeConstraints {
-         $0.centerX.equalToSuperview()
-         $0.leading.trailing.equalToSuperview()
-         $0.top.equalTo(textFieldContainer.snp.bottom).offset(18)
-         $0.height.equalTo(textFieldContainer.snp.height)
-      }
    }
    
    private func returnUIHeight() -> CGFloat {
@@ -139,33 +199,132 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    @objc private func didTapdoneButton() {
       print("지금 didTapdoneButton 눌림")
-      postEditGitHubURL()
-      self.dismiss(animated: true)
-   }
-   
-   private func postEditGitHubURL() {
-      if let token = self.keychain.get("accessToken") {
-         MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody) { result in
-            switch result {
-            case .success(_):
-               print("성공")
-            case .requestErr(let message):
-               // Handle request error here.
-               print("Request error: \(message)")
-            case .pathErr:
-               // Handle path error here.
-               print("Path error")
-            case .serverErr:
-               // Handle server error here.
-               print("Server error")
-            case .networkFail:
-               // Handle network failure here.
-               print("Network failure")
-            default:
-               break
+      if readyForEdigithub == false {
+         githubURLtextFieldLabel.resignFirstResponder()
+      } else {
+         if editGitHubURLBody.gitHubURL.count < 20 {
+            self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
+                           message: "다시 시도해주세요",
+                           confirmButtonName: "확인")
+         } else{
+            let t = editGitHubURLBody.gitHubURL.map{(String($0))}.prefix(upTo: 19).joined(separator: "")
+            print("🔥🔥🔥🔥\(t)🔥🔥t 개수 : \(t.count)🔥🔥t 타입 : \(type(of: t))🔥")
+            if String(t) != "https://github.com/" {
+               self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
+                              message: "다시 시도해주세요",
+                              confirmButtonName: "확인")
+            } else {
+               postEditGitHubURL()
             }
          }
       }
+   }
+   
+   
+   private func postEditGitHubURL() {
+      if let token = self.keychain.get("accessToken") {
+         switch activeModalType {
+         case .FirstLogin:
+            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody) { result in
+               switch result {
+               case .success(_):
+                        print("첫 로그인 정보 등록성공")
+                        self.showAlert(title: "계정 정보 등록을 완료하였습니다.",
+                                       confirmButtonName: "확인",
+                                       confirmButtonCompletion: { [self] in
+                           DispatchQueue.main.async {
+                              self.postFcmToken()
+                              self.dismiss(animated: true)
+                              let bottomTabController = BottomTabController()
+                              if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                 let delegate = windowScene.delegate as? SceneDelegate,
+                                 let window = delegate.window {
+                                 window.rootViewController = bottomTabController
+                                 window.makeKeyAndVisible()
+                              }
+                           }
+                        })
+                  
+
+               case .requestErr(let message):
+                  print("Error : \(message)")
+                  LoginAPI.shared.refreshAccessToken { result in
+                     switch result {
+                     case .success(_):
+                        DispatchQueue.main.async {
+                           self.postEditGitHubURL()
+                        }
+                     case .failure(let error):
+                        print("토큰 재발급 실패: \(error)")
+                     }
+                  }
+               case .pathErr, .serverErr, .networkFail:
+                  print("another Error")
+               default:
+                  break
+               }
+            }
+         case .NotFirstLogin:
+            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody) { result in
+               switch result {
+               case .success(_):
+                  self.showAlert(title: "Github URL 수정을 성공하였습니다",
+                                 confirmButtonName: "확인",
+                                 confirmButtonCompletion: { [self] in
+                     DispatchQueue.main.async {
+                        self.dismiss(animated: true)
+                     }
+                  })
+               case .requestErr(let message):
+                  print("Error : \(message)")
+                  LoginAPI.shared.refreshAccessToken { result in
+                     switch result {
+                     case .success(_):
+                        DispatchQueue.main.async {
+                           self.postEditGitHubURL()
+                        }
+                     case .failure(let error):
+                        print("토큰 재발급 실패: \(error)")
+                     }
+                  }
+               case .pathErr, .serverErr, .networkFail:
+                  print("another Error")
+               default:
+                  break
+               }
+            }
+         }
+      }
+   }
+   
+   //FcmToken 보내기
+   
+   func postFcmToken() {
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      
+      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
+           switch result {
+           case .success(_):
+              print("FcmToken 보내기 성공")
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+               
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
    }
    
    
@@ -177,6 +336,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          if textField.text?.count == 0 {
             self.doneButton.backgroundColor = .gray
          } else {
+            doneButton.isEnabled = true
             self.doneButton.backgroundColor = UIColor.P2()
          }
       }
@@ -188,7 +348,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          
          if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             
-            doneButton.isEnabled = false
+               readyForEdigithub = false
             
             textFieldContainer.snp.remakeConstraints {
                $0.centerX.equalToSuperview()
@@ -212,7 +372,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    }
    
    @objc func keyboardWillHide(notification: NSNotification) {
-      doneButton.isEnabled = true
+      readyForEdigithub = true
       
       textFieldContainer.snp.remakeConstraints {
          $0.centerX.equalToSuperview()
@@ -232,4 +392,17 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          self.view.layoutIfNeeded()
       }
    }
+   
+   func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+      
+      print("editGitHubURLBody.gitHubURL : \(editGitHubURLBody.gitHubURL)")
+//      print("현재 textField 값 : \(String(describing: ))")
+       return true
+   }
 }
+
+/* textField의 값 변경을 바로바로 감지해주는 친구
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return true
+    }
+     */

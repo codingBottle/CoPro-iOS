@@ -95,15 +95,15 @@ extension MyProfileTableViewCell {
         greaterthanContainer.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(54)
-            $0.height.equalTo(50)
+            $0.width.equalTo(20)
+            $0.height.equalTo(20)
         }
         
         greaterthanButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.width.equalTo(12)
-            $0.height.equalToSuperview().dividedBy(6)
+            $0.width.equalTo(10)
+            $0.height.equalTo(13)
         }
         
     }

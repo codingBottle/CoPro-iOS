@@ -29,14 +29,17 @@ class ChannelFirestoreStream {
 //           print("개설 끝")
 //           completion()
 //       }
-//   }
+//
    
-   func createChannel(with channelName: String, isProject: Bool, profileImage: String, occupation: String, unreadCount: Int, completion: @escaping (Error?) -> Void) {
+   func createChannel(sender: String, receiver: String, senderProfileImage: String, receiverProfileImage: String, occupation: String, unreadCount: Int, completion: @escaping (Error?) -> Void) {
        // Firestore 참조 생성
        let db = Firestore.firestore()
        
        // 'channelName'이 일치하는 문서 조회
-       db.collection("channels").whereField("name", isEqualTo: channelName).getDocuments { (querySnapshot, error) in
+      db.collection("channels")
+        .whereField("receiver", isEqualTo: receiver)
+        .whereField("sender", isEqualTo: sender)
+        .getDocuments { (querySnapshot, error) in
            if let error = error {
                // Firestore 에러 처리
                completion(error)
@@ -47,7 +50,7 @@ class ChannelFirestoreStream {
                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Channel already exists"]))
            } else {
                // 새로운 채널 생성
-               let channel = Channel(name: channelName, isProject: isProject, profileImage: profileImage, occupation: occupation, unreadCount: unreadCount)
+              let channel = Channel(sender: sender, senderProfileImage: senderProfileImage, receiver: receiver, receiverProfileImage: receiverProfileImage, occupation: occupation, unreadCount: unreadCount)
                self.ChannelListener.addDocument(data: channel.representation) { error in
                    if let error = error {
                        print("Error saving Channel: \(error.localizedDescription)")

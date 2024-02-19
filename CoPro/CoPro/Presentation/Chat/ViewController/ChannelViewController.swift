@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 import Firebase
+import KeychainSwift
 
 class ChannelViewController: BaseViewController {
    
@@ -59,13 +60,13 @@ class ChannelViewController: BaseViewController {
         }
     }
     
-    private var filteredChannels: [Channel] {
-        if isProjectEnabled {
-            return channels.filter { $0.isProject }
-        } else {
-            return channels
-        }
-    }
+//    private var filteredChannels: [Channel] {
+//       if channels. {
+//            return channels.filter { $0.isProject }
+//        } else {
+//            return channels
+//        }
+//    }
     
     init(currentUserNickName: String) {
         self.currentUserNickName = currentUserNickName
@@ -128,7 +129,7 @@ class ChannelViewController: BaseViewController {
             $0.centerX.centerY.equalToSuperview()
          }
       case 1...:
-         containerToEmptyLabel.removeFromSuperview() // 필요 없는 뷰를 제거합니다.
+         containerToEmptyLabel.removeFromSuperview()
 
                  view.addSubview(channelTableView)
 
@@ -144,7 +145,7 @@ class ChannelViewController: BaseViewController {
     private func addToolBarItems() {
         toolbarItems = [
           UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-//          UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddItem))
+//          UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddItem)) 카메라버튼
         ]
     }
     
@@ -185,6 +186,8 @@ class ChannelViewController: BaseViewController {
         print("토글버튼 눌림! : \(isProjectEnabled)")
         channelTableView.reloadData()
     }
+   
+          
     
     // MARK: - Update Cell
     
@@ -202,13 +205,19 @@ class ChannelViewController: BaseViewController {
     }
     
     private func addChannelToTable(_ channel: Channel) {
-        guard channels.contains(channel) == false else { return }
-        
-        channels.append(channel)
-        channels.sort()
-        
-        guard let index = channels.firstIndex(of: channel) else { return }
-        channelTableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+       let keychain = KeychainSwift()
+       guard let currentUserNickName = keychain.get("currentUserNickName") else {return print("getLoginUserData 안에 currentUserNickName 설정 에러")}
+       guard channels.contains(channel) == false else { return }
+       
+       
+       if channel.sender == currentUserNickName || channel.receiver == currentUserNickName {
+          channels.append(channel)
+          channels.sort()
+       }
+               
+               guard let index = channels.firstIndex(of: channel) else { return }
+               channelTableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+
     }
     
     private func updateChannelInTable(_ channel: Channel) {
@@ -234,26 +243,33 @@ class ChannelViewController: BaseViewController {
 
 extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      return filteredChannels.count
+      return channels.count
    }
    
    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
       let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.className, for: indexPath) as! ChannelTableViewCell
+//      cell.
+      let keychain = KeychainSwift()
+      if let currentUserNickName = keychain.get("currentUserNickName") {
+         if channels[indexPath.row].sender == currentUserNickName {
+            cell.chatRoomLabel.text = channels[indexPath.row].receiver
+            cell.loadChannelProfileImage(url: channels[indexPath.row].receiverProfileImage)
+         }
+         else if channels[indexPath.row].receiver == currentUserNickName {
+            cell.chatRoomLabel.text = channels[indexPath.row].sender
+            cell.loadChannelProfileImage(url: channels[indexPath.row].senderProfileImage)
+         }
+      }
       
-//      filteredChannels[indexPath.row].representation.create
-         
-         cell.chatRoomLabel.text = filteredChannels[indexPath.row].name
-         cell.isProject = filteredChannels[indexPath.row].isProject
-         print(filteredChannels[indexPath.row].profileImage)
-         cell.loadChannelProfileImage(url: filteredChannels[indexPath.row].profileImage)
-         cell.projectChipContainer.isHidden = !cell.isProject
-         
-         
-         // Long press gesture recognizer를 추가합니다.
-         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-         cell.addGestureRecognizer(longPressGesture)
-         
-         return cell
+      
+      cell.projectChipContainer.isHidden = true
+      
+      
+      // Long press gesture recognizer를 추가합니다.
+      let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+      cell.addGestureRecognizer(longPressGesture)
+      
+      return cell
       
    }
    
@@ -264,14 +280,27 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       if let cell = tableView.cellForRow(at: indexPath) as? ChannelTableViewCell {
          guard let profileImage = cell.loadedImage else {return print("엑시던트")}
-         // 채널 정보를 가져옵니다.
+         // 채널 정보를 가져옵니다. 수정해야함!
          let channel = channels[indexPath.row]
-         let viewController = ChatViewController(currentUserNickName: currentUserNickName, channel: channel)
-         viewController.chatAvatarImage.image = profileImage
-         print("🌊\n",viewController.chatAvatarImage.image as Any)
+         print("🔥\(self.currentUserNickName)")
+         if self.currentUserNickName == channel.sender {
+            
          
-         viewController.hidesBottomBarWhenPushed = true
-         navigationController?.pushViewController(viewController, animated: true)
+            let viewController = ChatViewController(currentUserNickName: self.currentUserNickName, channel: channel, titleName: channel.receiver)
+            viewController.chatAvatarImage.image = profileImage
+            print("🌊\n",viewController.chatAvatarImage.image as Any)
+            
+            viewController.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(viewController, animated: true)
+         } else if self.currentUserNickName != channel.sender {
+            
+            let viewController = ChatViewController(currentUserNickName: channel.receiver, channel: channel, titleName: self.currentUserNickName)
+            viewController.chatAvatarImage.image = profileImage
+            print("🌊\n",viewController.chatAvatarImage.image as Any)
+            
+            viewController.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(viewController, animated: true)
+         }
       }
    }
 }

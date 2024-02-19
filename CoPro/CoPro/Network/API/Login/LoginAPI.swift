@@ -10,9 +10,14 @@ import Alamofire
 import UIKit
 import KeychainSwift
 
+import Foundation
+import Alamofire
+import UIKit
+import KeychainSwift
+
 final class LoginAPI : BaseAPI {
     static let shared = LoginAPI()
-    var currentUserNickName: String?
+//    var currentUserNickName: String?
     var loginVC = LoginViewController()
     let keychain = KeychainSwift()
     private override init() {}
@@ -21,67 +26,68 @@ extension LoginAPI {
     var baseURL: String { return Config.baseURL }
     // 로그인 API
     
-    public func getAccessToken(authCode: String?, provider: String) {
-        let headers: HTTPHeaders = [
+   public func getAccessToken(authCode: String?, provider: String) {
+         let headers: HTTPHeaders = [
             "Accept": "application/json"
-        ]
-        // Body 설정
-        let parameters: Parameters = [
+         ]
+         // Body 설정
+         let parameters: Parameters = [
             "authCode" : authCode!,
-        ]
-        AF.request("https://copro.shop/api/\(provider)/token", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
+         ]
+         AF.request("https://copro.shop/api/\(provider)/token", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
             .responseDecodable(of: LoginDTO.self) { response in
-                switch response.result {
-                case .success(let loginDTO):
-                    print("\(provider) 로그인 성공")
-                    print("AccessToken: \(loginDTO.data.accessToken)")
-                    print("refreshToken: \(loginDTO.data.refreshToken)")
-                    let keychain = KeychainSwift()
-                    keychain.set(loginDTO.data.accessToken, forKey: "accessToken")
-                    keychain.set(loginDTO.data.refreshToken, forKey: "refreshToken")
-                    
-                    if let token = self.keychain.get("accessToken") {
-                        print("Token is available.")
-                        LoginAPI.shared.getCheckInitialLogin(token: token) { result in
-                            print("Response received: \(result)")
-                            switch result {
-                            case .success(let data):
-                                DispatchQueue.main.async {
-                                    if let data = data as? CheckInitialLoginDTO {
-                                        if data.data == true {
-                                            print("나는야 첫 로그인")
-                                            let alertVC = EditMyProfileViewController()
-                                            DispatchQueue.main.async {
-                                                if self.loginVC.isViewLoaded && self.loginVC.view.window != nil {
-                                                    alertVC.isFirstLogin = true
-                                                    self.loginVC.present(alertVC, animated: true, completion: nil)
-                                                } else {
-                                                    print("LoginViewController의 뷰가 윈도우 계층에 없습니다.")
-                                                }
-                                            }
-                                        } else {
-                                            print("나는야 non 첫 로그인")
-                                            self.getLoginUserData() {
-                                                DispatchQueue.main.async {
-                                                    let bottomTabController = BottomTabController(currentUserData: self.currentUserNickName ?? "")
-                                                    // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
-                                                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                                       let delegate = windowScene.delegate as? SceneDelegate,
-                                                       let window = delegate.window {
-                                                        window.rootViewController = bottomTabController
-                                                        window.makeKeyAndVisible()
-                                                    }
-                                                }
-                                            }
-                                        }
+               switch response.result {
+               case .success(let loginDTO):
+                  print("\(provider) 로그인 성공")
+                  print("AccessToken: \(loginDTO.data.accessToken)")
+                  print("refreshToken: \(loginDTO.data.refreshToken)")
+                  let keychain = KeychainSwift()
+                  keychain.set(loginDTO.data.accessToken, forKey: "accessToken")
+                  keychain.set(loginDTO.data.refreshToken, forKey: "refreshToken")
+                  
+                  if let token = self.keychain.get("accessToken") {
+                     print("Token is available.")
+                     LoginAPI.shared.getCheckInitialLogin(token: token) { result in
+                        print("Response received: \(result)")
+                        switch result {
+                        case .success(let data):
+                           DispatchQueue.main.async {
+                              if let data = data as? CheckInitialLoginDTO {
+                                 if data.data == true {
+                                    print("나는야 첫 로그인")
+                                    let alertVC = EditMyProfileViewController()
+                                    DispatchQueue.main.async {
+                                       if self.loginVC.isViewLoaded && self.loginVC.view.window != nil {
+                                          alertVC.activeViewType = .FirstLogin
+                                          self.loginVC.present(alertVC, animated: true, completion: nil)
+                                       } else {
+                                          print("LoginViewController의 뷰가 윈도우 계층에 없습니다.")
+                                       }
                                     }
-                                    else {
-                                        print("Failed to decode the response.")
+                                 }
+                                 
+                                 else {
+                                    print("나는야 non 첫 로그인")
+                                    self.getLoginUserData() {
+                                       print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
                                     }
-                                }
-                                
-                                
-                            case .requestErr(let message):
+                                 }
+                              }
+                              DispatchQueue.main.async {
+                                 guard let currentUserNickName = keychain.get("currentUserNickName") else {return print("getLoginUserData 안에 currentUserNickName 설정 에러")}
+                                 let bottomTabController = BottomTabController()
+                                 // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+                                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                    let delegate = windowScene.delegate as? SceneDelegate,
+                                    let window = delegate.window {
+                                    window.rootViewController = bottomTabController
+                                    window.makeKeyAndVisible()
+                                 }
+                              }
+                           }
+       
+                                   
+                               case .requestErr(let message):
                                 // Handle request error here.
                                 print("Request error: \(message)")
                             case .pathErr:
@@ -147,6 +153,13 @@ extension LoginAPI {
     }
     
     
+   
+   
+   
+   
+   
+   
+   
     public func refreshAccessToken(completion: @escaping (Result<LoginDTO, Error>) -> Void){
         let keychain = KeychainSwift()
         guard let refreshToken = keychain.get("refreshToken") else {
@@ -207,7 +220,7 @@ extension LoginAPI {
                 case .success(let data):
                     DispatchQueue.main.async {
                         if let data = data as? MyProfileDTO {
-                            self.currentUserNickName = LoginUserDataModel(from: data.data).nickName
+//                            self.currentUserNickName = LoginUserDataModel(from: data.data).nickName
                             completion()
                         } else {
                             print("Failed to decode the response.")
@@ -233,4 +246,3 @@ extension LoginAPI {
         }
     }
 }
-
