@@ -11,12 +11,7 @@ import Then
 
 class ChannelTableViewCell: UITableViewCell {
     
-    var channel: Channel? {
-            didSet {
-                guard let channel = channel else { return }
-                chatRoomLabel.text = channel.sender
-            }
-        }
+    var channel: Channel?
    var loadedImage: UIImage?
     var isProject = false
    

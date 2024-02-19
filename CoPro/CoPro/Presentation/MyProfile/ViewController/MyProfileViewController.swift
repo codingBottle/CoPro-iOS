@@ -296,6 +296,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
         print("현재 뷰컨에서 깃헙 눌림")
        getMyProfile()
+       print("myProfileData?.gitHubURL : \(String(describing: myProfileData?.gitHubURL))")
         let alertVC = EditGithubModalViewController()
        alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
        alertVC.activeModalType = .NotFirstLogin

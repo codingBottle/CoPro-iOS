@@ -21,6 +21,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    var originalHeight: CGFloat = 0
    var isFirstLoginUserName: String?
    var readyForEdigithub: Bool?
+   var myProfileVC: MyProfileViewController?
    
    let container = UIView()
    
@@ -208,7 +209,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                            confirmButtonName: "확인")
          } else{
             let t = editGitHubURLBody.gitHubURL.map{(String($0))}.prefix(upTo: 19).joined(separator: "")
-            print("🔥🔥🔥🔥\(t)🔥🔥t 개수 : \(t.count)🔥🔥t 타입 : \(type(of: t))🔥")
             if String(t) != "https://github.com/" {
                self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
                               message: "다시 시도해주세요",
@@ -272,6 +272,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                                  confirmButtonName: "확인",
                                  confirmButtonCompletion: { [self] in
                      DispatchQueue.main.async {
+//                        self.myProfileVC?.myProfileData?.gitHubURL = self.editGitHubURLBody.gitHubURL
                         self.dismiss(animated: true)
                      }
                   })
