@@ -29,6 +29,7 @@ class MyContributionsViewController: BaseViewController {
     private lazy var tableView = UITableView().then({
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .singleLine
+       $0.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         $0.register(RelatedPostsToMeTableViewCell.self,
                     forCellReuseIdentifier:"RelatedPostsToMeTableViewCell")
         $0.register(MyCommentsTableViewCell.self,
@@ -40,6 +41,36 @@ class MyContributionsViewController: BaseViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         view.backgroundColor = .white
+       // MARK: NavigationBar Custom Settings
+               let attributes: [NSAttributedString.Key: Any] = [
+                   .font: UIFont(name: "Pretendard-Regular", size: 17)!, // Pretendard 폰트 적용
+                   .kern: 1.25, // 자간 조절
+                   .foregroundColor: UIColor.black // 폰트 색상
+               ]
+               self.navigationController?.navigationBar.titleTextAttributes = attributes
+               self.navigationItem.title = "관심 프로필"
+               
+               self.navigationController?.setNavigationBarHidden(false, animated: true)
+               
+               self.navigationController?.navigationBar.tintColor = UIColor.Black()
+               let backButton = UIButton(type: .custom)
+               guard let originalImage = UIImage(systemName: "chevron.left") else {
+                   return
+               }
+               let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24) // 이미지 크기 설정
+               let boldImage = originalImage.withConfiguration(symbolConfiguration)
+               
+               backButton.setImage(boldImage, for: .normal)
+               backButton.contentMode = .scaleAspectFit
+               backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24) // 버튼의 크기설정
+               backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+               
+               let backBarButtonItem = UIBarButtonItem(customView: backButton)
+               self.navigationItem.leftBarButtonItem = backBarButtonItem
+               
+               let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+               spacer.width = 8 // 왼쪽 여백의 크기
+               self.navigationItem.leftBarButtonItems?.insert(spacer, at: 0) // 왼쪽 여백 추가
         
         switch activeCellType {
         case .post:
@@ -50,12 +81,22 @@ class MyContributionsViewController: BaseViewController {
             getMyWrittenComment()
             
         case .scrap:
-            self.navigationItem.title = "스크랩"
+            self.navigationItem.title = "저장한 게시물"
             getScrapPost()
         }
         
         setDelegate()
     }
+   
+   override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           self.tabBarController?.tabBar.isHidden = true
+       }
+       
+   override func viewWillDisappear(_ animated: Bool) {
+      super.viewWillDisappear(animated)
+      self.tabBarController?.tabBar.isHidden = false
+   }
         
     // Navigation Controller
     func popViewController() {
@@ -96,26 +137,50 @@ class MyContributionsViewController: BaseViewController {
                         self.myPostsData = data.data.boards.map {
                             return WritebyMeDataModel(id: $0.id, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL, commentCount: $0.commentCount)
                         }
+                       print("🌊🌊🌊🌊🌊🌊🌊🌊myPostsData?.count : \(String(describing: self.myPostsData?.count))🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
                         
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
+                           if self.myPostsData?.count == 0 {
+                               // contents가 비어있을 때 메시지 라벨을 추가합니다.
+                               let messageLabel = UILabel().then {
+                                   $0.setPretendardFont(text: "작성한 게시물이 없어요!", size: 17, weight: .regular, letterSpacing: 1.25)
+                                   $0.textColor = .black
+                                   $0.textAlignment = .center
+                               }
+                   
+                               let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
+                               imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
+                               
+                               let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel]) // 이미지와 라벨을 포함하는 스택 뷰 생성
+                               stackView.axis = .vertical // 세로 방향으로 정렬
+                               stackView.alignment = .center // 가운데 정렬
+                               stackView.spacing = 10 // 이미지와 라벨 사이의 간격 설정
+                               
+                               self.tableView.backgroundView = UIView() // 배경 뷰 생성
+                               
+                               if let backgroundView = self.tableView.backgroundView {
+                                   backgroundView.addSubview(stackView) // 스택 뷰를 배경 뷰에 추가
+                                   
+                                   stackView.snp.makeConstraints {
+                                       $0.centerX.equalTo(backgroundView) // 스택 뷰의 가로 중앙 정렬
+                                       $0.centerY.equalTo(backgroundView) // 스택 뷰의 세로 중앙 정렬
+                                   }
+                               }
+                           } else {
+                               // contents가 비어있지 않을 때 메시지 라벨을 제거합니다.
+                               self.tableView.backgroundView = nil
+                              self.view.backgroundColor = .white
+                           }
                         }
                     } else {
                         print("Failed to decode the response.")
                     }
                     
                 case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
+                   print("Error : \(message)")
+                case .pathErr, .serverErr, .networkFail:
+                    print("another Error")
                 default:
                     break
                 }
@@ -141,23 +206,47 @@ class MyContributionsViewController: BaseViewController {
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
+                           if self.myCommentData?.count == 0 {
+                               // contents가 비어있을 때 메시지 라벨을 추가합니다.
+                               let messageLabel = UILabel().then {
+                                   $0.setPretendardFont(text: "작성한 댓글이 없어요!", size: 17, weight: .regular, letterSpacing: 1.25)
+                                   $0.textColor = .black
+                                   $0.textAlignment = .center
+                               }
+                   
+                               let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
+                               imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
+                               
+                               let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel]) // 이미지와 라벨을 포함하는 스택 뷰 생성
+                               stackView.axis = .vertical // 세로 방향으로 정렬
+                               stackView.alignment = .center // 가운데 정렬
+                               stackView.spacing = 10 // 이미지와 라벨 사이의 간격 설정
+                               
+                               self.tableView.backgroundView = UIView() // 배경 뷰 생성
+                               
+                               if let backgroundView = self.tableView.backgroundView {
+                                   backgroundView.addSubview(stackView) // 스택 뷰를 배경 뷰에 추가
+                                   
+                                   stackView.snp.makeConstraints {
+                                       $0.centerX.equalTo(backgroundView) // 스택 뷰의 가로 중앙 정렬
+                                       $0.centerY.equalTo(backgroundView) // 스택 뷰의 세로 중앙 정렬
+                                   }
+                               }
+                           } else {
+                               // contents가 비어있지 않을 때 메시지 라벨을 제거합니다.
+                               self.tableView.backgroundView = nil
+                              self.view.backgroundColor = .white
+                           }
+
                         }
                     } else {
                         print("Failed to decode the response.")
                     }
                     
                 case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
+                   print("Error : \(message)")
+                case .pathErr, .serverErr, .networkFail:
+                    print("another Error")
                 default:
                     break
                 }
@@ -177,23 +266,46 @@ class MyContributionsViewController: BaseViewController {
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
+                           if self.scrapPostData?.count == 0 {
+                               // contents가 비어있을 때 메시지 라벨을 추가합니다.
+                               let messageLabel = UILabel().then {
+                                   $0.setPretendardFont(text: "저장한 게시물이 없어요!", size: 17, weight: .regular, letterSpacing: 1.25)
+                                   $0.textColor = .black
+                                   $0.textAlignment = .center
+                               }
+                   
+                               let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
+                               imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
+                               
+                               let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel]) // 이미지와 라벨을 포함하는 스택 뷰 생성
+                               stackView.axis = .vertical // 세로 방향으로 정렬
+                               stackView.alignment = .center // 가운데 정렬
+                               stackView.spacing = 10 // 이미지와 라벨 사이의 간격 설정
+                               
+                               self.tableView.backgroundView = UIView() // 배경 뷰 생성
+                               
+                               if let backgroundView = self.tableView.backgroundView {
+                                   backgroundView.addSubview(stackView) // 스택 뷰를 배경 뷰에 추가
+                                   
+                                   stackView.snp.makeConstraints {
+                                       $0.centerX.equalTo(backgroundView) // 스택 뷰의 가로 중앙 정렬
+                                       $0.centerY.equalTo(backgroundView) // 스택 뷰의 세로 중앙 정렬
+                                   }
+                               }
+                           } else {
+                               // contents가 비어있지 않을 때 메시지 라벨을 제거합니다.
+                               self.tableView.backgroundView = nil
+                              self.view.backgroundColor = .white
+                           }
                         }
                     } else {
                         print("Failed to decode the response.")
                     }
                     
                 case .requestErr(let message):
-                    // Handle request error here.
-                    print("Request error: \(message)")
-                case .pathErr:
-                    // Handle path error here.
-                    print("Path error")
-                case .serverErr:
-                    // Handle server error here.
-                    print("Server error")
-                case .networkFail:
-                    // Handle network failure here.
-                    print("Network failure")
+                   print("Error : \(message)")
+                case .pathErr, .serverErr, .networkFail:
+                    print("another Error")
                 default:
                     break
                 }
@@ -230,11 +342,39 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
             else {
                 return UITableViewCell()
             }
-            print("post입장")
-            let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
-            let post = myPostsData?[reverseIndex]
-            cell.configureCellWritebyMe(post!)
-            cell.selectionStyle = .none
+           print("🌊🌊🌊🌊🌊🌊🌊🌊myPostsData?.count : \(String(describing: myPostsData?.count))🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
+           if myPostsData?.count == 0 {
+              
+               // contents가 비어있을 때 메시지 라벨을 추가합니다.
+               let messageLabel = UILabel().then {
+                   $0.setPretendardFont(text: "작성 게시글이 없어요!", size: 17, weight: .regular, letterSpacing: 1.25)
+                   $0.textColor = .black
+                   $0.textAlignment = .center
+               }
+   
+               let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
+               imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
+               
+               let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel]) // 이미지와 라벨을 포함하는 스택 뷰 생성
+               stackView.axis = .vertical // 세로 방향으로 정렬
+               stackView.alignment = .center // 가운데 정렬
+               stackView.spacing = 10 // 이미지와 라벨 사이의 간격 설정
+               
+//              self.tableView.backgroundView = UIView() // 배경 뷰 생성
+               
+              cell.containerView.snp.removeConstraints()
+              cell.addSubview(stackView)
+              stackView.snp.makeConstraints {
+                  $0.centerX.equalToSuperview()
+                  $0.centerY.equalToSuperview()
+              }
+           } else {
+              let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
+              let post = myPostsData?[reverseIndex]
+              cell.configureCellWritebyMe(post!)
+              cell.selectionStyle = .none
+           }
+            
             return cell
             
         case .scrap:
@@ -265,4 +405,13 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return returnTableCellHeight()
     }
+   
+   @objc func backButtonTapped() {
+               
+               if self.navigationController == nil {
+                   self.dismiss(animated: true, completion: nil)
+               } else {
+                   self.navigationController?.popViewController(animated: true)
+               }
+           }
 }

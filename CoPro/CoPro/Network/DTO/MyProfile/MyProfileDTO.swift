@@ -16,8 +16,8 @@ struct MyProfileDTO: Codable {
 
 // MARK: - MyProfileData
 struct MyProfileData: Codable {
-    let picture, occupation, language: String
-    let gitHubURL, nickName: String
+    let picture, occupation, language, nickName: String
+    let gitHubURL: String?
     let career, viewType, likeMembersCount: Int
 
     enum CodingKeys: String, CodingKey {

@@ -13,7 +13,7 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     
     //MARK: - UI Components
     
-    private let containerView = UIView()
+   let containerView = UIView()
     private let leftContainerView = UIView()
     private let postImage = UIImageView()
     private let postTitleLabel = UILabel()
@@ -98,10 +98,10 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             $0.trailing.equalTo(postImage.snp.leading).offset(-25)
         }
         
-        postImage.snp.makeConstraints {
-            $0.top.bottom.trailing.equalToSuperview()
-            $0.leading.equalTo(leftContainerView.snp.trailing).offset(25)
-        }
+//        postImage.snp.makeConstraints {
+//            $0.top.bottom.trailing.equalToSuperview()
+//            $0.leading.equalTo(leftContainerView.snp.trailing).offset(25)
+//        }
         
         
         //First Line

@@ -75,9 +75,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
          
          // 유효한 경우, 정상적으로 셀을 구성
          cell.configure(with: contents[indexPath.item].picture ?? "",
-                        name: contents[indexPath.item].name ?? "",
+                        nickname: contents[indexPath.item].nickName ?? "",
                         occupation: contents[indexPath.item].occupation ?? " ",
-                        language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers)
+                        language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
          cell.CardCollectionCellViewdelegate = self
          return cell
       }
@@ -94,9 +94,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
       
       // 유효한 경우, 정상적으로 셀을 구성
       cell.configure(with: contents[indexPath.item].picture ?? "",
-                     name: contents[indexPath.item].name ?? "",
+                     nickname: contents[indexPath.item].nickName ?? "",
                      occupation: contents[indexPath.item].occupation ?? " ",
-                     language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers)
+                     language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
       cell.MiniCardGridViewdelegate = self
       return cell
    }
@@ -172,7 +172,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
             if last == true {
                 print("세로 마지막 페이지")
                 return
-            }else if index == contents.count - 7 {
+            }else if index == contents.count - 8 {
                 DispatchQueue.main.async {
                     self.loadNextPage()
                     
@@ -235,20 +235,34 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         // View를 생성하고 추가합니다.
         view = cardView
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        self.contents.removeAll()
+        self.page = 0
+        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: self.page)
+        setDropDownText()
+        // DropDown 설정
+        setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
+        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["직무를 선택해주세요"])
+        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // DropDown 설정
-        setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["Mobile", "Server", "Web"])
-        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["Swift", "Java", "Flutter"])
-        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["~ 6개월", "6개월~1년", "1년~2년", "2년~3년", "3년~5년", "5년~10년", "10년 이상"])
         
         setupCollectionView()
-        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: page)
-        //        getFontName()
         
+    }
+    private func setDropDownText(){
+        self.cardView.partLabel.text = "직무"
+        self.cardView.partLabel.textColor = UIColor.G3()
+        self.cardView.partButton.tintColor = UIColor.G3()
+        self.cardView.langLabel.text = "언어"
+        self.cardView.langLabel.textColor = UIColor.G3()
+        self.cardView.langButton.tintColor = UIColor.G3()
+        self.cardView.oldLabel.text = "경력"
+        self.cardView.oldLabel.textColor = UIColor.G3()
+        self.cardView.oldButton.tintColor = UIColor.G3()
     }
     //컬렉션뷰 셋업 메소드
     private func setupCollectionView() {
@@ -272,9 +286,14 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         collectionView.register(MiniCardGridView.self, forCellWithReuseIdentifier: "MiniCardGridView")
         collectionView.dataSource = self
         collectionView.delegate = self
+        
     }
     func reloadData() {
-        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: page)
+        CardAPI.shared.getUserData(part: " ", lang: " ", old: 0,page: page) { [weak self] result in
+                       DispatchQueue.main.async {
+                           self?.collectionView.reloadData() // 컬렉션 뷰일 경우
+                       }
+                   }
     }
     //API호출
     func loadCardDataFromAPI(part: String, lang: String, old: Int, page: Int) {
@@ -359,6 +378,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         //        var oldIndex = 0
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             if dropDown == self.partDropDown {
+                
                 self.cardView.partLabel.text = item
                 self.cardView.partLabel.textColor = UIColor.P2()
                 self.cardView.partButton.tintColor = UIColor.P2()
@@ -376,20 +396,18 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.cardView.oldLabel.textColor = UIColor.P2()
                 self.cardView.oldButton.tintColor = UIColor.P2()
                 switch item {
-                case "~ 6개월":
+                case "전체":
+                    self.oldIndex = 0
+                case "신입":
                     self.oldIndex = 1
-                case "6개월~1년":
+                case "3년 미만":
                     self.oldIndex = 2
-                case "1년~2년":
+                case "3년 이상":
                     self.oldIndex = 3
-                case "2년~3년":
+                case "5년 이상":
                     self.oldIndex = 4
-                case "3년~5년":
-                    self.oldIndex = 5
-                case "5년~10년":
-                    self.oldIndex = 6
                 case "10년 이상":
-                    self.oldIndex = 7
+                    self.oldIndex = 5
                 default:
                     self.oldIndex = 0
                 }
@@ -397,9 +415,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
             }
             DispatchQueue.main.async {
                 self.contents.removeAll()
-                let part = self.cardView.partLabel.text ?? " "
-                let lang = self.cardView.langLabel.text ?? " "
-                self.loadCardDataFromAPI(part: part, lang: lang, old: self.oldIndex, page: self.page)
+                let part = self.cardView.partLabel.text != "전체" ? self.cardView.partLabel.text : " "
+                let lang = self.cardView.langLabel.text != "전체" ? self.cardView.langLabel.text : " "
+                self.loadCardDataFromAPI(part: part!, lang: lang!, old: self.oldIndex, page: self.page)
             }
         }
         
@@ -409,14 +427,17 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     // 두 번째 드롭다운 내용 업데이트 메서드
     func updateLangDropDown(part: String) {
         var langItems: [String] = []
-        
         // 첫 번째 드롭다운 선택값에 따라 두 번째 드롭다운 내용 설정
         if part == "Mobile" {
-            langItems = ["Flutter", "Kotlin", "Java", "Objective-C"]
-        } else if part == "Server" {
-            langItems = ["Java", "Node.js", "Python"]
-        } else if part == "Web" {
-            langItems = ["HTML", "CSS", "Angular", "Vue.js", "TypeScript", "JavaScript", "React", "Sass"]
+            langItems = ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN"]
+        } else if part == "Backend" {
+            langItems = ["Spring", "Django", "Flask", "Node.js", "Go"]
+        } else if part == "Frontend" {
+            langItems = ["React.js", "Vue.js", "Angular.js", "TypeScript"]
+        } else if part == "AI"{
+            langItems = ["TensorFlow", "Keras", "PyTorch"]
+        } else if part == "전체"{
+            langItems = ["직무를 선택해주세요."]
         }
         
         // 두 번째 드롭다운 업데이트

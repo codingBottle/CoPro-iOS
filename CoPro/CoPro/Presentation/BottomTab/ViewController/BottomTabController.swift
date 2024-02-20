@@ -7,33 +7,24 @@
 
 import UIKit
 import FirebaseAuth
+import KeychainSwift
 
 class BottomTabController: UITabBarController {
-    
     private func addTabBarSeparator() {
         let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 1))
         separator.backgroundColor = UIColor.G3() // Set the color of the separator line
         tabBar.addSubview(separator)
     }
+    
+    let keychain = KeychainSwift()
     var currentUserData: String?
     var chatVC: ChannelViewController?
     
-    
-    init(currentUserData: String) {
-        self.currentUserData = currentUserData
-        self.chatVC = ChannelViewController(currentUserNickName: self.currentUserData ?? "")
-        super.init(nibName: nil, bundle: nil)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // 네비게이션 바를 숨깁니다.
         self.navigationController?.isNavigationBarHidden = true
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addTabBarSeparator()
@@ -41,11 +32,12 @@ class BottomTabController: UITabBarController {
         UITabBar.appearance().unselectedItemTintColor = UIColor.G3()
         UITabBar.appearance().tintColor = UIColor.Black()
         // Do any additional setup after loading the view.
+        guard let currentUserNickName = keychain.get("currentUserNickName") else {return print("BottomTabController 안 currentUserNickName 에러")}
         let notificationVC = CardViewController() //MARK: TODO) 알림화면VC등록
         let cardVC = CardViewController()
         let homeVC = MainViewController()//MARK: TODO) 홈화면VC등록
         let profileVC = MyProfileViewController() //MARK: TODO) ProfileVC등록
-        guard let chatVC = chatVC else { return }
+        let chatVC = ChannelViewController(currentUserNickName: currentUserNickName)
         
         
         //각 tab bar의 viewcontroller 타이틀 설정

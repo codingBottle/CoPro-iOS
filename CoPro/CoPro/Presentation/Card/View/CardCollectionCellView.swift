@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import KeychainSwift
 
 protocol CardCollectionCellViewDelegate: AnyObject {
     func didTapChatButtonOnCardCollectionCellView(in cell: CardCollectionCellView, success: Bool)
@@ -21,6 +22,7 @@ class CardCollectionCellView: UICollectionViewCell {
    var likeCount: Int?
    var isLike: Bool!
    var imageURL: String?
+   var email: String?
    weak var CardCollectionCellViewdelegate: CardCollectionCellViewDelegate?
    override init(frame: CGRect) {
       super.init(frame: frame)
@@ -72,8 +74,15 @@ class CardCollectionCellView: UICollectionViewCell {
    
    @objc func chatButtonTapped(_ sender: UIButton) {
       print("Chat 버튼이 눌렸습니다.")
-      guard let url = imageURL else { return print("chatButtonTapped의 imageURL 에러") }
-      channelStream.createChannel(with: slideCardView.userNameLabel.text ?? "", isProject: false, profileImage: url, occupation: slideCardView.userPartLabel.text ?? "", unreadCount: 0) {error in
+      let keychain = KeychainSwift()
+      guard let receiverurl = imageURL, let receiverEmail = email else {return}
+          
+      guard let currentUserNickName = keychain.get("currentUserNickName") else {return}
+      guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
+      guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
+      var channelId = [currentUserNickName, slideCardView.userNameLabel.text ?? ""].sorted().joined(separator: "-")
+      
+      channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, receiver: slideCardView.userNameLabel.text ?? "", receiverJobTitle: slideCardView.userPartLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
          if let error = error {
             // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
             print("Failed to create channel: \(error.localizedDescription)")
@@ -83,6 +92,7 @@ class CardCollectionCellView: UICollectionViewCell {
             self.CardCollectionCellViewdelegate?.didTapChatButtonOnCardCollectionCellView(in: self, success: true)
          }
       }
+      
    }
    
    //좋아요 아이콘을 터치했을 때 실행되는 메서드
@@ -127,14 +137,16 @@ class CardCollectionCellView: UICollectionViewCell {
       
    }
    
-   func configure(with imageUrl: String,name: String, occupation: String, language: String,gitButtonURL: String,likeCount: Int,memberId: Int,isLike: Bool) {
+   func configure(with imageUrl: String, nickname: String, occupation: String, language: String,gitButtonURL: String,likeCount: Int,memberId: Int,isLike: Bool, email: String) {
+      self.email = email
       self.gitButtonURL = gitButtonURL
       self.imageURL = imageUrl
       slideCardView.loadImage(url: imageUrl)
-      slideCardView.userNameLabel.text = name
+      slideCardView.userNameLabel.text = nickname
       slideCardView.userPartLabel.text = occupation
       slideCardView.userLangLabel.text = language
       slideCardView.likeLabel.text = String(likeCount)
+   
       self.likeCount = likeCount
       self.likeMemberId = memberId
       self.isLike = isLike
