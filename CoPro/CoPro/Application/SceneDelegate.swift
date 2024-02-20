@@ -20,11 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       //        self.window?.rootViewController = navigationController
       //        self.window?.makeKeyAndVisible()
       self.window = UIWindow(windowScene: windowScene)
-      let loginVC = LoginViewController()
+      let loginVC = MainViewController()
       let navigationController = UINavigationController(rootViewController: loginVC)
       self.window?.rootViewController = navigationController
       self.window?.makeKeyAndVisible()
-      LoginAPI.shared.loginVC = loginVC
+//      LoginAPI.shared.loginVC = loginVC
    }
    
    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

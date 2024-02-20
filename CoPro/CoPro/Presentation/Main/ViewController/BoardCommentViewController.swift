@@ -22,6 +22,8 @@ class BoardCommentViewController: UIViewController {
     var isInfiniteScroll = true
     var offset = 0
     var postId: Int?
+    var commentId: Int?
+
 //    let shadowPath = UIBezierPath()
     
     override func viewDidLoad() {
@@ -46,13 +48,6 @@ class BoardCommentViewController: UIViewController {
     
     private func setUI() {
         view.backgroundColor = .white
-//        shadowPath.do {
-//            $0.move(to: CGPoint(x: 0, y: 0))
-//            $0.addLine(to: CGPoint(x: view.bounds.width, y: 0))
-//            $0.addLine(to: CGPoint(x: view.bounds.width, y: -5))
-//            $0.addLine(to: CGPoint(x: 0, y: -5))
-//            $0.close()
-//        }
         tableView.do {
             $0.showsVerticalScrollIndicator = false
             $0.separatorStyle = .singleLine
@@ -63,7 +58,6 @@ class BoardCommentViewController: UIViewController {
             $0.layer.shadowOffset = CGSize(width: 0, height: -2)
             $0.layer.shadowOpacity = 0.3
             $0.layer.shadowRadius = 2
-//            $0.layer.shadowPath = shadowPath.cgPath
         }
         commentTextField.do {
             $0.placeholder = "댓글을 남겨보세요"
@@ -94,7 +88,7 @@ class BoardCommentViewController: UIViewController {
         }
         
         // 서버에 댓글을 보내는 함수를 호출합니다.
-        addComment(boardId: postId ?? 1, parentId: -1, content: comment)
+        addComment(boardId: postId ?? 1, parentId: commentId ?? -1, content: comment)
         
         // 텍스트 필드의 내용을 초기화합니다.
         commentTextField.text = ""
@@ -106,6 +100,8 @@ class BoardCommentViewController: UIViewController {
     private func setRegister() {
         tableView.register(commentTableViewCell.self,
                            forCellReuseIdentifier: commentTableViewCell.identifier)
+        tableView.register(commentChildTableViewCell.self,
+                           forCellReuseIdentifier: commentChildTableViewCell.identifier)
     }
     
     private func setLayout() {
@@ -278,21 +274,28 @@ extension BoardCommentViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: commentTableViewCell.identifier, for: indexPath) as? commentTableViewCell else {
-            return UITableViewCell()
-        }
-        
         let comment: DisplayComment
         if indexPath.row < filteredComments.count {
             comment = filteredComments[indexPath.row]
         } else {
             comment = comments[indexPath.row]
         }
-        cell.indentationWidth = 30
-        cell.indentationLevel = comment.level
-        cell.configureCell(comment)
-        
-        return cell
+        if comment.level == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: commentTableViewCell.identifier, for: indexPath) as? commentTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.configureCell(comment)
+            cell.delegate = self
+            return cell
+        }
+        else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: commentChildTableViewCell.identifier, for: indexPath) as? commentChildTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.configureCell(comment)
+            
+            return cell
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -349,5 +352,12 @@ extension BoardCommentViewController {
     func removeKeyBoardObserver() {
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillShowNotification)
         NotificationCenter.default.removeObserver(UIResponder.keyboardWillHideNotification)
+    }
+}
+
+extension BoardCommentViewController: CustomCellDelegate {
+    func buttonTapped(commentId: Int) {
+        self.commentId = commentId
+        print("data received")
     }
 }
