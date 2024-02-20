@@ -72,11 +72,11 @@ extension NotificationAPI {
                  }
              } else {
                  // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                 self.disposeNetwork(response, dataModel: FcmTokenDTO.self, completion: completion)
+                 self.disposeNetwork(response, dataModel: ChattingNotificationDTO.self, completion: completion)
              }
          } else {
              // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
-             self.disposeNetwork(response, dataModel: FcmTokenDTO.self, completion: completion)
+             self.disposeNetwork(response, dataModel: ChattingNotificationDTO.self, completion: completion)
          }
       }
    }

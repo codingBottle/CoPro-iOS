@@ -190,6 +190,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       if let text = textField.text {
          print("사용자가 입력한 텍스트: \(text)")
          editGitHubURLBody.gitHubURL = text
+         githubURLtextFieldLabel.text = text
       }
    }
    
@@ -203,12 +204,14 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       if readyForEdigithub == false {
          githubURLtextFieldLabel.resignFirstResponder()
       } else {
-         if editGitHubURLBody.gitHubURL.count < 20 {
+         if (githubURLtextFieldLabel.text ?? "").count < 20 {
             self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
                            message: "다시 시도해주세요",
                            confirmButtonName: "확인")
-         } else{
-            let t = editGitHubURLBody.gitHubURL.map{(String($0))}.prefix(upTo: 19).joined(separator: "")
+         }
+         
+         else{
+            let t = (githubURLtextFieldLabel.text ?? "").map{(String($0))}.prefix(upTo: 19).joined(separator: "")
             if String(t) != "https://github.com/" {
                self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
                               message: "다시 시도해주세요",
@@ -231,44 +234,37 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       if let token = self.keychain.get("accessToken") {
          switch activeModalType {
          case .FirstLogin:
+//            print
             MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody) { result in
-               switch result {
-               case .success(_):
-                        print("첫 로그인 정보 등록성공")
-                        self.showAlert(title: "계정 정보 등록을 완료하였습니다.",
-                                       confirmButtonName: "확인",
-                                       confirmButtonCompletion: { [self] in
-                           DispatchQueue.main.async {
-                              self.postFcmToken()
-                              self.dismiss(animated: true)
-                              let bottomTabController = BottomTabController()
-                              if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                 let delegate = windowScene.delegate as? SceneDelegate,
-                                 let window = delegate.window {
-                                 window.rootViewController = bottomTabController
-                                 window.makeKeyAndVisible()
-                              }
-                           }
-                        })
-                  
-
-               case .requestErr(let message):
-                  print("Error : \(message)")
-               case .pathErr, .serverErr, .networkFail:
-                  print("another Error")
-               default:
-                  break
-               }
+                switch result {
+                case .success :
+                    DispatchQueue.main.async { [self] in
+                       if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                          let window = windowScene.windows.first,
+                          let tabBarController = window.rootViewController as? BottomTabController {
+                          tabBarController.selectedIndex = 3
+                       }
+                    }
+                case .requestErr(let message):
+                   print("🔥🔥🔥🔥🔥🔥requestErr🔥🔥🔥🔥🔥🔥🔥🔥 ")
+                    print("Error : \(message)")
+                case .pathErr, .serverErr, .networkFail:
+                    print("another Error")
+                default:
+                    break
+                }
             }
+
          case .NotFirstLogin:
-            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody) { result in
+            print("NotFirstLogin")
+            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: EditGitHubURLRequestBody(gitHubURL: githubURLtextFieldLabel.text ?? "")) { result in
                switch result {
                case .success(_):
+                  print("NotFirstLogin2222")
                   self.showAlert(title: "Github URL 수정을 성공하였습니다",
                                  confirmButtonName: "확인",
                                  confirmButtonCompletion: { [self] in
                      DispatchQueue.main.async {
-                        self.keychain.set(self.editGitHubURLBody.gitHubURL, forKey: "currentUserGithubURL")
                         self.dismiss(animated: true)
                      }
                   })
@@ -382,14 +378,8 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
       
-      print("editGitHubURLBody.gitHubURL : \(editGitHubURLBody.gitHubURL)")
+//      print("editGitHubURLBody.gitHubURL : \(editGitHubURLBody.gitHubURL)")
 //      print("현재 textField 값 : \(String(describing: ))")
        return true
    }
 }
-
-/* textField의 값 변경을 바로바로 감지해주는 친구
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return true
-    }
-     */

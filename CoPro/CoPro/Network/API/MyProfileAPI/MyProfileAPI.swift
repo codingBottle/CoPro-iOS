@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import UIKit
 
 final class MyProfileAPI: BaseAPI {
     static let shared = MyProfileAPI()
@@ -99,8 +100,20 @@ extension MyProfileAPI {
                        }
                    }
                } else {
+                  
                    // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
                    self.disposeNetwork(response, dataModel: EditGitHubURLDTO.self, completion: completion)
+                  print("🔥\(response)")
+                  DispatchQueue.main.async {
+                     let bottomTabController = BottomTabController()
+                                                               // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+                                                               if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                                                  let delegate = windowScene.delegate as? SceneDelegate,
+                                                                  let window = delegate.window {
+                                                                  window.rootViewController = bottomTabController
+                                                                  window.makeKeyAndVisible()
+                                                               }
+                  }
                }
            } else {
                // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달

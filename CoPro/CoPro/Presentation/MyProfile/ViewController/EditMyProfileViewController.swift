@@ -191,38 +191,43 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
            switch activeViewType {
               
            case .FirstLogin:
-               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
-                   switch result {
-                   case .success(let data):
-                       if let data = data as? EditMyProfileDTO {
-                           self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
-                           self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
+              MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
+                  switch result {
+                  case .success(let data):
+                      if let data = data as? EditMyProfileDTO {
+                          self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
+                          self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
                           self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
-                           DispatchQueue.main.async {
-                               if let parentViewController = self.presentingViewController {
-                                   self.dismiss(animated: true, completion: {
-                                       let alertVC = EditGithubModalViewController()
-                                       alertVC.isFirstLoginUserName = self.editMyProfileBody.nickName
-                                       alertVC.activeModalType = .FirstLogin
-                                       parentViewController.present(alertVC, animated: true, completion: nil)
-                                   })
-                               }
-                           }
-                       }
-                   case .requestErr(let message):
-                       print("Error : \(message)")
-                   case .pathErr, .serverErr, .networkFail:
-                       print("another Error")
-                   default:
-                       break
-                   }
-               }
+                          // 현재 뷰 컨트롤러를 닫습니다.
+                          self.dismiss(animated: true) { [weak self] in
+                              guard let self = self else { return }
+                              // 그 후에 새로운 뷰 컨트롤러를 엽니다.
+                              let alertVC = EditGithubModalViewController()
+                              alertVC.isFirstLoginUserName = self.editMyProfileBody.nickName
+                              alertVC.activeModalType = .FirstLogin
+                              if let topViewController = self.getTopViewController() {
+                                  topViewController.present(alertVC, animated: true, completion: nil)
+                              }
+                          }
+                      }
+                  case .requestErr(let message):
+                      print("Error : \(message)")
+                  case .pathErr, .serverErr, .networkFail:
+                      print("another Error")
+                  default:
+                      break
+                  }
+              }
               
            case .NotFirstLogin:
                MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
                    switch result {
                    case .success(let data):
                        if let data = data as? EditMyProfileDTO {
+                          print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+                          print(self.keychain.get("FcmToken"))
+                          print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+                          self.postFcmToken()
                            if data.statusCode != 200 {
                                print("프로필 수정 실패")
                                self.faileEditProfile()
@@ -242,22 +247,33 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
            }
        }
    }
+   
+   func getTopViewController() -> UIViewController? {
+          if var topController = UIApplication.shared.keyWindow?.rootViewController {
+              while let presentedViewController = topController.presentedViewController {
+                  topController = presentedViewController
+              }
+              return topController
+          }
+          return nil
+      }
 
    
    
    private func returnEditMyProfileUIHeight(type: String) -> CGFloat {
       if type == "First" {
-         let screenHeight = UIScreen.main.bounds.height
-         let heightRatio = 300.0 / 852.0
-         let cellHeight = screenHeight * heightRatio
+//         let screenHeight = UIScreen.main.bounds.height
+//         let heightRatio = 300.0 / 852.0
+//         let heightRatio = 400.0 / 852.0
+         let cellHeight = UIScreen.main.bounds.height / 2
          return cellHeight
       }
       else {
-         let screenHeight = UIScreen.main.bounds.height
-         //            let heightRatio = 661.0 / 852.0
-         let heightRatio = 550 / 852.0
-         let cellHeight = screenHeight * heightRatio
-         return cellHeight
+//         let screenHeight = UIScreen.main.bounds.height
+//         let heightRatio = 550 / 852.0
+////         let heightRatio = 750 / 852.0
+//         let cellHeight = screenHeight * heightRatio
+         return UIScreen.main.bounds.height * 0.85
       }
    }
    
@@ -645,5 +661,34 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       }
    }
    
+   
+   func postFcmToken() {
+      print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥")
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      
+      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
+           switch result {
+           case .success(_):
+              print("FcmToken 보내기 성공")
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+               
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
+   }
    
 }

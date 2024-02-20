@@ -107,6 +107,7 @@
 		9E5C369A2B83902E0091884C /* FcmTokenRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C36992B83902E0091884C /* FcmTokenRequestBody.swift */; };
 		9E5C369D2B8390D40091884C /* NotificationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C369C2B8390D40091884C /* NotificationAPI.swift */; };
 		9E5C369F2B83F1A40091884C /* ChattingNotificationRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C369E2B83F1A30091884C /* ChattingNotificationRequestBody.swift */; };
+		9E5C36A12B847D370091884C /* ChattingNotificationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C36A02B847D370091884C /* ChattingNotificationDTO.swift */; };
 		9E7401C02B3BE1C80030C8EC /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7401BF2B3BE1C80030C8EC /* MessageKit */; };
 		9E7401C62B3BF48D0030C8EC /* NSObject++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401C52B3BF48D0030C8EC /* NSObject++.swift */; };
 		9E7401C82B3BF4B80030C8EC /* UIImage++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7401C72B3BF4B80030C8EC /* UIImage++.swift */; };
@@ -318,6 +319,7 @@
 		9E5C36992B83902E0091884C /* FcmTokenRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FcmTokenRequestBody.swift; sourceTree = "<group>"; };
 		9E5C369C2B8390D40091884C /* NotificationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAPI.swift; sourceTree = "<group>"; };
 		9E5C369E2B83F1A30091884C /* ChattingNotificationRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingNotificationRequestBody.swift; sourceTree = "<group>"; };
+		9E5C36A02B847D370091884C /* ChattingNotificationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingNotificationDTO.swift; sourceTree = "<group>"; };
 		9E7401C52B3BF48D0030C8EC /* NSObject++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject++.swift"; sourceTree = "<group>"; };
 		9E7401C72B3BF4B80030C8EC /* UIImage++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage++.swift"; sourceTree = "<group>"; };
 		9E7401CA2B3BF5670030C8EC /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
@@ -779,6 +781,7 @@
 				9E5C36972B838FFA0091884C /* FcmTokenDTO.swift */,
 				9E5C36992B83902E0091884C /* FcmTokenRequestBody.swift */,
 				9E5C369E2B83F1A30091884C /* ChattingNotificationRequestBody.swift */,
+				9E5C36A02B847D370091884C /* ChattingNotificationDTO.swift */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -1489,6 +1492,7 @@
 				9E0B9CAD2B6BFAE400A5EACB /* WritebyMeDataModel.swift in Sources */,
 				B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */,
 				E32B67402B56EE6300EBB5AC /* SearchBoardRequestBody.swift in Sources */,
+				9E5C36A12B847D370091884C /* ChattingNotificationDTO.swift in Sources */,
 				E36717BB2B70B39200CBCD8B /* AlbumManager.swift in Sources */,
 				9E05D2AE2AD508B200F4CA43 /* AppDelegate.swift in Sources */,
 				E32B67422B56F1B600EBB5AC /* allBoardRequestBody.swift in Sources */,

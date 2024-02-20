@@ -56,8 +56,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     }
                 }
+               let loginVC = LoginViewController()
+               loginVC.modalPresentationStyle = .custom
+               loginVC.view.alpha = 0.0
+               loginVC.modalPresentationStyle = .fullScreen
+               
+               self.window?.rootViewController?.present(loginVC, animated: false) {
+                   UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
+                       loginVC.view.alpha = 1.0 // fade-in 애니메이션
+                   }, completion: nil)
+                   LoginAPI.shared.loginVC = loginVC
+               }
             })
         }
+       
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

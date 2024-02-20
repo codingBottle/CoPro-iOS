@@ -15,29 +15,18 @@ struct DetailBoardDTO: Codable {
         let data: BoardData
     }
 
-    struct BoardData: Codable {
-        let boardId: Int
-        let title, createAt: String
-        let category, contents, part,tag: String?
-        let count: Int
-        let heart: Int
-        let imageUrl: [String]?
-        let nickName: String?
-        let occupation: String?
-        let isHeart: Bool
-        let isScrap: Bool
-        let commentCount: Int
-    }
-//
-//    struct Comment: Codable {
-//        let parentId: Int?
-//        let commentId: Int
-//        let content: String
-//        let writer: Writer?
-//        let children: [Comment]?
-//    }
-//
-//    struct Writer: Codable {
-//        let nickName: String
-//        let occupation: String
-//    }
+struct BoardData: Codable {
+   let boardId: Int
+   let title, createAt: String
+   let category, contents, part,tag: String?
+   let count: Int
+   let heart: Int
+   let imageUrl: [String]?
+   let nickName: String?
+   let occupation: String?
+   let isHeart: Bool
+   let isScrap: Bool
+   let commentCount: Int
+   let email: String
+   let picture: String
+}
