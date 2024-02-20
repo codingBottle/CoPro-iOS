@@ -1,8 +1,8 @@
 //
-//  CommentTableViewCell.swift
+//  CommentChildTableViewCell.swift
 //  CoPro
 //
-//  Created by 문인호 on 1/21/24.
+//  Created by 문인호 on 2/20/24.
 //
 
 import UIKit
@@ -10,16 +10,11 @@ import UIKit
 import SnapKit
 import Then
 
-protocol CustomCellDelegate: AnyObject {
-    func buttonTapped(commentId: Int)
-}
-
-final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
+final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate {
     
     //MARK: - UI Components
     
-    weak var delegate: CustomCellDelegate?
-    static let identifier = "commentTableViewCell"
+    static let identifier = "commentChildTableViewCell"
     private let cellStackView = UIStackView()
     private let nameJobStackView = UIStackView()
     private let nicknameLabel = UILabel()
@@ -30,7 +25,6 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     private let timeLabel = UILabel()
     private let recommentButton = UIButton()
     var levelConstraint = NSLayoutConstraint()
-    var commentId: Int?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setStyle()
@@ -84,14 +78,6 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             $0.titleLabel?.font = UIFont.pretendard(size: 12, weight: .regular)
             $0.contentHorizontalAlignment = .right
             $0.setTitle("답글쓰기", for: .normal)
-            $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
-        }
-    }
-    
-    @objc func buttonTapped(_ sender: UIButton) {
-        if let commentId = commentId {
-            delegate?.buttonTapped(commentId: commentId)
-            print("data sent\(commentId)")
         }
     }
     private func setLayout() {
@@ -106,7 +92,7 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
 //        dateTimeStackView.addArrangedSubviews(dateLabel,timeLabel,recommentButton)
         addSubviews(nicknameLabel,jobLabel,contentLabel,dateLabel,timeLabel,recommentButton)
         nicknameLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+            $0.leading.equalToSuperview().offset(30)
             $0.bottom.equalTo(contentLabel.snp.top).offset(-4)
         }
         jobLabel.snp.makeConstraints {
@@ -114,20 +100,16 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             $0.top.equalTo(nicknameLabel.snp.top)
         }
         contentLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+            $0.leading.equalToSuperview().offset(30)
             $0.centerY.equalToSuperview()
         }
         dateLabel.snp.makeConstraints {
             $0.top.equalTo(contentLabel.snp.bottom).offset(4)
-            $0.leading.equalToSuperview()
+            $0.leading.equalToSuperview().offset(30)
         }
         timeLabel.snp.makeConstraints {
             $0.leading.equalTo(dateLabel.snp.trailing).offset(5)
             $0.top.equalTo(dateLabel.snp.top)
-        }
-        recommentButton.snp.makeConstraints {
-            $0.leading.equalTo(timeLabel.snp.trailing).offset(5)
-            $0.centerY.equalTo(timeLabel.snp.centerY)
         }
     }
     func configureCell(_ data: DisplayComment) {
@@ -136,6 +118,5 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         contentLabel.text = data.comment.content
         dateLabel.text = data.comment.getDateString()
         timeLabel.text = data.comment.getTimeString()
-        commentId = data.comment.commentId
     }
 }

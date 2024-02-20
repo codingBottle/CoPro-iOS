@@ -160,18 +160,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         self.navigationItem.leftBarButtonItem = leftButton
     }
     private func setLayout() {
-        view.addSubviews(bottomSheetView, scrollView, pageControl)
-        
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
-            $0.centerX.equalTo(self.view.snp.centerX)
-            $0.height.equalTo(361)
-            $0.width.equalTo(345)
-        }
-        pageControl.snp.makeConstraints {
-            $0.top.equalTo(scrollView.snp.bottom)
-            $0.centerX.equalTo(self.view.snp.centerX)
-        }
+        view.addSubviews(bottomSheetView)
         bottomSheetView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -212,8 +201,12 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         self.changeValue(control: self.segmentedControl)
     }
     func setupScrollView() {
-        scrollView.frame = CGRect(x: 0, y: 0, width: 345, height: 361) // ScrollView의 크기를 설정
+        let screenWidth = UIScreen.main.bounds.width
+            let screenHeight = UIScreen.main.bounds.height
         scrollView.isPagingEnabled = true
+
+            // ScrollView의 크기를 화면의 반으로 설정
+            scrollView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight / 2)
 
             for i in 0..<images.count {
                 let imageView = UIImageView()
@@ -229,12 +222,17 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     }
 
     func setupPageControl() {
-        pageControl.frame = CGRect(x: 0, y: self.view.frame.height - 50, width: self.view.frame.width, height: 50)
+        let screenHeight = UIScreen.main.bounds.height
+//        pageControl.frame = CGRect(x: 0, y: screenHeight / 2, width: self.view.frame.width, height: 50)
         pageControl.numberOfPages = images.count
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.currentPageIndicatorTintColor = UIColor.black
         self.view.addSubview(pageControl)
+        pageControl.snp.makeConstraints {
+            $0.top.equalTo(scrollView.snp.bottom).offset(4)
+            $0.centerX.equalToSuperview()
+        }
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -301,7 +299,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
                 let navigationController = UINavigationController(rootViewController: addPostVC)
                 navigationController.modalPresentationStyle = .fullScreen
                 self.present(navigationController, animated: true, completion: nil)
-                break            case 1:
+                break            
+            case 1:
             let addPostVC = AddPostViewController()
                 let navigationController = UINavigationController(rootViewController: addPostVC)
                 navigationController.modalPresentationStyle = .fullScreen

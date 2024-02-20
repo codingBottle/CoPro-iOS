@@ -255,6 +255,7 @@
 		E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */; };
 		E3D6D15C2AEFACE6003269FF /* BaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D15B2AEFACE6003269FF /* BaseAPI.swift */; };
 		E3D6D15E2AEFACFE003269FF /* AFLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D15D2AEFACFE003269FF /* AFLogger.swift */; };
+		E3DED4572B8485070045E7E2 /* CommentChildTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DED4562B8485070045E7E2 /* CommentChildTableViewCell.swift */; };
 		E3E2B83B2B7DFC650022E5D0 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */; };
 		E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */; };
 		E3E2B8412B7F9AFA0022E5D0 /* freeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */; };
@@ -434,6 +435,7 @@
 		E3D6D1592AEFACCF003269FF /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
 		E3D6D15B2AEFACE6003269FF /* BaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAPI.swift; sourceTree = "<group>"; };
 		E3D6D15D2AEFACFE003269FF /* AFLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLogger.swift; sourceTree = "<group>"; };
+		E3DED4562B8485070045E7E2 /* CommentChildTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentChildTableViewCell.swift; sourceTree = "<group>"; };
 		E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		E3E2B83E2B7F2AB10022E5D0 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		E3E2B8402B7F9AFA0022E5D0 /* freeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = freeViewController.swift; sourceTree = "<group>"; };
@@ -1208,6 +1210,7 @@
 				E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */,
 				E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */,
 				E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */,
+				E3DED4562B8485070045E7E2 /* CommentChildTableViewCell.swift */,
 				E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */,
 				E37AE7FB2B3C2785002ABDCD /* BottomSheetView.swift */,
 			);
@@ -1499,6 +1502,7 @@
 				9E7401EE2B3C18FD0030C8EC /* ChannelTableViewCell.swift in Sources */,
 				9E7462DD2B78951F006693B6 /* getNickNameDuplicationDTO.swift in Sources */,
 				9E0B9CA92B6B44DB00A5EACB /* WritebyMeDTO.swift in Sources */,
+				E3DED4572B8485070045E7E2 /* CommentChildTableViewCell.swift in Sources */,
 				9E5C369D2B8390D40091884C /* NotificationAPI.swift in Sources */,
 				9E0B9CA52B6A08E800A5EACB /* EditCardTypeRequestBody.swift in Sources */,
 				E3C64F932B634F87000BB5D6 /* AddPostViewController.swift in Sources */,
