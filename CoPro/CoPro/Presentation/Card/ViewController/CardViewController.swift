@@ -14,92 +14,92 @@ import KeychainSwift
 
 
 class CardViewController: BaseViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, CardCollectionCellViewDelegate, MiniCardGridViewDelegate {
-   
-   func didTapChatButtonOnMiniCardGridView(in cell: MiniCardGridView, success: Bool) {
-      if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-         let window = windowScene.windows.first,
-         let tabBarController = window.rootViewController as? BottomTabController {
-         tabBarController.selectedIndex = 3
-      }
-      DispatchQueue.main.async {
-         if success {
-            self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
-                           message: "채팅을 보내 대화를 시작해보세요",
-                           confirmButtonName: "확인")
-         }
-         else {
-            self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
-                           message: "채팅 리스트에서 확인하여주세요",
-                           confirmButtonName: "확인")
-         }
-      }
-   }
-   
-   func didTapChatButtonOnCardCollectionCellView(in cell: CardCollectionCellView, success: Bool) {
-      if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-         let window = windowScene.windows.first,
-         let tabBarController = window.rootViewController as? BottomTabController {
-         tabBarController.selectedIndex = 3
-      }
-      DispatchQueue.main.async {
-         if success {
-            self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
-                           message: "채팅을 보내 대화를 시작해보세요",
-                           confirmButtonName: "확인")
-         }
-         else {
-            self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
-                           message: "채팅 리스트에서 확인하여주세요",
-                           confirmButtonName: "확인")
-         }
-      }
-   }
-   
+    
+    func didTapChatButtonOnMiniCardGridView(in cell: MiniCardGridView, success: Bool) {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first,
+           let tabBarController = window.rootViewController as? BottomTabController {
+            tabBarController.selectedIndex = 3
+        }
+        DispatchQueue.main.async {
+            if success {
+                self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                               message: "채팅을 보내 대화를 시작해보세요",
+                               confirmButtonName: "확인")
+            }
+            else {
+                self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                               message: "채팅 리스트에서 확인하여주세요",
+                               confirmButtonName: "확인")
+            }
+        }
+    }
+    
+    func didTapChatButtonOnCardCollectionCellView(in cell: CardCollectionCellView, success: Bool) {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first,
+           let tabBarController = window.rootViewController as? BottomTabController {
+            tabBarController.selectedIndex = 3
+        }
+        DispatchQueue.main.async {
+            if success {
+                self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                               message: "채팅을 보내 대화를 시작해보세요",
+                               confirmButtonName: "확인")
+            }
+            else {
+                self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                               message: "채팅 리스트에서 확인하여주세요",
+                               confirmButtonName: "확인")
+            }
+        }
+    }
+    
     //셀 갯수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         contents.count
     }
     //셀 데이터
-   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-      if myViewType == 0{
-         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CardCollectionCellView", for: indexPath) as? CardCollectionCellView else {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if myViewType == 0{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CardCollectionCellView", for: indexPath) as? CardCollectionCellView else {
+                return UICollectionViewCell()
+            }
+            
+            // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
+            guard indexPath.item < contents.count else {
+                // 유효하지 않은 경우, 빈 데이터로 셀을 구성하거나 다른 처리를 수행
+                // 예: cell.configure(with: "", name: "", occupation: "", language: "")
+                return cell
+            }
+            
+            // 유효한 경우, 정상적으로 셀을 구성
+            cell.configure(with: contents[indexPath.item].picture ?? "",
+                           nickname: contents[indexPath.item].nickName ?? "",
+                           occupation: contents[indexPath.item].occupation ?? " ",
+                           language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
+            cell.CardCollectionCellViewdelegate = self
+            return cell
+        }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MiniCardGridView", for: indexPath) as? MiniCardGridView else {
             return UICollectionViewCell()
-         }
-         
-         // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
-         guard indexPath.item < contents.count else {
+        }
+        
+        // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
+        guard indexPath.item < contents.count else {
             // 유효하지 않은 경우, 빈 데이터로 셀을 구성하거나 다른 처리를 수행
             // 예: cell.configure(with: "", name: "", occupation: "", language: "")
             return cell
-         }
-         
-         // 유효한 경우, 정상적으로 셀을 구성
-         cell.configure(with: contents[indexPath.item].picture ?? "",
-                        nickname: contents[indexPath.item].nickName ?? "",
-                        occupation: contents[indexPath.item].occupation ?? " ",
-                        language: contents[indexPath.item].language ?? " ", gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0 ,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
-         cell.CardCollectionCellViewdelegate = self
-         return cell
-      }
-      guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MiniCardGridView", for: indexPath) as? MiniCardGridView else {
-         return UICollectionViewCell()
-      }
-      
-      // contents 배열이 비어있거나 인덱스가 범위를 벗어나지 않는지 확인
-      guard indexPath.item < contents.count else {
-         // 유효하지 않은 경우, 빈 데이터로 셀을 구성하거나 다른 처리를 수행
-         // 예: cell.configure(with: "", name: "", occupation: "", language: "")
-         return cell
-      }
-      
-      // 유효한 경우, 정상적으로 셀을 구성
-      cell.configure(with: contents[indexPath.item].picture ?? "",
-                     nickname: contents[indexPath.item].nickName ?? "",
-                     occupation: contents[indexPath.item].occupation ?? " ",
-                     language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
-      cell.MiniCardGridViewdelegate = self
-      return cell
-   }
+        }
+        
+        // 유효한 경우, 정상적으로 셀을 구성
+        cell.configure(with: contents[indexPath.item].picture ?? "",
+                       nickname: contents[indexPath.item].nickName ?? "",
+                       occupation: contents[indexPath.item].occupation ?? " ",
+                       language: contents[indexPath.item].language ?? " ",old:contents[indexPath.item].career ?? 0, gitButtonURL:  contents[indexPath.item].gitHubURL ?? " ", likeCount: contents[indexPath.item].likeMembersCount ?? 0,memberId: contents[indexPath.item].memberId ?? 0,isLike: contents[indexPath.item].isLikeMembers, email: contents[indexPath.item].email ?? "")
+        cell.MiniCardGridViewdelegate = self
+        return cell
+    }
     //셀 사이즈 정의
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         if myViewType == 0{
@@ -154,26 +154,26 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
             let index = Int(scrollView.contentOffset.x / width)
             print("가로 현재 페이지: \(index)")
             
-            if last == true && index >= contents.count {
-                print("가로 마지막 페이지 - 처음 페이지로 돌아갑니다.")
+            //            if last == true{
+            //                print("가로 마지막 페이지 - 처음 페이지로 돌아갑니다.")
+            //                DispatchQueue.main.async {
+            //                    //                    self.loadFirstPage()
+            //                }
+            //            }
+            if index == contents.count - 1 {
                 DispatchQueue.main.async {
-                    //                    self.loadFirstPage()
-                }
-            } else if index == contents.count - 1 {
-                DispatchQueue.main.async {
+                    print("PageUpDate")
                     self.loadNextPage()
                 }
             }
         }
         else {
-            let height =  scrollView.frame.height / 2
+            let height =  272.0
             let index = Int(scrollView.contentOffset.y / height)
             print("세로 현재 페이지: \(index)")
-            if last == true {
-                print("세로 마지막 페이지")
-                return
-            }else if index == contents.count - 8 {
+            if index > 1 {
                 DispatchQueue.main.async {
+                    print("PageUpDate")
                     self.loadNextPage()
                     
                 }
@@ -182,22 +182,23 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     }
     // 다음 페이지의 데이터를 불러오는 메서드
     func loadNextPage() {
-        if last {
-            print("마지막 페이지")
-            DispatchQueue.main.async {
-                //                self.loadFirstPage()
-            }
-        }else{
-            // 페이지 번호를 증가시키고 데이터를 불러옴
-            self.page += 1
-            let part = self.cardView.partLabel.text ?? " "
-            let lang = self.cardView.langLabel.text ?? " "
-            let old = self.oldIndex
-            
-            self.loadCardDataFromAPI(part: part, lang: lang, old: old,page: self.page)
-            
-            print("page value: \(self.page)")
-        }
+        //        if last == true {
+        //            print("마지막 페이지")
+        //            DispatchQueue.main.async {
+        //
+        //                //                self.loadFirstPage()
+        //            }
+        //        }else{
+        // 페이지 번호를 증가시키고 데이터를 불러옴
+        self.page += 1
+        let part = self.cardView.partLabel.text ?? " "
+        let lang = self.cardView.langLabel.text ?? " "
+        let old = self.oldIndex
+        print(self.page)
+        self.loadCardDataFromAPI(part: part, lang: lang, old: old,page: self.page)
+        
+        print("page value: \(self.page)")
+        //        }
     }
     //첫 페이지로 돌아가는 메소드
     //    func loadFirstPage() {
@@ -236,20 +237,21 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         view = cardView
     }
     override func viewDidAppear(_ animated: Bool) {
-        self.contents.removeAll()
-        self.page = 0
-        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: self.page)
-        setDropDownText()
+        //        self.contents.removeAll()
+        //        self.page = 0
+        //        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: 0)
+        
         // DropDown 설정
-        setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
-        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["직무를 선택해주세요"])
-        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: 0)
+        //        setDropDownText()
+        setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
+        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["직무를 선택해주세요"])
+        setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
         setupCollectionView()
         
     }
@@ -290,18 +292,20 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     }
     func reloadData() {
         CardAPI.shared.getUserData(part: " ", lang: " ", old: 0,page: page) { [weak self] result in
-                       DispatchQueue.main.async {
-                           self?.collectionView.reloadData() // 컬렉션 뷰일 경우
-                       }
-                   }
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData() // 컬렉션 뷰일 경우
+            }
+        }
     }
     //API호출
     func loadCardDataFromAPI(part: String, lang: String, old: Int, page: Int) {
+        
         CardAPI.shared.getUserData(part: part, lang: lang, old: old, page: page) { [weak self] result in
             switch result {
             case .success(let cardDTO):
                 DispatchQueue.main.async {
                     self?.contents.append(contentsOf: cardDTO.data.memberResDto.content)
+                    self?.collectionView.reloadData()
                     self?.last = cardDTO.data.memberResDto.last
                     self?.myViewType = cardDTO.data.myViewType
                     let scrollDirection: UICollectionView.ScrollDirection = (self?.myViewType == 0) ? .horizontal : .vertical
@@ -311,7 +315,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                         self?.collectionView.isPagingEnabled = (scrollDirection == .horizontal)
                     }
                     
-                    self?.collectionView.reloadData()
+                    
                     if self?.contents.count == 0 {
                         // contents가 비어있을 때 메시지 라벨을 추가합니다.
                         let messageLabel = UILabel().then {
@@ -348,7 +352,9 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                         self?.collectionView.backgroundView = nil
                     }
                     print("After reloadData")
+                    print("\(part)//\(lang)//\(old)//\(page)")
                     print("API Success: \(cardDTO.data.memberResDto.content.count)")
+                    
                     print("APIDATA : \(String(describing: self?.contents))")
                 }
                 
@@ -417,8 +423,8 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.contents.removeAll()
                 let part = self.cardView.partLabel.text != "전체" ? self.cardView.partLabel.text : " "
                 let lang = self.cardView.langLabel.text != "전체" ? self.cardView.langLabel.text : " "
-                self.loadCardDataFromAPI(part: part!, lang: lang!, old: self.oldIndex, page: self.page)
-            }
+                self.loadCardDataFromAPI(part: part!, lang: lang!, old: self.oldIndex, page: 0)
+                self.collectionView.reloadData()}
         }
         
         button.addTarget(self, action: #selector(showDropDown(sender:)), for: .touchUpInside)

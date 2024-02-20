@@ -381,6 +381,8 @@ final class DetailBoardViewController: BaseViewController {
                                 self.setLayoutProject()
                                 case "자유":
                                 self.setLayoutFree()
+                                case "공지사항":
+                                self.setLayoutFree()
                                 default:
                                 break
                             }

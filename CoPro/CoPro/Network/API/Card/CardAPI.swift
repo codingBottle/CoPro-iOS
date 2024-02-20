@@ -31,7 +31,7 @@ extension CardAPI {
         
         // Body 설정
         let parameters: Parameters = [
-            "occupation": part == "직군" ? " " : part,
+            "occupation": part == "직무" ? " " : part,
             "language": lang == "언어" ? " " :lang,
             "career": old,
             "page":page,
