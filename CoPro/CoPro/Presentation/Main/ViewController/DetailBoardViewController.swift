@@ -12,10 +12,14 @@ import Then
 import KeychainSwift
 import Kingfisher
 
-final class DetailBoardViewController: UIViewController {
+
+final class DetailBoardViewController: BaseViewController {
     var postId: Int?
     var isHeart = Bool()
     var isScrap = Bool()
+   var email: String?
+   var picture: String?
+   private let channelStream = ChannelFirestoreStream()
     private let keychain = KeychainSwift()
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
@@ -59,8 +63,9 @@ final class DetailBoardViewController: UIViewController {
         heartButton.addTarget(self, action: #selector(heartButtonTapped(_: )), for: .touchUpInside)
         scrapButton.addTarget(self, action: #selector(scrapButtonTapped(_: )), for: .touchUpInside)
         commentButton.addTarget(self, action: #selector(commentButtonTapped(_: )), for: .touchUpInside)
+       chatButton.addTarget(self, action: #selector(chatButtonTapped(_: )), for: .touchUpInside)
     }
-    private func setUI() {
+   internal override func setUI() {
         
         self.view.backgroundColor = .white
         imageScrollView.do {
@@ -268,6 +273,7 @@ final class DetailBoardViewController: UIViewController {
     
     private func setLayoutProject() {
         view.addSubviews(scrollView,lineView2 ,bottomView)
+       chatButton.isEnabled = true
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.bottom.equalTo(lineView2.snp.top)
@@ -365,7 +371,7 @@ final class DetailBoardViewController: UIViewController {
                 case .success(let data):
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil")
+                       let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
                         DispatchQueue.main.async { [self] in
@@ -537,6 +543,8 @@ final class DetailBoardViewController: UIViewController {
         commentCountLabel.text = String(data.commentCount)
         imageViews.forEach { $0.removeFromSuperview() }
         imageViews.removeAll()
+       email = data.email
+       picture = data.picture
         
         // 받은 모든 URL을 UIImageView로 생성하여 UIScrollView에 추가
         var xOffset: CGFloat = 0
@@ -596,4 +604,49 @@ final class DetailBoardViewController: UIViewController {
         boardCommentVC.postId = postId
         self.navigationController?.pushViewController(boardCommentVC, animated: true)
     }
+   
+   @objc func chatButtonTapped(_ sender: UIButton) {
+      print("Chat 버튼이 눌렸습니다.")
+      let keychain = KeychainSwift()
+      guard let receiverurl = picture, let receiverEmail = email else {return}
+          
+      guard let currentUserNickName = keychain.get("currentUserNickName") else {return}
+      guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
+      guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
+      let channelId = [currentUserNickName, nicknameLabel.text ?? ""].sorted().joined(separator: "-")
+      
+      channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, receiver: nicknameLabel.text ?? "", receiverJobTitle: jobLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
+         if let error = error {
+            // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
+            print("Failed to create channel: \(error.localizedDescription)")
+            self.chatRoomCreationResult(result: false)
+         } else {
+            // 성공: 채팅 버튼을 탭하거나 필요한 다른 동작을 수행합니다.
+            self.chatRoomCreationResult(result: true)
+         }
+      }
+      
+   }
+   
+   private func chatRoomCreationResult(result: Bool) {
+      if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+         let window = windowScene.windows.first,
+         let tabBarController = window.rootViewController as? BottomTabController {
+         if let tabBarController = self.tabBarController as? BottomTabController {
+              tabBarController.selectedIndex = 3
+         }
+      }
+      DispatchQueue.main.async {
+         if result {
+            self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                           message: "채팅을 보내 대화를 시작해보세요",
+                           confirmButtonName: "확인")
+         }
+         else {
+            self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                           message: "채팅 리스트에서 확인하여주세요",
+                           confirmButtonName: "확인")
+         }
+      }
+   }
 }

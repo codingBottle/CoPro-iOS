@@ -18,10 +18,3 @@ struct ChattingNotificationRequestBody: Codable {
       self.body = body
    }
 }
-
-
-// MARK: - ChattingNotification DTO
-
-//struct ChattingNotificationDTO: Codable {
-//
-//}
