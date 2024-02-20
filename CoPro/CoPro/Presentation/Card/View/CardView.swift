@@ -23,7 +23,7 @@ class CardView: BaseView{
     }
     let partLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.setPretendardFont(text: "직무", size: 17, weight: .bold, letterSpacing: 1.23)
         $0.textColor = UIColor.G3()
     }
     let partButton = UIButton().then {
@@ -43,7 +43,7 @@ class CardView: BaseView{
     }
     let langLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.setPretendardFont(text: "언어", size: 17, weight: .bold, letterSpacing: 1.23)
         $0.textColor = UIColor.G3()
     }
     let langButton = UIButton().then {
@@ -63,7 +63,7 @@ class CardView: BaseView{
     }
     let oldLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.setPretendardFont(text: "경력", size: 17, weight: .bold, letterSpacing: 1.23)
         $0.textColor = UIColor.G3()
     }
     let oldButton = UIButton().then {
