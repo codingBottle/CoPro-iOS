@@ -28,12 +28,13 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
        myProfileView.tableView.delegate = self
        myProfileView.tableView.dataSource = self
        getMyProfile()
+       view.backgroundColor = UIColor.White()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        
+       getMyProfile()
        
     }
     
@@ -96,6 +97,9 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
            switch result {
            case .success(_):
               self.showAlert(title: "프로필 타입 변경에 성공하였습니다", confirmButtonName: "확인")
+//                             confirmButtonCompletion: {
+//                 CardViewController().reloadData()})
+              
                
            case .requestErr(let message):
                // 요청 에러인 경우
@@ -297,7 +301,8 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    
+   // MARK: - 프로필 화면 카드/목록 설정하는 곳
+   
     func didTapEditCardTypeButtonTapped(in cell: CardTypeSettingsTableViewCell) {
         print("현재 뷰컨에서 didTapEditCardTypeButtonTapped 눌림")
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -305,12 +310,14 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         let action1 = UIAlertAction(title: "카드로 보기", style: .default) { (action) in
             print("카드로 보기 호출")
             self.postEditCardViewType(CardViewType: 0)
+           CardViewController().reloadData()
         }
         alertController.addAction(action1)
 
         let action2 = UIAlertAction(title: "목록으로 보기", style: .default) { (action) in
             print("목록으로 보기 호출")
             self.postEditCardViewType(CardViewType: 1)
+           CardViewController().reloadData()
         }
         alertController.addAction(action2)
 

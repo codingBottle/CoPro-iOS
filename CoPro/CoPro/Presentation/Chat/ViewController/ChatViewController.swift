@@ -61,12 +61,11 @@ class ChatViewController: MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       view.backgroundColor = .white
         confirmDelegates()
         configure()
         setupMessageInputBar()
         removeOutgoingMessageAvatars()
-//        addCameraBarButtonToMessageInputBar()
         listenToMessages()
     }
 

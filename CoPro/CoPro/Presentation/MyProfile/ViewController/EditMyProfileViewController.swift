@@ -191,14 +191,15 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
            switch activeViewType {
               
            case .FirstLogin:
-              MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
+              let checkFirstlogin = true
+              MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
                   switch result {
                   case .success(let data):
                       if let data = data as? EditMyProfileDTO {
                           self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
                           self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
                           self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
-                         self.postFcmToken()
+                         
                           // 현재 뷰 컨트롤러를 닫습니다.
                           self.dismiss(animated: true) { [weak self] in
                               guard let self = self else { return }
@@ -221,22 +222,21 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
               }
               
            case .NotFirstLogin:
-               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody) { result in
+              let checkFirstlogin = false
+              MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
                    switch result {
-                   case .success(let data):
-                       if let data = data as? EditMyProfileDTO {
-                          print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
-                          print(self.keychain.get("FcmToken"))
-                          print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
-                          
-                           if data.statusCode != 200 {
-                               print("프로필 수정 실패")
-                               self.faileEditProfile()
-                           } else {
-                               print("프로필 수정 성공")
-                               self.successEditProfile()
-                           }
-                       }
+                   case .success(_):
+                      print("🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳")
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                          self.showAlert(title: "프로필 수정을 완료하였습니다",
+                                         confirmButtonName: "확인",
+                                         confirmButtonCompletion: { [self] in
+                              self.profileUpdateDelegate?.didUpdateProfile()
+                              self.dismiss(animated: true)
+                          })
+                      }
+                      
+                       print("NotFirstLogin 타입 / checkFirstlogin false / 프로필수정 성공공")
                    case .requestErr(let message):
                        print("Error : \(message)")
                    case .pathErr, .serverErr, .networkFail:
@@ -602,7 +602,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    @objc func didDoneButton() {
       postEditMyProfile()
-      self.dismiss(animated: true)
    }
    
    
@@ -630,16 +629,18 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                 confirmButtonName: "확인")
    }
    
-   private func successEditProfile() {
-      showAlert(title: "프로필 수정을 완료하였습니다",
-                confirmButtonName: "확인",
-                confirmButtonCompletion: { [self] in
-         self.profileUpdateDelegate?.didUpdateProfile()
-         self.dismiss(animated: true)
-      })
+   func successEditProfile() {
+      DispatchQueue.main.async {
+          let alert = UIAlertController(title: "프로필 수정을 완료하였습니다", message: nil, preferredStyle: .alert)
+          alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+              self?.profileUpdateDelegate?.didUpdateProfile()
+              self?.dismiss(animated: true)
+          }))
+          self.present(alert, animated: true, completion: nil)
+      }
    }
    
-   private func faileEditProfile() {
+   func faileEditProfile() {
       showAlert(title: "프로필 수정을 실패하였습니다",
                 confirmButtonName: "확인",
                 confirmButtonCompletion: { [self] in
@@ -663,33 +664,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    
    
-   func postFcmToken() {
-      print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥")
-       guard let token = self.keychain.get("accessToken") else {
-           print("No accessToken found in keychain.")
-           return
-       }
-      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
-      
-      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
-           switch result {
-           case .success(_):
-              print("FcmToken 보내기 성공")
-               
-           case .requestErr(let message):
-               // 요청 에러인 경우
-               print("Error : \(message)")
-              if (message as AnyObject).contains("401") {
-                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
-               }
-               
-           case .pathErr, .serverErr, .networkFail:
-               // 다른 종류의 에러인 경우
-               print("another Error")
-           default:
-               break
-           }
-       }
-   }
+   
    
 }

@@ -59,15 +59,7 @@ class ChannelViewController: BaseViewController {
             print("\n토글로 바뀌기전 willSet isProjectEnabled : \(isProjectEnabled) \n")
         }
     }
-    
-//    private var filteredChannels: [Channel] {
-//       if channels. {
-//            return channels.filter { $0.isProject }
-//        } else {
-//            return channels
-//        }
-//    }
-    
+   
     init(currentUserNickName: String) {
         self.currentUserNickName = currentUserNickName
         super.init(nibName: nil, bundle: nil)
@@ -83,6 +75,7 @@ class ChannelViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       view.backgroundColor = .white
         addToolBarItems()
        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
        

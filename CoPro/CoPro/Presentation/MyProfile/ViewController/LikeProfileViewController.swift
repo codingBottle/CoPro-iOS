@@ -61,7 +61,7 @@ class LikeProfileViewController:UIViewController, UICollectionViewDataSource, UI
         spacer.width = 8 // 왼쪽 여백의 크기
         self.navigationItem.leftBarButtonItems?.insert(spacer, at: 0) // 왼쪽 여백 추가
         
-        view.backgroundColor = .white
+       view.backgroundColor = UIColor.White()
         view.addSubview(collectionView)
         
         collectionView.snp.makeConstraints {
