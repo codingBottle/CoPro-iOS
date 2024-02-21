@@ -198,6 +198,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                           self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
                           self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
                           self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
+                         self.postFcmToken()
                           // 현재 뷰 컨트롤러를 닫습니다.
                           self.dismiss(animated: true) { [weak self] in
                               guard let self = self else { return }
@@ -227,7 +228,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                           print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
                           print(self.keychain.get("FcmToken"))
                           print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
-                          self.postFcmToken()
+                          
                            if data.statusCode != 200 {
                                print("프로필 수정 실패")
                                self.faileEditProfile()
