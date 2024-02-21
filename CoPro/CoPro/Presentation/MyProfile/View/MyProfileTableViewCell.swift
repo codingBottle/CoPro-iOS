@@ -44,7 +44,7 @@ class MyProfileTableViewCell: UITableViewCell {
     let greaterthanContainer: UIView = UIView()
     
     let greaterthanButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "greaterthan"), for: .normal)
+        $0.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         $0.contentVerticalAlignment = .fill
         $0.contentHorizontalAlignment = .fill
     }
