@@ -28,11 +28,22 @@ extension CardAPI {
             "Authorization": "Bearer \(token)",
             "Accept": "application/json"
         ]
-        
+        var rePart = " "
+        var reLang = " "
+        if part == "직무" || part == "전체"{
+            rePart = " "
+        }else{
+            rePart = part
+        }
+        if lang == "언어" || lang == "전체"{
+            reLang = " "
+        }else{
+            reLang = lang
+        }
         // Body 설정
         let parameters: Parameters = [
-            "occupation": part == "직무" ? " " : part,
-            "language": lang == "언어" ? " " :lang,
+            "occupation": rePart,
+            "language": reLang,
             "career": old,
             "page":page,
             "size":10
@@ -57,6 +68,7 @@ extension CardAPI {
                             }
                         }
                     } else {
+                        print("\(rePart)//\(reLang)//\(old)//\(page)")
                         // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
                         completion(response.result)
                     }
