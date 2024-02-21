@@ -32,7 +32,7 @@ final class MainViewController: UIViewController {
     var panGesture = UIPanGestureRecognizer()
     private let scrollView = UIScrollView()
     private let pageControl = UIPageControl()
-    var images: [UIImage] = [UIImage(named: "bird")!, UIImage(named: "plant")!, UIImage(named: "fruit")!] // 사용할 이미지들
+    var images: [UIImage] = [UIImage(named: "main_slider_image1")!, UIImage(named: "main_slider_image1")!, UIImage(named: "main_slider_image1")!] // 사용할 이미지들
     private let segmentedControl: UISegmentedControl = {
         let segmentedControl = UnderlineSegmentedControl(items: ["프로젝트", "자유", "공지사항"])
       segmentedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ final class MainViewController: UIViewController {
     }()
     
 //    private lazy var addPostButton: UIButton = {
-//        
+//
 //        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
 //        btn.backgroundColor = UIColor.P2()
 //        btn.layer.cornerRadius = 20
@@ -202,24 +202,51 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     }
     func setupScrollView() {
         let screenWidth = UIScreen.main.bounds.width
-            let screenHeight = UIScreen.main.bounds.height
+        let screenHeight = UIScreen.main.bounds.height
+        let padding: CGFloat = 20
+
         scrollView.isPagingEnabled = true
+        scrollView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight / 2.3)
+        print("rkskekfkek")
+        print(scrollView.frame)
+        for i in 0..<images.count {
+            let imageView = UIImageView()
+            imageView.image = images[i]
+            imageView.contentMode = .scaleToFill
+            imageView.backgroundColor = .white
 
-            // ScrollView의 크기를 화면의 반으로 설정
-            scrollView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight / 2)
+            let xPos = scrollView.frame.width * CGFloat(i) + padding
+            imageView.frame = CGRect(x: xPos, y: 0, width: scrollView.frame.width - 2 * padding, height: scrollView.frame.height)
+            imageView.layer.cornerRadius = 10 // radius 설정
+            imageView.layer.masksToBounds = true // 라운드 테두리 적용
 
-            for i in 0..<images.count {
-                let imageView = UIImageView()
-                imageView.image = images[i]
-                imageView.contentMode = .scaleAspectFit // 이미지의 비율을 유지하면서 이미지 뷰에 맞게 조절
-                imageView.backgroundColor = .white
-                let xPos = scrollView.frame.width * CGFloat(i)
-                imageView.frame = CGRect(x: xPos, y: 0, width: scrollView.frame.width, height: scrollView.frame.height)
-                scrollView.contentSize.width = scrollView.frame.width * CGFloat(i + 1)
-                scrollView.addSubview(imageView)
-            }
+            // 탭 제스처 추가
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+            imageView.addGestureRecognizer(tapGesture)
+            imageView.isUserInteractionEnabled = true
+            
+            scrollView.contentSize.width = scrollView.frame.width * CGFloat(i + 1)
+            scrollView.addSubview(imageView)
+        }
         self.view.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(screenHeight / 2.3)
+        }
+
     }
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        // 이미지를 탭했을 때 실행할 코드
+        // 여기서는 Safari를 열도록 합니다.
+        
+        guard let tappedImageView = sender.view as? UIImageView else { return }
+        // Safari 열기
+        if let url = URL(string: "https://forms.gle/3ALSbyx6QN9KNC7r5") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+
 
     func setupPageControl() {
         let screenHeight = UIScreen.main.bounds.height
@@ -299,7 +326,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
 //                let navigationController = UINavigationController(rootViewController: addPostVC)
 //                navigationController.modalPresentationStyle = .fullScreen
 //                self.present(navigationController, animated: true, completion: nil)
-//                break            
+//                break
 //            case 1:
 //            let addPostVC = AddPostViewController()
 //                let navigationController = UINavigationController(rootViewController: addPostVC)
