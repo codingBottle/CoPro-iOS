@@ -27,6 +27,7 @@ final class noticeViewController: UIViewController, SendStringData {
     
     // MARK: - UI Components
     
+    private let refreshControl = UIRefreshControl()
     weak var delegate1: radioDelegate?
     weak var delegate: RecruitVCDelegate?
     private let sortButton = UIButton()
@@ -66,6 +67,8 @@ extension noticeViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.do {
             $0.showsVerticalScrollIndicator = false
             $0.separatorStyle = .singleLine
+            $0.refreshControl = refreshControl
+            refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         }
     }
     
@@ -135,6 +138,21 @@ extension noticeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - @objc Method
+    
+    @objc func refreshData(_ sender: UIRefreshControl) {
+        // 데이터를 새로고침하는 코드를 여기에 작성합니다.
+        offset = 1
+        
+        // 게시글들 모두 제거
+        posts.removeAll()
+        filteredPosts.removeAll()
+        
+        // 새로운 게시글들 가져오기
+        getAllBoard(category: "공지사항", page: offset, standard: getStandard())
+        // 데이터를 새로고침 한 후에는 반드시 endRefreshing() 메소드를 호출하여 새로고침 인디케이터를 숨겨야 합니다.
+        sender.endRefreshing()
+    }
+
     
     @objc func sortButtonPressed() {
         let bottomSheetVC = SortBottomSheetViewController()

@@ -18,7 +18,14 @@ protocol radioDelegate: AnyObject {
     func sendDefaultSelect(withOpt opt: String)
 }
 
-final class recruitViewController: UIViewController, SendStringData {
+final class recruitViewController: UIViewController, SendStringData, AddPostViewControllerDelegate {
+    func didPostArticle() {
+        offset = 1
+        posts.removeAll()
+        filteredPosts.removeAll()
+        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+    }
+    
     func radioButtonDidSelect() {
         print("라디오버튼눌림")
     }
@@ -34,6 +41,7 @@ final class recruitViewController: UIViewController, SendStringData {
     
     // MARK: - UI Components
     
+    private let refreshControl = UIRefreshControl()
     weak var delegate1: radioDelegate?
     weak var delegate: RecruitVCDelegate?
     private let sortButton = UIButton()
@@ -43,7 +51,23 @@ final class recruitViewController: UIViewController, SendStringData {
     var posts = [BoardDataModel]()
     var isInfiniteScroll = true
     var offset = 1
+    private lazy var addPostButton: UIButton = {
+        
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
+        btn.backgroundColor = UIColor.P2()
+        btn.layer.cornerRadius = 20
+        btn.setImage(UIImage(systemName: "plus"), for: .normal)
+        btn.titleLabel?.font = .pretendard(size: 17, weight: .bold)
+        btn.setTitle("글쓰기", for: .normal)
+        btn.contentEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: 1)
+        btn.imageEdgeInsets = .init(top: 0, left: -1, bottom: 0, right: 1)
+        btn.titleEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: -1)
+        btn.clipsToBounds = true
+        btn.tintColor = .white
+        btn.addTarget(self, action: #selector(addButtonDidTapped), for: .touchUpInside)
 
+        return btn
+    }()
     
     // MARK: - LifeCycle
     
@@ -55,6 +79,7 @@ final class recruitViewController: UIViewController, SendStringData {
         setDelegate()
         setRegister()
         setAddTarget()
+        view.bringSubviewToFront(addPostButton)
     }
 }
 
@@ -74,6 +99,8 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.do {
             $0.showsVerticalScrollIndicator = false
             $0.separatorStyle = .singleLine
+            $0.refreshControl = refreshControl
+            refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         }
     }
     
@@ -93,6 +120,13 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.snp.makeConstraints {
             $0.top.equalTo(sortButton.snp.bottom).offset(5)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        view.addSubview(addPostButton)
+        addPostButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-91)
+            $0.width.equalTo(91)
+            $0.height.equalTo(37)
         }
     }
     
@@ -144,12 +178,36 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - @objc Method
     
+    @objc func addButtonDidTapped() {
+        let addPostVC = AddProjectPostViewController()
+        addPostVC.delegate = self
+        let navigationController = UINavigationController(rootViewController: addPostVC)
+        navigationController.modalPresentationStyle = .overFullScreen
+        self.present(navigationController, animated: true, completion: nil)
+    }
+
+    
     @objc func sortButtonPressed() {
         let bottomSheetVC = SortBottomSheetViewController()
         bottomSheetVC.delegate = self
         bottomSheetVC.tmp = sortButton.titleLabel?.text ?? "최신순"
             present(bottomSheetVC, animated: true, completion: nil)
     }
+    
+    @objc func refreshData(_ sender: UIRefreshControl) {
+        // 데이터를 새로고침하는 코드를 여기에 작성합니다.
+        offset = 1
+        
+        // 게시글들 모두 제거
+        posts.removeAll()
+        filteredPosts.removeAll()
+        
+        // 새로운 게시글들 가져오기
+        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+        // 데이터를 새로고침 한 후에는 반드시 endRefreshing() 메소드를 호출하여 새로고침 인디케이터를 숨겨야 합니다.
+        sender.endRefreshing()
+    }
+
 }
 extension recruitViewController {
     func getAllBoard(category: String, page: Int, standard: String) {

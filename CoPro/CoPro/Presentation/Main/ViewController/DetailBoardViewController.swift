@@ -145,7 +145,7 @@ final class DetailBoardViewController: BaseViewController {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 17, weight: .regular)
             $0.numberOfLines = 0
-            $0.lineBreakMode = .byWordWrapping
+//            $0.lineBreakMode = .byCharWrapping
         }
         heartButton.do {_ in
             if isHeart {

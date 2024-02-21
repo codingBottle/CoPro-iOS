@@ -47,23 +47,23 @@ final class MainViewController: UIViewController {
       return vc
     }()
     
-    private lazy var addPostButton: UIButton = {
-        
-        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
-        btn.backgroundColor = UIColor.P2()
-        btn.layer.cornerRadius = 20
-        btn.setImage(UIImage(systemName: "plus"), for: .normal)
-        btn.titleLabel?.font = .pretendard(size: 17, weight: .bold)
-        btn.setTitle("글쓰기", for: .normal)
-        btn.contentEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: 1)
-        btn.imageEdgeInsets = .init(top: 0, left: -1, bottom: 0, right: 1)
-        btn.titleEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: -1)
-        btn.clipsToBounds = true
-        btn.tintColor = .white
-        btn.addTarget(self, action: #selector(addButtonDidTapped), for: .touchUpInside)
-
-        return btn
-    }()
+//    private lazy var addPostButton: UIButton = {
+//        
+//        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
+//        btn.backgroundColor = UIColor.P2()
+//        btn.layer.cornerRadius = 20
+//        btn.setImage(UIImage(systemName: "plus"), for: .normal)
+//        btn.titleLabel?.font = .pretendard(size: 17, weight: .bold)
+//        btn.setTitle("글쓰기", for: .normal)
+//        btn.contentEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: 1)
+//        btn.imageEdgeInsets = .init(top: 0, left: -1, bottom: 0, right: 1)
+//        btn.titleEdgeInsets = .init(top: 0, left: 1, bottom: 0, right: -1)
+//        btn.clipsToBounds = true
+//        btn.tintColor = .white
+//        btn.addTarget(self, action: #selector(addButtonDidTapped), for: .touchUpInside)
+//
+//        return btn
+//    }()
       
     var dataViewControllers: [UIViewController] {
         [recruitVC, freeVC, noticeVC]
@@ -79,24 +79,24 @@ final class MainViewController: UIViewController {
                 animated: true,
                 completion: nil
             )
-            switch currentPage {
-            case 0:
-                // currentPage가 0이면 버튼을 보이게 함
-                addPostButton.isHidden = false
-                // a 페이지로 이동하는 코드
-                break
-            case 1:
-                // currentPage가 1이면 버튼을 보이게 함
-                addPostButton.isHidden = false
-                // b 페이지로 이동하는 코드
-                break
-            case 2:
-                // currentPage가 2이면 버튼을 숨김
-                addPostButton.isHidden = true
-                break
-            default:
-                break
-            }
+//            switch currentPage {
+//            case 0:
+//                // currentPage가 0이면 버튼을 보이게 함
+//                addPostButton.isHidden = false
+//                // a 페이지로 이동하는 코드
+//                break
+//            case 1:
+//                // currentPage가 1이면 버튼을 보이게 함
+//                addPostButton.isHidden = false
+//                // b 페이지로 이동하는 코드
+//                break
+//            case 2:
+//                // currentPage가 2이면 버튼을 숨김
+//                addPostButton.isHidden = true
+//                break
+//            default:
+//                break
+//            }
         }
     }
     
@@ -114,7 +114,7 @@ final class MainViewController: UIViewController {
         setupScrollView()
         setupPageControl()
         view.bringSubviewToFront(bottomSheetView)
-        view.bringSubviewToFront(addPostButton)
+//        view.bringSubviewToFront(addPostButton)
     }
 }
 
@@ -178,13 +178,13 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
             $0.bottom.equalToSuperview().offset(-4)
             $0.top.equalTo(segmentedControl.snp.bottom).offset(5)
         }
-        view.addSubview(addPostButton)
-        addPostButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.bottom.equalToSuperview().offset(-91)
-            $0.width.equalTo(91)
-            $0.height.equalTo(37)
-        }
+//        view.addSubview(addPostButton)
+//        addPostButton.snp.makeConstraints {
+//            $0.trailing.equalToSuperview().offset(-16)
+//            $0.bottom.equalToSuperview().offset(-91)
+//            $0.width.equalTo(91)
+//            $0.height.equalTo(37)
+//        }
     }
     private func setDelegate() {
         pageViewController.delegate = self
@@ -292,24 +292,24 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
-    @objc func addButtonDidTapped() {
-        switch currentPage {
-            case 0:
-            let addPostVC = AddProjectPostViewController()
-                let navigationController = UINavigationController(rootViewController: addPostVC)
-                navigationController.modalPresentationStyle = .fullScreen
-                self.present(navigationController, animated: true, completion: nil)
-                break            
-            case 1:
-            let addPostVC = AddPostViewController()
-                let navigationController = UINavigationController(rootViewController: addPostVC)
-                navigationController.modalPresentationStyle = .fullScreen
-                self.present(navigationController, animated: true, completion: nil)
-                break
-            default:
-                break
-            }
-    }
+//    @objc func addButtonDidTapped() {
+//        switch currentPage {
+//            case 0:
+//            let addPostVC = AddProjectPostViewController()
+//                let navigationController = UINavigationController(rootViewController: addPostVC)
+//                navigationController.modalPresentationStyle = .fullScreen
+//                self.present(navigationController, animated: true, completion: nil)
+//                break            
+//            case 1:
+//            let addPostVC = AddPostViewController()
+//                let navigationController = UINavigationController(rootViewController: addPostVC)
+//                navigationController.modalPresentationStyle = .fullScreen
+//                self.present(navigationController, animated: true, completion: nil)
+//                break
+//            default:
+//                break
+//            }
+//    }
 }
     
 extension MainViewController: RecruitVCDelegate {
