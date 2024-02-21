@@ -22,9 +22,11 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     var languageArr: Array<Substring>?
     
     let bottomTabBarView = UIView()
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
        myProfileView.tableView.delegate = self
        myProfileView.tableView.dataSource = self
        getMyProfile()
@@ -44,9 +46,8 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     override func setLayout() {
         
         myProfileView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+           $0.top.leading.trailing.bottom.equalToSuperview()
             $0.centerX.equalToSuperview()
-           $0.bottom.equalToSuperview()
         }
     }
     
@@ -96,10 +97,10 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
        MyProfileAPI.shared.postEditCardType(token: token, requestBody: EditCardTypeRequestBody(viewType: CardViewType)) { result in
            switch result {
            case .success(_):
-              self.showAlert(title: "프로필 타입 변경에 성공하였습니다", confirmButtonName: "확인")
-//                             confirmButtonCompletion: {
-//                 CardViewController().reloadData()})
-              
+              DispatchQueue.main.async {
+                 self.showAlert(title: "프로필 타입 변경에 성공하였습니다", confirmButtonName: "확인")
+                 
+              }
                
            case .requestErr(let message):
                // 요청 에러인 경우
@@ -129,17 +130,17 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
         let screenHeight = UIScreen.main.bounds.height
         switch _CellType {
         case .profile:
-           let heightRatio = 512.0 / 852.0
-            let cellHeight = screenHeight * heightRatio
-            return cellHeight
+//           let heightRatio = 512.0 / 852.0
+//            let cellHeight = screenHeight * heightRatio
+            return UIScreen.main.bounds.height/2 + 20
         case .cardChange:
-            let heightRatio = 64.0 / 852.0
-            let cellHeight = screenHeight * heightRatio
-            return cellHeight
+//            let heightRatio = 64.0 / 852.0
+//            let cellHeight = screenHeight * heightRatio
+            return 70
         case .myTrace:
-            let heightRatio = 44.0 / 852.0
-            let cellHeight = screenHeight * heightRatio
-            return cellHeight
+//            let heightRatio = 44.0 / 852.0
+//            let cellHeight = screenHeight * heightRatio
+            return 50
         }
     }
     
@@ -234,6 +235,81 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             return cell
         }
     }
+   
+   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      
+      switch indexPath.row {
+      case 1, 3:
+          print("")
+          
+      case 2:
+         print("현재 뷰컨에서 깃헙 눌림")
+        print("myProfileData?.gitHubURL : \(String(describing: myProfileData?.gitHubURL))")
+        guard let githubURL = keychain.get("currentUserGithubURL") else {return print("")}
+         let alertVC = EditGithubModalViewController()
+        alertVC.githubURLtextFieldLabel.text = githubURL
+        alertVC.activeModalType = .NotFirstLogin
+        alertVC.isModalInPresentation = true
+         present(alertVC, animated: true, completion: nil)
+          
+      case 4:
+         print("작성한 게시물 클릭")
+         let vc = MyContributionsViewController()
+         vc.activeCellType = .post
+         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+         self.navigationController?.pushViewController(vc, animated: true)
+          
+      case 5:
+         print("작성한 댓글 클릭")
+         let vc = MyContributionsViewController()
+         vc.activeCellType = .comment
+         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+         self.navigationController?.pushViewController(vc, animated: true)
+          
+      case 6:
+         print("스크랩 클릭")
+         let vc = MyContributionsViewController()
+         vc.activeCellType = .scrap
+         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+         self.navigationController?.pushViewController(vc, animated: true)
+          
+      case 7:
+         print("관심 프로필 클릭")
+         let vc = LikeProfileViewController()
+         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+         self.navigationController?.pushViewController(vc, animated: true)
+          
+      case 9:
+         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+         let action1 = UIAlertAction(title: "카드로 보기", style: .default) { (action) in
+             print("카드로 보기 호출")
+             self.postEditCardViewType(CardViewType: 0)
+            CardViewController().reloadData()
+         }
+         alertController.addAction(action1)
+
+         let action2 = UIAlertAction(title: "목록으로 보기", style: .default) { (action) in
+             print("목록으로 보기 호출")
+             self.postEditCardViewType(CardViewType: 1)
+            CardViewController().reloadData()
+         }
+         alertController.addAction(action2)
+
+         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+         alertController.addAction(cancelAction)
+
+         self.present(alertController, animated: true, completion: nil)
+          
+      default:
+          break
+      }
+       
+
+       // 셀 선택 해제
+       tableView.deselectRow(at: indexPath, animated: true)
+   }
+
 }
 
 extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate{

@@ -75,20 +75,20 @@ extension MyProfileTableViewCell {
         
         heartContainer.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(340)
+           $0.trailing.equalToSuperview().offset(-16)
             $0.width.equalTo(54)
         }
         
         heartImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview()
+           $0.trailing.equalTo(heartCountLabel.snp.leading).offset(-4)
             $0.width.equalTo(20)
-            $0.height.equalTo(17.5)
+            $0.height.equalTo(20)
         }
         
         heartCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(heartImageView)
-            $0.leading.equalTo(heartImageView.snp.trailing).offset(3)
+           $0.trailing.equalToSuperview()
             $0.trailing.equalToSuperview()
         }
         

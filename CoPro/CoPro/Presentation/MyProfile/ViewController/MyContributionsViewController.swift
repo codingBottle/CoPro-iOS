@@ -72,15 +72,20 @@ class MyContributionsViewController: BaseViewController {
                spacer.width = 8 // 왼쪽 여백의 크기
                self.navigationItem.leftBarButtonItems?.insert(spacer, at: 0) // 왼쪽 여백 추가
         
+       tableView.rowHeight = UITableView.automaticDimension
+           
         switch activeCellType {
         case .post:
+           tableView.estimatedRowHeight = 110
             self.navigationItem.title = "작성한 게시물"
             getWriteByMe()
         case .comment:
+           tableView.estimatedRowHeight = 65
             self.navigationItem.title = "작성한 댓글"
             getMyWrittenComment()
             
         case .scrap:
+           tableView.estimatedRowHeight = 110
             self.navigationItem.title = "저장한 게시물"
             getScrapPost()
         }
@@ -113,20 +118,14 @@ class MyContributionsViewController: BaseViewController {
         }
     }
     
-    private func returnTableCellHeight() -> CGFloat {
-        switch activeCellType {
-        case .post, .scrap:
-            let screenHeight = UIScreen.main.bounds.height
-            let heightRatio = 88.0 / 852.0
-            let cellHeight = screenHeight * heightRatio
-            return cellHeight
-        case .comment:
-            let screenHeight = UIScreen.main.bounds.height
-            let heightRatio = 62.0 / 852.0
-            let cellHeight = screenHeight * heightRatio
-            return cellHeight
-        }
-    }
+//    private func returnTableCellHeight() -> CGFloat {
+//        switch activeCellType {
+//        case .post, .scrap:
+//            return 100
+//        case .comment:
+//            return 65
+//        }
+//    }
     
     private func getWriteByMe() {
         if let token = self.keychain.get("accessToken") {
@@ -342,38 +341,11 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
             else {
                 return UITableViewCell()
             }
-           print("🌊🌊🌊🌊🌊🌊🌊🌊myPostsData?.count : \(String(describing: myPostsData?.count))🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
-           if myPostsData?.count == 0 {
-              
-               // contents가 비어있을 때 메시지 라벨을 추가합니다.
-               let messageLabel = UILabel().then {
-                   $0.setPretendardFont(text: "작성 게시글이 없어요!", size: 17, weight: .regular, letterSpacing: 1.25)
-                   $0.textColor = .black
-                   $0.textAlignment = .center
-               }
-   
-               let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
-               imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
-               
-               let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel]) // 이미지와 라벨을 포함하는 스택 뷰 생성
-               stackView.axis = .vertical // 세로 방향으로 정렬
-               stackView.alignment = .center // 가운데 정렬
-               stackView.spacing = 10 // 이미지와 라벨 사이의 간격 설정
-               
-//              self.tableView.backgroundView = UIView() // 배경 뷰 생성
-               
-              cell.containerView.snp.removeConstraints()
-              cell.addSubview(stackView)
-              stackView.snp.makeConstraints {
-                  $0.centerX.equalToSuperview()
-                  $0.centerY.equalToSuperview()
-              }
-           } else {
               let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
               let post = myPostsData?[reverseIndex]
               cell.configureCellWritebyMe(post!)
               cell.selectionStyle = .none
-           }
+           
             
             return cell
             
@@ -402,9 +374,9 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return returnTableCellHeight()
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return returnTableCellHeight()
+//    }
    
    @objc func backButtonTapped() {
                

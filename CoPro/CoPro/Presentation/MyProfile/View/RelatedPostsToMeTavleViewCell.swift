@@ -60,6 +60,7 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
 
         postTitleLabel.do {
            $0.setPretendardFont(text: "", size: 15, weight: .bold, letterSpacing: 1.22)
+           $0.numberOfLines = 0
         }
 
         likeCountIcon.do {
@@ -76,10 +77,8 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     }
     
     private func setLayout() {
-        
-        let standardWidth: CGFloat = 393 // iPhone 14 Pro의 너비
-        let width = UIScreen.main.bounds.width * (16 / standardWidth)
-        let height = width
+       let width = UIScreen.main.bounds.width
+       let height = UIScreen.main.bounds.height
         
         addSubview(containerView)
         containerView.addSubviews(leftContainerView, postImage)
@@ -97,12 +96,6 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             $0.top.bottom.leading.equalToSuperview()
             $0.trailing.equalTo(postImage.snp.leading).offset(-25)
         }
-        
-//        postImage.snp.makeConstraints {
-//            $0.top.bottom.trailing.equalToSuperview()
-//            $0.leading.equalTo(leftContainerView.snp.trailing).offset(25)
-//        }
-        
         
         //First Line
         postTitleLabel.snp.makeConstraints {

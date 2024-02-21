@@ -117,6 +117,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    
    
+   
    override func viewDidLoad() {
       super.viewDidLoad()
       view.backgroundColor = UIColor.White()
@@ -152,13 +153,14 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       nickNameLabel.snp.makeConstraints {
          $0.top.equalToSuperview()
          $0.leading.equalToSuperview().offset(8)
-         $0.width.equalTo(45)
+         $0.height.equalTo(21)
+//         $0.width.equalTo(45)
       }
       
       textFieldContainer.snp.makeConstraints {
          $0.leading.trailing.equalToSuperview()
          $0.top.equalTo(nickNameLabel.snp.bottom).offset(8)
-         $0.height.equalTo(41) //반응형으로 바꿔야함
+         $0.height.equalTo(41)
       }
       
       nickNameTextField.snp.makeConstraints {
@@ -170,12 +172,14 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       nicknameDuplicateCheckLabel.snp.makeConstraints {
          $0.top.equalTo(textFieldContainer.snp.bottom).offset(5)
          $0.leading.equalToSuperview().offset(8)
-         $0.width.equalTo(150)
+//         $0.width.equalTo(150)
+         $0.height.equalTo(15)
       }
       
       myJobLabel.snp.makeConstraints {
          $0.top.equalTo(nicknameDuplicateCheckLabel.snp.bottom).offset(18)
          $0.leading.equalToSuperview().offset(8)
+         $0.height.equalTo(21)
       }
       
       jobButtonsStackView.snp.makeConstraints {
@@ -268,11 +272,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    private func returnEditMyProfileUIHeight(type: String) -> CGFloat {
       if type == "First" {
-         let cellHeight = UIScreen.main.bounds.height / 2
-         return cellHeight
+         return 300.0
       }
       else {
-         return UIScreen.main.bounds.height * 0.85
+         return 520
       }
    }
    
@@ -334,13 +337,14 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          languageUsedLabel.snp.makeConstraints {
             $0.top.equalTo(jobButtonsStackView.snp.bottom).offset(18)
             $0.leading.equalToSuperview().offset(8)
-            $0.width.equalTo(79)
+            $0.height.equalTo(21)
          }
          
-         languageCount.snp.makeConstraints({
+         languageCount.snp.makeConstraints {
             $0.leading.equalTo(languageUsedLabel.snp.trailing).offset(3)
             $0.bottom.equalTo(languageUsedLabel)
-         })
+            $0.height.equalTo(14)
+         }
          
          stackView.snp.makeConstraints {
             $0.top.equalTo(languageUsedLabel.snp.bottom).offset(8)
@@ -541,7 +545,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             careerLabel.snp.makeConstraints {
                $0.top.equalTo(languageStackView.snp.bottom).offset(18)
                $0.leading.equalToSuperview().offset(8)
-               $0.width.equalTo(79)
+               $0.height.equalTo(21)
             }
             
             stackView.snp.makeConstraints {
@@ -560,10 +564,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          container.addSubview(doneButton)
          
          doneButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(440)
-            $0.bottom.equalToSuperview().offset(-47)
+            $0.bottom.equalToSuperview().offset(-27)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(41)
          }
          updateButtonState(type: "didTapNextButton")
       }

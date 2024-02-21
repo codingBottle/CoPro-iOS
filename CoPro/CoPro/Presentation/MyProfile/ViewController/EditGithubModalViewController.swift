@@ -57,6 +57,16 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       $0.spellCheckingType = .no
    }
    
+   var shouldShowSuccessAlert = false
+
+   override func viewDidAppear(_ animated: Bool) {
+      super.viewDidAppear(animated)
+      
+      if shouldShowSuccessAlert {
+         successAlert()
+      }
+   }
+   
    override func viewDidLoad() {
       super.viewDidLoad()
       view.backgroundColor = UIColor.White()
@@ -70,12 +80,23 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    }
    
    override func setUI() {
-      if let sheetPresentationController = sheetPresentationController {
-         sheetPresentationController.preferredCornerRadius = 15
-         sheetPresentationController.prefersGrabberVisible = true
-         sheetPresentationController.detents = [.custom {context in
-            return self.returnUIHeight()
-         }]
+      switch activeModalType {
+      case .FirstLogin:
+         if let sheetPresentationController = sheetPresentationController {
+            sheetPresentationController.preferredCornerRadius = 15
+            sheetPresentationController.prefersGrabberVisible = true
+            sheetPresentationController.detents = [.custom {context in
+               return 225
+            }]
+         }
+      case .NotFirstLogin:
+         if let sheetPresentationController = sheetPresentationController {
+            sheetPresentationController.preferredCornerRadius = 15
+            sheetPresentationController.prefersGrabberVisible = true
+            sheetPresentationController.detents = [.custom {context in
+               return 210
+            }]
+         }
       }
    }
    override func setLayout() {
@@ -97,20 +118,21 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          firstLoginInGithubModal.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(0)
+            $0.height.equalTo(21)
 //            $0.width.equalTo(60)
          }
          
          githubLabel.snp.makeConstraints {
             $0.top.equalTo(firstLoginInGithubModal.snp.bottom).offset(0)
             $0.leading.equalToSuperview().offset(0)
-//            $0.width.equalTo(60)
+            $0.height.equalTo(21)
          }
          
          textFieldContainer.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(githubLabel.snp.bottom).offset(12)
-            $0.height.equalTo(50)
+            $0.height.equalTo(41)
          }
          
          githubURLtextFieldLabel.snp.makeConstraints {
@@ -122,9 +144,10 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          doneButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(textFieldContainer.snp.bottom).offset(18)
+            $0.top.equalTo(textFieldContainer.snp.bottom).offset(15)
             $0.height.equalTo(textFieldContainer.snp.height)
          }
+         
       case .NotFirstLogin:
          view.addSubview(container)
          container.addSubviews(githubLabel, textFieldContainer, doneButton)
@@ -139,44 +162,31 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          
          githubLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.equalToSuperview().offset(8)
-            $0.width.equalTo(60)
+            $0.leading.equalToSuperview().offset(0)
+            $0.height.equalTo(21)
          }
          
          textFieldContainer.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(githubLabel.snp.bottom).offset(12)
-            $0.height.equalTo(50)
+            $0.height.equalTo(41)
          }
          
          githubURLtextFieldLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalTo(githubLabel.snp.leading)
+            $0.leading.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-6)
          }
          
          doneButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(textFieldContainer.snp.bottom).offset(18)
+            $0.top.equalTo(textFieldContainer.snp.bottom).offset(15)
             $0.height.equalTo(textFieldContainer.snp.height)
          }
       }
       
-   }
-   
-   private func returnUIHeight() -> CGFloat {
-      let screenHeight = UIScreen.main.bounds.height
-      let cellHeight = screenHeight / 2.5
-      return cellHeight
-   }
-   
-   private func returnTextFieldHeight() -> CGFloat {
-      let screenHeight = UIScreen.main.bounds.height
-      let heightRatio = 50.0 / 852.0
-      let cellHeight = screenHeight * heightRatio
-      return cellHeight
    }
    
    override func setUpKeyboard() {
@@ -233,16 +243,10 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          switch activeModalType {
          case .FirstLogin:
 //            print
-            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody) { result in
+            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody ,checkFirstlogin: true) { result in
                 switch result {
                 case .success :
-                    DispatchQueue.main.async { [self] in
-                       if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                          let window = windowScene.windows.first,
-                          let tabBarController = window.rootViewController as? BottomTabController {
-                          tabBarController.selectedIndex = 3
-                       }
-                    }
+                   print("성공!!!")
                 case .requestErr(let message):
                    print("🔥🔥🔥🔥🔥🔥requestErr🔥🔥🔥🔥🔥🔥🔥🔥 ")
                     print("Error : \(message)")
@@ -255,17 +259,12 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
 
          case .NotFirstLogin:
             print("NotFirstLogin")
-            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: EditGitHubURLRequestBody(gitHubURL: githubURLtextFieldLabel.text ?? "")) { result in
+            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: EditGitHubURLRequestBody(gitHubURL: githubURLtextFieldLabel.text ?? ""), checkFirstlogin: false) { result in
                switch result {
                case .success(_):
                   print("NotFirstLogin2222")
-                  self.showAlert(title: "Github URL 수정을 성공하였습니다",
-                                 confirmButtonName: "확인",
-                                 confirmButtonCompletion: { [self] in
-                     DispatchQueue.main.async {
-                        self.dismiss(animated: true)
-                     }
-                  })
+                  print("🔥🔥🔥🔥🔥NotFirstLogin success🔥🔥🔥🔥🔥🔥🔥🔥🔥 ")
+                  
                case .requestErr(let message):
                   print("Error : \(message)")
                case .pathErr, .serverErr, .networkFail:
@@ -278,35 +277,44 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       }
    }
    
-   //FcmToken 보내기
-   
-   func postFcmToken() {
-       guard let token = self.keychain.get("accessToken") else {
-           print("No accessToken found in keychain.")
-           return
-       }
-      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
-      
-      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
-           switch result {
-           case .success(_):
-              print("FcmToken 보내기 성공")
-               
-           case .requestErr(let message):
-               // 요청 에러인 경우
-               print("Error : \(message)")
-              if (message as AnyObject).contains("401") {
-                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
-               }
-               
-           case .pathErr, .serverErr, .networkFail:
-               // 다른 종류의 에러인 경우
-               print("another Error")
-           default:
-               break
+   func successAlert() {
+           DispatchQueue.main.async {
+              self.shouldShowSuccessAlert = false
+               self.showAlert(title: "Github URL 수정을 성공하였습니다",
+                              confirmButtonName: "확인")
+               self.dismiss(animated: true)
            }
        }
-   }
+
+   //FcmToken 보내기
+   
+//   func postFcmToken() {
+//       guard let token = self.keychain.get("accessToken") else {
+//           print("No accessToken found in keychain.")
+//           return
+//       }
+//      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+//      
+//      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
+//           switch result {
+//           case .success(_):
+//              print("FcmToken 보내기 성공")
+//               
+//           case .requestErr(let message):
+//               // 요청 에러인 경우
+//               print("Error : \(message)")
+//              if (message as AnyObject).contains("401") {
+//                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+//               }
+//               
+//           case .pathErr, .serverErr, .networkFail:
+//               // 다른 종류의 에러인 경우
+//               print("another Error")
+//           default:
+//               break
+//           }
+//       }
+//   }
    
    
    //MARK: - @objc func
@@ -330,21 +338,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             
                readyForEdigithub = false
-            
-            textFieldContainer.snp.remakeConstraints {
-               $0.centerX.equalToSuperview()
-               $0.leading.trailing.equalToSuperview()
-               $0.top.equalTo(githubLabel.snp.bottom).offset(8)
-               $0.height.equalTo(50)
-            }
-            
-            doneButton.snp.remakeConstraints {
-               $0.centerX.equalToSuperview()
-               $0.leading.trailing.equalToSuperview()
-               $0.top.equalTo(textFieldContainer.snp.bottom).offset(18)
-               $0.height.equalTo(textFieldContainer.snp.height)
-            }
-            
             UIView.animate(withDuration: 0.3) {
                self.view.layoutIfNeeded()
             }
@@ -355,20 +348,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    @objc func keyboardWillHide(notification: NSNotification) {
       readyForEdigithub = true
       
-      textFieldContainer.snp.remakeConstraints {
-         $0.centerX.equalToSuperview()
-         $0.leading.trailing.equalToSuperview()
-         $0.top.equalTo(githubLabel.snp.bottom).offset(8)
-         $0.height.equalTo(50)
-      }
-      
-      doneButton.snp.remakeConstraints {
-         $0.centerX.equalToSuperview()
-         $0.leading.trailing.equalToSuperview()
-         $0.top.equalTo(textFieldContainer.snp.bottom).offset(18)
-         $0.height.equalTo(textFieldContainer.snp.height)
-      }
-      
       UIView.animate(withDuration: 0.3) {
          self.view.layoutIfNeeded()
       }
@@ -376,8 +355,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
       
-//      print("editGitHubURLBody.gitHubURL : \(editGitHubURLBody.gitHubURL)")
-//      print("현재 textField 값 : \(String(describing: ))")
        return true
    }
 }
