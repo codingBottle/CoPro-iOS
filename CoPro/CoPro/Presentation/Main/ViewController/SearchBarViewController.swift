@@ -17,15 +17,15 @@ final class SearchBarViewController: UIViewController, UISearchControllerDelegat
     private let customView = UIView()
     private let backButton = UIButton()
     private let searchBar = UISearchBar()
-    private let popularSearchScrollView = UIScrollView()
-    private let popularSearchStackView = UIStackView()
-    private let popularSearchButtonStackView = UIStackView()
-    private let popularLabel = UILabel()
+//    private let popularSearchScrollView = UIScrollView()
+//    private let popularSearchStackView = UIStackView()
+//    private let popularSearchButtonStackView = UIStackView()
+//    private let popularLabel = UILabel()
     private let recentSearchLabel = UILabel()
     private let recentSearchDeleteButton = UIButton()
     private let recentSearchStackView = UIStackView()
     private lazy var recentSearchTableView = UITableView()
-    var items: [String] = ["title", "나는", "문인호임룰루","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕"]
+//    var items: [String] = ["title", "나는", "문인호임룰루","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕", "나는", "문인호","안녕"]
     var items1: [String] = []
 
     // MARK: - LifeCycle
@@ -59,22 +59,22 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.becomeFirstResponder()
             $0.sizeToFit()
         }
-        popularSearchScrollView.do {
-            $0.showsHorizontalScrollIndicator = false
-        }
-        popularSearchStackView.do {
-            $0.axis = .vertical
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.distribution = .equalSpacing
-            $0.spacing = 10
-        }
-        popularSearchButtonStackView.do {
-            $0.axis = .horizontal
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.spacing = 8
-            $0.alignment = .fill
-            $0.distribution = .equalSpacing
-        }
+//        popularSearchScrollView.do {
+//            $0.showsHorizontalScrollIndicator = false
+//        }
+//        popularSearchStackView.do {
+//            $0.axis = .vertical
+//            $0.translatesAutoresizingMaskIntoConstraints = false
+//            $0.distribution = .equalSpacing
+//            $0.spacing = 10
+//        }
+//        popularSearchButtonStackView.do {
+//            $0.axis = .horizontal
+//            $0.translatesAutoresizingMaskIntoConstraints = false
+//            $0.spacing = 8
+//            $0.alignment = .fill
+//            $0.distribution = .equalSpacing
+//        }
         recentSearchTableView.do {
             $0.showsVerticalScrollIndicator = false
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -84,11 +84,11 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.register(recentSearchTableViewCell.self,
                         forCellReuseIdentifier: recentSearchTableViewCell.id)
         }
-        popularLabel.do {
-            $0.text = "인기 검색"
-            $0.font = .pretendard(size: 17, weight: .bold)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+//        popularLabel.do {
+//            $0.text = "인기 검색"
+//            $0.font = .pretendard(size: 17, weight: .bold)
+//            $0.translatesAutoresizingMaskIntoConstraints = false
+//        }
         recentSearchLabel.do {
             $0.text = "최근 검색"
             $0.font = .pretendard(size: 17, weight: .bold)
@@ -106,47 +106,48 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.alignment = .center
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        popularSearchScrollView.do {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
+//        popularSearchScrollView.do {
+//            $0.translatesAutoresizingMaskIntoConstraints = false
+//        }
     }
     
     private func setLayout() {
-        popularSearchStackView.addArrangedSubviews(popularLabel, popularSearchScrollView)
+//        popularSearchStackView.addArrangedSubviews(popularLabel, popularSearchScrollView)
         recentSearchStackView.addArrangedSubviews(recentSearchLabel, recentSearchDeleteButton)
-        view.addSubviews(popularSearchStackView, recentSearchStackView, recentSearchTableView)
+        view.addSubviews(/*popularSearchStackView,*/ recentSearchStackView, recentSearchTableView)
         
-            popularLabel.snp.makeConstraints {
-                $0.top.leading.equalToSuperview()
-            }
-            popularSearchScrollView.snp.makeConstraints {
-                $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(41)
-            }
-        popularSearchScrollView.addSubview(popularSearchButtonStackView)
-        popularSearchButtonStackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalToSuperview()
-        }
-        for item in self.items {
-            let button = UIButton()
-            button.setTitle(item, for: .normal)
-            button.titleLabel?.font = .pretendard(size: 17, weight: .regular)
-            button.setTitleColor(.black, for: .normal)
-            button.layer.borderColor = UIColor.G1().cgColor
-            button.layer.borderWidth = 0.5
-            button.layer.cornerRadius = 10
-            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-            button.addTarget(self, action: #selector(keywordButtonTapped(_:)), for: .touchUpInside)
-            popularSearchButtonStackView.addArrangedSubview(button)
-        }
-            
-            popularSearchStackView.snp.makeConstraints {
-                $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
-                $0.leading.trailing.equalToSuperview().inset(16)
-            }
+//            popularLabel.snp.makeConstraints {
+//                $0.top.leading.equalToSuperview()
+//            }
+//            popularSearchScrollView.snp.makeConstraints {
+//                $0.leading.trailing.equalToSuperview()
+//                $0.height.equalTo(41)
+//            }
+//        popularSearchScrollView.addSubview(popularSearchButtonStackView)
+//        popularSearchButtonStackView.snp.makeConstraints {
+//            $0.edges.equalToSuperview()
+//            $0.height.equalToSuperview()
+//        }
+//        for item in self.items {
+//            let button = UIButton()
+//            button.setTitle(item, for: .normal)
+//            button.titleLabel?.font = .pretendard(size: 17, weight: .regular)
+//            button.setTitleColor(.black, for: .normal)
+//            button.layer.borderColor = UIColor.G1().cgColor
+//            button.layer.borderWidth = 0.5
+//            button.layer.cornerRadius = 10
+//            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+//            button.addTarget(self, action: #selector(keywordButtonTapped(_:)), for: .touchUpInside)
+//            popularSearchButtonStackView.addArrangedSubview(button)
+//        }
+//            
+//            popularSearchStackView.snp.makeConstraints {
+//                $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
+//                $0.leading.trailing.equalToSuperview().inset(16)
+//            }
             recentSearchStackView.snp.makeConstraints {
-                $0.top.equalTo(popularSearchStackView.snp.bottom).offset(16)
+                $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
+//                $0.top.equalTo(popularSearchStackView.snp.bottom).offset(16)
                 $0.leading.trailing.equalToSuperview().inset(16)
             }
             recentSearchLabel.snp.makeConstraints {
@@ -280,7 +281,7 @@ extension SearchBarViewController: UITextFieldDelegate {
     func onSearchTextCleared() {
         // UserDefaults에서 데이터를 다시 불러와서 테이블뷰를 갱신합니다.
         if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
-            items = savedItems
+//            items = savedItems
             recentSearchTableView.reloadData()
         }
     }
