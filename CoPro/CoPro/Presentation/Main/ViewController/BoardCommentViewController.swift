@@ -36,9 +36,15 @@ class BoardCommentViewController: UIViewController {
         setDelegate()
         addKeyboardObserver()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         removeKeyBoardObserver()
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     private func setDelegate() {
