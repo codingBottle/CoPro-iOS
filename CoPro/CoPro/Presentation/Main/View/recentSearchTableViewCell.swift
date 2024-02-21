@@ -80,6 +80,7 @@ class recentSearchTableViewCell: UITableViewCell {
         }
         searchLabel.snp.makeConstraints {
             $0.centerY.centerX.equalToSuperview()
+            $0.left.equalTo(circleView.snp.right).offset(10)
             $0.width.equalTo(300)
             $0.height.equalTo(25)
         }
