@@ -40,7 +40,7 @@ class MyContributionsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        view.backgroundColor = .white
+       view.backgroundColor = UIColor.White()
        // MARK: NavigationBar Custom Settings
                let attributes: [NSAttributedString.Key: Any] = [
                    .font: UIFont(name: "Pretendard-Regular", size: 17)!, // Pretendard 폰트 적용

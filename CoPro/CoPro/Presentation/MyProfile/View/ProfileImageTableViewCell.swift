@@ -67,12 +67,12 @@ class ProfileImageTableViewCell: UITableViewCell {
          profileImage.backgroundColor = .red
          return
       }
-      profileImage.kf.indicatorType = .activity
+      profileImage.kf.indicatorType = .none
       profileImage.kf.setImage(
          with: imageURL,
          placeholder: nil,
          options: [
-            .transition(.fade(1.0)),
+//            .transition(.fade(1.0)),
             .forceTransition,
             .cacheOriginalImage,
             .scaleFactor(UIScreen.main.scale),

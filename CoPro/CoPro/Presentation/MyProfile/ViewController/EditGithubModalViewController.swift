@@ -59,9 +59,9 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    override func viewDidLoad() {
       super.viewDidLoad()
+      view.backgroundColor = UIColor.White()
       githubURLtextFieldLabel.delegate = self
       githubURLtextFieldLabel.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-      view.backgroundColor = UIColor(hex: "#FFFFFF")
       originalHeight = returnTextFieldHeight()
    }
    
