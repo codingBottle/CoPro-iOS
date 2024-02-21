@@ -18,7 +18,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    var activeModalType: EditGitHubModalType = .NotFirstLogin
    private let keychain = KeychainSwift()
    var editGitHubURLBody = EditGitHubURLRequestBody()
-   var originalHeight: CGFloat = 0
+//   var originalHeight: CGFloat = 0
    var isFirstLoginUserName: String?
    var readyForEdigithub: Bool?
    var myProfileVC: MyProfileViewController?
@@ -62,7 +62,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       view.backgroundColor = UIColor.White()
       githubURLtextFieldLabel.delegate = self
       githubURLtextFieldLabel.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-      originalHeight = returnTextFieldHeight()
    }
    
    deinit {
@@ -111,7 +110,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(githubLabel.snp.bottom).offset(12)
-            $0.height.equalTo(returnTextFieldHeight())
+            $0.height.equalTo(50)
          }
          
          githubURLtextFieldLabel.snp.makeConstraints {
@@ -148,7 +147,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(githubLabel.snp.bottom).offset(12)
-            $0.height.equalTo(returnTextFieldHeight())
+            $0.height.equalTo(50)
          }
          
          githubURLtextFieldLabel.snp.makeConstraints {
@@ -169,8 +168,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    private func returnUIHeight() -> CGFloat {
       let screenHeight = UIScreen.main.bounds.height
-      let heightRatio = 204.0 / 852.0
-      let cellHeight = screenHeight * heightRatio
+      let cellHeight = screenHeight / 2.5
       return cellHeight
    }
    
@@ -337,7 +335,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                $0.centerX.equalToSuperview()
                $0.leading.trailing.equalToSuperview()
                $0.top.equalTo(githubLabel.snp.bottom).offset(8)
-               $0.height.equalTo(returnTextFieldHeight())
+               $0.height.equalTo(50)
             }
             
             doneButton.snp.remakeConstraints {
@@ -361,7 +359,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          $0.centerX.equalToSuperview()
          $0.leading.trailing.equalToSuperview()
          $0.top.equalTo(githubLabel.snp.bottom).offset(8)
-         $0.height.equalTo(originalHeight)
+         $0.height.equalTo(50)
       }
       
       doneButton.snp.remakeConstraints {

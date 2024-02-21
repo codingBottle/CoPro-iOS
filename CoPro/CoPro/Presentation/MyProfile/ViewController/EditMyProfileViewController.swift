@@ -54,7 +54,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    let nickNameTextField = UITextField().then {
       $0.placeholder = "닉네임"
       $0.clearButtonMode = .always
-      $0.keyboardType = .alphabet
+      $0.keyboardType = .default
       $0.autocapitalizationType = .none
       $0.spellCheckingType = .no
    }
@@ -110,6 +110,11 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       $0.isEnabled = false
    }
    
+   private lazy var languageCount = UILabel().then {
+      $0.setPretendardFont(text: "(\(selectedLanguageButtons.count)/2)", size: 11, weight: .regular, letterSpacing: 1.23)
+      $0.textColor = UIColor.P1()
+   }
+   
    
    
    override func viewDidLoad() {
@@ -125,7 +130,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    override func setUI() {
       if let sheetPresentationController = sheetPresentationController {
          sheetPresentationController.preferredCornerRadius = 15
-         sheetPresentationController.prefersGrabberVisible = true
+         sheetPresentationController.prefersGrabberVisible = false
          sheetPresentationController.detents = [.custom {context in
             return self.returnEditMyProfileUIHeight(type: "First")
          }]
@@ -263,17 +268,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    private func returnEditMyProfileUIHeight(type: String) -> CGFloat {
       if type == "First" {
-//         let screenHeight = UIScreen.main.bounds.height
-//         let heightRatio = 300.0 / 852.0
-//         let heightRatio = 400.0 / 852.0
          let cellHeight = UIScreen.main.bounds.height / 2
          return cellHeight
       }
       else {
-//         let screenHeight = UIScreen.main.bounds.height
-//         let heightRatio = 550 / 852.0
-////         let heightRatio = 750 / 852.0
-//         let cellHeight = screenHeight * heightRatio
          return UIScreen.main.bounds.height * 0.85
       }
    }
@@ -330,7 +328,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          
          guard let stackView = languageStackView else { return print("languageStackView failed") }
          
-         container.addSubviews(languageUsedLabel, stackView)
+         container.addSubviews(languageUsedLabel, languageCount, stackView)
          
          nextButton.removeFromSuperview()
          languageUsedLabel.snp.makeConstraints {
@@ -338,6 +336,11 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             $0.leading.equalToSuperview().offset(8)
             $0.width.equalTo(79)
          }
+         
+         languageCount.snp.makeConstraints({
+            $0.leading.equalTo(languageUsedLabel.snp.trailing).offset(3)
+            $0.bottom.equalTo(languageUsedLabel)
+         })
          
          stackView.snp.makeConstraints {
             $0.top.equalTo(languageUsedLabel.snp.bottom).offset(8)
@@ -363,23 +366,63 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    
    @objc func handleLanguageButtonSelection(_ sender: UIButton) {
-      print(selectedLanguageButtons)
-      if selectedLanguageButtons.count < 2 {
-         // 선택된 버튼이 2개 미만일 때
-         sender.isSelected = true
-         sender.layer.backgroundColor = UIColor.P7().cgColor
-         selectedLanguageButtons.append(sender)
-      } else {
-         // 선택된 버튼이 이미 2개일 때
-         let firstButton = selectedLanguageButtons.removeFirst()   // 첫 번째로 선택된 버튼을 제거
-         firstButton.isSelected = false
-         firstButton.layer.backgroundColor = UIColor.G1().cgColor
+      DispatchQueue.main.async { [self] in
+         print("selectedLanguageButtons.count :",selectedLanguageButtons.count)
          
-         sender.isSelected = true
-         sender.layer.backgroundColor = UIColor.P7().cgColor
-         selectedLanguageButtons.append(sender)   // 새로 선택된 버튼을 추가
+         // 선택한 언어 버튼이 2개 미만일 때,
+         if selectedLanguageButtons.count < 2 {
+            
+            // 선택한 버튼이 selectedLanguageButtons에 이미 있을 때
+            if selectedLanguageButtons.contains(sender) {
+               print("지금 2개 미만인 상황, selectedLanguageButtons에 \(sender) 있음!!!")
+               var index = 0
+               for i in 0..<2 {
+                  if selectedLanguageButtons[i] == sender {
+                     selectedLanguageButtons[i].isSelected = false
+                     selectedLanguageButtons[i].layer.backgroundColor = UIColor.G1().cgColor
+                     selectedLanguageButtons.remove(at: i)
+                     break
+                  }
+               }
+            }
+            // 선택한 버튼이 selectedLanguageButtons에 없을 때
+            else {
+               sender.isSelected = true
+               sender.layer.backgroundColor = UIColor.P7().cgColor
+               selectedLanguageButtons.append(sender)
+            }
+            
+            languageCount.text = "(\(selectedLanguageButtons.count)/2)"
+         }
+         
+         // 선택한 언어 버튼이 2개 이상일 때,
+         else {
+            if selectedLanguageButtons.contains(sender) {
+               print("지금 2개 이상인 상황, selectedLanguageButtons에 \(sender) 있음!!!")
+               for i in 0..<2 {
+                  if selectedLanguageButtons[i] == sender {
+                     selectedLanguageButtons[i].isSelected = false
+                     selectedLanguageButtons[i].layer.backgroundColor = UIColor.G1().cgColor
+                     selectedLanguageButtons.remove(at: i)
+                     break
+                  }
+               }
+            }
+            else {
+               // 선택된 버튼이 이미 2개일 때
+               let firstButton = selectedLanguageButtons.removeFirst()   // 첫 번째로 선택된 버튼을 제거
+               firstButton.isSelected = false
+               firstButton.layer.backgroundColor = UIColor.G1().cgColor
+               
+               sender.isSelected = true
+               sender.layer.backgroundColor = UIColor.P7().cgColor
+               selectedLanguageButtons.append(sender)   // 새로 선택된 버튼을 추가
+            }
+            languageCount.text = "(\(selectedLanguageButtons.count)/2)"
+            
+         }
+         updateButtonState(type: "End")
       }
-      updateButtonState(type: "End")
    }
    
    @objc func handleCareerButtonSelection(_ sender: UIButton) {
