@@ -9,6 +9,10 @@ import UIKit
 import KeychainSwift
 import Photos
 
+protocol AddPostViewControllerDelegate: AnyObject {
+    func didPostArticle()
+}
+
 class AddPostViewController: UIViewController, SendStringData {
     func sendData(mydata: String, groupId: Int) {
         sortLabel.text = mydata
@@ -41,6 +45,7 @@ class AddPostViewController: UIViewController, SendStringData {
     private let imageScrollView = UIScrollView()
     var imageViews: [UIImageView] = []
     private let photoService: PhotoManager = MyPhotoManager()
+    weak var delegate: AddPostViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,8 +184,8 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.trailing.equalToSuperview()
         }
         attachButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(25)
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             $0.width.height.equalTo(45)
         }
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTextView(_:)))
@@ -226,6 +231,8 @@ class AddPostViewController: UIViewController, SendStringData {
     }
     @objc private func addButtonTapped() {
         addPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: contentTextField.text, image: imageUrls)
+        self.delegate?.didPostArticle()
+        self.dismiss(animated: true, completion: nil)
     }
 
     @objc func receiveImages(_ notification: Notification) {

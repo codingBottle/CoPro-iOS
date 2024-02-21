@@ -48,6 +48,7 @@ class AddProjectPostViewController: UIViewController {
     private let tagStackView = UIStackView()
     private let chatButton = UIButton()
     private let contentStackView = UIStackView()
+    weak var delegate: AddPostViewControllerDelegate?
     private lazy var checkboxes: [Checkbox] = [self.checkbox1, self.checkbox2, self.checkbox3]
     private lazy var checkbox1: Checkbox = {
         let checkbox = Checkbox(text: "AI")
@@ -326,18 +327,20 @@ class AddProjectPostViewController: UIViewController {
     }
     @objc private func addButtonTapped() {
         var checkedTexts = ""
-            for checkbox in checkboxes {
-                if checkbox.isChecked, let checkBoxText = checkbox.label.text {
-                    if checkedTexts == "" {
-                        checkedTexts += checkBoxText
-                    }
-                    else {
-                        checkedTexts += "," + checkBoxText
-                    }
+        for checkbox in checkboxes {
+            if checkbox.isChecked, let checkBoxText = checkbox.label.text {
+                if checkedTexts == "" {
+                    checkedTexts += checkBoxText
+                }
+                else {
+                    checkedTexts += "," + checkBoxText
                 }
             }
+        }
         print("\(checkedTexts)")
         addProjectPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: recruitContentTextField.text, image: imageUrls, tag: tagRadioButton.getSelectedText() ?? "", part: checkedTexts)
+        self.dismiss(animated: true, completion: nil)
+//        self.delegate?.didPostArticle()
     }
 
     @objc func receiveImages(_ notification: Notification) {
