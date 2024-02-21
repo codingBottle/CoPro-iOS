@@ -278,8 +278,8 @@ class AddProjectPostViewController: UIViewController {
             $0.trailing.equalToSuperview()
         }
         attachButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(25)
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-10)
             $0.width.height.equalTo(45)
         }
 //        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTextView(_:)))
