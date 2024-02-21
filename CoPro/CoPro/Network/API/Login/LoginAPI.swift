@@ -53,7 +53,7 @@ extension LoginAPI {
                         case .success(let data):
                            DispatchQueue.main.async {
                               if let data = data as? CheckInitialLoginDTO {
-                                 if data.data != true {
+                                 if data.data == true {
                                     print("나는야 첫 로그인")
                                     
                                     DispatchQueue.main.async {
