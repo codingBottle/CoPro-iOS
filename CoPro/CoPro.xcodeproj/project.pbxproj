@@ -207,6 +207,10 @@
 		B5F1C26A2B82009100791595 /* LikeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2692B82009100791595 /* LikeProfileViewController.swift */; };
 		B5F1C26C2B820A6500791595 /* LikeProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */; };
 		B5F1C2702B83BDCE00791595 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */; };
+		B5F1C2742B864C9D00791595 /* NotificationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2732B864C9D00791595 /* NotificationListViewController.swift */; };
+		B5F1C2772B864D0000791595 /* NotificationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2762B864D0000791595 /* NotificationListCell.swift */; };
+		B5F1C2792B86550900791595 /* NotificationListAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2782B86550900791595 /* NotificationListAPI.swift */; };
+		B5F1C27B2B8655CD00791595 /* NotificationListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C27A2B8655CD00791595 /* NotificationListDTO.swift */; };
 		E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */; };
 		E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */; };
 		E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */; };
@@ -388,6 +392,10 @@
 		B5F1C2692B82009100791595 /* LikeProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileViewController.swift; sourceTree = "<group>"; };
 		B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileDTO.swift; sourceTree = "<group>"; };
 		B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		B5F1C2732B864C9D00791595 /* NotificationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListViewController.swift; sourceTree = "<group>"; };
+		B5F1C2762B864D0000791595 /* NotificationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListCell.swift; sourceTree = "<group>"; };
+		B5F1C2782B86550900791595 /* NotificationListAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListAPI.swift; sourceTree = "<group>"; };
+		B5F1C27A2B8655CD00791595 /* NotificationListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListDTO.swift; sourceTree = "<group>"; };
 		E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardViewController.swift; sourceTree = "<group>"; };
 		E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardDataModel.swift; sourceTree = "<group>"; };
@@ -612,6 +620,7 @@
 		9E05D2C32AD5090A00F4CA43 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				B5F1C2712B864C6E00791595 /* Notification */,
 				B5F1C26D2B83BD6400791595 /* Onboarding */,
 				B5B510FD2B74C9DE00A1B74D /* BottomTab */,
 				9E98F2EC2B4A473400A6756A /* MyProfile */,
@@ -784,6 +793,7 @@
 				9E5C36992B83902E0091884C /* FcmTokenRequestBody.swift */,
 				9E5C369E2B83F1A30091884C /* ChattingNotificationRequestBody.swift */,
 				9E5C36A02B847D370091884C /* ChattingNotificationDTO.swift */,
+				B5F1C27A2B8655CD00791595 /* NotificationListDTO.swift */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -792,6 +802,7 @@
 			isa = PBXGroup;
 			children = (
 				9E5C369C2B8390D40091884C /* NotificationAPI.swift */,
+				B5F1C2782B86550900791595 /* NotificationListAPI.swift */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -1106,6 +1117,31 @@
 				B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		B5F1C2712B864C6E00791595 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				B5F1C2752B864CE700791595 /* View */,
+				B5F1C2722B864C7F00791595 /* ViewController */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		B5F1C2722B864C7F00791595 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B5F1C2732B864C9D00791595 /* NotificationListViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		B5F1C2752B864CE700791595 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B5F1C2762B864D0000791595 /* NotificationListCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E32B671C2B566C3000EBB5AC /* Board */ = {
@@ -1533,6 +1569,7 @@
 				E36717BF2B70B40600CBCD8B /* MediaType.swift in Sources */,
 				9E7401D72B3C18040030C8EC /* ChannelViewController.swift in Sources */,
 				9E98F2F72B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift in Sources */,
+				B5F1C27B2B8655CD00791595 /* NotificationListDTO.swift in Sources */,
 				9E7401ED2B3C18FD0030C8EC /* Sender.swift in Sources */,
 				9E7401C82B3BF4B80030C8EC /* UIImage++.swift in Sources */,
 				9E98F2F32B4A49DC00A6756A /* MyProfileView.swift in Sources */,
@@ -1541,6 +1578,7 @@
 				9E8FB6EF2B5CF4CA00C02028 /* MyProfileDTO.swift in Sources */,
 				E32B672F2B567B4B00EBB5AC /* MostIncreasedLikesDTO.swift in Sources */,
 				E3C64F972B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift in Sources */,
+				B5F1C2772B864D0000791595 /* NotificationListCell.swift in Sources */,
 				9E7401E72B3C18A60030C8EC /* DatabaseRepresentation.swift in Sources */,
 				9E0B9CB12B6C336C00A5EACB /* MyCommentsTableViewCell.swift in Sources */,
 				9E05D2F82AD5226300F4CA43 /* UIButton++.swift in Sources */,
@@ -1560,6 +1598,7 @@
 				B5B5110C2B74CCE400A1B74D /* CardView.swift in Sources */,
 				E32B67232B566D7900EBB5AC /* BoardRouter.swift in Sources */,
 				E32B67212B566CF600EBB5AC /* BoardDTO.swift in Sources */,
+				B5F1C2742B864C9D00791595 /* NotificationListViewController.swift in Sources */,
 				9E05D2D32AD5099E00F4CA43 /* BaseResponse.swift in Sources */,
 				E3E2B8432B7F9B040022E5D0 /* noticeViewController.swift in Sources */,
 				E32B673C2B56AD6700EBB5AC /* CreateBoardRequestBody.swift in Sources */,
@@ -1578,6 +1617,7 @@
 				E3E2B8492B8258DD0022E5D0 /* AddProjectPostViewController.swift in Sources */,
 				E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */,
 				E32B673E2B56D16000EBB5AC /* heartRequestBody.swift in Sources */,
+				B5F1C2792B86550900791595 /* NotificationListAPI.swift in Sources */,
 				E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */,
 				E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */,
 				B5B5110B2B74CCE400A1B74D /* MiniCardGridView.swift in Sources */,
