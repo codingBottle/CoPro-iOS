@@ -248,9 +248,10 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: 0)
+        view.backgroundColor = UIColor.White()
         //        setDropDownText()
         setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
-        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["직무를 선택해주세요"])
+        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN","Spring", "Django", "Flask", "Node.js", "Go","React.js", "Vue.js", "Angular.js", "TypeScript", "TensorFlow", "Keras", "PyTorch"])
         setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
         setupCollectionView()
         
@@ -352,7 +353,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                         self?.collectionView.backgroundView = nil
                     }
                     print("After reloadData")
-                    print("\(part)//\(lang)//\(old)//\(page)")
+//                    print("\(part)//\(lang)//\(old)//\(page)")
                     print("API Success: \(cardDTO.data.memberResDto.content.count)")
                     
                     print("APIDATA : \(String(describing: self?.contents))")
@@ -381,13 +382,22 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         
         dropDown.anchorView = anchorView
         dropDown.dataSource = items
-        //        var oldIndex = 0
+        dropDown.direction = .bottom
+        dropDown.offsetFromWindowBottom = 400
+       
+        
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             if dropDown == self.partDropDown {
                 
                 self.cardView.partLabel.text = item
                 self.cardView.partLabel.textColor = UIColor.P2()
                 self.cardView.partButton.tintColor = UIColor.P2()
+                self.cardView.langLabel.text = "언어"
+                self.cardView.langLabel.textColor = UIColor.G3()
+                self.cardView.langButton.tintColor = UIColor.G3()
+                self.cardView.oldLabel.text = "경력"
+                self.cardView.oldLabel.textColor = UIColor.G3()
+                self.cardView.oldButton.tintColor = UIColor.G3()
                 print(self.cardView.partLabel.text!)
                 updateLangDropDown(part: item)
                 
@@ -443,7 +453,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         } else if part == "AI"{
             langItems = ["TensorFlow", "Keras", "PyTorch"]
         } else if part == "전체"{
-            langItems = ["직무를 선택해주세요."]
+            langItems = ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN","Spring", "Django", "Flask", "Node.js", "Go","React.js", "Vue.js", "Angular.js", "TypeScript", "TensorFlow", "Keras", "PyTorch"]
         }
         
         // 두 번째 드롭다운 업데이트
@@ -454,10 +464,13 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     //Dropdown show function
     @objc func showDropDown(sender: UIButton) {
         if sender == cardView.partButton {
+            partDropDown.bottomOffset = CGPoint(x: 0, y:(partDropDown.anchorView?.plainView.bounds.height)!)
             partDropDown.show()
         } else if sender == cardView.langButton {
+            langDropDown.bottomOffset = CGPoint(x: 0, y:(langDropDown.anchorView?.plainView.bounds.height)!)
             langDropDown.show()
         } else if sender == cardView.oldButton {
+            oldDropDown.bottomOffset = CGPoint(x: 0, y:(oldDropDown.anchorView?.plainView.bounds.height)!)
             oldDropDown.show()
         }
     }
