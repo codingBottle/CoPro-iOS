@@ -236,14 +236,6 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         // View를 생성하고 추가합니다.
         view = cardView
     }
-    override func viewDidAppear(_ animated: Bool) {
-        //        self.contents.removeAll()
-        //        self.page = 0
-        //        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: 0)
-        
-        // DropDown 설정
-        
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -383,6 +375,14 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         dropDown.dataSource = items
         dropDown.direction = .bottom
         dropDown.offsetFromWindowBottom = 400
+        dropDown.cornerRadius = 15
+        dropDown.backgroundColor = UIColor.White()
+        dropDown.textColor = UIColor.G3()
+        dropDown.selectedTextColor = UIColor.P2()
+        dropDown.textFont = UIFont(name: "Pretendard-Bold", size: 15)!
+        dropDown.customCellConfiguration = { (index, item, cell) in
+            cell.optionLabel.textAlignment = .center
+        }
        
         
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
