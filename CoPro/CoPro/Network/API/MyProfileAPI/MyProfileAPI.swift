@@ -8,9 +8,11 @@
 import Foundation
 import Alamofire
 import UIKit
+import KeychainSwift
 
 final class MyProfileAPI: BaseAPI {
     static let shared = MyProfileAPI()
+   let keychain = KeychainSwift()
 
     private override init() {}
 }
@@ -52,32 +54,49 @@ extension MyProfileAPI {
     /// MARK: - MyProfile 수정
    public func postEditMyProfile(token: String,
                                         requestBody: EditMyProfileRequestBody,
-                                        completion: @escaping(NetworkResult<Any>) -> Void) {
-          AFManager.request(MyProfileRouter.postEditMyProfile(token: token, requestBody: requestBody)).responseData { response in
-              if let statusCode = response.response?.statusCode {
-                  if statusCode == 401 {
-                      // 토큰 재요청 함수 호출
-                      LoginAPI.shared.refreshAccessToken { result in
-                          switch result {
-                          case .success(let loginDTO):
-                              print("토큰 재발급 성공: \(loginDTO)")
-                              DispatchQueue.main.async {
-                                  self.postEditMyProfile(token: loginDTO.data.accessToken, requestBody: requestBody, completion: completion)
-                              }
-                          case .failure(let error):
-                              print("토큰 재발급 실패: \(error)")
-                          }
-                      }
-                  } else {
-                      // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                      self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
+                                 checkFirstlogin: Bool,
+                                 completion: @escaping(NetworkResult<Any>) -> Void) {
+      
+      AFManager.request(MyProfileRouter.postEditMyProfile(token: token, requestBody: requestBody)).responseData { response in
+         if let statusCode = response.response?.statusCode {
+            if statusCode == 401 {
+               // 토큰 재요청 함수 호출
+               LoginAPI.shared.refreshAccessToken { result in
+                  switch result {
+                  case .success(let loginDTO):
+                     print("토큰 재발급 성공: \(loginDTO)")
+                     DispatchQueue.main.async {
+                        self.postEditMyProfile(token: loginDTO.data.accessToken, requestBody: requestBody, checkFirstlogin: checkFirstlogin, completion: completion)
+                     }
+                  case .failure(let error):
+                     print("토큰 재발급 실패: \(error)")
                   }
-              } else {
-                  // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+               }
+            } else {
+               let editMyProfileVC = EditMyProfileViewController()
+               if checkFirstlogin {
+                  // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                  self.postFcmToken()
+                  print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin true / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
                   self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
-              }
-          }
+               } else {
+
+                  
+                  if statusCode == 200 {
+                     self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
+                     print("🅾️현재 MyProfileRouter.postEditMyProfile StatusCode 200 🅾️")
+                  } else {
+                     print("❌현재 MyProfileRouter.postEditMyProfile StatusCode 200 아님❌")
+                  }
+                  
+               }
+            }
+         } else {
+            // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+            self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
+         }
       }
+   }
     
    
     /// MARK: - Github URL 수정
@@ -271,4 +290,35 @@ extension MyProfileAPI {
            }
         }
     }
+   
+   
+   func postFcmToken() {
+      print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥")
+      
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      
+      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
+           switch result {
+           case .success(_):
+              print("FcmToken 보내기 성공")
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+               
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
+   }
 }
