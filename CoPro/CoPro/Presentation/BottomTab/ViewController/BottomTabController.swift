@@ -33,7 +33,7 @@ class BottomTabController: UITabBarController {
         UITabBar.appearance().tintColor = UIColor.Black()
         // Do any additional setup after loading the view.
         guard let currentUserNickName = keychain.get("currentUserNickName") else {return print("BottomTabController 안 currentUserNickName 에러")}
-        let notificationVC = CardViewController() //MARK: TODO) 알림화면VC등록
+        let notificationVC = NotificationListViewController() //MARK: TODO) 알림화면VC등록
         let cardVC = CardViewController()
         let homeVC = MainViewController()//MARK: TODO) 홈화면VC등록
         let profileVC = MyProfileViewController() //MARK: TODO) ProfileVC등록
@@ -56,7 +56,7 @@ class BottomTabController: UITabBarController {
         chatVC.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
         profileVC.tabBarItem.setTitleTextAttributes(attributes, for: .normal)
         // 상단 탭바 타이틀 노출 제거
-        notificationVC.navigationItem.title = nil
+//        notificationVC.navigationItem.title = nil
         cardVC.navigationItem.title = nil
         homeVC.navigationItem.title = nil
         chatVC.navigationItem.title = nil
