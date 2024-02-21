@@ -27,7 +27,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    let container = UIView()
    var languageStackView: UIStackView?
    var careerStackView: UIStackView?
-   var stackViewHeightConstraint: Constraint?
    var initialUserName: String?
    var isJobsButtonTap: Bool?
    var editFlag: Bool?
@@ -37,6 +36,8 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    var selectedCareer: String?
    var isNicknameModificationSuccessful: Bool?
    var isFirstLogin: Bool?
+   var readyForNextButton: Bool?
+   var nicknameValidity: Bool?
    
    var editMyProfileBody = EditMyProfileRequestBody()
    
@@ -235,7 +236,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
                    switch result {
                    case .success(_):
-                      print("🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳")
+                      print("🥳🥳🥳🥳🥳🥳🥳")
                       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                           self.showAlert(title: "프로필 수정을 완료하였습니다",
                                          confirmButtonName: "확인",
@@ -279,16 +280,36 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       }
    }
    
+   //여기
    internal func textFieldDidEndEditing(_ textField: UITextField) {
       if let text = textField.text {
          print("사용자가 입력한 텍스트: \(text)")
          if text == initialUserName {
             nickNameDuplicateFlag = true
+            nicknameValidity = true
             DispatchQueue.main.async {
                self.nicknameDuplicateCheckLabel.text = "사용 가능한 닉네임입니다."
             }
          } else {
-            getNickNameDuplication(nickname: text)
+            
+            // 정규 표현식을 사용하여 영어, 한글, 숫자만을 허용하고, 한글 자소로 나누어진 입력을 허용하지 않는지 확인합니다.
+            let regex = "^[a-zA-Z0-9가-힣]{1,8}$"
+            let test = NSPredicate(format:"SELF MATCHES %@", regex)
+            let result = test.evaluate(with: text)
+            
+            if !result {
+               DispatchQueue.main.async {
+                  self.showAlert(title: "닉네임 요건이 충족되지 못하였습니다",
+                                 message: "1. 특수문자는 입력이 불가능합니다.\n2. 닉네임 길이 규정은 1글자 이상 8글자 이하입니다.\n3. 'ㅋㅗㅍㅡㄹㅗ'와 같이 한글 자소 입력은 불가능합니다.," ,
+                                 confirmButtonName: "확인",
+                                 confirmButtonCompletion: { [self] in
+                     nicknameValidity = false
+                     nicknameDuplicateCheckLabel.text = "사용할 수 없는 닉네임입니다." })
+               }
+            } else {
+               nicknameValidity = true
+               getNickNameDuplication(nickname: text)
+            }
          }
       }
       updateButtonState(type: "First")
@@ -446,7 +467,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    func updateButtonState(type: String) {
       if type == "First" {
-         let isTextFieldNotEmpty = nickNameTextField.text?.isEmpty == false
+         var isTextFieldNotEmpty = nickNameTextField.text?.isEmpty == false
          let isSelectedJobNotEmpty = selectedJob?.isEmpty == false
          DispatchQueue.main.async { [self] in
             if isTextFieldNotEmpty && isSelectedJobNotEmpty {
@@ -628,16 +649,16 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                
             case .requestErr(let message):
                print("Error : \(message)")
-               LoginAPI.shared.refreshAccessToken { result in
-                   switch result {
-                   case .success(_):
-                       DispatchQueue.main.async {
-                          self.getNickNameDuplication(nickname: nickname)
-                       }
-                   case .failure(let error):
-                       print("토큰 재발급 실패: \(error)")
-                   }
-               }
+//               LoginAPI.shared.refreshAccessToken { result in
+//                   switch result {
+//                   case .success(_):
+//                       DispatchQueue.main.async {
+//                          self.getNickNameDuplication(nickname: nickname)
+//                       }
+//                   case .failure(let error):
+//                       print("토큰 재발급 실패: \(error)")
+//                   }
+//               }
             case .pathErr, .serverErr, .networkFail:
                 print("another Error")
             default:
@@ -653,11 +674,16 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    
    @objc func didNextButtonAlert() {
-      if editFlag == true && nickNameDuplicateFlag == true {
-         didNext()
-      }
-      else {
-         didError()
+      if readyForNextButton == false {
+         nickNameTextField.resignFirstResponder()
+      } else {
+         if editFlag == true && nickNameDuplicateFlag == true && nicknameValidity == true {
+            didNext()
+         }
+         else {
+            didError()
+         }
+         
       }
    }
    
@@ -697,7 +723,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    @objc func keyboardWillShow(notification: NSNotification) {
       if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-         
+         readyForNextButton = false
          UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
          }
@@ -705,6 +731,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    
    @objc func keyboardWillHide(notification: NSNotification) {
+      readyForNextButton = true
       UIView.animate(withDuration: 0.3) {
          self.view.layoutIfNeeded()
       }
