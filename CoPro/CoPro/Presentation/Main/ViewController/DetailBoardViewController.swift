@@ -17,9 +17,9 @@ final class DetailBoardViewController: BaseViewController {
     var postId: Int?
     var isHeart = Bool()
     var isScrap = Bool()
-   var email: String?
-   var picture: String?
-   private let channelStream = ChannelFirestoreStream()
+    var email: String?
+    var picture: String?
+    private let channelStream = ChannelFirestoreStream()
     private let keychain = KeychainSwift()
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
@@ -59,13 +59,22 @@ final class DetailBoardViewController: BaseViewController {
         addTarget()
         setNavigate()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
     private func addTarget() {
         heartButton.addTarget(self, action: #selector(heartButtonTapped(_: )), for: .touchUpInside)
         scrapButton.addTarget(self, action: #selector(scrapButtonTapped(_: )), for: .touchUpInside)
         commentButton.addTarget(self, action: #selector(commentButtonTapped(_: )), for: .touchUpInside)
-       chatButton.addTarget(self, action: #selector(chatButtonTapped(_: )), for: .touchUpInside)
+        chatButton.addTarget(self, action: #selector(chatButtonTapped(_: )), for: .touchUpInside)
     }
-   internal override func setUI() {
+    internal override func setUI() {
         
         self.view.backgroundColor = .white
         imageScrollView.do {
@@ -102,7 +111,7 @@ final class DetailBoardViewController: BaseViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.distribution = .equalSpacing
         }
-
+        
         titleLabel.do {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 22, weight: .regular)
@@ -115,7 +124,7 @@ final class DetailBoardViewController: BaseViewController {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 13, weight: .regular)
         }
-
+        
         dateLabel.do {
             $0.textColor = UIColor.G2()
             $0.font = .pretendard(size: 13, weight: .regular)
@@ -273,7 +282,7 @@ final class DetailBoardViewController: BaseViewController {
     
     private func setLayoutProject() {
         view.addSubviews(scrollView,lineView2 ,bottomView)
-       chatButton.isEnabled = true
+        chatButton.isEnabled = true
         scrollView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.bottom.equalTo(lineView2.snp.top)
@@ -343,9 +352,58 @@ final class DetailBoardViewController: BaseViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
-    
+    private func setNoticeLayout() {
+        view.addSubviews(scrollView,lineView2)
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(lineView2.snp.top)
+        }
+        lineView2.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        scrollView.addSubview(stackView)
+        stackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        stackView.addArrangedSubviews(titleLabel,infoView,contentLabel,imageScrollView)
+        infoView.addSubviews(nicknameLabel, jobLabel, dateLabel, timeLabel, viewCountLabel, lineView1)
+        infoView.snp.makeConstraints {
+            $0.height.equalTo(28)
+        }
+        imageScrollView.snp.makeConstraints {
+            $0.height.equalTo(144)
+        }
+        nicknameLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+        jobLabel.snp.makeConstraints {
+            $0.leading.equalTo(nicknameLabel.snp.trailing).offset(5)
+            $0.centerY.equalToSuperview()
+        }
+        viewCountLabel.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+        timeLabel.snp.makeConstraints {
+            $0.trailing.equalTo(viewCountLabel.snp.leading).offset(-10)
+            $0.centerY.equalToSuperview()
+        }
+        dateLabel.snp.makeConstraints {
+            $0.trailing.equalTo(timeLabel.snp.leading).offset(-10)
+            $0.centerY.equalToSuperview()
+        }
+        lineView1.snp.makeConstraints {
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+    }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(popToMainViewController))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         if #available(iOS 14.0, *) {
@@ -371,19 +429,19 @@ final class DetailBoardViewController: BaseViewController {
                 case .success(let data):
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                       let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
                         DispatchQueue.main.async { [self] in
                             self.setUI()
                             switch mappedItem.category {
-                                case "프로젝트":
+                            case "프로젝트":
                                 self.setLayoutProject()
-                                case "자유":
+                            case "자유":
                                 self.setLayoutFree()
-                                case "공지사항":
-                                self.setLayoutFree()
-                                default:
+                            case "공지사항":
+                                self.setNoticeLayout()
+                            default:
                                 break
                             }
                             self.updateView(with: mappedItem)
@@ -543,8 +601,8 @@ final class DetailBoardViewController: BaseViewController {
         commentCountLabel.text = String(data.commentCount)
         imageViews.forEach { $0.removeFromSuperview() }
         imageViews.removeAll()
-       email = data.email
-       picture = data.picture
+        email = data.email
+        picture = data.picture
         
         // 받은 모든 URL을 UIImageView로 생성하여 UIScrollView에 추가
         var xOffset: CGFloat = 0
@@ -553,21 +611,21 @@ final class DetailBoardViewController: BaseViewController {
             let imageView = UIImageView()
             imageView.kf.indicatorType = .activity
             imageView.kf.setImage(with: URL(string:url), placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
-                DispatchQueue.main.async {
-                    // 이미지 뷰 생성 및 추가
-                    imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
-                    self.imageScrollView.addSubview(imageView)
-                    self.imageViews.append(imageView)
-                    imageView.do {
-                        $0.layer.cornerRadius = 10
-                        $0.clipsToBounds = true
-                    }
-                    
-                    xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
-                    
-                    // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
-                    self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
+            DispatchQueue.main.async {
+                // 이미지 뷰 생성 및 추가
+                imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
+                self.imageScrollView.addSubview(imageView)
+                self.imageViews.append(imageView)
+                imageView.do {
+                    $0.layer.cornerRadius = 10
+                    $0.clipsToBounds = true
                 }
+                
+                xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
+                
+                // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
+                self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
+            }
         }
     }
     
@@ -604,49 +662,49 @@ final class DetailBoardViewController: BaseViewController {
         boardCommentVC.postId = postId
         self.navigationController?.pushViewController(boardCommentVC, animated: true)
     }
-   
-   @objc func chatButtonTapped(_ sender: UIButton) {
-      print("Chat 버튼이 눌렸습니다.")
-      let keychain = KeychainSwift()
-      guard let receiverurl = picture, let receiverEmail = email else {return}
-          
-      guard let currentUserNickName = keychain.get("currentUserNickName") else {return}
-      guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
-      guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
-      let channelId = [currentUserNickName, nicknameLabel.text ?? ""].sorted().joined(separator: "-")
-      
-      channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, receiver: nicknameLabel.text ?? "", receiverJobTitle: jobLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
-         if let error = error {
-            // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
-            print("Failed to create channel: \(error.localizedDescription)")
-            self.chatRoomCreationResult(result: false)
-         } else {
-            // 성공: 채팅 버튼을 탭하거나 필요한 다른 동작을 수행합니다.
-            self.chatRoomCreationResult(result: true)
-         }
-      }
-      
-   }
-   
-   private func chatRoomCreationResult(result: Bool) {
-      if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-         let window = windowScene.windows.first,
-         let tabBarController = window.rootViewController as? BottomTabController {
-         if let tabBarController = self.tabBarController as? BottomTabController {
-              tabBarController.selectedIndex = 3
-         }
-      }
-      DispatchQueue.main.async {
-         if result {
-            self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
-                           message: "채팅을 보내 대화를 시작해보세요",
-                           confirmButtonName: "확인")
-         }
-         else {
-            self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
-                           message: "채팅 리스트에서 확인하여주세요",
-                           confirmButtonName: "확인")
-         }
-      }
-   }
+    
+    @objc func chatButtonTapped(_ sender: UIButton) {
+        print("Chat 버튼이 눌렸습니다.")
+        let keychain = KeychainSwift()
+        guard let receiverurl = picture, let receiverEmail = email else {return}
+        
+        guard let currentUserNickName = keychain.get("currentUserNickName") else {return}
+        guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
+        guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
+        let channelId = [currentUserNickName, nicknameLabel.text ?? ""].sorted().joined(separator: "-")
+        
+        channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, receiver: nicknameLabel.text ?? "", receiverJobTitle: jobLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
+            if let error = error {
+                // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
+                print("Failed to create channel: \(error.localizedDescription)")
+                self.chatRoomCreationResult(result: false)
+            } else {
+                // 성공: 채팅 버튼을 탭하거나 필요한 다른 동작을 수행합니다.
+                self.chatRoomCreationResult(result: true)
+            }
+        }
+        
+    }
+    
+    private func chatRoomCreationResult(result: Bool) {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first,
+           let tabBarController = window.rootViewController as? BottomTabController {
+            if let tabBarController = self.tabBarController as? BottomTabController {
+                tabBarController.selectedIndex = 3
+            }
+        }
+        DispatchQueue.main.async {
+            if result {
+                self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                               message: "채팅을 보내 대화를 시작해보세요",
+                               confirmButtonName: "확인")
+            }
+            else {
+                self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                               message: "채팅 리스트에서 확인하여주세요",
+                               confirmButtonName: "확인")
+            }
+        }
+    }
 }

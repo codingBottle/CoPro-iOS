@@ -36,9 +36,15 @@ class BoardCommentViewController: UIViewController {
         setDelegate()
         addKeyboardObserver()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         removeKeyBoardObserver()
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     private func setDelegate() {
@@ -122,7 +128,7 @@ class BoardCommentViewController: UIViewController {
         }
     }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(popToMainViewController))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         navigationItem.title = "댓글"
