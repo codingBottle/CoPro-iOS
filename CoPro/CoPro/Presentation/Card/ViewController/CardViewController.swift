@@ -353,7 +353,6 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                         self?.collectionView.backgroundView = nil
                     }
                     print("After reloadData")
-//                    print("\(part)//\(lang)//\(old)//\(page)")
                     print("API Success: \(cardDTO.data.memberResDto.content.count)")
                     
                     print("APIDATA : \(String(describing: self?.contents))")
