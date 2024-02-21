@@ -128,7 +128,7 @@ class BoardCommentViewController: UIViewController {
         }
     }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(popToMainViewController))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(popToMainViewController))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         navigationItem.title = "댓글"
