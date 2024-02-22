@@ -102,6 +102,7 @@ extension MyProfileAPI {
     /// MARK: - Github URL 수정
     public func postEditGitHubURL(token: String,
                                   requestBody: EditGitHubURLRequestBody,
+                                  checkFirstlogin: Bool,
                                   completion: @escaping(NetworkResult<Any>) -> Void) {
         AFManager.request(MyProfileRouter.postEditGitHubURL(token: token, requestBody: requestBody)).responseData { response in
            if let statusCode = response.response?.statusCode {
@@ -112,7 +113,7 @@ extension MyProfileAPI {
                        case .success(let loginDTO):
                            print("토큰 재발급 성공: \(loginDTO)")
                            DispatchQueue.main.async {
-                              self.postEditGitHubURL(token: loginDTO.data.accessToken, requestBody: requestBody, completion: completion)
+                              self.postEditGitHubURL(token: loginDTO.data.accessToken, requestBody: requestBody, checkFirstlogin: checkFirstlogin, completion: completion)
                            }
                        case .failure(let error):
                            print("토큰 재발급 실패: \(error)")
@@ -120,18 +121,36 @@ extension MyProfileAPI {
                    }
                } else {
                   
-                   // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                   self.disposeNetwork(response, dataModel: EditGitHubURLDTO.self, completion: completion)
+                  // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                  self.disposeNetwork(response, dataModel: EditGitHubURLDTO.self, completion: completion)
                   print("🔥\(response)")
-                  DispatchQueue.main.async {
-                     let bottomTabController = BottomTabController()
-                                                               // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
-                                                               if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                                                  let delegate = windowScene.delegate as? SceneDelegate,
-                                                                  let window = delegate.window {
-                                                                  window.rootViewController = bottomTabController
-                                                                  window.makeKeyAndVisible()
-                                                               }
+                  
+                  if checkFirstlogin {
+                     DispatchQueue.main.async {
+                        let bottomTabController = BottomTabController()
+                        // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let delegate = windowScene.delegate as? SceneDelegate,
+                           let window = delegate.window {
+                           window.rootViewController = bottomTabController
+                           window.makeKeyAndVisible()
+                        }
+                     }
+                  }
+                  else {
+                     // 깃헙모달 alert 활성화 해야함
+                     DispatchQueue.main.async {
+                        let bottomTabController = BottomTabController()
+                        
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let delegate = windowScene.delegate as? SceneDelegate,
+                           let window = delegate.window {
+                           window.rootViewController = bottomTabController
+                           window.makeKeyAndVisible()
+                           bottomTabController.selectedIndex = 4
+                           
+                        }
+                     }
                   }
                }
            } else {
@@ -293,7 +312,7 @@ extension MyProfileAPI {
    
    
    func postFcmToken() {
-      print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥")
+      print("🔥")
       
        guard let token = self.keychain.get("accessToken") else {
            print("No accessToken found in keychain.")

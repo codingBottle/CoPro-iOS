@@ -27,7 +27,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    let container = UIView()
    var languageStackView: UIStackView?
    var careerStackView: UIStackView?
-   var stackViewHeightConstraint: Constraint?
    var initialUserName: String?
    var isJobsButtonTap: Bool?
    var editFlag: Bool?
@@ -37,6 +36,8 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    var selectedCareer: String?
    var isNicknameModificationSuccessful: Bool?
    var isFirstLogin: Bool?
+   var readyForNextButton: Bool?
+   var nicknameValidity: Bool?
    
    var editMyProfileBody = EditMyProfileRequestBody()
    
@@ -54,7 +55,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    let nickNameTextField = UITextField().then {
       $0.placeholder = "닉네임"
       $0.clearButtonMode = .always
-      $0.keyboardType = .alphabet
+      $0.keyboardType = .default
       $0.autocapitalizationType = .none
       $0.spellCheckingType = .no
    }
@@ -110,6 +111,12 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       $0.isEnabled = false
    }
    
+   private lazy var languageCount = UILabel().then {
+      $0.setPretendardFont(text: "(\(selectedLanguageButtons.count)/2)", size: 11, weight: .regular, letterSpacing: 1.23)
+      $0.textColor = UIColor.P1()
+   }
+   
+   
    
    
    override func viewDidLoad() {
@@ -125,7 +132,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    override func setUI() {
       if let sheetPresentationController = sheetPresentationController {
          sheetPresentationController.preferredCornerRadius = 15
-         sheetPresentationController.prefersGrabberVisible = true
+         sheetPresentationController.prefersGrabberVisible = false
          sheetPresentationController.detents = [.custom {context in
             return self.returnEditMyProfileUIHeight(type: "First")
          }]
@@ -147,13 +154,14 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       nickNameLabel.snp.makeConstraints {
          $0.top.equalToSuperview()
          $0.leading.equalToSuperview().offset(8)
-         $0.width.equalTo(45)
+         $0.height.equalTo(21)
+//         $0.width.equalTo(45)
       }
       
       textFieldContainer.snp.makeConstraints {
          $0.leading.trailing.equalToSuperview()
          $0.top.equalTo(nickNameLabel.snp.bottom).offset(8)
-         $0.height.equalTo(41) //반응형으로 바꿔야함
+         $0.height.equalTo(41)
       }
       
       nickNameTextField.snp.makeConstraints {
@@ -165,12 +173,14 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       nicknameDuplicateCheckLabel.snp.makeConstraints {
          $0.top.equalTo(textFieldContainer.snp.bottom).offset(5)
          $0.leading.equalToSuperview().offset(8)
-         $0.width.equalTo(150)
+//         $0.width.equalTo(150)
+         $0.height.equalTo(15)
       }
       
       myJobLabel.snp.makeConstraints {
          $0.top.equalTo(nicknameDuplicateCheckLabel.snp.bottom).offset(18)
          $0.leading.equalToSuperview().offset(8)
+         $0.height.equalTo(21)
       }
       
       jobButtonsStackView.snp.makeConstraints {
@@ -226,7 +236,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
                    switch result {
                    case .success(_):
-                      print("🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳")
+                      print("🥳🥳🥳🥳🥳🥳🥳")
                       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                           self.showAlert(title: "프로필 수정을 완료하였습니다",
                                          confirmButtonName: "확인",
@@ -263,31 +273,43 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    private func returnEditMyProfileUIHeight(type: String) -> CGFloat {
       if type == "First" {
-//         let screenHeight = UIScreen.main.bounds.height
-//         let heightRatio = 300.0 / 852.0
-//         let heightRatio = 400.0 / 852.0
-         let cellHeight = UIScreen.main.bounds.height / 2
-         return cellHeight
+         return 300.0
       }
       else {
-//         let screenHeight = UIScreen.main.bounds.height
-//         let heightRatio = 550 / 852.0
-////         let heightRatio = 750 / 852.0
-//         let cellHeight = screenHeight * heightRatio
-         return UIScreen.main.bounds.height * 0.85
+         return 520
       }
    }
    
+   //여기
    internal func textFieldDidEndEditing(_ textField: UITextField) {
       if let text = textField.text {
          print("사용자가 입력한 텍스트: \(text)")
          if text == initialUserName {
             nickNameDuplicateFlag = true
+            nicknameValidity = true
             DispatchQueue.main.async {
                self.nicknameDuplicateCheckLabel.text = "사용 가능한 닉네임입니다."
             }
          } else {
-            getNickNameDuplication(nickname: text)
+            
+            // 정규 표현식을 사용하여 영어, 한글, 숫자만을 허용하고, 한글 자소로 나누어진 입력을 허용하지 않는지 확인합니다.
+            let regex = "^[a-zA-Z0-9가-힣]{1,8}$"
+            let test = NSPredicate(format:"SELF MATCHES %@", regex)
+            let result = test.evaluate(with: text)
+            
+            if !result {
+               DispatchQueue.main.async {
+                  self.showAlert(title: "닉네임 요건이 충족되지 못하였습니다",
+                                 message: "1. 특수문자는 입력이 불가능합니다.\n2. 닉네임 길이 규정은 1글자 이상 8글자 이하입니다.\n3. 'ㅋㅗㅍㅡㄹㅗ'와 같이 한글 자소 입력은 불가능합니다.," ,
+                                 confirmButtonName: "확인",
+                                 confirmButtonCompletion: { [self] in
+                     nicknameValidity = false
+                     nicknameDuplicateCheckLabel.text = "사용할 수 없는 닉네임입니다." })
+               }
+            } else {
+               nicknameValidity = true
+               getNickNameDuplication(nickname: text)
+            }
          }
       }
       updateButtonState(type: "First")
@@ -330,13 +352,19 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          
          guard let stackView = languageStackView else { return print("languageStackView failed") }
          
-         container.addSubviews(languageUsedLabel, stackView)
+         container.addSubviews(languageUsedLabel, languageCount, stackView)
          
          nextButton.removeFromSuperview()
          languageUsedLabel.snp.makeConstraints {
             $0.top.equalTo(jobButtonsStackView.snp.bottom).offset(18)
             $0.leading.equalToSuperview().offset(8)
-            $0.width.equalTo(79)
+            $0.height.equalTo(21)
+         }
+         
+         languageCount.snp.makeConstraints {
+            $0.leading.equalTo(languageUsedLabel.snp.trailing).offset(3)
+            $0.bottom.equalTo(languageUsedLabel)
+            $0.height.equalTo(14)
          }
          
          stackView.snp.makeConstraints {
@@ -363,23 +391,63 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    
    @objc func handleLanguageButtonSelection(_ sender: UIButton) {
-      print(selectedLanguageButtons)
-      if selectedLanguageButtons.count < 2 {
-         // 선택된 버튼이 2개 미만일 때
-         sender.isSelected = true
-         sender.layer.backgroundColor = UIColor.P7().cgColor
-         selectedLanguageButtons.append(sender)
-      } else {
-         // 선택된 버튼이 이미 2개일 때
-         let firstButton = selectedLanguageButtons.removeFirst()   // 첫 번째로 선택된 버튼을 제거
-         firstButton.isSelected = false
-         firstButton.layer.backgroundColor = UIColor.G1().cgColor
+      DispatchQueue.main.async { [self] in
+         print("selectedLanguageButtons.count :",selectedLanguageButtons.count)
          
-         sender.isSelected = true
-         sender.layer.backgroundColor = UIColor.P7().cgColor
-         selectedLanguageButtons.append(sender)   // 새로 선택된 버튼을 추가
+         // 선택한 언어 버튼이 2개 미만일 때,
+         if selectedLanguageButtons.count < 2 {
+            
+            // 선택한 버튼이 selectedLanguageButtons에 이미 있을 때
+            if selectedLanguageButtons.contains(sender) {
+               print("지금 2개 미만인 상황, selectedLanguageButtons에 \(sender) 있음!!!")
+               var index = 0
+               for i in 0..<2 {
+                  if selectedLanguageButtons[i] == sender {
+                     selectedLanguageButtons[i].isSelected = false
+                     selectedLanguageButtons[i].layer.backgroundColor = UIColor.G1().cgColor
+                     selectedLanguageButtons.remove(at: i)
+                     break
+                  }
+               }
+            }
+            // 선택한 버튼이 selectedLanguageButtons에 없을 때
+            else {
+               sender.isSelected = true
+               sender.layer.backgroundColor = UIColor.P7().cgColor
+               selectedLanguageButtons.append(sender)
+            }
+            
+            languageCount.text = "(\(selectedLanguageButtons.count)/2)"
+         }
+         
+         // 선택한 언어 버튼이 2개 이상일 때,
+         else {
+            if selectedLanguageButtons.contains(sender) {
+               print("지금 2개 이상인 상황, selectedLanguageButtons에 \(sender) 있음!!!")
+               for i in 0..<2 {
+                  if selectedLanguageButtons[i] == sender {
+                     selectedLanguageButtons[i].isSelected = false
+                     selectedLanguageButtons[i].layer.backgroundColor = UIColor.G1().cgColor
+                     selectedLanguageButtons.remove(at: i)
+                     break
+                  }
+               }
+            }
+            else {
+               // 선택된 버튼이 이미 2개일 때
+               let firstButton = selectedLanguageButtons.removeFirst()   // 첫 번째로 선택된 버튼을 제거
+               firstButton.isSelected = false
+               firstButton.layer.backgroundColor = UIColor.G1().cgColor
+               
+               sender.isSelected = true
+               sender.layer.backgroundColor = UIColor.P7().cgColor
+               selectedLanguageButtons.append(sender)   // 새로 선택된 버튼을 추가
+            }
+            languageCount.text = "(\(selectedLanguageButtons.count)/2)"
+            
+         }
+         updateButtonState(type: "End")
       }
-      updateButtonState(type: "End")
    }
    
    @objc func handleCareerButtonSelection(_ sender: UIButton) {
@@ -399,7 +467,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    func updateButtonState(type: String) {
       if type == "First" {
-         let isTextFieldNotEmpty = nickNameTextField.text?.isEmpty == false
+         var isTextFieldNotEmpty = nickNameTextField.text?.isEmpty == false
          let isSelectedJobNotEmpty = selectedJob?.isEmpty == false
          DispatchQueue.main.async { [self] in
             if isTextFieldNotEmpty && isSelectedJobNotEmpty {
@@ -498,7 +566,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             careerLabel.snp.makeConstraints {
                $0.top.equalTo(languageStackView.snp.bottom).offset(18)
                $0.leading.equalToSuperview().offset(8)
-               $0.width.equalTo(79)
+               $0.height.equalTo(21)
             }
             
             stackView.snp.makeConstraints {
@@ -517,10 +585,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          container.addSubview(doneButton)
          
          doneButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(440)
-            $0.bottom.equalToSuperview().offset(-47)
+            $0.bottom.equalToSuperview().offset(-27)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(41)
          }
          updateButtonState(type: "didTapNextButton")
       }
@@ -581,16 +649,16 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                
             case .requestErr(let message):
                print("Error : \(message)")
-               LoginAPI.shared.refreshAccessToken { result in
-                   switch result {
-                   case .success(_):
-                       DispatchQueue.main.async {
-                          self.getNickNameDuplication(nickname: nickname)
-                       }
-                   case .failure(let error):
-                       print("토큰 재발급 실패: \(error)")
-                   }
-               }
+//               LoginAPI.shared.refreshAccessToken { result in
+//                   switch result {
+//                   case .success(_):
+//                       DispatchQueue.main.async {
+//                          self.getNickNameDuplication(nickname: nickname)
+//                       }
+//                   case .failure(let error):
+//                       print("토큰 재발급 실패: \(error)")
+//                   }
+//               }
             case .pathErr, .serverErr, .networkFail:
                 print("another Error")
             default:
@@ -606,11 +674,16 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    
    @objc func didNextButtonAlert() {
-      if editFlag == true && nickNameDuplicateFlag == true {
-         didNext()
-      }
-      else {
-         didError()
+      if readyForNextButton == false {
+         nickNameTextField.resignFirstResponder()
+      } else {
+         if editFlag == true && nickNameDuplicateFlag == true && nicknameValidity == true {
+            didNext()
+         }
+         else {
+            didError()
+         }
+         
       }
    }
    
@@ -650,7 +723,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    
    @objc func keyboardWillShow(notification: NSNotification) {
       if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-         
+         readyForNextButton = false
          UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
          }
@@ -658,6 +731,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    
    @objc func keyboardWillHide(notification: NSNotification) {
+      readyForNextButton = true
       UIView.animate(withDuration: 0.3) {
          self.view.layoutIfNeeded()
       }

@@ -157,8 +157,8 @@ class ChannelViewController: BaseViewController {
        }
    }
     
-    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        if gestureRecognizer.state == .began {
+    @objc func handleLefttPress(_ gestureRecognizer: UISwipeGestureRecognizer) {
+       if gestureRecognizer.direction == .left {
             let touchPoint = gestureRecognizer.location(in: channelTableView)
             if let indexPath = channelTableView.indexPathForRow(at: touchPoint) {
                 // 채널 삭제를 확인하는 alert를 표시합니다.
@@ -257,10 +257,9 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
       
       cell.projectChipContainer.isHidden = true
       
-      
-      // Long press gesture recognizer를 추가합니다.
-      let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-      cell.addGestureRecognizer(longPressGesture)
+      let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleLefttPress(_:)))
+      swipeGestureRecognizer.direction = .left
+      cell.addGestureRecognizer(swipeGestureRecognizer)
       
       return cell
       

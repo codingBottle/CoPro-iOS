@@ -14,7 +14,7 @@ class MyProfileView: BaseView {
    
    let profileImage = UIImageView(image : Image.coproLogo)
    let tableView: UITableView = UITableView()
-   var tableViewHeightConstraint: NSLayoutConstraint?
+//   var tableViewHeightConstraint: NSLayoutConstraint?
    
    override func setUI() {
       addSubviews(tableView)
@@ -34,6 +34,7 @@ class MyProfileView: BaseView {
    override func setLayout() {
       
       tableView.snp.makeConstraints {
+//         $0.top.bottom.leading.trailing.equalToSuperview()
          $0.edges.equalToSuperview()
          $0.centerX.width.equalToSuperview()
       }

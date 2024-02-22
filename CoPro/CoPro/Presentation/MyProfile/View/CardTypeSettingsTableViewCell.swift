@@ -30,7 +30,7 @@ class CardTypeSettingsTableViewCell: UITableViewCell {
     let greaterthanContainer: UIView = UIView()
     
     let greaterthanButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "greaterthan"), for: .normal)
+        $0.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         $0.contentVerticalAlignment = .fill
         $0.contentHorizontalAlignment = .fill
     }
@@ -70,19 +70,19 @@ class CardTypeSettingsTableViewCell: UITableViewCell {
             $0.leading.equalToSuperview()
         }
         
-        greaterthanContainer.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.width.equalTo(54)
-            $0.height.equalTo(50)
-        }
-        
-        greaterthanButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.width.equalTo(12)
-            $0.height.equalToSuperview().dividedBy(6)
-        }
+       greaterthanContainer.snp.makeConstraints {
+           $0.centerY.equalToSuperview()
+           $0.trailing.equalToSuperview().offset(-16)
+           $0.width.equalTo(20)
+           $0.height.equalTo(20)
+       }
+       
+       greaterthanButton.snp.makeConstraints {
+           $0.centerY.equalToSuperview()
+           $0.trailing.equalToSuperview()
+           $0.width.equalTo(10)
+           $0.height.equalTo(13)
+       }
     }
     
     @objc func didTapEditCardTypeButtonTapped(_ sender: UIButton) {
