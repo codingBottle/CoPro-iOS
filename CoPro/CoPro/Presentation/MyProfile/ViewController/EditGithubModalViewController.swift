@@ -212,29 +212,27 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       if readyForEdigithub == false {
          githubURLtextFieldLabel.resignFirstResponder()
       } else {
-         if (githubURLtextFieldLabel.text ?? "").count < 20 {
-            self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
-                           message: "다시 시도해주세요",
-                           confirmButtonName: "확인")
+         let regex = "^https://github\\.com/[a-zA-Z0-9/\\.]*$"
+         let testStr = githubURLtextFieldLabel.text ?? ""
+         if testStr.count > 19 {
+             let testPredicate = NSPredicate(format:"SELF MATCHES %@", regex)
+             if testPredicate.evaluate(with: testStr) {
+                 print("// GitHub URL이 유효함")
+                 postEditGitHubURL()
+             } else {
+                 // GitHub URL이 유효하지 않음
+                 self.showAlert(title: "Github 프로필 주소의 양식이 올바르지 않습니다",
+                                message: "다시 시도해주세요",
+                                confirmButtonName: "확인")
+             }
+         } else {
+             // GitHub URL이 너무 짧음
+             self.showAlert(title: "Github 프로필 주소가 너무 짧습니다",
+                            message: "다시 시도해주세요",
+                            confirmButtonName: "확인")
          }
-         
-         else{
-            let t = (githubURLtextFieldLabel.text ?? "").map{(String($0))}.prefix(upTo: 19).joined(separator: "")
-            if String(t) != "https://github.com/" {
-               self.showAlert(title: "Github URL 양식이 올바르지 않습니다",
-                              message: "다시 시도해주세요",
-                              confirmButtonName: "확인")
-            } 
-            
-            /** 정규식 대응하기*/
-//            else if {
-//               if editGitHubURLBody.gitHubURL.filter({ $0. })
-//            }
-            else {
-               postEditGitHubURL()
-            }
-         }
-      }
+     }
+
    }
    
    
