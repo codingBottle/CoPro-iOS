@@ -14,7 +14,7 @@ struct BoardDataModel {
     var createAt: Date
     var heartCount: Int
     var viewsCount: Int
-    var imageUrl: String
+    var imageUrl: String?
     var commentCount: Int
 
     init(boardId: Int, title: String, nickName: String, createAt: String, heartCount: Int, viewsCount: Int, imageUrl: String, commentCount: Int) {

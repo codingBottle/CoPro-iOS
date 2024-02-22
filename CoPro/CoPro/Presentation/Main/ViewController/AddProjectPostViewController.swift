@@ -94,6 +94,12 @@ class AddProjectPostViewController: UIViewController {
         setLayout()
         view.bringSubviewToFront(attachButton)
         NotificationCenter.default.addObserver(self, selector: #selector(receiveImages(_:)), name: NSNotification.Name("SelectedImages"), object: nil)
+        addKeyboardObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        removeKeyBoardObserver()
+        super.viewWillDisappear(animated)
     }
     
     private func setUI() {
@@ -461,5 +467,46 @@ extension AddProjectPostViewController: ImageUploaderDelegate, SendStringData, U
     }
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+    }
+    // keyboard action control
+    
+    func addKeyboardObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow(_:)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(_:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as NSDictionary?,
+              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        /// 키보드의 높이
+        let keyboardHeight = keyboardFrame.size.height
+
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        UIView.animate(withDuration: 0.3,
+                       animations: { self.view.layoutIfNeeded()},
+                       completion: nil)
+    }
+    
+    @objc private func keyboardWillHide(_ notification: NSNotification) {
+        
+        scrollView.contentInset = .zero
+        
+        UIView.animate(withDuration: 0.3,
+                       animations: { self.view.layoutIfNeeded()},
+                       completion: nil)
+    }
+    
+    func removeKeyBoardObserver() {
+        NotificationCenter.default.removeObserver(UIResponder.keyboardWillShowNotification)
+        NotificationCenter.default.removeObserver(UIResponder.keyboardWillHideNotification)
     }
 }

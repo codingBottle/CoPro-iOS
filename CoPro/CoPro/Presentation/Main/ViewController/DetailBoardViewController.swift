@@ -115,6 +115,7 @@ final class DetailBoardViewController: BaseViewController {
         titleLabel.do {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 22, weight: .regular)
+            $0.numberOfLines = 0
         }
         nicknameLabel.do {
             $0.textColor = UIColor.G4()
@@ -181,6 +182,7 @@ final class DetailBoardViewController: BaseViewController {
         }
         recruitContentLabel.do {
             $0.font = .pretendard(size: 17, weight: .regular)
+            $0.numberOfLines = 0
         }
         partLabel.do {
             $0.setPretendardFont(text: "모집 분야", size: 17, weight: .bold, letterSpacing: 1.25)
@@ -432,6 +434,13 @@ final class DetailBoardViewController: BaseViewController {
                         let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
+                        if data.data.nickName == self.keychain.get("currentUserNickName") {
+                            self.chatButton.isHidden = true
+                        }
+                        else {
+                            self.chatButton.isHidden = false
+                        }
+
                         DispatchQueue.main.async { [self] in
                             self.setUI()
                             switch mappedItem.category {
