@@ -46,7 +46,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     // MARK: - UI Components Property
     private func setUI() {
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         searchBar.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.delegate = self

@@ -146,7 +146,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         if let imageUrl = data.imageUrl, let url = URL(string: imageUrl) {
             postImage.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
         } else {
-            postImage.backgroundColor = .white
+            postImage.backgroundColor = .White()
         }
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName

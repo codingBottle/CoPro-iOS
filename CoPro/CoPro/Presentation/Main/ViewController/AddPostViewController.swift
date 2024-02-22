@@ -46,7 +46,6 @@ class AddPostViewController: UIViewController, SendStringData {
     var imageViews: [UIImageView] = []
     private let photoService: PhotoManager = MyPhotoManager()
     weak var delegate: AddPostViewControllerDelegate?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigate()
@@ -63,7 +62,7 @@ class AddPostViewController: UIViewController, SendStringData {
     }
 
     private func setUI() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         stackView.do {
             $0.axis = .vertical
             $0.layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: .zero, right: 16)
@@ -87,10 +86,6 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.font = UIFont.pretendard(size: 17, weight: .regular)
             $0.text = "자유"
         }
-//        sortButton.do {
-//            $0.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-//            $0.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
-//        }
         lineView1.do {
             $0.backgroundColor = UIColor.G1()
         }
@@ -105,7 +100,7 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.textContainerInset = UIEdgeInsets(top: 16.0, left: 0, bottom: 16.0, right: 0)
             $0.font = .pretendard(size: 17, weight: .regular)
             $0.text = textViewPlaceHolder
-            $0.textColor = .lightGray
+            $0.textColor = .Black()
             $0.delegate = self
             $0.isScrollEnabled = false
             $0.sizeToFit()
@@ -148,12 +143,7 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview()
         }
-//
-//        sortButton.snp.makeConstraints {
-//            $0.centerY.equalToSuperview()
-//            $0.trailing.equalToSuperview()
-//            $0.height.width.equalTo(24)
-//        }
+
         lineView1.snp.makeConstraints {
 //            $0.top.equalTo(sortStackView.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
@@ -210,12 +200,7 @@ class AddPostViewController: UIViewController, SendStringData {
         let barButtonItem = UIBarButtonItem(customView: button)
         self.navigationItem.rightBarButtonItem = barButtonItem
         }
-    @objc func sortButtonPressed() {
-        let bottomSheetVC = SelectBoardBottomSheetViewController()
-        bottomSheetVC.delegate = self
-        bottomSheetVC.tmp = sortLabel.text ?? "게시판 선택"
-            present(bottomSheetVC, animated: true, completion: nil)
-    }
+
     @objc private func closeButtonTapped() {
             dismiss(animated: true, completion: nil)
         }
@@ -286,7 +271,7 @@ extension AddPostViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .Black()
         }
     }
 

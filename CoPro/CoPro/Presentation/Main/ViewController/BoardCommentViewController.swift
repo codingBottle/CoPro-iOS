@@ -53,13 +53,13 @@ class BoardCommentViewController: UIViewController {
     }
     
     private func setUI() {
-        view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         tableView.do {
             $0.showsVerticalScrollIndicator = false
             $0.separatorStyle = .singleLine
         }
         bottomView.do {
-            $0.backgroundColor = .white
+            self.view.backgroundColor = UIColor.systemBackground
             $0.layer.shadowColor = UIColor.black.cgColor
             $0.layer.shadowOffset = CGSize(width: 0, height: -2)
             $0.layer.shadowOpacity = 0.3

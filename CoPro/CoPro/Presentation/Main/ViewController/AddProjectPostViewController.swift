@@ -103,7 +103,7 @@ class AddProjectPostViewController: UIViewController {
     }
     
     private func setUI() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         recruitStackView.do {
             $0.axis = .vertical
             $0.spacing = 16
@@ -161,20 +161,20 @@ class AddProjectPostViewController: UIViewController {
 //            $0.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
 //        }
         lineView1.do {
-            $0.backgroundColor = UIColor.G1()
+            $0.backgroundColor = .G1()
         }
         titleTextField.do {
             $0.placeholder = "제목"
             $0.font = .pretendard(size: 17, weight: .bold)
         }
         lineView2.do {
-            $0.backgroundColor = UIColor.G1()
+            $0.backgroundColor = .G1()
         }
         recruitContentTextField.do {
             $0.textContainerInset = UIEdgeInsets(top: 16.0, left: 0, bottom: 16.0, right: 0)
             $0.font = .pretendard(size: 17, weight: .regular)
             $0.text = textViewPlaceHolder
-            $0.textColor = .lightGray
+            $0.textColor = .Black()
             $0.delegate = self
             $0.isScrollEnabled = false
             $0.sizeToFit()
@@ -193,9 +193,6 @@ class AddProjectPostViewController: UIViewController {
         recruitLabel.do {
             $0.setPretendardFont(text: "모집 내용", size: 17, weight: .bold, letterSpacing: 1.25)
         }
-//        recruitContentLabel.do {
-//            $0.font = .pretendard(size: 17, weight: .regular)
-//        }
         partLabel.do {
             $0.setPretendardFont(text: "모집 분야", size: 17, weight: .bold, letterSpacing: 1.25)
         }
@@ -306,12 +303,6 @@ class AddProjectPostViewController: UIViewController {
         let barButtonItem = UIBarButtonItem(customView: button)
         self.navigationItem.rightBarButtonItem = barButtonItem
         }
-    @objc func sortButtonPressed() {
-        let bottomSheetVC = SelectBoardBottomSheetViewController()
-        bottomSheetVC.delegate = self
-        bottomSheetVC.tmp = sortLabel.text ?? "게시판 선택"
-            present(bottomSheetVC, animated: true, completion: nil)
-    }
     @objc private func closeButtonTapped() {
             dismiss(animated: true, completion: nil)
         }
@@ -394,7 +385,7 @@ extension AddProjectPostViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .Black()
         }
     }
 

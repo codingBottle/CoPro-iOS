@@ -76,7 +76,7 @@ final class DetailBoardViewController: BaseViewController {
     }
     internal override func setUI() {
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         imageScrollView.do {
             $0.showsHorizontalScrollIndicator = false
         }

@@ -55,12 +55,12 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
     
     // MARK: - UI Components Property
     private func setUI() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         sortButton.do {
             $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
             $0.setTitle("최신순", for: .normal)
             $0.titleLabel?.font = .pretendard(size: 15, weight: .regular)
-            $0.setTitleColor(.black, for: .normal)
+            $0.setTitleColor(.Black(), for: .normal)
             $0.semanticContentAttribute = .forceRightToLeft  // 오른쪽에서 왼쪽으로 컨텐츠를 정렬
             $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         }
