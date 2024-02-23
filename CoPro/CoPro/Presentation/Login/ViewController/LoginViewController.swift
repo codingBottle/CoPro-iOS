@@ -52,22 +52,6 @@ class LoginViewController: BaseViewController, AuthUIDelegate,ASAuthorizationCon
     }
    
     let keychain = KeychainSwift()
-    @objc private func signOut() {
-        if Auth.auth().currentUser != nil{
-            do {
-                try Auth.auth().signOut()
-                // 로그아웃이 성공적으로 처리된 후의 코드를 여기에 작성합니다.
-                // 예를 들어, 로그인 화면으로 돌아가는 등의 처리를 할 수 있습니다.
-                print("로그아웃")
-                self.navigationController?.popToRootViewController(animated: true)
-            } catch let signOutError as NSError {
-                print("Error signing out: %@", signOutError)
-            }
-        }
-        else{
-            print("로그인 된 계정없음")
-        }
-    }
    
    @objc private func handleGoogleSignIn() {
       print("Google Sign in button tapped")
