@@ -32,8 +32,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     // MARK: UI
     private let submitButton = UIButton(type: .system).then {
         $0.setTitle("완료", for: .normal)
-        $0.setTitleColor(.blue, for: .normal)
-        $0.setTitleColor(.systemBlue, for: [.normal, .highlighted])
+        $0.setTitleColor(.P2(), for: .normal)
         $0.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
     }
     private let dismissButton = UIButton(type: .system).then {
@@ -83,7 +82,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         collectionView.dataSource = self
         collectionView.delegate = self
         

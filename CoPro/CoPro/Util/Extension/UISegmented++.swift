@@ -32,7 +32,10 @@ final class UnderlineSegmentedControl: UISegmentedControl {
   }
   
   private func removeBackgroundAndDivider() {
-    let image = UIImage()
+      let image = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in
+          UIColor.clear.set()  // 투명한 색상을 설정합니다.
+          UIRectFill(CGRect(x: 0, y: 0, width: 1, height: 1))  // 색상으로 1x1 크기의 사각형을 채웁니다.
+      }
     self.setBackgroundImage(image, for: .normal, barMetrics: .default)
     self.setBackgroundImage(image, for: .selected, barMetrics: .default)
     self.setBackgroundImage(image, for: .highlighted, barMetrics: .default)
