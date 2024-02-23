@@ -20,7 +20,7 @@ class BoardCommentViewController: UIViewController {
     private let sendButton = UIButton()
     var comments = [DisplayComment]()
     var isInfiniteScroll = true
-    var offset = 0
+    var offset = 1
     var postId: Int?
     var commentId: Int?
 
@@ -28,7 +28,7 @@ class BoardCommentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getAllComment(boardId: postId ?? 1, page: 0)
+        getAllComment(boardId: postId ?? 1, page: offset)
         setNavigate()
         setUI()
         setLayout()
@@ -59,7 +59,7 @@ class BoardCommentViewController: UIViewController {
             $0.separatorStyle = .singleLine
         }
         bottomView.do {
-            self.view.backgroundColor = UIColor.systemBackground
+//            self.view.backgroundColor = UIColor.systemBackground
             $0.layer.shadowColor = UIColor.black.cgColor
             $0.layer.shadowOffset = CGSize(width: 0, height: -2)
             $0.layer.shadowOpacity = 0.3
@@ -305,8 +305,13 @@ extension BoardCommentViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
     }
+
 }
 
 extension BoardCommentViewController {

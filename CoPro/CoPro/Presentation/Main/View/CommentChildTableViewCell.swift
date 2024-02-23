@@ -60,6 +60,7 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
         contentLabel.do {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 17, weight: .regular)
+            $0.numberOfLines = 0
         }
         dateTimeStackView.do {
             $0.axis = .horizontal
@@ -92,6 +93,7 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
 //        dateTimeStackView.addArrangedSubviews(dateLabel,timeLabel,recommentButton)
         addSubviews(nicknameLabel,jobLabel,contentLabel,dateLabel,timeLabel,recommentButton)
         nicknameLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
             $0.leading.equalToSuperview().offset(30)
             $0.bottom.equalTo(contentLabel.snp.top).offset(-4)
         }
@@ -101,11 +103,14 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
         }
         contentLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(30)
+            $0.trailing.equalToSuperview()
+            $0.top.equalTo(nicknameLabel.snp.bottom).offset(8)
             $0.centerY.equalToSuperview()
         }
         dateLabel.snp.makeConstraints {
             $0.top.equalTo(contentLabel.snp.bottom).offset(4)
             $0.leading.equalToSuperview().offset(30)
+            $0.bottom.equalToSuperview().offset(-10)
         }
         timeLabel.snp.makeConstraints {
             $0.leading.equalTo(dateLabel.snp.trailing).offset(5)
