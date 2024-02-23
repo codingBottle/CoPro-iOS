@@ -82,7 +82,7 @@ class CardView: BaseView{
     let scrollView = UIScrollView().then {
         $0.isPagingEnabled = true
         $0.showsHorizontalScrollIndicator = false
-        
+        $0.backgroundColor = UIColor.White()
     }
     let miniCardView = MiniCard()
     
