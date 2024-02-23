@@ -14,17 +14,19 @@ struct Channel {
    let sender: String
    let senderJobTitle: String
    let senderProfileImage: String
+   let senderEmail: String
    let receiver: String
    let receiverJobTitle: String
    let receiverProfileImage: String
    let receiverEmail: String
 
-   init(id: String? = nil, channelId: String, sender: String, senderJobTitle: String, senderProfileImage: String, receiver: String, receiverJobTitle: String, receiverProfileImage: String, receiverEmail: String) {
+   init(id: String? = nil, channelId: String, sender: String, senderJobTitle: String, senderProfileImage: String, senderEmail: String, receiver: String, receiverJobTitle: String, receiverProfileImage: String, receiverEmail: String) {
       self.id = id
       self.channelId = channelId
       self.sender = sender
       self.senderJobTitle = senderJobTitle
       self.senderProfileImage = senderProfileImage
+      self.senderEmail = senderEmail
       self.receiver = receiver
       self.receiverJobTitle = receiverJobTitle
       self.receiverProfileImage = receiverProfileImage
@@ -38,6 +40,7 @@ struct Channel {
             let sender = data["sender"] as? String,
             let senderJobTitle = data["senderJobTitle"] as? String,
             let senderProfileImage = data["senderProfileImage"] as? String,
+            let senderEmail = data["senderEmail"] as? String,
             let receiver = data["receiver"] as? String,
             let receiverJobTitle = data["receiverJobTitle"] as? String,
             let receiverProfileImage = data["receiverProfileImage"] as? String,
@@ -51,6 +54,7 @@ struct Channel {
       self.sender = sender
       self.senderJobTitle = senderJobTitle
       self.senderProfileImage = senderProfileImage
+      self.senderEmail = senderEmail
       self.receiver = receiver
       self.receiverJobTitle = receiverJobTitle
       self.receiverProfileImage = receiverProfileImage
@@ -60,7 +64,7 @@ struct Channel {
 
 extension Channel: DatabaseRepresentation {
     var representation: [String: Any] {
-       var rep: [String : Any] = ["channelId": channelId, "sender": sender, "senderJobTitle": senderJobTitle, "senderProfileImage": senderProfileImage, "receiver": receiver, "receiverJobTitle": receiverJobTitle, "receiverProfileImage": receiverProfileImage, "receiverEmail": receiverEmail]
+       var rep: [String : Any] = ["channelId": channelId, "sender": sender, "senderJobTitle": senderJobTitle, "senderProfileImage": senderProfileImage, "senderEmail": senderEmail, "receiver": receiver, "receiverJobTitle": receiverJobTitle, "receiverProfileImage": receiverProfileImage, "receiverEmail": receiverEmail]
         
         if let id = id {
             rep["id"] = id

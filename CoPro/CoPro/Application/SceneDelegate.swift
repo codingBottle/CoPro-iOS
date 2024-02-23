@@ -46,18 +46,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     switch result {
                     case .success(let loginDTO):
                         print("토큰 재발급 성공: \(loginDTO)")
-                        DispatchQueue.main.async {
-                            let bottomtabVC = BottomTabController()
-                            bottomtabVC.modalPresentationStyle = .custom
-                            bottomtabVC.view.alpha = 0.0
-                            bottomtabVC.modalPresentationStyle = .fullScreen
-
-                            self.window?.rootViewController?.present(bottomtabVC, animated: false) {
+                       LoginAPI.shared.getLoginUserData {
+                          DispatchQueue.main.async {
+                             let bottomtabVC = BottomTabController()
+                             bottomtabVC.modalPresentationStyle = .custom
+                             bottomtabVC.view.alpha = 0.0
+                             bottomtabVC.modalPresentationStyle = .fullScreen
+                             
+                             self.window?.rootViewController?.present(bottomtabVC, animated: false) {
                                 UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
-                                    bottomtabVC.view.alpha = 1.0 // fade-in 애니메이션
+                                   bottomtabVC.view.alpha = 1.0 // fade-in 애니메이션
                                 }, completion: nil)
-                            }
-                        }
+                             }
+                          }
+                       }
+                       
                     case .failure(let error):
                         let loginVC = LoginViewController()
                         loginVC.modalPresentationStyle = .custom

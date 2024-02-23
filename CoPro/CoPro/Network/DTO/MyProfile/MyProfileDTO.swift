@@ -16,12 +16,12 @@ struct MyProfileDTO: Codable {
 
 // MARK: - MyProfileData
 struct MyProfileData: Codable {
-    let picture, occupation, language, nickName: String
+    let picture, occupation, language, nickName, email: String
     let gitHubURL: String?
     let career, viewType, likeMembersCount: Int
 
     enum CodingKeys: String, CodingKey {
-        case picture, occupation, language, career
+        case picture, occupation, language, career, email
         case gitHubURL = "gitHubUrl"
         case nickName, viewType, likeMembersCount
     }

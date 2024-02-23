@@ -277,17 +277,26 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
          print("🔥\(self.currentUserNickName)")
          
          //sender, receiver 둘 중 currentUserNickName이 어떤거든 간에 일단 채팅방 상대를 titlename에 넣어야함.
-         //왜냐하면 나는 고정이니까.
+         
+         // 현재 로그인한 유저가 송신자로 시작한 경우
          if self.currentUserNickName == channel.sender {
+            print("현재 currentUserNickName == channel.sender")
+            print("현재 : channel.senderEmail : \(channel.senderEmail)")
+            print("현재 : channel.receiverEmail : \(channel.receiverEmail)")
             let viewController = ChatViewController(currentUserNickName: self.currentUserNickName, channel: channel, titleName: channel.receiver)
             viewController.chatAvatarImage.image = profileImage
             viewController.targetEmail = channel.receiverEmail
             viewController.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(viewController, animated: true)
-         } else if self.currentUserNickName == channel.receiver {
+         }
+         
+         else if self.currentUserNickName == channel.receiver {
+            print("현재 currentUserNickName == channel.receiver")
+            print("현재 : channel.senderEmail : \(channel.senderEmail)")
+            print("현재 : channel.receiverEmail : \(channel.receiverEmail)")
             let viewController = ChatViewController(currentUserNickName: channel.receiver, channel: channel, titleName: channel.sender)
             viewController.chatAvatarImage.image = profileImage
-            viewController.targetEmail = channel.receiverEmail
+            viewController.targetEmail = channel.senderEmail
             print("🌊\n",viewController.chatAvatarImage.image as Any)
             
             viewController.hidesBottomBarWhenPushed = true

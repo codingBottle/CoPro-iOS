@@ -65,7 +65,6 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                    if let data = data as? MyProfileDTO {
                        // 성공적으로 프로필 데이터를 가져온 경우
                        self.myProfileData = MyProfileDataModel(from: data.data)
-                      self.keychain.set(self.myProfileData?.gitHubURL ?? "", forKey: "currentUserGithubURL")
                        self.languageArr = self.myProfileData?.language.split(separator: ",")
                        let indexPath0 = IndexPath(row: 0, section: 0)
                        let indexPath1 = IndexPath(row: 1, section: 0)
@@ -127,19 +126,12 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     }
     
     func returnMainTableCellHeight(_CellType: CellType) -> CGFloat {
-        let screenHeight = UIScreen.main.bounds.height
         switch _CellType {
         case .profile:
-//           let heightRatio = 512.0 / 852.0
-//            let cellHeight = screenHeight * heightRatio
             return UIScreen.main.bounds.height/2 + 20
         case .cardChange:
-//            let heightRatio = 64.0 / 852.0
-//            let cellHeight = screenHeight * heightRatio
             return 70
         case .myTrace:
-//            let heightRatio = 44.0 / 852.0
-//            let cellHeight = screenHeight * heightRatio
             return 50
         }
     }
@@ -192,7 +184,6 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             case 1:
                 cell.titleLabel.text = "좋아요 수"
                 if let data = myProfileData?.likeMembersCount {
-                    print("성공으로 들어와짐")
                     cell.heartCountLabel.text = String(data)
                 }
                 cell.heartContainer.isHidden = false
@@ -244,37 +235,32 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
           
       case 2:
          print("현재 뷰컨에서 깃헙 눌림")
-        print("myProfileData?.gitHubURL : \(String(describing: myProfileData?.gitHubURL))")
-        guard let githubURL = keychain.get("currentUserGithubURL") else {return print("")}
          let alertVC = EditGithubModalViewController()
-        alertVC.githubURLtextFieldLabel.text = githubURL
+        alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
+         alertVC.initialUserURL = myProfileData?.gitHubURL
         alertVC.activeModalType = .NotFirstLogin
         alertVC.isModalInPresentation = true
          present(alertVC, animated: true, completion: nil)
           
       case 4:
-         print("작성한 게시물 클릭")
          let vc = MyContributionsViewController()
          vc.activeCellType = .post
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
          self.navigationController?.pushViewController(vc, animated: true)
           
       case 5:
-         print("작성한 댓글 클릭")
          let vc = MyContributionsViewController()
          vc.activeCellType = .comment
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
          self.navigationController?.pushViewController(vc, animated: true)
           
       case 6:
-         print("스크랩 클릭")
          let vc = MyContributionsViewController()
          vc.activeCellType = .scrap
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
          self.navigationController?.pushViewController(vc, animated: true)
           
       case 7:
-         print("관심 프로필 클릭")
          let vc = LikeProfileViewController()
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
          self.navigationController?.pushViewController(vc, animated: true)
@@ -283,14 +269,12 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
          let action1 = UIAlertAction(title: "카드로 보기", style: .default) { (action) in
-             print("카드로 보기 호출")
              self.postEditCardViewType(CardViewType: 0)
             CardViewController().reloadData()
          }
          alertController.addAction(action1)
 
          let action2 = UIAlertAction(title: "목록으로 보기", style: .default) { (action) in
-             print("목록으로 보기 호출")
              self.postEditCardViewType(CardViewType: 1)
             CardViewController().reloadData()
          }
@@ -320,7 +304,6 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     
     // 프로필 수정
     func didTapEditProfileButton(in cell: ProfileImageTableViewCell) {
-        print("didTapEditProfileButtondidTapEditProfileButton")
         let alertVC = EditMyProfileViewController()
         alertVC.beforeEditMyProfileData = myProfileData
         alertVC.initialUserName = myProfileData?.nickName
@@ -332,11 +315,10 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     
     // github url 수정
     func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
-        print("현재 뷰컨에서 깃헙 눌림")
-       print("myProfileData?.gitHubURL : \(String(describing: myProfileData?.gitHubURL))")
        guard let githubURL = keychain.get("currentUserGithubURL") else {return print("")}
         let alertVC = EditGithubModalViewController()
-       alertVC.githubURLtextFieldLabel.text = githubURL
+       alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
+        alertVC.initialUserURL = myProfileData?.gitHubURL
        alertVC.activeModalType = .NotFirstLogin
        alertVC.isModalInPresentation = true
         present(alertVC, animated: true, completion: nil)

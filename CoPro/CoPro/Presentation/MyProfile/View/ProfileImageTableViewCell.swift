@@ -47,47 +47,6 @@ class ProfileImageTableViewCell: UITableViewCell {
    lazy var nickname = createLabel(text: "테스트", size: 30, weight: .bold)
    lazy var developmentJobLabel = createLabel(text: "테스트", size: 24, weight: .medium)
    lazy var usedLanguageLabel = createLabel(text: "테스트", size: 24, weight: .medium)
-
-//   let nickname = UILabel().then {
-//      let strokeTextAttributes: [NSAttributedString.Key : Any] = [
-//          .strokeColor : UIColor.black,
-//          .foregroundColor : UIColor.white,
-//          .strokeWidth : -2.0,
-//      ]
-//       $0.setPretendardFont(text: "테스트", size: 30, weight: .bold, letterSpacing: 1.23)
-//       $0.textColor = UIColor.White()
-//      $0.attributedText = NSAttributedString(string: "테스트", attributes: strokeTextAttributes)
-//   }
-//
-//   let developmentJobLabel = UILabel().then {
-//      let strokeTextAttributes: [NSAttributedString.Key : Any] = [
-//          .strokeColor : UIColor.black,
-//          .foregroundColor : UIColor.white,
-//          .strokeWidth : -2.0,
-//      ]
-//       $0.setPretendardFont(text: "테스트", size: 13, weight: .medium, letterSpacing: 1.23)
-//       $0.textColor = UIColor.White()
-//      $0.attributedText = NSAttributedString(string: "테스트", attributes: strokeTextAttributes)
-//   }
-//
-//   let usedLanguageLabel = UILabel().then {
-//      let strokeTextAttributes: [NSAttributedString.Key : Any] = [
-//          .strokeColor : UIColor.black,
-//          .foregroundColor : UIColor.white,
-//          .strokeWidth : -2.0,
-//      ]
-//       $0.setPretendardFont(text: "테스트", size: 13, weight: .medium, letterSpacing: 1.23)
-//       $0.textColor = UIColor.White()
-//      $0.attributedText = NSAttributedString(string: "테스트", attributes: strokeTextAttributes)
-//   }
-
-   
-//   let buttonContainerView = UIView().then {
-//      $0.layer.backgroundColor = UIColor(red: 0.463, green: 0.463, blue: 0.502, alpha: 0.2).cgColor
-//      $0.clipsToBounds = true
-//      $0.backgroundColor = .lightGray
-//      $0.layer.cornerRadius = 25
-//   }
    
    var editButton = UIButton().then {
       let symbolConfiguration = UIImage.SymbolConfiguration(scale: .large)
@@ -170,8 +129,18 @@ class ProfileImageTableViewCell: UITableViewCell {
               $0.leading.equalToSuperview().offset(16)
               $0.trailing.equalToSuperview().offset(-16)
               $0.bottom.equalToSuperview().offset(-10)
-              $0.height.equalTo(UIScreen.main.bounds.height/2/2.5)
+//              $0.height.equalTo(UIScreen.main.bounds.height/2/2.5)
           }
+      
+      nickname.snp.makeConstraints {
+         $0.height.equalTo(90)
+      }
+      developmentJobLabel.snp.makeConstraints {
+         $0.height.equalTo(30)
+      }
+      usedLanguageLabel.snp.makeConstraints {
+         $0.height.equalTo(30)
+      }
 
       editButton.snp.makeConstraints {
               $0.width.equalTo(50)

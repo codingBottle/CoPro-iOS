@@ -8,7 +8,7 @@
 import Foundation
 
 struct MyProfileDataModel: Codable {
-    var picture, occupation, language, nickName: String
+    var picture, occupation, language, nickName, email: String
     var gitHubURL: String?
     var career, viewType, likeMembersCount: Int
     
@@ -21,10 +21,11 @@ struct MyProfileDataModel: Codable {
       self.nickName = data.nickName
       self.viewType = data.viewType
       self.likeMembersCount = data.likeMembersCount
+      self.email = data.email
    }
 
     enum CodingKeys: String, CodingKey {
-        case picture, occupation, language, career
+        case picture, occupation, language, career, email
         case gitHubURL = "gitHubUrl"
         case nickName, viewType, likeMembersCount
     }

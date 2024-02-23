@@ -21,10 +21,11 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
            let tabBarController = window.rootViewController as? BottomTabController {
             tabBarController.selectedIndex = 3
         }
+       else {print("현재 여기로 들어옴.")}
         DispatchQueue.main.async {
             if success {
                 self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
-                               message: "채팅을 보내 대화를 시작해보세요",
+                               message: "채팅 리스트에서 확인하여주세요!",
                                confirmButtonName: "확인")
             }
             else {
@@ -41,10 +42,11 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
            let tabBarController = window.rootViewController as? BottomTabController {
             tabBarController.selectedIndex = 3
         }
+       else {print("현재 여기로 들어옴.")}
         DispatchQueue.main.async {
             if success {
                 self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
-                               message: "채팅을 보내 대화를 시작해보세요",
+                               message: "채팅 리스트에서 확인하여주세요!",
                                confirmButtonName: "확인")
             }
             else {
@@ -53,6 +55,25 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                                confirmButtonName: "확인")
             }
         }
+       
+       
+       /* 화면 전환은 이루어지나 뷰 생명주기에 위반하는 것 같아 일단 보류.
+       if let tabBarController = self.tabBarController as? BottomTabController {
+               tabBarController.selectedIndex = 3
+           }
+
+           DispatchQueue.main.async {
+               if success {
+                   self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                                  message: "채팅 리스트에서 확인하여주세요!",
+                                  confirmButtonName: "확인")
+               } else {
+                   self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                                  message: "채팅 리스트에서 확인하여주세요",
+                                  confirmButtonName: "확인")
+               }
+           }
+        */
     }
     
     //셀 갯수
