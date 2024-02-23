@@ -19,9 +19,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController(rootViewController: onBoardingView)
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
-        if #available(iOS 13.0, *) {
-            window?.overrideUserInterfaceStyle = .light
-        }
         //MARK: - 화면 전환 에니메이션
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { // 2초 후 이동
             UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseIn, animations: {

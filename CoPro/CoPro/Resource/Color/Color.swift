@@ -18,22 +18,10 @@ extension UIColor {
     }
 
     static func Black(alpha: CGFloat = 1.0) -> UIColor {
-            return UIColor { (traitCollection: UITraitCollection) -> UIColor in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return UIColor.white.withAlphaComponent(alpha)
-                } else {
-                    return UIColor.black.withAlphaComponent(alpha)
-                }
-            }
+            return UIColor(fromHex: "000000", alpha: alpha)
         }
     static func White(alpha: CGFloat = 1.0) -> UIColor {
-            return UIColor { (traitCollection: UITraitCollection) -> UIColor in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return UIColor.black.withAlphaComponent(alpha)
-                } else {
-                    return UIColor.white.withAlphaComponent(alpha)
-                }
-            }
+            return UIColor(fromHex: "ffffff", alpha: alpha)
         }
     static func G1(alpha: CGFloat = 1.0) -> UIColor {
         return UIColor(fromHex: "D1D1D2", alpha: alpha)

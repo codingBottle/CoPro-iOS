@@ -23,6 +23,7 @@ class BoardCommentViewController: UIViewController {
     var offset = 1
     var postId: Int?
     var commentId: Int?
+    private let lineView1 = UIView()
 
 //    let shadowPath = UIBezierPath()
     
@@ -58,13 +59,16 @@ class BoardCommentViewController: UIViewController {
             $0.showsVerticalScrollIndicator = false
             $0.separatorStyle = .singleLine
         }
-        bottomView.do {
-//            self.view.backgroundColor = UIColor.systemBackground
-            $0.layer.shadowColor = UIColor.black.cgColor
-            $0.layer.shadowOffset = CGSize(width: 0, height: -2)
-            $0.layer.shadowOpacity = 0.3
-            $0.layer.shadowRadius = 2
+        lineView1.do {
+            $0.backgroundColor = UIColor.G1()
         }
+//        bottomView.do {
+////            self.view.backgroundColor = UIColor.systemBackground
+//            $0.layer.shadowColor = UIColor.black.cgColor
+//            $0.layer.shadowOffset = CGSize(width: 0, height: -2)
+//            $0.layer.shadowOpacity = 0.3
+//            $0.layer.shadowRadius = 2
+//        }
         commentTextField.do {
             $0.placeholder = "댓글을 남겨보세요"
             $0.setPlaceholderColor(placeholderColor: .G3())
@@ -111,18 +115,23 @@ class BoardCommentViewController: UIViewController {
     }
     
     private func setLayout() {
-        view.addSubviews(tableView, bottomView)
-        bottomView.addSubview(commentTextField)
+        view.addSubviews(tableView, lineView1, bottomView)
+        bottomView.addSubviews(commentTextField)
         bottomView.snp.makeConstraints {
             $0.height.equalTo(58)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+        lineView1.snp.makeConstraints {
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(bottomView.snp.top)
+        }
         commentTextField.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview().inset(8)
         }
         tableView.snp.makeConstraints {
-            $0.bottom.equalTo(bottomView.snp.top)
+            $0.bottom.equalTo(lineView1.snp.top)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.top.equalTo(view.safeAreaLayoutGuide)
         }
