@@ -53,9 +53,9 @@ extension LoginAPI {
                         case .success(let data):
                            DispatchQueue.main.async {
                               if let data = data as? CheckInitialLoginDTO {
+                                 
                                  if data.data == true {
                                     print("나는야 첫 로그인")
-                                    
                                     DispatchQueue.main.async {
                                        let alertVC = EditMyProfileViewController()
                                        if self.loginVC.isViewLoaded && self.loginVC.view.window != nil {
@@ -66,7 +66,6 @@ extension LoginAPI {
                                        }
                                     }
                                  }
-                                 
                                  else {
                                     print("나는야 non 첫 로그인")
                                     self.getLoginUserData() {
@@ -238,6 +237,9 @@ extension LoginAPI {
                            keychain.set(data.data.nickName, forKey: "currentUserNickName")
                            keychain.set(data.data.picture, forKey: "currentUserProfileImage")
                            keychain.set(data.data.occupation, forKey: "currentUserOccupation")
+                           keychain.set(data.data.email, forKey: "currentUserEmail")
+                           print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥현재 currentUserEmail",keychain.get("currentUserEmail"))
+                           keychain.set(data.data.gitHubURL ?? "지금 비어있엉~", forKey: "currentUserGithubURL")
                             completion()
                         } else {
                             print("Failed to decode the response.")

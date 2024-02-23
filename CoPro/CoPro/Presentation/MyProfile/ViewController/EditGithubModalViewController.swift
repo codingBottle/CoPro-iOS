@@ -17,16 +17,15 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    }
    var activeModalType: EditGitHubModalType = .NotFirstLogin
    private let keychain = KeychainSwift()
+   var initialUserURL: String?
    var editGitHubURLBody = EditGitHubURLRequestBody()
-//   var originalHeight: CGFloat = 0
-   var isFirstLoginUserName: String?
    var readyForEdigithub: Bool?
    var myProfileVC: MyProfileViewController?
    
    let container = UIView()
    
    let githubLabel = UILabel().then {
-      $0.setPretendardFont(text: "Git URL", size: 17, weight: .bold, letterSpacing: 1.25)
+      $0.setPretendardFont(text: "Github Profile URL", size: 17, weight: .bold, letterSpacing: 1.25)
       $0.textColor = UIColor.Black()
    }
    
@@ -50,21 +49,11 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    }
    
    let githubURLtextFieldLabel = UITextField().then {
-      $0.placeholder = "GitHub URL을 입력해주세요"
+      $0.placeholder = "Github Profile URL을 입력해주세요"
       $0.clearButtonMode = .always
       $0.keyboardType = .URL
       $0.autocapitalizationType = .none
       $0.spellCheckingType = .no
-   }
-   
-   var shouldShowSuccessAlert = false
-
-   override func viewDidAppear(_ animated: Bool) {
-      super.viewDidAppear(animated)
-      
-      if shouldShowSuccessAlert {
-         successAlert()
-      }
    }
    
    override func viewDidLoad() {
@@ -72,7 +61,23 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       view.backgroundColor = UIColor.White()
       githubURLtextFieldLabel.delegate = self
       githubURLtextFieldLabel.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+      
+      if initialUserURL == githubURLtextFieldLabel.text {
+         print("❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️")
+         readyForEdigithub = true
+         
+         self.doneButton.backgroundColor = UIColor.P2()
+      }
+      
    }
+   
+//   override func viewWillAppear(_ animated: Bool) {
+//      if initialUserURL == githubURLtextFieldLabel.text {
+//         readyForEdigithub = true
+//         
+//         self.doneButton.backgroundColor = UIColor.P2()
+//      }
+//   }
    
    deinit {
       NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -102,8 +107,8 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    override func setLayout() {
       switch activeModalType {
       case .FirstLogin:
-         githubLabel.text = "깃허브 링크를 입력해주세요"
-         githubURLtextFieldLabel.placeholder = "http://examplegithub.com"
+         githubLabel.text = "깃허브 유저 이름을 입력해주세요"
+         githubURLtextFieldLabel.text = "https://github.com/"
          view.addSubview(container)
          container.addSubviews(firstLoginInGithubModal, githubLabel, textFieldContainer, doneButton)
          textFieldContainer.addSubview(githubURLtextFieldLabel)
@@ -119,12 +124,11 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(0)
             $0.height.equalTo(21)
-//            $0.width.equalTo(60)
          }
          
          githubLabel.snp.makeConstraints {
             $0.top.equalTo(firstLoginInGithubModal.snp.bottom).offset(0)
-            $0.leading.equalToSuperview().offset(0)
+            $0.leading.equalToSuperview().offset(4)
             $0.height.equalTo(21)
          }
          
@@ -139,6 +143,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-6)
+            $0.height.equalTo(40)
          }
          
          doneButton.snp.makeConstraints {
@@ -198,21 +203,24 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       if let text = textField.text {
          print("사용자가 입력한 텍스트: \(text)")
          editGitHubURLBody.gitHubURL = text
-         githubURLtextFieldLabel.text = text
       }
    }
    
+   // 확인 or return 버튼으로 키보드 내리기
    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
       textField.resignFirstResponder()
       return true
    }
    
+   
+   
    @objc private func didTapdoneButton() {
       print("지금 didTapdoneButton 눌림")
       if readyForEdigithub == false {
+         print("readyForEdigithub = false 상태")
          githubURLtextFieldLabel.resignFirstResponder()
       } else {
-         let regex = "^https://github\\.com/[a-zA-Z0-9/\\.]*$"
+         let regex = "^https://github\\.com/[a-zA-Z0-9]*$"
          let testStr = githubURLtextFieldLabel.text ?? ""
          if testStr.count > 19 {
              let testPredicate = NSPredicate(format:"SELF MATCHES %@", regex)
@@ -221,13 +229,13 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                  postEditGitHubURL()
              } else {
                  // GitHub URL이 유효하지 않음
-                 self.showAlert(title: "Github 프로필 주소의 양식이 올바르지 않습니다",
+                 self.showAlert(title: "Github URL이 올바르지 않습니다",
                                 message: "다시 시도해주세요",
                                 confirmButtonName: "확인")
              }
          } else {
              // GitHub URL이 너무 짧음
-             self.showAlert(title: "Github 프로필 주소가 너무 짧습니다",
+             self.showAlert(title: "Github URL이 너무 짧습니다",
                             message: "다시 시도해주세요",
                             confirmButtonName: "확인")
          }
@@ -240,11 +248,17 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       if let token = self.keychain.get("accessToken") {
          switch activeModalType {
          case .FirstLogin:
-//            print
             MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody ,checkFirstlogin: true) { result in
                 switch result {
-                case .success :
-                   print("성공!!!")
+                case .success(let data):
+                   if let data = data as? EditGitHubURLDTO {
+                      
+//                   if data is EditGitHubURLDTO {
+//                      data.
+                      self.keychain.set(self.editGitHubURLBody.gitHubURL, forKey: "currentUserGithubURL")
+                      print("성공!!!")
+                   }
+                   
                 case .requestErr(let message):
                    print("🔥🔥🔥🔥🔥🔥requestErr🔥🔥🔥🔥🔥🔥🔥🔥 ")
                     print("Error : \(message)")
@@ -257,12 +271,11 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
 
          case .NotFirstLogin:
             print("NotFirstLogin")
-            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: EditGitHubURLRequestBody(gitHubURL: githubURLtextFieldLabel.text ?? ""), checkFirstlogin: false) { result in
+            MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody, checkFirstlogin: false) { result in
                switch result {
-               case .success(_):
-                  print("NotFirstLogin2222")
-                  print("🔥🔥🔥🔥🔥NotFirstLogin success🔥🔥🔥🔥🔥🔥🔥🔥🔥 ")
                   
+               case .success(let data):
+                  print("왜 이 안의 코드는 실행되지 않는지 수정해야함.")
                case .requestErr(let message):
                   print("Error : \(message)")
                case .pathErr, .serverErr, .networkFail:
@@ -275,45 +288,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       }
    }
    
-   func successAlert() {
-           DispatchQueue.main.async {
-              self.shouldShowSuccessAlert = false
-               self.showAlert(title: "Github URL 수정을 성공하였습니다",
-                              confirmButtonName: "확인")
-               self.dismiss(animated: true)
-           }
-       }
-
-   //FcmToken 보내기
-   
-//   func postFcmToken() {
-//       guard let token = self.keychain.get("accessToken") else {
-//           print("No accessToken found in keychain.")
-//           return
-//       }
-//      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
-//      
-//      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
-//           switch result {
-//           case .success(_):
-//              print("FcmToken 보내기 성공")
-//               
-//           case .requestErr(let message):
-//               // 요청 에러인 경우
-//               print("Error : \(message)")
-//              if (message as AnyObject).contains("401") {
-//                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
-//               }
-//               
-//           case .pathErr, .serverErr, .networkFail:
-//               // 다른 종류의 에러인 경우
-//               print("another Error")
-//           default:
-//               break
-//           }
-//       }
-//   }
-   
    
    //MARK: - @objc func
    
@@ -323,7 +297,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          if textField.text?.count == 0 {
             self.doneButton.backgroundColor = .gray
          } else {
-            doneButton.isEnabled = true
+//            doneButton.isEnabled = true
             self.doneButton.backgroundColor = UIColor.P2()
          }
       }

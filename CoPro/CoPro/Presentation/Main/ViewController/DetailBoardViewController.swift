@@ -680,9 +680,10 @@ final class DetailBoardViewController: BaseViewController {
         guard let currentUserNickName = keychain.get("currentUserNickName") else {return}
         guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
         guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
+       guard let currentUserEmail = keychain.get("currentUserEmail") else {return}
         let channelId = [currentUserNickName, nicknameLabel.text ?? ""].sorted().joined(separator: "-")
         
-        channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, receiver: nicknameLabel.text ?? "", receiverJobTitle: jobLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
+        channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, senderEmail: currentUserEmail, receiver: nicknameLabel.text ?? "", receiverJobTitle: jobLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
             if let error = error {
                 // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
                 print("Failed to create channel: \(error.localizedDescription)")
@@ -706,7 +707,7 @@ final class DetailBoardViewController: BaseViewController {
         DispatchQueue.main.async {
             if result {
                 self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
-                               message: "채팅을 보내 대화를 시작해보세요",
+                               message: "채팅 리스트에서 확인하여주세요!",
                                confirmButtonName: "확인")
             }
             else {

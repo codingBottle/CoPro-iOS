@@ -126,13 +126,16 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       nickNameTextField.text = beforeEditMyProfileData?.nickName
       isJobsButtonTap = false
       updateButtonState(type: "First")
+         nickNameDuplicateFlag = true
+         nicknameValidity = true
+         editFlag = true
       
    }
    
    override func setUI() {
       if let sheetPresentationController = sheetPresentationController {
          sheetPresentationController.preferredCornerRadius = 15
-         sheetPresentationController.prefersGrabberVisible = false
+         sheetPresentationController.prefersGrabberVisible = true
          sheetPresentationController.detents = [.custom {context in
             return self.returnEditMyProfileUIHeight(type: "First")
          }]
@@ -205,17 +208,19 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
                   switch result {
                   case .success(let data):
-                      if let data = data as? EditMyProfileDTO {
+                     if let data = data as? EditMyProfileDTO {
                           self.keychain.set(data.data.picture, forKey: "currentUserProfileImage")
                           self.keychain.set(data.data.nickName, forKey: "currentUserNickName")
                           self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
+                         self.keychain.set(data.data.email, forKey: "currentUserEmail")
+                         
                          
                           // 현재 뷰 컨트롤러를 닫습니다.
                           self.dismiss(animated: true) { [weak self] in
                               guard let self = self else { return }
                               // 그 후에 새로운 뷰 컨트롤러를 엽니다.
                               let alertVC = EditGithubModalViewController()
-                              alertVC.isFirstLoginUserName = self.editMyProfileBody.nickName
+//                              alertVC.isFirstLoginUserName = self.editMyProfileBody.nickName
                               alertVC.activeModalType = .FirstLogin
                               if let topViewController = self.getTopViewController() {
                                   topViewController.present(alertVC, animated: true, completion: nil)
@@ -287,6 +292,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
          if text == initialUserName {
             nickNameDuplicateFlag = true
             nicknameValidity = true
+            editFlag = true
             DispatchQueue.main.async {
                self.nicknameDuplicateCheckLabel.text = "사용 가능한 닉네임입니다."
             }

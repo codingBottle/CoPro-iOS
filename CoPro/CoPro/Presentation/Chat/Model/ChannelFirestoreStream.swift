@@ -19,23 +19,12 @@ class ChannelFirestoreStream {
     }()
     
    
-   //여기에 채팅하기 눌린 사람의 값들이 들어가야함
-//   func createChannel(with channelName: String, isProject: Bool, profileImage: String, occupation: String, unreadCount: Int, completion: @escaping () -> Void) {
-//       let channel = Channel(name: channelName, isProject: isProject, profileImage: profileImage, occupation: occupation, unreadCount: unreadCount)
-//       ChannelListener.addDocument(data: channel.representation) { error in
-//           if let error = error {
-//               print("Error saving Channel: \(error.localizedDescription)")
-//           }
-//           print("개설 끝")
-//           completion()
-//       }
-//
    /**
-    1. 송신자 / 송신자이미지 / 송신자 직군
+    1. 송신자 / 송신자이미지 / 송신자 직군 / 송신자 이멩
     2. 수신자 / 수신자이미지 / 수신자 직군 / 수신자 이메일
     */
    
-   func createChannel(channelId: String, sender: String, senderJobTitle: String, senderProfileImage: String, receiver: String, receiverJobTitle: String, receiverProfileImage: String, receiverEmail: String, completion: @escaping (Error?) -> Void) {
+   func createChannel(channelId: String, sender: String, senderJobTitle: String, senderProfileImage: String, senderEmail: String, receiver: String, receiverJobTitle: String, receiverProfileImage: String, receiverEmail: String, completion: @escaping (Error?) -> Void) {
        // Firestore 참조 생성
        let db = Firestore.firestore()
        
@@ -53,7 +42,7 @@ class ChannelFirestoreStream {
                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Channel already exists"]))
            } else {
                // 새로운 채널 생성
-              let channel = Channel(channelId: channelId, sender: sender, senderJobTitle: senderJobTitle, senderProfileImage: senderProfileImage, receiver: receiver, receiverJobTitle: receiverJobTitle, receiverProfileImage: receiverProfileImage, receiverEmail: receiverEmail)
+              let channel = Channel(channelId: channelId, sender: sender, senderJobTitle: senderJobTitle, senderProfileImage: senderProfileImage, senderEmail: senderEmail, receiver: receiver, receiverJobTitle: receiverJobTitle, receiverProfileImage: receiverProfileImage, receiverEmail: receiverEmail)
                self.ChannelListener.addDocument(data: channel.representation) { error in
                    if let error = error {
                        print("Error saving Channel: \(error.localizedDescription)")

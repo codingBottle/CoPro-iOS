@@ -80,9 +80,11 @@ class CardCollectionCellView: UICollectionViewCell {
       guard let currentUserNickName = keychain.get("currentUserNickName") else {return}
       guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
       guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
-      var channelId = [currentUserNickName, slideCardView.userNameLabel.text ?? ""].sorted().joined(separator: "-")
+      guard let currentUserEmail = keychain.get("currentUserEmail") else {return}
+      print("currentUserEmail : \(currentUserEmail)")
+      let channelId = [currentUserEmail, receiverEmail].sorted().joined(separator: "-")
       
-      channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, receiver: slideCardView.userNameLabel.text ?? "", receiverJobTitle: slideCardView.userPartLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
+      channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, senderEmail: currentUserEmail, receiver: slideCardView.userNameLabel.text ?? "", receiverJobTitle: slideCardView.userPartLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
          if let error = error {
             // 실패: 오류 메시지를 출력하거나 사용자에게 오류 상황을 알립니다.
             print("Failed to create channel: \(error.localizedDescription)")

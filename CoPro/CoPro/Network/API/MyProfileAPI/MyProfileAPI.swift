@@ -138,19 +138,18 @@ extension MyProfileAPI {
                      }
                   }
                   else {
-                     // 깃헙모달 alert 활성화 해야함
+                     print("현재 깃헙모달에서 checkfirstlogin false")
                      DispatchQueue.main.async {
                         let bottomTabController = BottomTabController()
-                        
+                        // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
                         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                            let delegate = windowScene.delegate as? SceneDelegate,
                            let window = delegate.window {
                            window.rootViewController = bottomTabController
                            window.makeKeyAndVisible()
-                           bottomTabController.selectedIndex = 4
-                           
                         }
                      }
+                     
                   }
                }
            } else {

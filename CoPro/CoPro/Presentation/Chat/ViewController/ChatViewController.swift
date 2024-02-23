@@ -17,7 +17,7 @@ import KeychainSwift
 class ChatViewController: MessagesViewController {
     
    let keychain = KeychainSwift()
-   var customAvatarView = CustomAvatarView()
+//   var customAvatarView = CustomAvatarView()
    var avatarView: AvatarView?
    var targetEmail: String?
    
@@ -59,15 +59,16 @@ class ChatViewController: MessagesViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-       view.backgroundColor = .white
-        confirmDelegates()
-        configure()
-        setupMessageInputBar()
-        removeOutgoingMessageAvatars()
-        listenToMessages()
-    }
+   override func viewDidLoad() {
+      super.viewDidLoad()
+      view.backgroundColor = .white
+      confirmDelegates()
+      configure()
+      setupMessageInputBar()
+      removeOutgoingMessageAvatars()
+      removeincomingMessageAvatars()
+      listenToMessages()
+   }
 
     private func confirmDelegates() {
         messagesCollectionView.messagesDataSource = self
@@ -128,6 +129,14 @@ class ChatViewController: MessagesViewController {
         let outgoingLabelAlignment = LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 15))
         layout.setMessageOutgoingMessageTopLabelAlignment(outgoingLabelAlignment)
     }
+   
+   private func removeincomingMessageAvatars() {
+       guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else { return }
+       layout.textMessageSizeCalculator.incomingAvatarSize = .zero
+       layout.setMessageIncomingAvatarSize(.zero)
+       let incomingLabelAlignment = LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
+       layout.setMessageIncomingMessageTopLabelAlignment(incomingLabelAlignment)
+   }
     
    // 사진 직접 찍어 보내는 기능
 //    private func addCameraBarButtonToMessageInputBar() {
@@ -215,9 +224,13 @@ extension ChatViewController: MessagesDataSource {
 extension ChatViewController: MessagesLayoutDelegate {
     
    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
-      let isCurrentSender = isFromCurrentSender(message: message)
       
-      // 내가 보낸 메세지 일 떄
+      let cornerDirection: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
+      return .bubbleTail(cornerDirection, .pointedEdge)
+   }
+      /*
+      let isCurrentSender = isFromCurrentSender(message: message)
+       내가 보낸 메세지 일 떄
       if isCurrentSender {
          return .custom { view in
             let maskLayer = CAShapeLayer()
@@ -227,7 +240,7 @@ extension ChatViewController: MessagesLayoutDelegate {
                                     cornerRadii: CGSize(width: 10, height: 10))
             
             // 우측 상단 모서리에 2의 반경 적용
-            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 3, y: 0, width: 2, height: 2),
+            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
                                      byRoundingCorners: .topRight,
                                      cornerRadii: CGSize(width: 2, height: 2)))
             
@@ -250,9 +263,10 @@ extension ChatViewController: MessagesLayoutDelegate {
                                     cornerRadii: CGSize(width: 10, height: 10))
             
             // 우측 상단 모서리에 2의 반경 적용
-            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 3, y: 0, width: 2, height: 2),
+            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
                                      byRoundingCorners: .topLeft,
                                      cornerRadii: CGSize(width: 2, height: 2)))
+
             
             maskLayer.path = path.cgPath
             view.layer.mask = maskLayer
@@ -260,7 +274,8 @@ extension ChatViewController: MessagesLayoutDelegate {
             // 그림자 설정 (추후 해야함 현재 레이아웃 깨짐)
          }
       }
-   }
+      */
+   
     
     // 아래 여백
     func footerViewSize(for section: Int, in messagesCollectionView: MessagesCollectionView) -> CGSize {
@@ -285,7 +300,7 @@ extension ChatViewController: MessagesLayoutDelegate {
         if isFromCurrentSender(message: message) {
             return LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10))
         } else {
-            return LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0))
+            return LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
         }
     }
 }
@@ -310,6 +325,7 @@ extension ChatViewController: MessagesDisplayDelegate {
         return !isSameTimeGroup
     }
     
+   // 아바타뷰 설정 (프로필 사진)
    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
       print("configureAvatarView is called")
       DispatchQueue.main.async {
@@ -317,7 +333,8 @@ extension ChatViewController: MessagesDisplayDelegate {
          
          let isFirstMessageInGroup = self.isFirstMessageInTimeGroup(at: indexPath)
          if isFirstMessageInGroup {
-            avatarView.isHidden = false
+//            avatarView.isHidden = false
+            avatarView.isHidden = true
             avatarView.image = self.chatAvatarImage.image
          } else {
             avatarView.isHidden = true
@@ -394,7 +411,8 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
        guard let token = self.keychain.get("accessToken") else {
            print("No accessToken found in keychain.")
            return }
-      guard let targetEmail = targetEmail else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      guard let targetEmail = targetEmail else {return print("postChatNotification 안에 targetEmail 설정 에러")}
+      print("🔥🔥🔥🔥🔥🔥🔥현재 targetEmail : \(targetEmail)🔥🔥🔥🔥🔥🔥🔥🔥🔥")
       
       NotificationAPI.shared.postChatNotification(token: token,
                                                   requestBody: ChattingNotificationRequestBody(targetMemberEmail: targetEmail, title: currentUserNickName, body: content)) { result in
