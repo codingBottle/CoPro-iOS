@@ -150,7 +150,6 @@ class CardCollectionCellView: UICollectionViewCell {
       self.likeCount = likeCount
       self.likeMemberId = memberId
       self.isLike = isLike
-      print("configure IsLike\(isLike)")
       if isLike == true {
          self.slideCardView.likeIcon.tintColor = UIColor.P2()// 아이콘 색상을 파란색으로 변경
          self.slideCardView.likeLabel.textColor = UIColor.P2()
