@@ -28,6 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 //MARK: - 로그인 상태에 따른 화면 전환
                 let keychain = KeychainSwift()
                 guard let refreshToken = keychain.get("refreshToken") else {
+                    //refreshToken이 존재 하지 않으면
                     let loginVC = LoginViewController()
                     loginVC.modalPresentationStyle = .custom
                     loginVC.view.alpha = 0.0
