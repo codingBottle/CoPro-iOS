@@ -13,7 +13,7 @@ class Checkbox: UIView {
     let label = UILabel()
     
     private func createSubViews(text: String) {
-        label.textColor = .black
+        label.textColor = .Black()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.text = text
@@ -25,7 +25,7 @@ class Checkbox: UIView {
         }
         checkbox.image = UIImage(systemName: "square")
         checkbox.contentMode = .scaleAspectFit
-        checkbox.tintColor = UIColor(named: "Black")
+        checkbox.tintColor = .Black()
             
         addSubview(checkbox)
         checkbox.snp.makeConstraints { make in

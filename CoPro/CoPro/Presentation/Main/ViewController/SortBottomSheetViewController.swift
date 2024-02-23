@@ -53,7 +53,7 @@ extension SortBottomSheetViewController {
     }
     private func setUI() {
         
-        view.backgroundColor = UIColor.White()
+        self.view.backgroundColor = UIColor.systemBackground
         
         if let sheetPresentationController = sheetPresentationController {
             sheetPresentationController.preferredCornerRadius = 20

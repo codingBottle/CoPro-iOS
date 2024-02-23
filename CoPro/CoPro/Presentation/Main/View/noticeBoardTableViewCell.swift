@@ -51,6 +51,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         }
         postTitleLabel.do {
             $0.font = .pretendard(size: 15, weight: .bold)
+            $0.numberOfLines = 1
         }
         writerNameLabel.do {
             $0.font = .pretendard(size: 13, weight: .regular)
@@ -100,6 +101,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         postTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalTo(postImage.snp.leading).offset(-10)
         }
         writerNameLabel.snp.makeConstraints {
             $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
@@ -141,11 +143,10 @@ class noticeBoardTableViewCell: UITableViewCell {
 
     func configureCell(_ data: BoardDataModel) {
         postImage.kf.indicatorType = .activity
-        if let url = URL(string: data.imageUrl) {
+        if let imageUrl = data.imageUrl, let url = URL(string: imageUrl) {
             postImage.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
         } else {
-            // URL 변환이 잘못된 경우, 디폴트 이미지를 로드하거나 에러 처리를 합니다.
-            postImage.image = UIImage(systemName: "heart")
+            postImage.backgroundColor = .White()
         }
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName

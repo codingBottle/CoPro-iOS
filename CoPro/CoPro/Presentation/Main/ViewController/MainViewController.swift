@@ -21,7 +21,7 @@ final class MainViewController: UIViewController {
 //    private lazy var noticeBoardView = UIView()
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
-        view.bottomSheetColor = .white
+        view.bottomSheetColor = UIColor.systemBackground
         view.barViewColor = .clear
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -123,7 +123,7 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
     // MARK: - UI Components Property
 
     private func setUI() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.systemBackground
         scrollView.do {
             $0.showsHorizontalScrollIndicator = false
         }
@@ -167,8 +167,8 @@ extension MainViewController: UIPageViewControllerDataSource, UIPageViewControll
         bottomSheetView.addSubviews(segmentedControl, pageViewController.view)
 
         segmentedControl.snp.makeConstraints {
-            $0.leading.equalTo(bottomSheetView.bottomSheetView.snp.leading).offset(16)
-            $0.trailing.equalTo(bottomSheetView.bottomSheetView.snp.trailing).offset(-16)
+            $0.leading.equalTo(bottomSheetView.bottomSheetView.snp.leading)
+            $0.trailing.equalTo(bottomSheetView.bottomSheetView.snp.trailing)
             $0.top.equalTo(bottomSheetView.bottomSheetView.snp.top).offset(10)
             $0.height.equalTo(50)
         }

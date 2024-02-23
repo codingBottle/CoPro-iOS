@@ -49,8 +49,8 @@ extension ReportBottomSheetViewController {
     }
     private func setUI() {
         
-        view.backgroundColor = UIColor.White()
-        
+        self.view.backgroundColor = UIColor.systemBackground
+
         if let sheetPresentationController = sheetPresentationController {
             sheetPresentationController.preferredCornerRadius = 20
             sheetPresentationController.prefersGrabberVisible = true
@@ -156,7 +156,7 @@ extension ReportBottomSheetViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .Black()
             updateButtonState(isEnabled: false)
         }
     }

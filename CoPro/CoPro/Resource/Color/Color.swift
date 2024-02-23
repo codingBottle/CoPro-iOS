@@ -16,12 +16,13 @@ extension UIColor {
         let b = CGFloat(Int(v[4] + v[5], radix: 16) ?? 0) / 255.0
         self.init(red: r, green: g, blue: b, alpha: alpha)
     }
+
     static func Black(alpha: CGFloat = 1.0) -> UIColor {
-        return UIColor(fromHex: "000000", alpha: alpha)
-    }
+            return UIColor(fromHex: "000000", alpha: alpha)
+        }
     static func White(alpha: CGFloat = 1.0) -> UIColor {
-        return UIColor(fromHex: "ffffff", alpha: alpha)
-    }
+            return UIColor(fromHex: "ffffff", alpha: alpha)
+        }
     static func G1(alpha: CGFloat = 1.0) -> UIColor {
         return UIColor(fromHex: "D1D1D2", alpha: alpha)
     }
