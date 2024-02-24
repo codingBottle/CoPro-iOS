@@ -54,6 +54,7 @@ class SlideCardView: BaseView {
     let chatLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "채팅하기", size: 16, weight: .regular, letterSpacing: 1.15)
+        $0.textColor = UIColor.Black()
     }
     let gitImage = UIImageView(image: Image.github_SignInButton)
     let gitButtonStackView = UIStackView().then {
@@ -93,14 +94,17 @@ class SlideCardView: BaseView {
     let userNameLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 14, weight: .regular, letterSpacing: 1.26)
+        $0.textColor = UIColor.Black()
     }
     let userPartLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 25, weight: .bold, letterSpacing: 1.24)
+        $0.textColor = UIColor.Black()
     }
     let userLangLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 25, weight: .bold, letterSpacing: 1.24)
+        $0.textColor = UIColor.Black()
     }
     let infoIconStackView = UIStackView().then{
         $0.axis = .vertical

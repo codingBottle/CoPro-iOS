@@ -65,16 +65,19 @@ class MiniCard: BaseView {
     let userPartLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.0)
+        $0.textColor = UIColor.Black()
     }
     
     let userLangLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.23)
+        $0.textColor = UIColor.Black()
     }
     
     let userCareerLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "hi", size: 11, weight: .regular, letterSpacing: 1.0)
+        $0.textColor = UIColor.Black()
     }
     
     let buttonStackView = UIStackView().then {

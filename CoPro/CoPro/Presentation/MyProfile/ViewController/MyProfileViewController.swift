@@ -369,14 +369,12 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         let action1 = UIAlertAction(title: "카드로 보기", style: .default) { (action) in
             print("카드로 보기 호출")
             self.postEditCardViewType(CardViewType: 0)
-           CardViewController().reloadData()
         }
         alertController.addAction(action1)
 
         let action2 = UIAlertAction(title: "목록으로 보기", style: .default) { (action) in
             print("목록으로 보기 호출")
             self.postEditCardViewType(CardViewType: 1)
-           CardViewController().reloadData()
         }
         alertController.addAction(action2)
 

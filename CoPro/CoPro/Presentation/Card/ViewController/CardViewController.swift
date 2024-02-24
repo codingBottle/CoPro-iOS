@@ -149,88 +149,58 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
             return 10
         }
     }
-    
-    //셀 스크롤 에니메이션
-    //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    //           let center = CGPoint(x: scrollView.contentOffset.x + scrollView.bounds.width / 2, y: scrollView.bounds.height / 2)
-    //
-    //           if let indexPath = collectionView.indexPathForItem(at: center) {
-    //               for cell in collectionView.visibleCells {
-    //                   guard let indexPathForCell = collectionView.indexPath(for: cell) else { continue }
-    //
-    //                   let scaleFactor: CGFloat = indexPath == indexPathForCell ? 1.0 : 0.7
-    //                   let width = collectionView.frame.width * scaleFactor
-    //                   let height = collectionView.frame.height
-    //
-    //                   UIView.animate(withDuration: 0.5) {
-    //                       cell.frame.size = CGSize(width: width, height: height)
-    //                   }
-    //               }
-    //           }
-    //       }
     //셀 인덱스
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if myViewType == 0{
-            let width = scrollView.frame.width
-            let index = Int(scrollView.contentOffset.x / width)
-            print("가로 현재 페이지: \(index)")
-            
-            //            if last == true{
-            //                print("가로 마지막 페이지 - 처음 페이지로 돌아갑니다.")
-            //                DispatchQueue.main.async {
-            //                    //                    self.loadFirstPage()
-            //                }
-            //            }
-            if index == contents.count - 1 {
-                DispatchQueue.main.async {
-                    print("PageUpDate")
-                    self.loadNextPage()
-                }
+        if myViewType == 0 {
+            let offset = scrollView.contentOffset.x
+            let contentWidth = scrollView.contentSize.width
+            let scrollViewWidth = scrollView.bounds.width
+
+            // 스크롤이 오른쪽 끝에 도달하면 다음 페이지 로드
+            if offset + scrollViewWidth + 50 >= contentWidth {
+                loadNextPage()
             }
-        }
-        else {
-            let height =  272.0
-            let index = Int(scrollView.contentOffset.y / height)
-            print("세로 현재 페이지: \(index)")
-            if index > 1 {
-                DispatchQueue.main.async {
-                    print("PageUpDate")
-                    self.loadNextPage()
-                    
-                }
+        } else {
+            let offset = scrollView.contentOffset.y
+            let contentHeight = scrollView.contentSize.height
+            let scrollViewHeight = scrollView.bounds.height
+
+            // 스크롤이 아래쪽 끝에 도달하면 다음 페이지 로드
+            if offset + scrollViewHeight + 50 >= contentHeight {
+                loadNextPage()
             }
         }
     }
     // 다음 페이지의 데이터를 불러오는 메서드
     func loadNextPage() {
-        //        if last == true {
-        //            print("마지막 페이지")
-        //            DispatchQueue.main.async {
-        //
-        //                //                self.loadFirstPage()
-        //            }
-        //        }else{
-        // 페이지 번호를 증가시키고 데이터를 불러옴
-        self.page += 1
-        let part = self.cardView.partLabel.text ?? " "
-        let lang = self.cardView.langLabel.text ?? " "
-        let old = self.oldIndex
-        print(self.page)
-        self.loadCardDataFromAPI(part: part, lang: lang, old: old,page: self.page)
-        
-        print("page value: \(self.page)")
-        //        }
+        if last != true{
+            self.page += 1
+            let part = self.cardView.partLabel.text ?? " "
+            let lang = self.cardView.langLabel.text ?? " "
+            self.loadCardDataFromAPI(part: part, lang: lang, old: self.oldIndex,page: self.page)
+            
+            print("page value: \(self.page)")
+        }
     }
-    //첫 페이지로 돌아가는 메소드
-    //    func loadFirstPage() {
-    //        self.page = 0
-    //        self.contents.removeAll()
-    //        let part = self.cardView.partLabel.text ?? " "
-    //        let lang = self.cardView.langLabel.text ?? " "
-    //        let old = self.oldIndex
-    //        loadCardDataFromAPI(part: part, lang: lang, old: old, page: 0)
-    //        print("첫 페이지로 돌아갔습니다.")
-    //    }
+    // MARK: - ReLoadData 데이터 새로고침
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // 화면이 나타날 때마다 데이터 새로고침
+        reloadCardData()
+    }
+    func reloadCardData() {
+        let part = cardView.partLabel.text ?? " "
+        let lang = cardView.langLabel.text ?? " "
+        
+        
+        // 기존의 데이터 초기화
+        contents.removeAll()
+        
+        // 첫 번째 페이지부터 데이터를 새로 불러옴
+        self.page = 0
+        loadCardDataFromAPI(part: part, lang: lang, old: self.oldIndex, page: self.page)
+    }
     
     var myViewType = 0
     var last = false
@@ -260,7 +230,8 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: 0)
+        print(self.page)
+//        loadCardDataFromAPI(part: " ", lang: " ", old: 0,page: 0)
         view.backgroundColor = UIColor.White()
         //        setDropDownText()
         setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
@@ -268,17 +239,6 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
         setupCollectionView()
         
-    }
-    private func setDropDownText(){
-        self.cardView.partLabel.text = "직무"
-        self.cardView.partLabel.textColor = UIColor.G3()
-        self.cardView.partButton.tintColor = UIColor.G3()
-        self.cardView.langLabel.text = "언어"
-        self.cardView.langLabel.textColor = UIColor.G3()
-        self.cardView.langButton.tintColor = UIColor.G3()
-        self.cardView.oldLabel.text = "경력"
-        self.cardView.oldLabel.textColor = UIColor.G3()
-        self.cardView.oldButton.tintColor = UIColor.G3()
     }
     //컬렉션뷰 셋업 메소드
     private func setupCollectionView() {
@@ -419,6 +379,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.cardView.oldLabel.textColor = UIColor.G3()
                 self.cardView.oldButton.tintColor = UIColor.G3()
                 print(self.cardView.partLabel.text!)
+                self.page = 0
                 updateLangDropDown(part: item)
                 
             } else if dropDown == self.langDropDown {
@@ -426,11 +387,15 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.cardView.langLabel.textColor = UIColor.P2()
                 self.cardView.langButton.tintColor = UIColor.P2()
                 print(self.cardView.partLabel.text!)
+                self.page = 0
+
                 
             } else if dropDown == self.oldDropDown {
                 self.cardView.oldLabel.text = item
                 self.cardView.oldLabel.textColor = UIColor.P2()
                 self.cardView.oldButton.tintColor = UIColor.P2()
+                self.page = 0
+
                 switch item {
                 case "전체":
                     self.oldIndex = 0
@@ -453,7 +418,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.contents.removeAll()
                 let part = self.cardView.partLabel.text != "전체" ? self.cardView.partLabel.text : " "
                 let lang = self.cardView.langLabel.text != "전체" ? self.cardView.langLabel.text : " "
-                self.loadCardDataFromAPI(part: part!, lang: lang!, old: self.oldIndex, page: 0)
+                self.loadCardDataFromAPI(part: part!, lang: lang!, old: self.oldIndex, page: self.page)
                 self.collectionView.reloadData()}
         }
         
