@@ -133,7 +133,8 @@ extension BoardRouter: BaseTargetType {
             let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: part, tag: tag, imageID: imageId)
             return .body(requestBody)
         case .deleteBoard(_, let boardId):
-            return .query(boardId)
+            let requestModel = heartRequestBody(boardID: boardId)
+            return .query(requestModel)
         case .requestWritePage:
             return .none
         case .saveHeart(_, let boardId):
