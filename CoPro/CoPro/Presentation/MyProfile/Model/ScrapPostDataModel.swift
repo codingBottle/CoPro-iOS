@@ -13,7 +13,7 @@ struct ScrapPostDataModel: Codable {
     let count: Int
     let createAt: String
     let heart: Int
-    let imageURL: String
+    let imageURL: String?
     let nickName: String
     let commentCount: Int
     
