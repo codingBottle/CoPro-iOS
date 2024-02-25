@@ -15,7 +15,7 @@ final class NotificationListAPI : BaseAPI {
 }
 extension NotificationListAPI {
     var baseURL: String { return Config.baseURL }
-    func getNotificationListData(completion: @escaping (Result<NotificationListDTO, AFError>) -> Void){
+    func getNotificationListData(page: Int,completion: @escaping (Result<NotificationListDTO, AFError>) -> Void){
         //keychain 토큰가저오기
         let keychain = KeychainSwift()
         guard let token = keychain.get("accessToken") else {
@@ -27,7 +27,7 @@ extension NotificationListAPI {
             "Accept": "application/json"
         ]
         let parameters: Parameters = [
-            "page":0,
+            "page":page,
             "size":10
             
         ]
