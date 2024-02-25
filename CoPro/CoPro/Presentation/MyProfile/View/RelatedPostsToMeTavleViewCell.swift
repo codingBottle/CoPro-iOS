@@ -25,6 +25,30 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     private let sawPostLabel = UILabel()
     private let commentCountIcon = UIImageView()
     private let commentCountLabel = UILabel()
+   
+   var imageUrl: String?
+   
+   func loadProfileImage(url: String) {
+      guard !url.isEmpty, let imageURL = URL(string: url) else {
+         postImage.backgroundColor = .red
+         postImage.removeFromSuperview()
+         return
+      }
+      postImage.kf.indicatorType = .none
+      postImage.kf.setImage(
+         with: imageURL,
+         placeholder: nil,
+         options: [
+//            .transition(.fade(1.0)),
+            .forceTransition,
+            .cacheOriginalImage,
+            .scaleFactor(UIScreen.main.scale),
+            
+         ],
+         completionHandler: nil
+      )
+      postImage.alpha = 0.7
+   }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,6 +60,10 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+   
+//   private func deleteImage() {
+//      
+//   }
     
     
     
@@ -58,10 +86,14 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             }
         }
 
-        postTitleLabel.do {
-           $0.setPretendardFont(text: "", size: 15, weight: .bold, letterSpacing: 1.22)
-           $0.numberOfLines = 0
-        }
+       //제목 글자 크기가 길이에 따라 최소크기까지 변하면 이상하길래 이와 같이 설정.
+       postTitleLabel.do {
+          $0.textColor = UIColor.Black()
+          $0.font = .pretendard(size: 15, weight: .bold)
+          
+          $0.lineBreakMode = .byTruncatingTail
+          $0.numberOfLines = 1
+       }
 
         likeCountIcon.do {
             $0.image = UIImage(systemName: "heart")
@@ -75,10 +107,11 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             $0.image = UIImage(systemName: "text.bubble")
         }
     }
+   
     
     private func setLayout() {
-       let width = UIScreen.main.bounds.width
-       let height = UIScreen.main.bounds.height
+//       let width = UIScreen.main.bounds.width
+//       let height = UIScreen.main.bounds.height
         
         addSubview(containerView)
         containerView.addSubviews(leftContainerView, postImage)
@@ -91,16 +124,24 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
         }
-        
+       
         leftContainerView.snp.makeConstraints {
             $0.top.bottom.leading.equalToSuperview()
-            $0.trailing.equalTo(postImage.snp.leading).offset(-25)
+           $0.trailing.equalTo(postImage.snp.leading).offset(-10)
         }
+       
+       postImage.snp.makeConstraints {
+//          $0.centerY.equalToSuperview()
+          $0.trailing.equalToSuperview()
+          $0.top.bottom.equalToSuperview().inset(3)
+          $0.width.equalTo(postImage.snp.height)
+       }
         
         //First Line
         postTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview()
+           $0.width.equalTo(280)
         }
         
         //secound Line
@@ -118,8 +159,8 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
             $0.leading.equalTo(postTitleLabel.snp.leading)
             $0.bottom.equalToSuperview()
-            $0.width.equalTo(width)
-            $0.height.equalTo(height)
+            $0.width.equalTo(20)
+            $0.height.equalTo(20)
         }
         likeCountLabel.snp.makeConstraints {
             $0.leading.equalTo(likeCountIcon.snp.trailing).offset(4)
@@ -129,8 +170,8 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             $0.top.equalTo(likeCountIcon.snp.top)
             $0.leading.equalTo(likeCountLabel.snp.trailing).offset(16)
             $0.bottom.equalTo(likeCountIcon.snp.bottom)
-            $0.width.equalTo(width)
-            $0.height.equalTo(height)
+            $0.width.equalTo(20)
+            $0.height.equalTo(20)
         }
         sawPostLabel.snp.makeConstraints {
             $0.leading.equalTo(sawPostIcon.snp.trailing).offset(4)
@@ -140,8 +181,8 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
             $0.top.equalTo(likeCountIcon.snp.top)
             $0.leading.equalTo(sawPostLabel.snp.trailing).offset(16)
             $0.bottom.equalTo(likeCountIcon.snp.bottom)
-            $0.width.equalTo(width)
-            $0.height.equalTo(height)
+            $0.width.equalTo(20)
+            $0.height.equalTo(20)
         }
         commentCountLabel.snp.makeConstraints {
             $0.leading.equalTo(commentCountIcon.snp.trailing).offset(4)
@@ -151,8 +192,8 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     
     
     func configureCellWritebyMe(_ data: WritebyMeDataModel) {
-//        postImage.image = data.imageUrl
-        postImage.image = nil
+//        postImage.image = data.imageUrlself
+       loadProfileImage(url: data.imageURL ?? "")
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName
         postTimeLabel.text = data.getWritebyMeDateString()
@@ -163,7 +204,7 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     
     func configureCellScrapPost(_ data: ScrapPostDataModel) {
 //        postImage.image = data.imageUrl
-        postImage.image = nil
+       loadProfileImage(url: data.imageURL ?? "")
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName
         postTimeLabel.text = data.getScrapPostDateString()

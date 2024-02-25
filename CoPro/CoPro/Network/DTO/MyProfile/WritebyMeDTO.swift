@@ -26,7 +26,7 @@ struct WritebyMeBoard: Codable {
     let id: Int
     let title, nickName, createAt: String
     let count, heart: Int
-    let imageURL: String
+    let imageURL: String?
     let commentCount: Int
 
     enum CodingKeys: String, CodingKey {

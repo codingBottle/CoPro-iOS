@@ -134,7 +134,7 @@ class MyContributionsViewController: BaseViewController {
                 case .success(let data):
                     if let data = data as? WritebyMeDTO {
                         self.myPostsData = data.data.boards.map {
-                            return WritebyMeDataModel(id: $0.id, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL, commentCount: $0.commentCount)
+                           return WritebyMeDataModel(id: $0.id, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL ?? "", commentCount: $0.commentCount)
                         }
                        print("🌊🌊🌊🌊🌊🌊🌊🌊myPostsData?.count : \(String(describing: self.myPostsData?.count))🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
                         
@@ -261,7 +261,7 @@ class MyContributionsViewController: BaseViewController {
                 case .success(let data):
                     if let data = data as? ScrapPostDTO {
                         self.scrapPostData = data.data.content.map {
-                            return ScrapPostDataModel(boardID: $0.boardID, title: $0.title, count: $0.count, createAt: $0.createAt, heart: $0.heart, imageURL: $0.imageURL, nickName: $0.nickName, commentCount: $0.commentCount)
+                           return ScrapPostDataModel(boardID: $0.boardID, title: $0.title, count: $0.count, createAt: $0.createAt, heart: $0.heart, imageURL: $0.imageURL ?? "", nickName: $0.nickName, commentCount: $0.commentCount)
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
