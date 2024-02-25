@@ -52,7 +52,8 @@ final class DetailBoardViewController: BaseViewController {
     private let tagStackView = UIStackView()
     private let chatButton = UIButton()
     private let contentStackView = UIStackView()
-    
+    private var isMyPost: Bool = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         getDetailBoard( boardId: postId!)
@@ -409,19 +410,46 @@ final class DetailBoardViewController: BaseViewController {
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         if #available(iOS 14.0, *) {
-            let menuItem1 = UIAction(title: "신고", attributes: .destructive) { action in
+            var menuItems : [UIAction] = [UIAction(title: "신고", attributes: .destructive) { action in
                 guard let boardId = self.postId else { return }
                 let bottomSheetVC = ReportBottomSheetViewController()
                 bottomSheetVC.postId = boardId
                 self.present(bottomSheetVC, animated: true, completion: nil)
+            }]
+            
+            if isMyPost {
+                let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
+                    self.presentDeleteConfirmationAlert()
+                }
+                print("😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛this is my post")
+                menuItems.append(deleteAction)
+            }
+            else {
+                print("😫this is not my post")
             }
             
-            let menu = UIMenu(title: "", children: [menuItem1])
-            
+            let menu = UIMenu(title: "", children: menuItems)
+
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
             navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
             
         }
+    }
+    func presentDeleteConfirmationAlert() {
+        let alertController = UIAlertController(title: nil, message: "게시물을 삭제하시겠습니까?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            self.deletePost()
+        }
+        alertController.addAction(deleteAction)
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    func deletePost() {
+        // 게시물 삭제 처리 코드를 여기에 작성하세요.
     }
     func getDetailBoard( boardId: Int) {
         if let token = self.keychain.get("accessToken") {
@@ -434,13 +462,13 @@ final class DetailBoardViewController: BaseViewController {
                         let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
-                        if data.data.nickName == self.keychain.get("currentUserNickName") {
+                        self.isMyPost = data.data.nickName == self.keychain.get("currentUserNickName")
+                        if self.isMyPost {
                             self.chatButton.isHidden = true
                         }
                         else {
                             self.chatButton.isHidden = false
                         }
-
                         DispatchQueue.main.async { [self] in
                             self.setUI()
                             switch mappedItem.category {

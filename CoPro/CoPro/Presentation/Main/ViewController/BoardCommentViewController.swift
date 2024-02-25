@@ -9,7 +9,7 @@ import UIKit
 import KeychainSwift
 import SnapKit
 
-class BoardCommentViewController: UIViewController {
+class BoardCommentViewController: UIViewController, UIGestureRecognizerDelegate {
     
     
     private lazy var tableView = UITableView()
@@ -36,6 +36,8 @@ class BoardCommentViewController: UIViewController {
         setRegister()
         setDelegate()
         addKeyboardObserver()
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
