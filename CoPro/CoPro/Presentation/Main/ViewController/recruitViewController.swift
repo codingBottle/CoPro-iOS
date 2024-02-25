@@ -165,11 +165,14 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailBoardViewController()
+        detailVC.delegate = self
         if indexPath.row < filteredPosts.count {
             print(filteredPosts[indexPath.row].title)
             print("\(filteredPosts[indexPath.row].boardId)")
             detailVC.postId = filteredPosts[indexPath.row].boardId
-            delegate?.didSelectItem(withId: detailVC.postId!)
+            let navigationController = UINavigationController(rootViewController: detailVC)
+            navigationController.modalPresentationStyle = .overFullScreen
+            self.present(navigationController, animated: true, completion: nil)
         } else {
             print("Invalid index")
             detailVC.postId = posts[indexPath.row].boardId
@@ -276,4 +279,14 @@ extension recruitViewController {
             return "create_at" // 기본값
         }
     }
+}
+
+extension recruitViewController: DetailViewControllerDelegate {
+    func didDeletePost() {
+        print("😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛")
+        offset = 1
+        posts.removeAll()
+        filteredPosts.removeAll()
+        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+       }
 }

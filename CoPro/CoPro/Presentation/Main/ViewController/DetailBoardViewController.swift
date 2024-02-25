@@ -12,6 +12,9 @@ import Then
 import KeychainSwift
 import Kingfisher
 
+protocol DetailViewControllerDelegate: AnyObject {
+    func didDeletePost()
+}
 
 final class DetailBoardViewController: BaseViewController {
     var postId: Int?
@@ -52,7 +55,9 @@ final class DetailBoardViewController: BaseViewController {
     private let tagStackView = UIStackView()
     private let chatButton = UIButton()
     private let contentStackView = UIStackView()
-    
+    private var isMyPost: Bool = false
+    weak var delegate: DetailViewControllerDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         getDetailBoard( boardId: postId!)
@@ -405,23 +410,24 @@ final class DetailBoardViewController: BaseViewController {
         }
     }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(popToMainViewController))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeButtonTapped))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
-        if #available(iOS 14.0, *) {
-            let menuItem1 = UIAction(title: "신고", attributes: .destructive) { action in
-                guard let boardId = self.postId else { return }
-                let bottomSheetVC = ReportBottomSheetViewController()
-                bottomSheetVC.postId = boardId
-                self.present(bottomSheetVC, animated: true, completion: nil)
-            }
-            
-            let menu = UIMenu(title: "", children: [menuItem1])
-            
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
-            navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
-            
+    }
+    func presentDeleteConfirmationAlert() {
+        let alertController = UIAlertController(title: nil, message: "게시물을 삭제하시겠습니까?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            guard let postId = self.postId else { return }
+            print("\(postId)")
+            self.deletePost(boardId: postId)
         }
+        alertController.addAction(deleteAction)
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     func getDetailBoard( boardId: Int) {
         if let token = self.keychain.get("accessToken") {
@@ -434,13 +440,41 @@ final class DetailBoardViewController: BaseViewController {
                         let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
-                        if data.data.nickName == self.keychain.get("currentUserNickName") {
+                        self.isMyPost = data.data.nickName == self.keychain.get("currentUserNickName")
+                        if #available(iOS 14.0, *) {
+                            var menuItems : [UIAction] = [UIAction(title: "신고", attributes: .destructive) { action in
+                                guard let boardId = self.postId else { return }
+                                let bottomSheetVC = ReportBottomSheetViewController()
+                                bottomSheetVC.postId = boardId
+                                self.present(bottomSheetVC, animated: true, completion: nil)
+                            }]
+                            
+                            if self.isMyPost {
+//                                let editAction = UIAction(title: "수정") { action in
+//                                    self.presentDeleteConfirmationAlert()
+//                                }
+//                                menuItems.append(editAction)
+                                let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
+                                    self.presentDeleteConfirmationAlert()
+                                }
+                                menuItems.append(deleteAction)
+                            }
+                            else {
+                                print("😫this is not my post")
+                            }
+                            
+                            let menu = UIMenu(title: "", children: menuItems)
+
+                            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
+                            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
+                            
+                        }
+                        if self.isMyPost {
                             self.chatButton.isHidden = true
                         }
                         else {
                             self.chatButton.isHidden = false
                         }
-
                         DispatchQueue.main.async { [self] in
                             self.setUI()
                             switch mappedItem.category {
@@ -593,6 +627,32 @@ final class DetailBoardViewController: BaseViewController {
             }
         }
     }
+    func deletePost( boardId: Int) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.deleteBoard(token: token, boardId: boardId) { result in
+                switch result {
+                case .success:
+                    print("delete success")
+                    self.delegate?.didDeletePost()
+                    self.dismiss(animated: true, completion: nil)
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
     func updateView(with data: DetailBoardDataModel) {
         titleLabel.text = data.title
         nicknameLabel.text = data.nickName
@@ -637,11 +697,9 @@ final class DetailBoardViewController: BaseViewController {
             }
         }
     }
-    
-    @objc
-    func popToMainViewController() {
-        self.navigationController?.popViewController(animated: true)
-    }
+    @objc private func closeButtonTapped() {
+            dismiss(animated: true, completion: nil)
+        }
     @objc
     func pushToCommentViewController() {
         self.navigationController?.popViewController(animated: true)

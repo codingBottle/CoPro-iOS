@@ -104,7 +104,7 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
         contentLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(30)
             $0.trailing.equalToSuperview()
-            $0.top.equalTo(nicknameLabel.snp.bottom).offset(8)
+//            $0.top.equalTo(nicknameLabel.snp.bottom).offset(8)
             $0.centerY.equalToSuperview()
         }
         dateLabel.snp.makeConstraints {
@@ -114,7 +114,7 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
         }
         timeLabel.snp.makeConstraints {
             $0.leading.equalTo(dateLabel.snp.trailing).offset(5)
-            $0.top.equalTo(dateLabel.snp.top)
+            $0.centerY.equalTo(dateLabel.snp.centerY)
         }
     }
     func configureCell(_ data: DisplayComment) {

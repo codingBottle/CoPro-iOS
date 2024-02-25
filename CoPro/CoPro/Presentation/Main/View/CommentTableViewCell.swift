@@ -109,7 +109,7 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         nicknameLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.leading.equalToSuperview()
-            $0.bottom.equalTo(contentLabel.snp.top).offset(-4)
+//            $0.bottom.equalTo(contentLabel.snp.top).offset(-4)
         }
         jobLabel.snp.makeConstraints {
             $0.leading.equalTo(nicknameLabel.snp.trailing).offset(5)
@@ -127,7 +127,7 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         }
         timeLabel.snp.makeConstraints {
             $0.leading.equalTo(dateLabel.snp.trailing).offset(5)
-            $0.top.equalTo(dateLabel.snp.top)
+            $0.centerY.equalTo(dateLabel.snp.centerY)
         }
         recommentButton.snp.makeConstraints {
             $0.leading.equalTo(timeLabel.snp.trailing).offset(5)
