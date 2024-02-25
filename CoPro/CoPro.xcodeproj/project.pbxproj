@@ -144,6 +144,12 @@
 		9E98F2F52B4FA46B00A6756A /* MyProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */; };
 		9E98F2F72B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */; };
 		9E98F2F92B5145A300A6756A /* ProfileImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */; };
+		9EF2EE202B8BC3B500C87DDC /* OppositeInfoCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE1F2B8BC3B500C87DDC /* OppositeInfoCardViewController.swift */; };
+		9EF2EE242B8BCBB500C87DDC /* OppositeInfoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE232B8BCBB500C87DDC /* OppositeInfoDTO.swift */; };
+		9EF2EE272B8BCC2200C87DDC /* OppositeInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE262B8BCC2200C87DDC /* OppositeInfoAPI.swift */; };
+		9EF2EE2A2B8BCCB100C87DDC /* ChatRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE292B8BCCB100C87DDC /* ChatRouter.swift */; };
+		9EF2EE2C2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE2B2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift */; };
+		9EF2EE2E2B8BD58100C87DDC /* OppositeInfoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE2D2B8BD58100C87DDC /* OppositeInfoCardView.swift */; };
 		B517514E2B427161003453B5 /* CardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B517514D2B427161003453B5 /* CardDTO.swift */; };
 		B58A4A632B68F82C00793160 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */; };
 		B58A4A642B68F82C00793160 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5B2B68F82C00793160 /* Pretendard-Bold.otf */; };
@@ -359,6 +365,12 @@
 		9E98F2F42B4FA46B00A6756A /* MyProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileTableViewCell.swift; sourceTree = "<group>"; };
 		9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTypeSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		9E98F2F82B5145A300A6756A /* ProfileImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageTableViewCell.swift; sourceTree = "<group>"; };
+		9EF2EE1F2B8BC3B500C87DDC /* OppositeInfoCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OppositeInfoCardViewController.swift; sourceTree = "<group>"; };
+		9EF2EE232B8BCBB500C87DDC /* OppositeInfoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OppositeInfoDTO.swift; sourceTree = "<group>"; };
+		9EF2EE262B8BCC2200C87DDC /* OppositeInfoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OppositeInfoAPI.swift; sourceTree = "<group>"; };
+		9EF2EE292B8BCCB100C87DDC /* ChatRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRouter.swift; sourceTree = "<group>"; };
+		9EF2EE2B2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OppositeInfoRequestBody.swift; sourceTree = "<group>"; };
+		9EF2EE2D2B8BD58100C87DDC /* OppositeInfoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OppositeInfoCardView.swift; sourceTree = "<group>"; };
 		B517514D2B427161003453B5 /* CardDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDTO.swift; sourceTree = "<group>"; };
 		B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
 		B58A4A5B2B68F82C00793160 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
@@ -664,6 +676,7 @@
 		9E05D2C82AD5094A00F4CA43 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				9EF2EE252B8BCBDD00C87DDC /* Chat */,
 				9E5C369B2B8390C40091884C /* Notification */,
 				B5B5110F2B7B6B5100A1B74D /* Login */,
 				B58B8D312B4D3C4800FB98F9 /* Card */,
@@ -677,6 +690,7 @@
 		9E05D2C92AD5094E00F4CA43 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
+				9EF2EE212B8BCB8100C87DDC /* Chat */,
 				9E5C36942B838FCA0091884C /* Notification */,
 				B5B511122B7B6D5A00A1B74D /* Login */,
 				B58B8D342B4D3EC100FB98F9 /* Card */,
@@ -850,6 +864,7 @@
 				9E7401EA2B3C18FD0030C8EC /* ChannelTableViewCell.swift */,
 				9E7401E82B3C18FD0030C8EC /* CustomAvatarView.swift */,
 				9E7401EB2B3C18FD0030C8EC /* CustomMessageContentCell.swift */,
+				9EF2EE2D2B8BD58100C87DDC /* OppositeInfoCardView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -859,6 +874,7 @@
 			children = (
 				9E7401D62B3C18040030C8EC /* ChannelViewController.swift */,
 				9E7401D82B3C187F0030C8EC /* ChatViewController.swift */,
+				9EF2EE1F2B8BC3B500C87DDC /* OppositeInfoCardViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -866,6 +882,7 @@
 		9E76B89B2AFB4E4F00338E2C /* Router */ = {
 			isa = PBXGroup;
 			children = (
+				9EF2EE282B8BCCA400C87DDC /* ChatRouter */,
 				9E5C36912B838F9C0091884C /* NotificationRouter */,
 				9E5C36162B7F8E2C0091884C /* LoginRouter */,
 				9E8FB6F02B5CF59700C02028 /* MyProfileRouter */,
@@ -972,6 +989,31 @@
 				9E05D2D42AD509B100F4CA43 /* ViewController */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		9EF2EE212B8BCB8100C87DDC /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				9EF2EE232B8BCBB500C87DDC /* OppositeInfoDTO.swift */,
+				9EF2EE2B2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		9EF2EE252B8BCBDD00C87DDC /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				9EF2EE262B8BCC2200C87DDC /* OppositeInfoAPI.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		9EF2EE282B8BCCA400C87DDC /* ChatRouter */ = {
+			isa = PBXGroup;
+			children = (
+				9EF2EE292B8BCCB100C87DDC /* ChatRouter.swift */,
+			);
+			path = ChatRouter;
 			sourceTree = "<group>";
 		};
 		B543E5252AFB71AF00937662 /* Login */ = {
@@ -1505,9 +1547,12 @@
 				E32B671E2B566C4100EBB5AC /* BoardAPI.swift in Sources */,
 				E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */,
 				E363D5C42B60D8B100FE6A9C /* CommentDataModel.swift in Sources */,
+				9EF2EE242B8BCBB500C87DDC /* OppositeInfoDTO.swift in Sources */,
 				E3CEC8442B7BA73E00ABEBF5 /* imageUploadDTO.swift in Sources */,
+				9EF2EE2A2B8BCCB100C87DDC /* ChatRouter.swift in Sources */,
 				9E05D2F42AD5224500F4CA43 /* UIViewController++.swift in Sources */,
 				B5B511112B7B6B6400A1B74D /* LoginAPI.swift in Sources */,
+				9EF2EE2E2B8BD58100C87DDC /* OppositeInfoCardView.swift in Sources */,
 				9E76B89E2AFB4E6700338E2C /* BaseRouter.swift in Sources */,
 				E3E2B83B2B7DFC650022E5D0 /* SearchResultViewController.swift in Sources */,
 				9E5C369A2B83902E0091884C /* FcmTokenRequestBody.swift in Sources */,
@@ -1528,6 +1573,7 @@
 				9E0B9CAD2B6BFAE400A5EACB /* WritebyMeDataModel.swift in Sources */,
 				B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */,
 				E32B67402B56EE6300EBB5AC /* SearchBoardRequestBody.swift in Sources */,
+				9EF2EE2C2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift in Sources */,
 				9E5C36A12B847D370091884C /* ChattingNotificationDTO.swift in Sources */,
 				E36717BB2B70B39200CBCD8B /* AlbumManager.swift in Sources */,
 				9E05D2AE2AD508B200F4CA43 /* AppDelegate.swift in Sources */,
@@ -1569,6 +1615,7 @@
 				B5F1C27B2B8655CD00791595 /* NotificationListDTO.swift in Sources */,
 				9E7401ED2B3C18FD0030C8EC /* Sender.swift in Sources */,
 				9E7401C82B3BF4B80030C8EC /* UIImage++.swift in Sources */,
+				9EF2EE202B8BC3B500C87DDC /* OppositeInfoCardViewController.swift in Sources */,
 				9E98F2F32B4A49DC00A6756A /* MyProfileView.swift in Sources */,
 				9E05D2F62AD5225600F4CA43 /* UITextField++.swift in Sources */,
 				B5B5110D2B74CCE400A1B74D /* SlideCardView.swift in Sources */,
@@ -1618,6 +1665,7 @@
 				E37AE8052B3C2878002ABDCD /* RadioButton.swift in Sources */,
 				E37AE7F82B3C2747002ABDCD /* noticeBoardTableViewCell.swift in Sources */,
 				B5B5110B2B74CCE400A1B74D /* MiniCardGridView.swift in Sources */,
+				9EF2EE272B8BCC2200C87DDC /* OppositeInfoAPI.swift in Sources */,
 				B5B511002B74CA1000A1B74D /* BottomTabController.swift in Sources */,
 				E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */,
 				E3D6D15A2AEFACCF003269FF /* BaseTargetType.swift in Sources */,
