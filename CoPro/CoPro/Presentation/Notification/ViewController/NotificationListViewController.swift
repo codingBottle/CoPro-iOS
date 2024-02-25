@@ -10,16 +10,17 @@ import SnapKit
 import Then
 
 class NotificationListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+    var currentPage = 0
+    var scrollLast = false
     private let tableView = UITableView().then {
         $0.separatorStyle = .singleLine
-        $0.backgroundColor = .clear
+        $0.backgroundColor = UIColor.White()
         $0.register(NotificationListCell.self, forCellReuseIdentifier: "NotificationListCell")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor.White()
         self.view.addSubview(tableView)
         
         tableView.snp.makeConstraints {
@@ -29,20 +30,24 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
         // 테이블 뷰 델리게이트 및 데이터 소스 설정
         tableView.delegate = self
         tableView.dataSource = self
-        getNotificationListData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getNotificationListData()
+        self.view.backgroundColor = UIColor.White()
+        currentPage = 0
+        contents.removeAll()
+        getNotificationListData(page: currentPage)
+        
     }
     var contents: [NotificationListDataContent] = []
-    func getNotificationListData() {
-        NotificationListAPI.shared.getNotificationListData { [weak self] result in
+    func getNotificationListData(page: Int) {
+        NotificationListAPI.shared.getNotificationListData(page: currentPage) { [weak self] result in
             switch result {
             case .success(let data):
                 self?.contents.append(contentsOf: data.data.content)
                 print(data.data.content)
                 print(self?.contents.count)
+                self?.scrollLast = data.data.last
                 self?.tableView.reloadData()
             case .failure(let error):
                 print(error)
@@ -60,6 +65,23 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
         // 배열이 비어있는지 체크
         if indexPath.row < contents.count {
             cell.titleLabel.text = self.contents[indexPath.row].message
+            
+            if let dateString = self.contents[indexPath.row].createAt {
+                // 널이 아닌 경우에만 실행
+                
+                let prefixIndex = dateString.index(dateString.startIndex, offsetBy: 5)
+                let suffixIndex = dateString.index(dateString.startIndex, offsetBy: 16)
+                
+                let formattedString = String(dateString[prefixIndex..<suffixIndex]).replacingOccurrences(of: "T", with: " ")
+                
+                // 변환된 문자열 사용
+                print("Time Label \(formattedString)")
+                cell.timeLabel.text = formattedString
+            } else {
+                // 널인 경우에 대한 처리
+                print("createAt is nil")
+                cell.timeLabel.text = self.contents[indexPath.row].createAt
+            }
         } else {
             cell.titleLabel.text = "No Data"
         }
@@ -75,12 +97,24 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // 각 셀의 높이를 지정해줌
-        return 50.0 // 적절한 높이로 수정
+        return 60.0 // 적절한 높이로 수정
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // 셀 하단에 구분선 추가
         let separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         cell.separatorInset = separatorInset
     }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let scrollViewHeight = scrollView.frame.size.height
+        
+        // 스크롤이 끝에 도달하면 추가 데이터 로드
+        if self.scrollLast != true && offsetY > contentHeight - scrollViewHeight {
+            currentPage += 1
+            getNotificationListData(page: currentPage)
+        }
+    }
+
     
 }
