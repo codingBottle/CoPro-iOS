@@ -429,6 +429,22 @@ final class DetailBoardViewController: BaseViewController {
         
         present(alertController, animated: true, completion: nil)
     }
+    func presentEditVC() {
+        let alertController = UIAlertController(title: nil, message: "게시물을 삭제하시겠습니까?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            guard let postId = self.postId else { return }
+            print("\(postId)")
+            self.deletePost(boardId: postId)
+        }
+        alertController.addAction(deleteAction)
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+
     func getDetailBoard( boardId: Int) {
         if let token = self.keychain.get("accessToken") {
             print("\(token)")
@@ -450,10 +466,10 @@ final class DetailBoardViewController: BaseViewController {
                             }]
                             
                             if self.isMyPost {
-//                                let editAction = UIAction(title: "수정") { action in
-//                                    self.presentDeleteConfirmationAlert()
-//                                }
-//                                menuItems.append(editAction)
+                                let editAction = UIAction(title: "수정") { action in
+                                    self.presentEditVC()
+                                }
+                                menuItems.append(editAction)
                                 let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
                                     self.presentDeleteConfirmationAlert()
                                 }

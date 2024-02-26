@@ -235,7 +235,6 @@ extension noticeViewController {
 
 extension noticeViewController: DetailViewControllerDelegate {
     func didDeletePost() {
-        print("😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛")
         offset = 1
         posts.removeAll()
         filteredPosts.removeAll()

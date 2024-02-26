@@ -121,7 +121,6 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         nicknameLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.leading.equalToSuperview()
-//            $0.bottom.equalTo(contentLabel.snp.top).offset(-4)
         }
         jobLabel.snp.makeConstraints {
             $0.leading.equalTo(nicknameLabel.snp.trailing).offset(5)

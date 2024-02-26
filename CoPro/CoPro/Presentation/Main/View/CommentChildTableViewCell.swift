@@ -24,6 +24,9 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
     private let recommentButton = UIButton()
+    weak var delegate: CustomCellDelegate?
+    private let menuButton = UIButton()
+    var commentId: Int?
     var levelConstraint = NSLayoutConstraint()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -80,7 +83,19 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
             $0.contentHorizontalAlignment = .right
             $0.setTitle("답글쓰기", for: .normal)
         }
+        menuButton.do {
+            $0.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+            $0.addTarget(self, action: #selector(menubuttonTapped(_: )), for: .touchUpInside)
+            $0.tintColor = UIColor.G4()
+        }
     }
+    @objc func menubuttonTapped(_ sender: UIButton) {
+        print("menu button tapped")
+        if let commentId = commentId {
+            delegate?.menuButtonTapped(commentId: commentId, commentContent: contentLabel.text ?? "")
+        }
+    }
+    
     private func setLayout() {
 //        addSubviews(cellStackView)
 //        cellStackView.addArrangedSubviews(nameJobStackView,contentLabel,dateTimeStackView)
@@ -123,5 +138,13 @@ final class commentChildTableViewCell: UITableViewCell, UICollectionViewDelegate
         contentLabel.text = data.comment.content
         dateLabel.text = data.comment.getDateString()
         timeLabel.text = data.comment.getTimeString()
+        commentId = data.comment.commentId
+    }
+    func configMenu() {
+        addSubview(menuButton)
+        menuButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview()
+        }
     }
 }

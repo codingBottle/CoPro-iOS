@@ -47,13 +47,13 @@ class editCommentViewController: UIViewController {
             $0.isLayoutMarginsRelativeArrangement = true
         }
         remainCountLabel.do {
-            $0.text = "0/500"
+            $0.text = "0/100"
             $0.font = .pretendard(size: 11, weight: .regular)
             $0.textColor = .G4()
             $0.textAlignment = .center
         }
         warnLabel.do {
-            $0.text = "500자 이내로 간단히 입력해주세요."
+            $0.text = "100자 이내로 간단히 입력해주세요."
             $0.font = .pretendard(size: 11, weight: .regular)
             $0.textColor = .G4()
         }
@@ -128,7 +128,7 @@ extension editCommentViewController: UITextViewDelegate {
         let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
 
         let characterCount = newString.count
-        guard characterCount <= 500 else { return false }
+        guard characterCount <= 100 else { return false }
         updateCountLabel(characterCount: characterCount)
 
         return true
@@ -140,7 +140,7 @@ extension editCommentViewController: UITextViewDelegate {
         }
 
         private func updateCountLabel(characterCount: Int) {
-            remainCountLabel.text = "\(characterCount)/500"
+            remainCountLabel.text = "\(characterCount)/100"
         }
 }
 

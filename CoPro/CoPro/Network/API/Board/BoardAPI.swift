@@ -539,7 +539,7 @@ extension BoardAPI {
                                     DispatchQueue.main.async {
                                         self.AFManager.request(BoardRouter.deleteComment(token: loginDTO.data.accessToken, boardId: boardId)).responseData { response in
                                             self.disposeNetwork(response,
-                                                                dataModel: CommentDTO.self,
+                                                                dataModel: VoidDTO.self,
                                                                 completion: completion)
                                             
                                         }
@@ -550,11 +550,11 @@ extension BoardAPI {
                             }
                         } else {
                             // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                            self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                            self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
                         }
                     } else {
                         // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
-                        self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                        self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
                     }
         }
     }
@@ -571,7 +571,7 @@ extension BoardAPI {
                                     DispatchQueue.main.async {
                                         self.AFManager.request(BoardRouter.editComment(token: loginDTO.data.accessToken, boardId: boardId, contents: content)).responseData { response in
                                             self.disposeNetwork(response,
-                                                                dataModel: CommentDTO.self,
+                                                                dataModel: EditCommentDTO.self,
                                                                 completion: completion)
                                             
                                         }
@@ -582,11 +582,11 @@ extension BoardAPI {
                             }
                         } else {
                             // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                            self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                            self.disposeNetwork(response, dataModel: EditCommentDTO.self, completion: completion)
                         }
                     } else {
                         // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
-                        self.disposeNetwork(response, dataModel: CommentDTO.self, completion: completion)
+                        self.disposeNetwork(response, dataModel: EditCommentDTO.self, completion: completion)
                     }
         }
     }

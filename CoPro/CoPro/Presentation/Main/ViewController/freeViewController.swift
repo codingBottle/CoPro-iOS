@@ -274,7 +274,6 @@ extension freeViewController {
 
 extension freeViewController: DetailViewControllerDelegate {
     func didDeletePost() {
-        print("😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛")
         offset = 1
         posts.removeAll()
         filteredPosts.removeAll()

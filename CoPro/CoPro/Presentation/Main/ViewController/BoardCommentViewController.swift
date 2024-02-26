@@ -194,10 +194,11 @@ extension BoardCommentViewController {
                         }
                         self.comments.append(contentsOf: self.flattenComments(mappedData, level: 0))
                         self.filteredComments = self.comments
-                        
-                        // 테이블 뷰 업데이트
-                        self.tableView.reloadData()
-                        self.isInfiniteScroll = !data.data.last
+                        DispatchQueue.main.async {
+                            // 테이블 뷰 업데이트
+                            self.tableView.reloadData()
+                            self.isInfiniteScroll = !data.data.last
+                        }
                     } else {
                                             print("Failed to decode the response.")
                                         }
@@ -276,36 +277,12 @@ extension BoardCommentViewController {
             print("\(token)")
             BoardAPI.shared.deleteComment(token: token, boardId: boardId) { result in
                 switch result {
-                case .success(let data):
-                    if let data = data as? CommentDTO {
-                        let serverData = data.data.content
-                        var mappedData: [CommentData] = []
-                        
-                        for serverItem in serverData {
-                            
-                            let writerData = WriterData(nickName: serverItem.writer?.nickName ?? "", occupation: serverItem.writer?.occupation ?? "")
-                            
-                            var childrenData: [CommentData]?
-                            if !serverItem.children.isEmpty {
-                                childrenData = serverItem.children.map { child in
-                                    let childWriterData = WriterData(nickName: child.writer?.nickName ?? "", occupation: child.writer?.occupation ?? "")
-                                    return CommentData(parentId: child.parentID, commentId: child.commentID, createAt: child.createAt, content: child.content, writer: childWriterData, children: nil)
-                                }
-                            }
-                            
-                            let mappedItem = CommentData(parentId: serverItem.parentID, commentId: serverItem.commentID, createAt: serverItem.createAt, content: serverItem.content, writer: writerData, children: childrenData)
-                            mappedData.append(mappedItem)
-                        }
-                        self.comments = self.flattenComments(mappedData, level: 0)
-                        self.filteredComments = self.comments
-                        
-                        // 테이블 뷰 업데이트
-                        self.tableView.reloadData()
-                        self.isInfiniteScroll = !data.data.last
-                    } else {
-                                            print("Failed to decode the response.")
-                                        }
-                    print("success")
+                case .success:
+                    print("🐖🐖🐖🐖🐖🐖🐖🐖🐖🐖 success")
+                        self.offset = 1
+                        self.comments.removeAll()
+                        self.filteredComments.removeAll()
+                        self.getAllComment(boardId: self.postId ?? 1, page: self.offset)
                 case .requestErr(let message):
                     print("Request error: \(message)")
                     
@@ -329,36 +306,13 @@ extension BoardCommentViewController {
             print("\(token)")
             BoardAPI.shared.editComment(token: token, boardId: boardId, content: content) { result in
                 switch result {
-                case .success(let data):
-                    if let data = data as? CommentDTO {
-                        let serverData = data.data.content
-                        var mappedData: [CommentData] = []
-                        
-                        for serverItem in serverData {
-                            
-                            let writerData = WriterData(nickName: serverItem.writer?.nickName ?? "", occupation: serverItem.writer?.occupation ?? "")
-                            
-                            var childrenData: [CommentData]?
-                            if !serverItem.children.isEmpty {
-                                childrenData = serverItem.children.map { child in
-                                    let childWriterData = WriterData(nickName: child.writer?.nickName ?? "", occupation: child.writer?.occupation ?? "")
-                                    return CommentData(parentId: child.parentID, commentId: child.commentID, createAt: child.createAt, content: child.content, writer: childWriterData, children: nil)
-                                }
-                            }
-                            
-                            let mappedItem = CommentData(parentId: serverItem.parentID, commentId: serverItem.commentID, createAt: serverItem.createAt, content: serverItem.content, writer: writerData, children: childrenData)
-                            mappedData.append(mappedItem)
-                        }
-                        self.comments = self.flattenComments(mappedData, level: 0)
-                        self.filteredComments = self.comments
-                        
-                        // 테이블 뷰 업데이트
-                        self.tableView.reloadData()
-                        self.isInfiniteScroll = !data.data.last
-                    } else {
-                                            print("Failed to decode the response.")
-                                        }
-                    print("success")
+                case .success:
+                    DispatchQueue.main.async {
+                        self.offset = 1
+                        self.comments.removeAll()
+                        self.filteredComments.removeAll()
+                        self.getAllComment(boardId: self.postId ?? 1, page: self.offset)
+                    }
                 case .requestErr(let message):
                     print("Request error: \(message)")
                     
@@ -419,7 +373,11 @@ extension BoardCommentViewController: UITableViewDelegate, UITableViewDataSource
                 return UITableViewCell()
             }
             cell.configureCell(comment)
-            
+            cell.delegate = self
+            let currentUserNickName = keychain.get("currentUserNickName")
+            if comment.comment.writer.nickName == currentUserNickName {
+                cell.configMenu()
+            }
             return cell
         }
     }
