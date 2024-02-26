@@ -26,7 +26,7 @@ class NotificationListCell: UITableViewCell {
         }
         
         let timeLabel = UILabel().then {
-            $0.font = UIFont.systemFont(ofSize: 12)
+            $0.setPretendardFont(text: "", size: 9, weight: .regular, letterSpacing: 1.25)
             $0.textColor = .lightGray
             $0.textAlignment = .right
         }
@@ -45,7 +45,8 @@ class NotificationListCell: UITableViewCell {
             contentView.addSubview(titleLabel)
             contentView.addSubview(iconImageView)
 //            contentView.addSubview(messageLabel)
-//            contentView.addSubview(timeLabel)
+            contentView.addSubview(timeLabel)
+            contentView.backgroundColor = UIColor.White()
         }
 
         private func setLayoutConstraints() {
@@ -65,7 +66,11 @@ class NotificationListCell: UITableViewCell {
 //                $0.leading.trailing.equalTo(titleLabel)
 //            }
 //
-//            timeLabel.snp.makeConstraints {
-//                $0.top.trailing.equalToSuperview().offset(10)
-//            }
+            timeLabel.snp.makeConstraints {
+//                $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+//                $0.left.equalTo(iconImageView.snp.right).offset(10)
+//                $0.centerY.equalToSuperview()
+                $0.trailing.equalToSuperview().offset(-15)
+                $0.bottom.equalToSuperview().offset(-10)
+            }
         }}

@@ -12,7 +12,7 @@ struct WritebyMeDataModel: Codable {
     let id: Int
     let title, nickName, createAt: String
     let count, heart: Int
-    let imageURL: String
+    let imageURL: String?
     let commentCount: Int
     
     init(id: Int, title: String, nickName: String, createAt: String, count: Int, heart: Int, imageURL: String, commentCount: Int) {

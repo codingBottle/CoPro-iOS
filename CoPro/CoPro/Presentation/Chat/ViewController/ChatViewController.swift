@@ -16,6 +16,7 @@ import KeychainSwift
 
 class ChatViewController: MessagesViewController {
     
+   let alertVC = OppositeInfoCardViewController()
    let keychain = KeychainSwift()
 //   var customAvatarView = CustomAvatarView()
    var avatarView: AvatarView?
@@ -92,25 +93,34 @@ class ChatViewController: MessagesViewController {
           $0.setPretendardFont(text: channel.receiverJobTitle, size: 11, weight: .regular, letterSpacing: 1)
           $0.textAlignment = .center
        }
+       
 
         let titleView = UIView()
         titleView.addSubview(titleLabel)
         titleView.addSubview(subtitleLabel)
+       
+       titleView.snp.makeConstraints {
+           $0.width.equalTo(110)
+          $0.height.equalTo(40)
+           $0.centerX.equalTo(titleLabel)
+       }
+       
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
+           $0.height.equalTo(23)
         }
         
         subtitleLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(3)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(0)
+//            $0.bottom.equalToSuperview().offset(0)
+           $0.height.equalTo(13)
         }
        
-       titleView.snp.makeConstraints {
-           $0.width.equalTo(titleLabel.snp.width)
-           $0.centerX.equalTo(titleLabel.snp.centerX)
-       }
+       let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(titleViewTapped))
+           titleView.isUserInteractionEnabled = true
+           titleView.addGestureRecognizer(tapGestureRecognizer)
 
         navigationItem.titleView = titleView
     }
@@ -182,6 +192,42 @@ class ChatViewController: MessagesViewController {
             }
         }
     }
+   
+   private func loadOppositeInfo(email: String) {
+       guard let token = self.keychain.get("accessToken") else {return}
+         
+       OppositeInfoAPI.shared.getOppositeInfo(token: token, email: email) { result in
+           switch result {
+           case .success(let data):
+               DispatchQueue.main.async {
+                   let alertVC = OppositeInfoCardViewController()
+                   if let data = data as? OppositeInfoDTO {
+                       let data = data.data
+                       alertVC.oppositeInfoCardViewConfigure(with: data.picture, nickname: data.nickName, occupation: data.occupation, language: data.language, likeCount: data.likeMembersCount, isLike: data.isLikeMembers)
+                       
+                       // API 호출이 성공적으로 끝나고 나서 present를 합니다.
+                       self.present(alertVC, animated: true, completion: nil)
+                   } else {
+                       print("Failed to decode the response.")
+                   }
+               }
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("Another Error")
+           default:
+               break
+           }
+       }
+   }
+   
+   @objc func titleViewTapped() {
+       print("Title view tapped")
+       loadOppositeInfo(email: targetEmail ?? "")
+   }
+   
     
     @objc private func didTapCameraButton() {
         let picker = UIImagePickerController()
@@ -194,6 +240,8 @@ class ChatViewController: MessagesViewController {
         }
         present(picker, animated: true)
     }
+   
+   
 }
 
 extension ChatViewController: MessagesDataSource {

@@ -51,15 +51,18 @@ class NotificationListData: Codable {
 class NotificationListDataContent: Codable {
     let message: String
     let boardID: Int?
-
+    let createAt: String?
+    
     enum CodingKeys: String, CodingKey {
         case message
         case boardID = "boardId"
+        case createAt
     }
 
-    init(message: String, boardID: Int) {
+    init(message: String, boardID: Int, createAt: String) {
         self.message = message
         self.boardID = boardID
+        self.createAt = createAt
     }
 }
 
