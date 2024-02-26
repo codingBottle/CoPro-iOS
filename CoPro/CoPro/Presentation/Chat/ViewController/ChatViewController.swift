@@ -203,8 +203,8 @@ class ChatViewController: MessagesViewController {
                    let alertVC = OppositeInfoCardViewController()
                    if let data = data as? OppositeInfoDTO {
                        let data = data.data
-                       alertVC.oppositeInfoCardViewConfigure(with: data.picture, nickname: data.nickName, occupation: data.occupation, language: data.language, likeCount: data.likeMembersCount, isLike: data.isLikeMembers)
-                       
+                      alertVC.oppositeInfoCardViewConfigure(with: data.picture, nickname: data.nickName, occupation: data.occupation, language: data.language, likeCount: data.likeMembersCount, isLike: data.isLikeMembers, memberID: data.memberID)
+                      alertVC.modalPresentationStyle = .formSheet
                        // API 호출이 성공적으로 끝나고 나서 present를 합니다.
                        self.present(alertVC, animated: true, completion: nil)
                    } else {
