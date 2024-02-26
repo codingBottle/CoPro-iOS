@@ -18,6 +18,8 @@ enum BoardRouter {
     case addPhoto(token: String, images: [UIImage])
     case addPost(token: String, title: String, category: String, contents: String, imageid: [Int])
     case addProjectPost(token: String, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
+    case editProjectPost(token: String, boardId: Int, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
+
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
     case saveHeart(token: String, boardId: Int)
@@ -29,6 +31,9 @@ enum BoardRouter {
 //    case sortLikes(token: String)
     case getAllComment(token: String, boardId: Int, page: Int)
     case addComment(token: String,boardId: Int, parentId: Int, contents: String)
+    case editComment(token: String, boardId: Int, contents: String)
+    case deleteComment(token: String,boardId: Int)
+
 }
 
 extension BoardRouter: BaseTargetType {
@@ -49,6 +54,8 @@ extension BoardRouter: BaseTargetType {
             return .post
         case .addProjectPost:
             return .post
+        case .editProjectPost:
+            return .put
         case .deleteBoard:
             return .delete
         case .requestWritePage:
@@ -71,6 +78,10 @@ extension BoardRouter: BaseTargetType {
             return .get
         case .addComment:
             return .post
+        case .editComment:
+            return .put
+        case .deleteComment:
+            return .delete
         }
     }
     
@@ -87,6 +98,8 @@ extension BoardRouter: BaseTargetType {
         case .addPost:
             return "/api/board"
         case .addProjectPost:
+            return "/api/board"
+        case .editProjectPost:
             return "/api/board"
         case .deleteBoard:
             return "/api/board"
@@ -110,6 +123,10 @@ extension BoardRouter: BaseTargetType {
             return "/api/comment/\(boardId)/comments"
         case .addComment(_, let boardId, _, _):
             return "/api/comment/\(boardId)"
+        case .editComment(_, let boardId, _):
+            return "/api/comment/\(boardId)"
+        case .deleteComment(_, let boardId):
+            return "/api/comment/\(boardId)"
         }
     }
     var parameters: RequestParams {
@@ -132,6 +149,9 @@ extension BoardRouter: BaseTargetType {
         case .addProjectPost(_, let title, let category, let contents, let part,let tag, let imageId):
             let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: part, tag: tag, imageID: imageId)
             return .body(requestBody)
+        case .editProjectPost(_, let boardId, let title, let category, let contents, let part, let tag, let imageId):
+            let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: part, tag: tag, imageID: imageId)
+            return .both(boardId, _parameter: requestBody)
         case .deleteBoard(_, let boardId):
             let requestModel = heartRequestBody(boardID: boardId)
             return .query(requestModel)
@@ -163,6 +183,11 @@ extension BoardRouter: BaseTargetType {
         case .addComment(_, _, let parentId, let content):
             let requestModel = addCommentRequestBody(parentId: parentId, content: content)
             return .body(requestModel)
+        case .editComment(_, _, let contents):
+            let requesetModel = editCommentRequestBody(content: contents)
+            return .body(requesetModel)
+        case .deleteComment:
+            return .none
         }
     }
     
@@ -179,6 +204,8 @@ extension BoardRouter: BaseTargetType {
         case .addPost(let token, _, _, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .addProjectPost(let token, _, _, _, _, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .editProjectPost(let token, _, _, _, _,_, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .deleteBoard(let token, _):
             return ["Authorization": "Bearer \(token)"]
@@ -201,6 +228,10 @@ extension BoardRouter: BaseTargetType {
         case .getAllComment(let token, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .addComment(let token, _, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .editComment(let token, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .deleteComment(let token, _):
             return ["Authorization": "Bearer \(token)"]
         }
     }

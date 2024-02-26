@@ -13,6 +13,7 @@ protocol AddPostViewControllerDelegate: AnyObject {
     func didPostArticle()
 }
 
+
 class AddPostViewController: UIViewController, SendStringData {
     func sendData(mydata: String, groupId: Int) {
         sortLabel.text = mydata

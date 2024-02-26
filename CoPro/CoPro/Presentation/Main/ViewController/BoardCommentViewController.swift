@@ -11,7 +11,6 @@ import SnapKit
 
 class BoardCommentViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    
     private lazy var tableView = UITableView()
     private let keychain = KeychainSwift()
     private var filteredComments: [DisplayComment]!
@@ -195,10 +194,11 @@ extension BoardCommentViewController {
                         }
                         self.comments.append(contentsOf: self.flattenComments(mappedData, level: 0))
                         self.filteredComments = self.comments
-                        
-                        // 테이블 뷰 업데이트
-                        self.tableView.reloadData()
-                        self.isInfiniteScroll = !data.data.last
+                        DispatchQueue.main.async {
+                            // 테이블 뷰 업데이트
+                            self.tableView.reloadData()
+                            self.isInfiniteScroll = !data.data.last
+                        }
                     } else {
                                             print("Failed to decode the response.")
                                         }
@@ -272,6 +272,65 @@ extension BoardCommentViewController {
             }
         }
     }
+    func deleteComment( boardId: Int) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.deleteComment(token: token, boardId: boardId) { result in
+                switch result {
+                case .success:
+                    print("🐖🐖🐖🐖🐖🐖🐖🐖🐖🐖 success")
+                        self.offset = 1
+                        self.comments.removeAll()
+                        self.filteredComments.removeAll()
+                        self.getAllComment(boardId: self.postId ?? 1, page: self.offset)
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                    
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
+    func editComment( boardId: Int, content: String) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.editComment(token: token, boardId: boardId, content: content) { result in
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.offset = 1
+                        self.comments.removeAll()
+                        self.filteredComments.removeAll()
+                        self.getAllComment(boardId: self.postId ?? 1, page: self.offset)
+                    }
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                    
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
 }
     
 extension BoardCommentViewController: UITableViewDelegate, UITableViewDataSource {
@@ -303,6 +362,10 @@ extension BoardCommentViewController: UITableViewDelegate, UITableViewDataSource
             }
             cell.configureCell(comment)
             cell.delegate = self
+            let currentUserNickName = keychain.get("currentUserNickName")
+            if comment.comment.writer.nickName == currentUserNickName {
+                cell.configMenu()
+            }
             return cell
         }
         else {
@@ -310,7 +373,11 @@ extension BoardCommentViewController: UITableViewDelegate, UITableViewDataSource
                 return UITableViewCell()
             }
             cell.configureCell(comment)
-            
+            cell.delegate = self
+            let currentUserNickName = keychain.get("currentUserNickName")
+            if comment.comment.writer.nickName == currentUserNickName {
+                cell.configMenu()
+            }
             return cell
         }
     }
@@ -378,8 +445,46 @@ extension BoardCommentViewController {
 }
 
 extension BoardCommentViewController: CustomCellDelegate {
+    func menuButtonTapped(commentId: Int, commentContent: String) {
+        self.commentId = commentId
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+            let action1 = UIAlertAction(title: "수정", style: .default) { _ in
+                let editCommentVC = editCommentViewController()
+                editCommentVC.commentId = commentId
+                editCommentVC.originalComment = commentContent
+                editCommentVC.delegate = self
+                let navigationController = UINavigationController(rootViewController: editCommentVC)
+                navigationController.modalPresentationStyle = .overFullScreen
+                self.present(navigationController, animated: true, completion: nil)
+            }
+            let action2 = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                self.deleteComment(boardId: commentId)
+            }
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+            alertController.addAction(action1)
+            alertController.addAction(action2)
+            alertController.addAction(cancelAction)
+
+//            // iPad에서는 popover로 표시되어야 하므로 popover의 sourceView와 sourceRect를 설정해야 합니다.
+//            if let popoverController = alertController.popoverPresentationController {
+//                popoverController.sourceView = sender
+//                popoverController.sourceRect = sender.bounds
+//            }
+
+            self.present(alertController, animated: true, completion: nil)
+    }
+    
     func buttonTapped(commentId: Int) {
         self.commentId = commentId
         print("data received")
     }
+}
+
+extension BoardCommentViewController: editCommentViewControllerDelegate{
+    func editComment(_ commentId: Int, _ comment: String) {
+        editComment(boardId: commentId, content: comment)
+    }
+
 }

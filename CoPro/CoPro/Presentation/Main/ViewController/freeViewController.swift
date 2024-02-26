@@ -274,10 +274,9 @@ extension freeViewController {
 
 extension freeViewController: DetailViewControllerDelegate {
     func didDeletePost() {
-        print("😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛")
         offset = 1
         posts.removeAll()
         filteredPosts.removeAll()
-        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+        getAllBoard(category: "자유", page: offset, standard: getStandard())
        }
 }

@@ -45,3 +45,10 @@ struct ContentElement: Codable {
 struct Writer: Codable {
     let nickName, occupation: String
 }
+
+struct EditCommentDTO: Codable {
+    let statusCode: Int
+    let message: String
+    let data: ContentElement
+}
+

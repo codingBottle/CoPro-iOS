@@ -120,7 +120,7 @@ extension noticeViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         cell.configureCell(post)
-        
+        cell.hideComment()
         return cell
     }
 
@@ -235,10 +235,9 @@ extension noticeViewController {
 
 extension noticeViewController: DetailViewControllerDelegate {
     func didDeletePost() {
-        print("😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛😛")
         offset = 1
         posts.removeAll()
         filteredPosts.removeAll()
-        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+        getAllBoard(category: "공지사항", page: offset, standard: getStandard())
        }
 }

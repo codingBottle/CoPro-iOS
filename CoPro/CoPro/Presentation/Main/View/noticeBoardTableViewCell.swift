@@ -90,6 +90,13 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.textColor = UIColor.G4()
         }
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        postImage.kf.cancelDownloadTask() // first, cancel currenct download task
+        postImage.kf.setImage(with: URL(string: "")) // second, prevent kingfisher from setting previous image
+        postImage.image = nil
+    }
+    
     private func setLayout() {
         addSubviews(postImage, postTitleLabel, writerNameLabel, postDateLabel, postTimeLabel, likeCountIcon ,likeCountLabel,sawPostIcon ,sawPostLabel, commentCountIcon, commentCountLabel)
         
@@ -146,7 +153,7 @@ class noticeBoardTableViewCell: UITableViewCell {
         if let imageUrl = data.imageUrl, let url = URL(string: imageUrl) {
             postImage.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
         } else {
-            postImage.backgroundColor = .White()
+            postImage.image = nil
         }
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName
@@ -157,6 +164,10 @@ class noticeBoardTableViewCell: UITableViewCell {
         commentCountLabel.text = "\(data.commentCount)"
     }
     
+    func hideComment() {
+        commentCountIcon.isHidden = true
+        commentCountLabel.isHidden = true
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
     }

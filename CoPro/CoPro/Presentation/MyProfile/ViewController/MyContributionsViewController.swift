@@ -367,20 +367,26 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
       switch activeCellType {
       case .post:
           print("post")
-         let detailVC = DetailBoardViewController()
+          let detailVC = DetailBoardViewController()
+        detailVC.delegate = self
          let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
          if let id = self.myPostsData?[reverseIndex].id {
             detailVC.postId = id
-            self.navigationController?.pushViewController(detailVC, animated: true)
+             let navigationController = UINavigationController(rootViewController: detailVC)
+             navigationController.modalPresentationStyle = .overFullScreen
+             self.present(navigationController, animated: true, completion: nil)
          }
           
       case .scrap:
          print("scrap")
-         let detailVC = DetailBoardViewController()
+          let detailVC = DetailBoardViewController()
+        detailVC.delegate = self
          let reverseIndex = (scrapPostData?.count ?? 0) - 1 - indexPath.row
          if let id = self.scrapPostData?[reverseIndex].boardID {
-            detailVC.postId = id
-            self.navigationController?.pushViewController(detailVC, animated: true)
+             detailVC.postId = id
+              let navigationController = UINavigationController(rootViewController: detailVC)
+              navigationController.modalPresentationStyle = .overFullScreen
+              self.present(navigationController, animated: true, completion: nil)
          }
           
       case .comment:
@@ -396,4 +402,24 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
                    self.navigationController?.popViewController(animated: true)
                }
            }
+}
+
+extension MyContributionsViewController: DetailViewControllerDelegate {
+    func didDeletePost() {
+        switch activeCellType {
+        case .post:
+           tableView.estimatedRowHeight = 110
+            self.navigationItem.title = "작성한 게시물"
+            getWriteByMe()
+        case .comment:
+           tableView.estimatedRowHeight = 65
+            self.navigationItem.title = "작성한 댓글"
+            getMyWrittenComment()
+            
+        case .scrap:
+           tableView.estimatedRowHeight = 110
+            self.navigationItem.title = "저장한 게시물"
+            getScrapPost()
+        }
+    }
 }

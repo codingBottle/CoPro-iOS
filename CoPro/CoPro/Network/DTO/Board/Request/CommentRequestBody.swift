@@ -13,3 +13,7 @@ struct addCommentRequestBody: Encodable {
     let parentId: Int
     let content: String
 }
+
+struct editCommentRequestBody: Encodable {
+    let content: String
+}
