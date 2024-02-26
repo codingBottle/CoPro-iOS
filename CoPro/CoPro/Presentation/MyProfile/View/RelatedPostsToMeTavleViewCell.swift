@@ -131,10 +131,11 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
         }
        
        postImage.snp.makeConstraints {
-//          $0.centerY.equalToSuperview()
+          $0.centerY.equalToSuperview()
           $0.trailing.equalToSuperview()
-          $0.top.bottom.equalToSuperview().inset(3)
+//          $0.top.bottom.equalToSuperview().inset(3)
           $0.width.equalTo(postImage.snp.height)
+          $0.height.equalTo(70)
        }
         
         //First Line

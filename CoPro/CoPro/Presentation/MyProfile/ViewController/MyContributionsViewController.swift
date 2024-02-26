@@ -108,25 +108,13 @@ class MyContributionsViewController: BaseViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    
-    
-    
     override func setLayout() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
-    
-//    private func returnTableCellHeight() -> CGFloat {
-//        switch activeCellType {
-//        case .post, .scrap:
-//            return 100
-//        case .comment:
-//            return 65
-//        }
-//    }
-    
+   
     private func getWriteByMe() {
         if let token = self.keychain.get("accessToken") {
             MyProfileAPI.shared.getWritebyMe(token: token) { result in
@@ -373,10 +361,32 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
             return cell
         }
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return returnTableCellHeight()
-//    }
+   
+   // 셀 클릭시 이벤트 (추후 detailVC에서 분기처리 필요)
+   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      switch activeCellType {
+      case .post:
+          print("post")
+         let detailVC = DetailBoardViewController()
+         let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
+         if let id = self.myPostsData?[reverseIndex].id {
+            detailVC.postId = id
+            self.navigationController?.pushViewController(detailVC, animated: true)
+         }
+          
+      case .scrap:
+         print("scrap")
+         let detailVC = DetailBoardViewController()
+         let reverseIndex = (scrapPostData?.count ?? 0) - 1 - indexPath.row
+         if let id = self.scrapPostData?[reverseIndex].boardID {
+            detailVC.postId = id
+            self.navigationController?.pushViewController(detailVC, animated: true)
+         }
+          
+      case .comment:
+         print("댓글은 이동없음")
+      }
+   }
    
    @objc func backButtonTapped() {
                
