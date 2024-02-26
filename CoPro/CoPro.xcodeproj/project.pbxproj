@@ -211,6 +211,7 @@
 		B5F1C2772B864D0000791595 /* NotificationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2762B864D0000791595 /* NotificationListCell.swift */; };
 		B5F1C2792B86550900791595 /* NotificationListAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2782B86550900791595 /* NotificationListAPI.swift */; };
 		B5F1C27B2B8655CD00791595 /* NotificationListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C27A2B8655CD00791595 /* NotificationListDTO.swift */; };
+		E3111E662B8C3BA300756886 /* editCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3111E652B8C3BA300756886 /* editCommentViewController.swift */; };
 		E314AD152B5CD1CE00BDB6AD /* DetailBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */; };
 		E314AD172B5CD98100BDB6AD /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */; };
 		E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */; };
@@ -395,6 +396,7 @@
 		B5F1C2762B864D0000791595 /* NotificationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListCell.swift; sourceTree = "<group>"; };
 		B5F1C2782B86550900791595 /* NotificationListAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListAPI.swift; sourceTree = "<group>"; };
 		B5F1C27A2B8655CD00791595 /* NotificationListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListDTO.swift; sourceTree = "<group>"; };
+		E3111E652B8C3BA300756886 /* editCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editCommentViewController.swift; sourceTree = "<group>"; };
 		E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardViewController.swift; sourceTree = "<group>"; };
 		E314AD162B5CD98100BDB6AD /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		E314AD182B5E735300BDB6AD /* DetailBoardDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardDataModel.swift; sourceTree = "<group>"; };
@@ -1268,6 +1270,7 @@
 				E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */,
 				E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */,
 				E37B20982B72311600308158 /* BoardCommentViewController.swift */,
+				E3111E652B8C3BA300756886 /* editCommentViewController.swift */,
 				E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */,
 			);
 			path = ViewController;
@@ -1610,6 +1613,7 @@
 				9E98F2F92B5145A300A6756A /* ProfileImageTableViewCell.swift in Sources */,
 				9E05D2B02AD508B200F4CA43 /* SceneDelegate.swift in Sources */,
 				9E05D2CF2AD5098200F4CA43 /* API.swift in Sources */,
+				E3111E662B8C3BA300756886 /* editCommentViewController.swift in Sources */,
 				E3E2B83F2B7F2AB10022E5D0 /* ImageUploader.swift in Sources */,
 				E3E2B8492B8258DD0022E5D0 /* AddProjectPostViewController.swift in Sources */,
 				E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */,

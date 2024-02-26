@@ -12,8 +12,8 @@ import Then
 
 protocol CustomCellDelegate: AnyObject {
     func buttonTapped(commentId: Int)
+    func menuButtonTapped(commentId: Int)
 }
-
 final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     
     //MARK: - UI Components
@@ -29,6 +29,7 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
     private let recommentButton = UIButton()
+    private let menuButton = UIButton()
     var levelConstraint = NSLayoutConstraint()
     var commentId: Int?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -81,11 +82,16 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             $0.font = .pretendard(size: 12, weight: .regular)
         }
         recommentButton.do {
-            $0.setTitleColor(UIColor.G2(), for: .normal)
+            $0.setTitleColor(UIColor.Black(), for: .normal)
             $0.titleLabel?.font = UIFont.pretendard(size: 12, weight: .regular)
             $0.contentHorizontalAlignment = .right
             $0.setTitle("답글쓰기", for: .normal)
             $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
+        }
+        menuButton.do {
+            $0.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+            $0.addTarget(self, action: #selector(menubuttonTapped(_: )), for: .touchUpInside)
+            $0.tintColor = UIColor.G4()
         }
     }
     
@@ -95,6 +101,12 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
             print("data sent\(commentId)")
         }
     }
+    @objc func menubuttonTapped(_ sender: UIButton) {
+        if let commentId = commentId {
+            delegate?.menuButtonTapped(commentId: commentId)
+        }
+    }
+
     private func setLayout() {
 //        addSubviews(cellStackView)
 //        cellStackView.addArrangedSubviews(nameJobStackView,contentLabel,dateTimeStackView)
@@ -141,5 +153,12 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         dateLabel.text = data.comment.getDateString()
         timeLabel.text = data.comment.getTimeString()
         commentId = data.comment.commentId
+    }
+    func configMenu() {
+        addSubview(menuButton)
+        menuButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview()
+        }
     }
 }

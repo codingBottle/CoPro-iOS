@@ -29,6 +29,9 @@ enum BoardRouter {
 //    case sortLikes(token: String)
     case getAllComment(token: String, boardId: Int, page: Int)
     case addComment(token: String,boardId: Int, parentId: Int, contents: String)
+    case editComment(token: String, boardId: Int, contents: String)
+    case deleteComment(token: String,boardId: Int)
+
 }
 
 extension BoardRouter: BaseTargetType {
@@ -71,6 +74,10 @@ extension BoardRouter: BaseTargetType {
             return .get
         case .addComment:
             return .post
+        case .editComment:
+            return .put
+        case .deleteComment:
+            return .delete
         }
     }
     
@@ -109,6 +116,10 @@ extension BoardRouter: BaseTargetType {
         case .getAllComment(_, let boardId, _):
             return "/api/comment/\(boardId)/comments"
         case .addComment(_, let boardId, _, _):
+            return "/api/comment/\(boardId)"
+        case .editComment(_, let boardId, _):
+            return "/api/comment/\(boardId)"
+        case .deleteComment(_, let boardId):
             return "/api/comment/\(boardId)"
         }
     }
@@ -163,6 +174,11 @@ extension BoardRouter: BaseTargetType {
         case .addComment(_, _, let parentId, let content):
             let requestModel = addCommentRequestBody(parentId: parentId, content: content)
             return .body(requestModel)
+        case .editComment(_, _, let contents):
+            let requesetModel = editCommentRequestBody(content: contents)
+            return .body(requesetModel)
+        case .deleteComment:
+            return .none
         }
     }
     
@@ -201,6 +217,10 @@ extension BoardRouter: BaseTargetType {
         case .getAllComment(let token, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .addComment(let token, _, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .editComment(let token, _, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .deleteComment(let token, _):
             return ["Authorization": "Bearer \(token)"]
         }
     }
