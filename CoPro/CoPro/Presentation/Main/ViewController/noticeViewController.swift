@@ -120,7 +120,7 @@ extension noticeViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         cell.configureCell(post)
-        
+        cell.hideComment()
         return cell
     }
 

@@ -159,7 +159,7 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         cell.configureCell(post)
-        
+        cell.hideComment()
         return cell
     }
 
