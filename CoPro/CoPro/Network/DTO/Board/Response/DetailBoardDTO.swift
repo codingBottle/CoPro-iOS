@@ -21,12 +21,13 @@ struct BoardData: Codable {
    let category, contents, part,tag: String?
    let count: Int
    let heart: Int
+    let imageId: [Int]?
    let imageUrl: [String]?
    let nickName: String?
    let occupation: String?
    let isHeart: Bool
    let isScrap: Bool
    let commentCount: Int
-   let email: String
-   let picture: String
+   let email: String?
+   let picture: String?
 }

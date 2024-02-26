@@ -21,3 +21,15 @@ struct CreatePostRequestBody: Codable {
 struct uploadImageRequestBody: Codable {
     let files: [String]
 }
+
+// MARK: - ImageUploadDTO
+struct EditPostDTO: Codable {
+    let title, category, contents, part: String
+    let tag: String
+    let imageID: [Int]
+
+    enum CodingKeys: String, CodingKey {
+        case title, category, contents, part, tag
+        case imageID = "imageId"
+    }
+}
