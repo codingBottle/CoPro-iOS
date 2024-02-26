@@ -262,6 +262,7 @@
 		E3C64F932B634F87000BB5D6 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */; };
 		E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */; };
 		E3C64F972B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */; };
+		E3CACA352B8CDAF00028A76C /* EditProjectPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CACA342B8CDAF00028A76C /* EditProjectPostViewController.swift */; };
 		E3CEC8442B7BA73E00ABEBF5 /* imageUploadDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CEC8432B7BA73E00ABEBF5 /* imageUploadDTO.swift */; };
 		E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1552AEFACA3003269FF /* URLConst.swift */; };
 		E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D6D1572AEFACB6003269FF /* NetworkResult.swift */; };
@@ -454,6 +455,7 @@
 		E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeartDataModel.swift; sourceTree = "<group>"; };
 		E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBottomSheetViewController.swift; sourceTree = "<group>"; };
+		E3CACA342B8CDAF00028A76C /* EditProjectPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProjectPostViewController.swift; sourceTree = "<group>"; };
 		E3CEC8432B7BA73E00ABEBF5 /* imageUploadDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageUploadDTO.swift; sourceTree = "<group>"; };
 		E3D6D1552AEFACA3003269FF /* URLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConst.swift; sourceTree = "<group>"; };
 		E3D6D1572AEFACB6003269FF /* NetworkResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResult.swift; sourceTree = "<group>"; };
@@ -1314,6 +1316,7 @@
 				E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */,
 				E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */,
 				E37D36622B8CB52200FFEF57 /* EditPostViewController.swift */,
+				E3CACA342B8CDAF00028A76C /* EditProjectPostViewController.swift */,
 				E37B20982B72311600308158 /* BoardCommentViewController.swift */,
 				E3111E652B8C3BA300756886 /* editCommentViewController.swift */,
 				E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */,
@@ -1580,6 +1583,7 @@
 				B5D3E4F42AFB73B00021DDA0 /* LoginView.swift in Sources */,
 				E32B67402B56EE6300EBB5AC /* SearchBoardRequestBody.swift in Sources */,
 				9EF2EE2C2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift in Sources */,
+				E3CACA352B8CDAF00028A76C /* EditProjectPostViewController.swift in Sources */,
 				9E5C36A12B847D370091884C /* ChattingNotificationDTO.swift in Sources */,
 				E36717BB2B70B39200CBCD8B /* AlbumManager.swift in Sources */,
 				9E05D2AE2AD508B200F4CA43 /* AppDelegate.swift in Sources */,

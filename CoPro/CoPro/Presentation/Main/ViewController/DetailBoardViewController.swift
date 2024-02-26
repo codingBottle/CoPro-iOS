@@ -57,6 +57,9 @@ final class DetailBoardViewController: BaseViewController {
     private let contentStackView = UIStackView()
     private var isMyPost: Bool = false
     private var category: String?
+    private var imageUrl = [String]()
+    private var imageId = [Int]()
+
     weak var delegate: DetailViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -431,28 +434,28 @@ final class DetailBoardViewController: BaseViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-//    func presentEditVC() {
-//        switch category {
-//        case "프로젝트":
-//            print("project Button")
-//            let editVC = EditPostViewController()
-//            editVC.delegate = self
-//            editVC.editRecruitVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "")
-//            let navigationController = UINavigationController(rootViewController: editVC)
-//            navigationController.modalPresentationStyle = .overFullScreen
-//            self.present(navigationController, animated: true, completion: nil)
-//        case "자유":
-//            let editVC = EditPostViewController()
-//            editVC.delegate = self
-//            editVC.editFreeVC(title: titleLabel.text ?? "", content: contentLabel.text ?? "")
-//            let navigationController = UINavigationController(rootViewController: editVC)
-//            navigationController.modalPresentationStyle = .overFullScreen
-//            self.present(navigationController, animated: true, completion: nil)
-//        default:
-//            break
-//        }
-//        guard let postId = self.postId else { return }
-//    }
+    func presentEditVC() {
+        switch category {
+        case "프로젝트":
+            print("project Button")
+            let editVC = EditProjectPostViewController()
+            editVC.delegate = self
+            editVC.editProjectVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "", defaultRadio: tagLabel.text ?? "")
+            let navigationController = UINavigationController(rootViewController: editVC)
+            navigationController.modalPresentationStyle = .overFullScreen
+            self.present(navigationController, animated: true, completion: nil)
+        case "자유":
+            let editVC = EditPostViewController()
+            editVC.delegate = self
+            editVC.editFreeVC(title: titleLabel.text ?? "", content: contentLabel.text ?? "", imageId: imageId, imageUrl: imageUrl)
+            let navigationController = UINavigationController(rootViewController: editVC)
+            navigationController.modalPresentationStyle = .overFullScreen
+            self.present(navigationController, animated: true, completion: nil)
+        default:
+            break
+        }
+        guard let postId = self.postId else { return }
+    }
 
     func getDetailBoard( boardId: Int) {
         if let token = self.keychain.get("accessToken") {
@@ -462,7 +465,10 @@ final class DetailBoardViewController: BaseViewController {
                 case .success(let data):
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
+                        if let validImageId = data.data.imageId {
+                            self.imageId = validImageId
+                        }
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email ?? "" , picture: data.data.picture ?? "")
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
                         self.isMyPost = data.data.nickName == self.keychain.get("currentUserNickName")
@@ -475,10 +481,10 @@ final class DetailBoardViewController: BaseViewController {
                             }]
                             
                             if self.isMyPost {
-//                                let editAction = UIAction(title: "수정") { action in
-//                                    self.presentEditVC()
-//                                }
-//                                menuItems.append(editAction)
+                                let editAction = UIAction(title: "수정") { action in
+                                    self.presentEditVC()
+                                }
+                                menuItems.append(editAction)
                                 let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
                                     self.presentDeleteConfirmationAlert()
                                 }
@@ -701,25 +707,27 @@ final class DetailBoardViewController: BaseViewController {
         
         // 받은 모든 URL을 UIImageView로 생성하여 UIScrollView에 추가
         var xOffset: CGFloat = 0
-        for url in data.imageUrl! {
-            // 비동기적으로 이미지 로드
-            let imageView = UIImageView()
-            imageView.kf.indicatorType = .activity
-            imageView.kf.setImage(with: URL(string:url), placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
-            DispatchQueue.main.async {
-                // 이미지 뷰 생성 및 추가
-                imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
-                self.imageScrollView.addSubview(imageView)
-                self.imageViews.append(imageView)
-                imageView.do {
-                    $0.layer.cornerRadius = 10
-                    $0.clipsToBounds = true
+        if let imageUrl = data.imageUrl {
+            for url in imageUrl {
+                // 비동기적으로 이미지 로드
+                let imageView = UIImageView()
+                imageView.kf.indicatorType = .activity
+                imageView.kf.setImage(with: URL(string:url), placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
+                DispatchQueue.main.async {
+                    // 이미지 뷰 생성 및 추가
+                    imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
+                    self.imageScrollView.addSubview(imageView)
+                    self.imageViews.append(imageView)
+                    imageView.do {
+                        $0.layer.cornerRadius = 10
+                        $0.clipsToBounds = true
+                    }
+                    
+                    xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
+                    
+                    // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
+                    self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
                 }
-                
-                xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
-                
-                // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
-                self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
             }
         }
     }
@@ -848,8 +856,7 @@ extension DetailBoardViewController: editPostViewControllerDelegate {
             editProjectPost(title: title, boardId: postId ?? 1, category: category, content: content, image: image, tag: tag, part: part)
             
         case "자유":
-            let editVC = AddPostViewController()
-            present(editVC, animated: true, completion: nil)
+            editPost(title: title, boardId: postId!, category: category, content: content, image: image, tag: tag, part: part)
             
         default:
             break
@@ -869,7 +876,7 @@ extension DetailBoardViewController: editPostViewControllerDelegate {
                 case .success(let data):
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email ?? "nil" , picture: data.data.picture ?? "nil")
                         DispatchQueue.main.async {
                             self.updateView(with: mappedItem)
                         }
@@ -894,12 +901,13 @@ extension DetailBoardViewController: editPostViewControllerDelegate {
     func editPost( title: String, boardId: Int,category: String, content: String, image: [Int], tag: String, part: String) {
         if let token = self.keychain.get("accessToken") {
             print("\(token)")
-            BoardAPI.shared.editProjectPost(token: token, boardId: boardId, title: title, category: category, contents: content, imageId: image, tag: tag, part: part){ result in
+            BoardAPI.shared.editPost(token: token, boardId: boardId, title: title, category: category, contents: content, imageId: image, tag: tag, part: part){ result in
                 switch result {
                 case .success(let data):
+                    print("🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷")
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data
-                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email ?? "nil" , picture: data.data.picture ?? "nil")
                         DispatchQueue.main.async {
                             self.updateView(with: mappedItem)
                         }

@@ -14,12 +14,11 @@ enum BoardRouter {
     case reportBoard(token: String, boardId: Int, contents: String)
     case getAllBoard(token: String, category: String, page: Int, standard: String)
     case getDetailBoard(token: String, boardId: Int)
-    case editBoard(token: String, boardId: Int, requestBody: CreatePostRequestBody)
     case addPhoto(token: String, images: [UIImage])
     case addPost(token: String, title: String, category: String, contents: String, imageid: [Int])
     case addProjectPost(token: String, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
     case editProjectPost(token: String, boardId: Int, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
-
+    case editBoard(token: String, boardId: Int, title: String, Category: String, Content: String, part: String, tag: String, imageId: [Int])
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
     case saveHeart(token: String, boardId: Int)
@@ -137,8 +136,11 @@ extension BoardRouter: BaseTargetType {
         case .getDetailBoard(_, let boardId):
             let requestModel = DetailBoardRequestBody(boardID: boardId)
             return .query(requestModel)
-        case .editBoard(_, let boardId, let requestBody):
-            return .both(boardId, _parameter: requestBody)
+        case .editBoard(_, let boardId, let title, let Category, let Content, let part, let tag, let imageId):
+            let requestModel1 = DetailBoardRequestBody(boardID: boardId)
+
+            let requestModel2 = EditPostDTO(title: title, category: Category, contents: Content, part: part, tag: tag, imageID: imageId)
+            return .both(requestModel1, _parameter: requestModel2)
         case .addPhoto(_, let images):
             let base64Images = images.compactMap { $0.jpegData(compressionQuality: 1.0)?.base64EncodedString() }
             let requestModel = uploadImageRequestBody(files: base64Images)
@@ -197,7 +199,7 @@ extension BoardRouter: BaseTargetType {
             return ["Authorization": "Bearer \(token)"]
         case .getDetailBoard(let token, _):
             return ["Authorization": "Bearer \(token)"]
-        case .editBoard(let token, _, _):
+        case .editBoard(let token, _, _, _, _, _, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .addPhoto(let token, _):
             return ["Authorization": "Bearer \(token)"]
