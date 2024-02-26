@@ -56,8 +56,9 @@ final class DetailBoardViewController: BaseViewController {
     private let chatButton = UIButton()
     private let contentStackView = UIStackView()
     private var isMyPost: Bool = false
+    private var category: String?
     weak var delegate: DetailViewControllerDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getDetailBoard( boardId: postId!)
@@ -151,7 +152,7 @@ final class DetailBoardViewController: BaseViewController {
             $0.textColor = UIColor.Black()
             $0.font = .pretendard(size: 17, weight: .regular)
             $0.numberOfLines = 0
-//            $0.lineBreakMode = .byCharWrapping
+            //            $0.lineBreakMode = .byCharWrapping
         }
         heartButton.do {_ in
             if isHeart {
@@ -429,21 +430,29 @@ final class DetailBoardViewController: BaseViewController {
         
         present(alertController, animated: true, completion: nil)
     }
-    func presentEditVC() {
-        let alertController = UIAlertController(title: nil, message: "게시물을 삭제하시겠습니까?", preferredStyle: .alert)
-        
-        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
-            guard let postId = self.postId else { return }
-            print("\(postId)")
-            self.deletePost(boardId: postId)
-        }
-        alertController.addAction(deleteAction)
-        
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
-        present(alertController, animated: true, completion: nil)
-    }
+    
+//    func presentEditVC() {
+//        switch category {
+//        case "프로젝트":
+//            print("project Button")
+//            let editVC = EditPostViewController()
+//            editVC.delegate = self
+//            editVC.editRecruitVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "")
+//            let navigationController = UINavigationController(rootViewController: editVC)
+//            navigationController.modalPresentationStyle = .overFullScreen
+//            self.present(navigationController, animated: true, completion: nil)
+//        case "자유":
+//            let editVC = EditPostViewController()
+//            editVC.delegate = self
+//            editVC.editFreeVC(title: titleLabel.text ?? "", content: contentLabel.text ?? "")
+//            let navigationController = UINavigationController(rootViewController: editVC)
+//            navigationController.modalPresentationStyle = .overFullScreen
+//            self.present(navigationController, animated: true, completion: nil)
+//        default:
+//            break
+//        }
+//        guard let postId = self.postId else { return }
+//    }
 
     func getDetailBoard( boardId: Int) {
         if let token = self.keychain.get("accessToken") {
@@ -466,10 +475,10 @@ final class DetailBoardViewController: BaseViewController {
                             }]
                             
                             if self.isMyPost {
-                                let editAction = UIAction(title: "수정") { action in
-                                    self.presentEditVC()
-                                }
-                                menuItems.append(editAction)
+//                                let editAction = UIAction(title: "수정") { action in
+//                                    self.presentEditVC()
+//                                }
+//                                menuItems.append(editAction)
                                 let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
                                     self.presentDeleteConfirmationAlert()
                                 }
@@ -493,7 +502,8 @@ final class DetailBoardViewController: BaseViewController {
                         }
                         DispatchQueue.main.async { [self] in
                             self.setUI()
-                            switch mappedItem.category {
+                            category = mappedItem.category
+                            switch category {
                             case "프로젝트":
                                 self.setLayoutProject()
                             case "자유":
@@ -788,6 +798,88 @@ final class DetailBoardViewController: BaseViewController {
                 self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
                                message: "채팅 리스트에서 확인하여주세요",
                                confirmButtonName: "확인")
+            }
+        }
+    }
+}
+
+extension DetailBoardViewController: editPostViewControllerDelegate {
+    func didEditPost(title: String, category: String, content: String, image: [Int], tag: String, part: String) {
+        switch category {
+        case "프로젝트":
+            editProjectPost(title: title, boardId: postId ?? 1, category: category, content: content, image: image, tag: tag, part: part)
+            
+        case "자유":
+            let editVC = AddPostViewController()
+            present(editVC, animated: true, completion: nil)
+            
+        default:
+            break
+        }
+        guard let postId = self.postId else { return }
+    }
+    
+    func didPostArticle() {
+        print("post completed")
+    }
+    
+    func editProjectPost( title: String, boardId: Int,category: String, content: String, image: [Int], tag: String, part: String) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.editProjectPost(token: token, boardId: boardId, title: title, category: category, contents: content, imageId: image, tag: tag, part: part){ result in
+                switch result {
+                case .success(let data):
+                    if let data = data as? DetailBoardDTO{
+                        let serverData = data.data
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
+                        DispatchQueue.main.async {
+                            self.updateView(with: mappedItem)
+                        }
+                    }
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
+    func editPost( title: String, boardId: Int,category: String, content: String, image: [Int], tag: String, part: String) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.editProjectPost(token: token, boardId: boardId, title: title, category: category, contents: content, imageId: image, tag: tag, part: part){ result in
+                switch result {
+                case .success(let data):
+                    if let data = data as? DetailBoardDTO{
+                        let serverData = data.data
+                        let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email , picture: data.data.picture)
+                        DispatchQueue.main.async {
+                            self.updateView(with: mappedItem)
+                        }
+                    }
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
             }
         }
     }

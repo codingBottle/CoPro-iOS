@@ -258,6 +258,7 @@
 		E37B20992B72311600308158 /* BoardCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B20982B72311600308158 /* BoardCommentViewController.swift */; };
 		E37B209B2B7252C900308158 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B209A2B7252C900308158 /* CommentDTO.swift */; };
 		E37B209D2B7258FF00308158 /* CommentRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B209C2B7258FF00308158 /* CommentRequestBody.swift */; };
+		E37D36632B8CB52200FFEF57 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37D36622B8CB52200FFEF57 /* EditPostViewController.swift */; };
 		E3C64F932B634F87000BB5D6 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */; };
 		E3C64F952B63B3D5000BB5D6 /* DetailHeartDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */; };
 		E3C64F972B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */; };
@@ -449,6 +450,7 @@
 		E37B20982B72311600308158 /* BoardCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCommentViewController.swift; sourceTree = "<group>"; };
 		E37B209A2B7252C900308158 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
 		E37B209C2B7258FF00308158 /* CommentRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRequestBody.swift; sourceTree = "<group>"; };
+		E37D36622B8CB52200FFEF57 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		E3C64F942B63B3D5000BB5D6 /* DetailHeartDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeartDataModel.swift; sourceTree = "<group>"; };
 		E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBottomSheetViewController.swift; sourceTree = "<group>"; };
@@ -1311,6 +1313,7 @@
 				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
 				E3E2B83A2B7DFC650022E5D0 /* SearchResultViewController.swift */,
 				E314AD142B5CD1CE00BDB6AD /* DetailBoardViewController.swift */,
+				E37D36622B8CB52200FFEF57 /* EditPostViewController.swift */,
 				E37B20982B72311600308158 /* BoardCommentViewController.swift */,
 				E3111E652B8C3BA300756886 /* editCommentViewController.swift */,
 				E3C64F962B65FCA6000BB5D6 /* ReportBottomSheetViewController.swift */,
@@ -1651,6 +1654,7 @@
 				E32B673C2B56AD6700EBB5AC /* CreateBoardRequestBody.swift in Sources */,
 				9E0B9CAF2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift in Sources */,
 				9E0B9CAB2B6B466B00A5EACB /* MyContributionsViewController.swift in Sources */,
+				E37D36632B8CB52200FFEF57 /* EditPostViewController.swift in Sources */,
 				9E7401CD2B3C0FB50030C8EC /* BaseNavigationController.swift in Sources */,
 				9E05D2EA2AD521CB00F4CA43 /* Font.swift in Sources */,
 				E3D6D1562AEFACA3003269FF /* URLConst.swift in Sources */,
