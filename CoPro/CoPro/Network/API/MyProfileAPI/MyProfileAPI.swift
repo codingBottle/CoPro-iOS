@@ -122,34 +122,15 @@ extension MyProfileAPI {
                } else {
                   
                   // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                  self.disposeNetwork(response, dataModel: EditGitHubURLDTO.self, completion: completion)
-                  print("🔥\(response)")
                   
+                  print("🔥\(response)")
                   if checkFirstlogin {
-                     DispatchQueue.main.async {
-                        let bottomTabController = BottomTabController()
-                        // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
-                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                           let delegate = windowScene.delegate as? SceneDelegate,
-                           let window = delegate.window {
-                           window.rootViewController = bottomTabController
-                           window.makeKeyAndVisible()
-                        }
-                     }
+                     print("현재 깃헙모달에서 checkfirstlogin true")
+                     self.disposeNetwork(response, dataModel: EditGitHubURLDTO.self, completion: completion)
                   }
                   else {
                      print("현재 깃헙모달에서 checkfirstlogin false")
-                     DispatchQueue.main.async {
-                        let bottomTabController = BottomTabController()
-                        // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
-                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                           let delegate = windowScene.delegate as? SceneDelegate,
-                           let window = delegate.window {
-                           window.rootViewController = bottomTabController
-                           window.makeKeyAndVisible()
-                        }
-                     }
-                     
+                     self.disposeNetwork(response, dataModel: EditGitHubURLDTO.self, completion: completion)
                   }
                }
            } else {

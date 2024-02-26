@@ -152,6 +152,7 @@ class ProfileImageTableViewCell: UITableViewCell {
    }
    
    @objc func didTapEditProfileButton(_ sender: UIButton) {
+      print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
       delegate?.didTapEditProfileButton(in: self)
    }
    
