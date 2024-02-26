@@ -11,7 +11,6 @@ import SnapKit
 
 class BoardCommentViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    
     private lazy var tableView = UITableView()
     private let keychain = KeychainSwift()
     private var filteredComments: [DisplayComment]!
@@ -325,7 +324,7 @@ extension BoardCommentViewController {
             }
         }
     }
-    func editComment( boardId: Int, parentId: Int, content: String) {
+    func editComment( boardId: Int, content: String) {
         if let token = self.keychain.get("accessToken") {
             print("\(token)")
             BoardAPI.shared.editComment(token: token, boardId: boardId, content: content) { result in
@@ -488,13 +487,15 @@ extension BoardCommentViewController {
 }
 
 extension BoardCommentViewController: CustomCellDelegate {
-    func menuButtonTapped(commentId: Int) {
+    func menuButtonTapped(commentId: Int, commentContent: String) {
         self.commentId = commentId
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
             let action1 = UIAlertAction(title: "수정", style: .default) { _ in
                 let editCommentVC = editCommentViewController()
-//                editCommentVC.delegate = self
+                editCommentVC.commentId = commentId
+                editCommentVC.originalComment = commentContent
+                editCommentVC.delegate = self
                 let navigationController = UINavigationController(rootViewController: editCommentVC)
                 navigationController.modalPresentationStyle = .overFullScreen
                 self.present(navigationController, animated: true, completion: nil)
@@ -521,4 +522,11 @@ extension BoardCommentViewController: CustomCellDelegate {
         self.commentId = commentId
         print("data received")
     }
+}
+
+extension BoardCommentViewController: editCommentViewControllerDelegate{
+    func editComment(_ commentId: Int, _ comment: String) {
+        editComment(boardId: commentId, content: comment)
+    }
+
 }

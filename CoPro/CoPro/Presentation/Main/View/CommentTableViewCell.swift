@@ -12,7 +12,7 @@ import Then
 
 protocol CustomCellDelegate: AnyObject {
     func buttonTapped(commentId: Int)
-    func menuButtonTapped(commentId: Int)
+    func menuButtonTapped(commentId: Int, commentContent: String)
 }
 final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     
@@ -103,7 +103,7 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
     }
     @objc func menubuttonTapped(_ sender: UIButton) {
         if let commentId = commentId {
-            delegate?.menuButtonTapped(commentId: commentId)
+            delegate?.menuButtonTapped(commentId: commentId, commentContent: contentLabel.text ?? "")
         }
     }
 
