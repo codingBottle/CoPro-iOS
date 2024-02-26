@@ -20,7 +20,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     var myProfileView = MyProfileView()
     var myProfileData: MyProfileDataModel?
     var languageArr: Array<Substring>?
-    
+   var githubURL: String?
     let bottomTabBarView = UIView()
    
     
@@ -65,6 +65,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                    if let data = data as? MyProfileDTO {
                        // 성공적으로 프로필 데이터를 가져온 경우
                        self.myProfileData = MyProfileDataModel(from: data.data)
+                      self.githubURL = self.myProfileData?.gitHubURL
                        self.languageArr = self.myProfileData?.language.split(separator: ",")
                        let indexPath0 = IndexPath(row: 0, section: 0)
                        let indexPath1 = IndexPath(row: 1, section: 0)
@@ -237,7 +238,8 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          print("현재 뷰컨에서 깃헙 눌림")
          let alertVC = EditGithubModalViewController()
         alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
-         alertVC.initialUserURL = myProfileData?.gitHubURL
+         alertVC.githubUrlUpdateDelegate = self
+         alertVC.initialUserURL = self.githubURL
         alertVC.activeModalType = .NotFirstLogin
         alertVC.isModalInPresentation = true
          present(alertVC, animated: true, completion: nil)
@@ -296,8 +298,9 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
 
 }
 
-extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate{
+extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate, GithubUrlUpdateDelegate{
     func didUpdateProfile() {
+       print("✅✅✅✅✅✅✅✅✅✅✅✅")
         getMyProfile()
     }
     
@@ -315,13 +318,14 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     
     // github url 수정
     func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
-       guard let githubURL = keychain.get("currentUserGithubURL") else {return print("")}
-        let alertVC = EditGithubModalViewController()
-       alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
-        alertVC.initialUserURL = myProfileData?.gitHubURL
-       alertVC.activeModalType = .NotFirstLogin
-       alertVC.isModalInPresentation = true
-        present(alertVC, animated: true, completion: nil)
+       print("현재 뷰컨에서 깃헙 눌림")
+       let alertVC = EditGithubModalViewController()
+       alertVC.githubUrlUpdateDelegate = self
+      alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
+       alertVC.initialUserURL = self.githubURL
+      alertVC.activeModalType = .NotFirstLogin
+      alertVC.isModalInPresentation = true
+       present(alertVC, animated: true, completion: nil)
     }
     
     // 작성한 게시물

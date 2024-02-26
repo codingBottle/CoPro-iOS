@@ -241,7 +241,6 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
               MyProfileAPI.shared.postEditMyProfile(token: token, requestBody: editMyProfileBody, checkFirstlogin: checkFirstlogin) { result in
                    switch result {
                    case .success(_):
-                      print("🥳🥳🥳🥳🥳🥳🥳")
                       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                           self.showAlert(title: "프로필 수정을 완료하였습니다",
                                          confirmButtonName: "확인",
@@ -708,16 +707,16 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                 confirmButtonName: "확인")
    }
    
-   func successEditProfile() {
-      DispatchQueue.main.async {
-          let alert = UIAlertController(title: "프로필 수정을 완료하였습니다", message: nil, preferredStyle: .alert)
-          alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
-              self?.profileUpdateDelegate?.didUpdateProfile()
-              self?.dismiss(animated: true)
-          }))
-          self.present(alert, animated: true, completion: nil)
-      }
-   }
+//   func successEditProfile() {
+//      DispatchQueue.main.async {
+//          let alert = UIAlertController(title: "프로필 수정을 완료하였습니다", message: nil, preferredStyle: .alert)
+//          alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+//              self?.profileUpdateDelegate?.didUpdateProfile()
+//              self?.dismiss(animated: true)
+//          }))
+//          self.present(alert, animated: true, completion: nil)
+//      }
+//   }
    
    func faileEditProfile() {
       showAlert(title: "프로필 수정을 실패하였습니다",

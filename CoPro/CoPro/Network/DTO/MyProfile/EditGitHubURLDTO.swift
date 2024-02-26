@@ -14,9 +14,9 @@ struct EditGitHubURLDTO: Codable {
 }
 
 struct EditGitHubURLDataClass: Codable {
-    let memberID: Int
+    let memberID, career: Int
     let name, email, picture, occupation: String
-    let language, career, gitHubURL, nickName: String
+    let language, gitHubURL, nickName: String
     let likeMembersCount: Int
     let isLikeMembers: Bool
 

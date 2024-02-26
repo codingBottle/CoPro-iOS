@@ -10,12 +10,17 @@ import Then
 import SnapKit
 import KeychainSwift
 
+protocol GithubUrlUpdateDelegate: AnyObject {
+    func didUpdateProfile()
+}
+
 class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    enum EditGitHubModalType {
       case FirstLogin, NotFirstLogin
    }
    var activeModalType: EditGitHubModalType = .NotFirstLogin
+   weak var githubUrlUpdateDelegate: GithubUrlUpdateDelegate?
    private let keychain = KeychainSwift()
    var initialUserURL: String?
    var editGitHubURLBody = EditGitHubURLRequestBody()
@@ -122,7 +127,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          
          firstLoginInGithubModal.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.equalToSuperview().offset(0)
+            $0.leading.equalToSuperview().offset(4)
             $0.height.equalTo(21)
          }
          
@@ -216,31 +221,38 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    
    @objc private func didTapdoneButton() {
       print("지금 didTapdoneButton 눌림")
-      if readyForEdigithub == false {
-         print("readyForEdigithub = false 상태")
-         githubURLtextFieldLabel.resignFirstResponder()
-      } else {
-         let regex = "^https://github\\.com/[a-zA-Z0-9]*$"
-         let testStr = githubURLtextFieldLabel.text ?? ""
-         if testStr.count > 19 {
-             let testPredicate = NSPredicate(format:"SELF MATCHES %@", regex)
-             if testPredicate.evaluate(with: testStr) {
-                 print("// GitHub URL이 유효함")
-                 postEditGitHubURL()
-             } else {
-                 // GitHub URL이 유효하지 않음
-                 self.showAlert(title: "Github URL이 올바르지 않습니다",
-                                message: "다시 시도해주세요",
-                                confirmButtonName: "확인")
-             }
+      DispatchQueue.main.async { [weak self] in
+         guard let self = self else { return }
+         if readyForEdigithub == false {
+            print("지금 키보드 올라와 있어서 readyForEdigithub = false 상태니까, done버튼은 키보드 내려가는 기능으로 동작")
+            githubURLtextFieldLabel.resignFirstResponder()
          } else {
-             // GitHub URL이 너무 짧음
-             self.showAlert(title: "Github URL이 너무 짧습니다",
-                            message: "다시 시도해주세요",
-                            confirmButtonName: "확인")
+            if githubURLtextFieldLabel.text == initialUserURL {
+               self.dismiss(animated: true, completion: nil)
+            } else {
+               let regex = "^https://github\\.com/[a-zA-Z0-9]*$"
+               let testStr = githubURLtextFieldLabel.text ?? ""
+               if testStr.count > 19 {
+                  let testPredicate = NSPredicate(format:"SELF MATCHES %@", regex)
+                  if testPredicate.evaluate(with: testStr) {
+                     print("// GitHub URL이 유효함")
+                     postEditGitHubURL()
+                  } else {
+                     // GitHub URL이 유효하지 않음
+                     self.showAlert(title: "Github URL이 올바르지 않습니다",
+                                    message: "다시 시도해주세요",
+                                    confirmButtonName: "확인")
+                  }
+               } else {
+                  // GitHub URL이 너무 짧음
+                  self.showAlert(title: "Github URL이 너무 짧습니다",
+                                 message: "다시 시도해주세요",
+                                 confirmButtonName: "확인")
+               }
+            }
          }
-     }
-
+      }
+      
    }
    
    
@@ -249,15 +261,28 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
          switch activeModalType {
          case .FirstLogin:
             MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody ,checkFirstlogin: true) { result in
-                switch result {
-                case .success(let data):
-                   if let data = data as? EditGitHubURLDTO {
-                      
-//                   if data is EditGitHubURLDTO {
-//                      data.
-                      self.keychain.set(self.editGitHubURLBody.gitHubURL, forKey: "currentUserGithubURL")
-                      print("성공!!!")
-                   }
+               switch result {
+               case .success(_):
+                  
+                  DispatchQueue.main.async { [weak self] in
+                     guard let self = self else { return }
+                     self.showAlert(title: "🥳회원가입이 성공적으로 완료되었습니다🥳",
+                                    message: "다양한 기능을 체험해보세요",
+                                    confirmButtonName: "확인",
+                                    confirmButtonCompletion: {
+                        let bottomTabController = BottomTabController()
+                        // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let delegate = windowScene.delegate as? SceneDelegate,
+                           let window = delegate.window {
+                           window.rootViewController = bottomTabController
+                           window.makeKeyAndVisible()
+                           bottomTabController.selectedIndex = 2
+                        }
+                     })
+                  }
+                       
+                   
                    
                 case .requestErr(let message):
                    print("🔥🔥🔥🔥🔥🔥requestErr🔥🔥🔥🔥🔥🔥🔥🔥 ")
@@ -274,8 +299,16 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
             MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody, checkFirstlogin: false) { result in
                switch result {
                   
-               case .success(let data):
-                  print("왜 이 안의 코드는 실행되지 않는지 수정해야함.")
+               case .success(_):
+                  DispatchQueue.main.async {
+                     self.showAlert(title: "Github URL이 성공적으로 수정되었습니다",
+                                    confirmButtonName: "확인",
+                                    confirmButtonCompletion: { [self] in
+                        self.githubUrlUpdateDelegate?.didUpdateProfile()
+                        self.dismiss(animated: true, completion: nil)
+                     })
+                  }
+                  
                case .requestErr(let message):
                   print("Error : \(message)")
                case .pathErr, .serverErr, .networkFail:
