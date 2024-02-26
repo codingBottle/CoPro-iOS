@@ -739,7 +739,8 @@ final class DetailBoardViewController: BaseViewController {
         guard let currentUserProfileImage = keychain.get("currentUserProfileImage") else {return}
         guard let currentUserOccupation = keychain.get("currentUserOccupation") else {return}
        guard let currentUserEmail = keychain.get("currentUserEmail") else {return}
-        let channelId = [currentUserNickName, nicknameLabel.text ?? ""].sorted().joined(separator: "-")
+       print("currentUserEmail : \(currentUserEmail)")
+       let channelId = [currentUserEmail, receiverEmail].sorted().joined(separator: "-")
         
         channelStream.createChannel(channelId: channelId, sender: currentUserNickName, senderJobTitle: currentUserOccupation, senderProfileImage: currentUserProfileImage, senderEmail: currentUserEmail, receiver: nicknameLabel.text ?? "", receiverJobTitle: jobLabel.text ?? "", receiverProfileImage: receiverurl, receiverEmail: receiverEmail) {error in
             if let error = error {
@@ -755,24 +756,61 @@ final class DetailBoardViewController: BaseViewController {
     }
     
     private func chatRoomCreationResult(result: Bool) {
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first,
-           let tabBarController = window.rootViewController as? BottomTabController {
-            if let tabBarController = self.tabBarController as? BottomTabController {
-                tabBarController.selectedIndex = 3
-            }
-        }
-        DispatchQueue.main.async {
-            if result {
-                self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
-                               message: "채팅 리스트에서 확인하여주세요!",
-                               confirmButtonName: "확인")
-            }
-            else {
-                self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
-                               message: "채팅 리스트에서 확인하여주세요",
-                               confirmButtonName: "확인")
-            }
-        }
+//        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+//           let window = windowScene.windows.first,
+//           let tabBarController = window.rootViewController as? BottomTabController {
+//            if let tabBarController = self.tabBarController as? BottomTabController {
+//                tabBarController.selectedIndex = 3
+//            }
+//        }
+       DispatchQueue.main.async { [weak self] in
+          guard let self = self else { return }
+          if result {
+             print("result : true")
+             self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+                            message: "채팅 리스트에서 확인하여주세요!",
+                            confirmButtonName: "확인",
+                            confirmButtonCompletion: {
+                let bottomTabController = BottomTabController()
+                // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let delegate = windowScene.delegate as? SceneDelegate,
+                   let window = delegate.window {
+                   window.rootViewController = bottomTabController
+                   window.makeKeyAndVisible()
+                   bottomTabController.selectedIndex = 3
+                }
+             })
+          }
+          else {
+             print("result : false")
+             self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+                            message: "채팅 리스트에서 확인하여주세요",
+                            confirmButtonName: "확인",
+                            confirmButtonCompletion: {
+                let bottomTabController = BottomTabController()
+                // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let delegate = windowScene.delegate as? SceneDelegate,
+                   let window = delegate.window {
+                   window.rootViewController = bottomTabController
+                   window.makeKeyAndVisible()
+                   bottomTabController.selectedIndex = 3
+                }
+             })
+          }
+       }
+//        DispatchQueue.main.async {
+//            if result {
+//                self.showAlert(title: "🥳채팅방이 개설되었습니다🥳",
+//                               message: "채팅 리스트에서 확인하여주세요!",
+//                               confirmButtonName: "확인")
+//            }
+//            else {
+//                self.showAlert(title: "이미 채팅방에 존재하는 사람입니다",
+//                               message: "채팅 리스트에서 확인하여주세요",
+//                               confirmButtonName: "확인")
+//            }
+//        }
     }
 }
