@@ -90,6 +90,13 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.textColor = UIColor.G4()
         }
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        postImage.kf.cancelDownloadTask() // first, cancel currenct download task
+        postImage.kf.setImage(with: URL(string: "")) // second, prevent kingfisher from setting previous image
+        postImage.image = nil
+    }
+    
     private func setLayout() {
         addSubviews(postImage, postTitleLabel, writerNameLabel, postDateLabel, postTimeLabel, likeCountIcon ,likeCountLabel,sawPostIcon ,sawPostLabel, commentCountIcon, commentCountLabel)
         

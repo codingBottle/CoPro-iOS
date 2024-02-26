@@ -239,6 +239,6 @@ extension noticeViewController: DetailViewControllerDelegate {
         offset = 1
         posts.removeAll()
         filteredPosts.removeAll()
-        getAllBoard(category: "프로젝트", page: offset, standard: getStandard())
+        getAllBoard(category: "공지사항", page: offset, standard: getStandard())
        }
 }
