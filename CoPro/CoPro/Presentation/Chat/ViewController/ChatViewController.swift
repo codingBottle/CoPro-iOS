@@ -18,6 +18,7 @@ class ChatViewController: MessagesViewController {
     
    let alertVC = OppositeInfoCardViewController()
    let keychain = KeychainSwift()
+   var channelId: String?
 //   var customAvatarView = CustomAvatarView()
    var avatarView: AvatarView?
    var targetEmail: String?
@@ -463,7 +464,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
       print("🔥🔥🔥🔥🔥🔥🔥현재 targetEmail : \(targetEmail)🔥🔥🔥🔥🔥🔥🔥🔥🔥")
       
       NotificationAPI.shared.postChatNotification(token: token,
-                                                  requestBody: ChattingNotificationRequestBody(targetMemberEmail: targetEmail, title: currentUserNickName, body: content)) { result in
+                                                  requestBody: ChattingNotificationRequestBody(targetMemberEmail: targetEmail, title: currentUserNickName, body: content, data: ChattingNotificationDataClass(channelId: channelId ?? "error"))) { result in
            switch result {
            case .success(_):
               print("postChatNotification 보내기 성공")
