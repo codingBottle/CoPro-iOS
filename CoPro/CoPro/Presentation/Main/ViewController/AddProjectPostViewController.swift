@@ -49,7 +49,7 @@ class AddProjectPostViewController: UIViewController {
     private let chatButton = UIButton()
     private let contentStackView = UIStackView()
     weak var delegate: AddPostViewControllerDelegate?
-    private lazy var checkboxes: [Checkbox] = [self.checkbox1, self.checkbox2, self.checkbox3]
+   private lazy var checkboxes: [Checkbox] = [self.checkbox1, self.checkbox2, self.checkbox3, self.checkbox4]
     private lazy var checkbox1: Checkbox = {
         let checkbox = Checkbox(text: "AI")
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapCheckbox(_:)))
@@ -69,6 +69,13 @@ class AddProjectPostViewController: UIViewController {
         checkbox.addGestureRecognizer(gesture)
         return checkbox
     }()
+   
+   private lazy var checkbox4: Checkbox = {
+       let checkbox = Checkbox(text: "모바일")
+       let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapCheckbox(_:)))
+       checkbox.addGestureRecognizer(gesture)
+       return checkbox
+   }()
 
     @objc private func didTapCheckbox(_ sender: UITapGestureRecognizer) {
         guard let checkbox = sender.view as? Checkbox else { return }
