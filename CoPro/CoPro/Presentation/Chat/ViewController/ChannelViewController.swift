@@ -78,8 +78,8 @@ class ChannelViewController: BaseViewController {
        view.backgroundColor = .white
         addToolBarItems()
        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-       
-       navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)
+//       
+//       navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)
        navigationController?.navigationBar.prefersLargeTitles = false
        navigationController?.isToolbarHidden = false // 툴바 보이게 설정
         setupListener()
@@ -88,24 +88,31 @@ class ChannelViewController: BaseViewController {
    private func configureViews() {
           view.addSubview(topContainerView)
       topContainerView.isUserInteractionEnabled = true
-          topContainerView.addSubview(toggleLabel)
-          topContainerView.addSubview(projectToggleSwitch)
+//          topContainerView.addSubview(toggleLabel)
+//          topContainerView.addSubview(projectToggleSwitch)
+      topContainerView.addSubview(titleLabel)
+      
+      topContainerView.isHidden = false
 
           topContainerView.snp.makeConstraints {
-              $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+              $0.top.equalTo(view.safeAreaLayoutGuide).offset(0)
               $0.trailing.leading.equalToSuperview().inset(10)
              $0.height.equalTo(50)  // 높이 제약 추가
           }
+      
+      titleLabel.snp.makeConstraints {
+         $0.leading.equalToSuperview().offset(10)
+      }
 
-          toggleLabel.snp.makeConstraints {
-              $0.trailing.equalTo(projectToggleSwitch.snp.leading).offset(-10)
-              $0.centerY.equalToSuperview()
-          }
-
-          projectToggleSwitch.snp.makeConstraints {
-              $0.trailing.equalToSuperview()
-              $0.centerY.equalToSuperview()
-          }
+//          toggleLabel.snp.makeConstraints {
+//              $0.trailing.equalTo(projectToggleSwitch.snp.leading).offset(-10)
+//              $0.centerY.equalToSuperview()
+//          }
+//
+//          projectToggleSwitch.snp.makeConstraints {
+//              $0.trailing.equalToSuperview()
+//              $0.centerY.equalToSuperview()
+//          }
 
       switch channels.count {
       case 0:
