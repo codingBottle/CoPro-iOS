@@ -11,10 +11,16 @@ import Foundation
 
 struct ChattingNotificationRequestBody: Codable {
     let targetMemberEmail, title, body: String
+   let data: ChattingNotificationDataClass
    
-   init(targetMemberEmail: String, title: String, body: String) {
-      self.targetMemberEmail = targetMemberEmail
-      self.title = title
-      self.body = body
-   }
+//   init(targetMemberEmail: String, title: String, body: String) {
+//      self.targetMemberEmail = targetMemberEmail
+//      self.title = title
+//      self.body = body
+//      self.data = data
+//   }
+}
+
+struct ChattingNotificationDataClass: Codable {
+    let channelId: String
 }

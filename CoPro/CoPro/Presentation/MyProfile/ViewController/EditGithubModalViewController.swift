@@ -76,14 +76,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       
    }
    
-//   override func viewWillAppear(_ animated: Bool) {
-//      if initialUserURL == githubURLtextFieldLabel.text {
-//         readyForEdigithub = true
-//         
-//         self.doneButton.backgroundColor = UIColor.P2()
-//      }
-//   }
-   
    deinit {
       NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
       NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -271,7 +263,6 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
                                     confirmButtonName: "확인",
                                     confirmButtonCompletion: {
                         let bottomTabController = BottomTabController()
-                        // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
                         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                            let delegate = windowScene.delegate as? SceneDelegate,
                            let window = delegate.window {

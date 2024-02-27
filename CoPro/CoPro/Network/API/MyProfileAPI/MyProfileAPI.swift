@@ -73,23 +73,25 @@ extension MyProfileAPI {
                   }
                }
             } else {
-               let editMyProfileVC = EditMyProfileViewController()
-               if checkFirstlogin {
-                  // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                  self.postFcmToken()
-                  print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin true / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
-                  self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
-               } else {
-
-                  
-                  if statusCode == 200 {
-                     self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
-                     print("🅾️현재 MyProfileRouter.postEditMyProfile StatusCode 200 🅾️")
-                  } else {
-                     print("❌현재 MyProfileRouter.postEditMyProfile StatusCode 200 아님❌")
-                  }
-                  
-               }
+               print("프로필 수정 성공")
+               self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
+//               let editMyProfileVC = EditMyProfileViewController()
+//               if checkFirstlogin {
+//                  // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+//                  self.postFcmToken()
+//                  print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin true / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+//                  self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
+//               } else {
+//
+//                  
+//                  if statusCode == 200 {
+//                     self.disposeNetwork(response, dataModel: EditMyProfileDTO.self, completion: completion)
+//                     print("🅾️현재 MyProfileRouter.postEditMyProfile StatusCode 200 🅾️")
+//                  } else {
+//                     print("❌현재 MyProfileRouter.postEditMyProfile StatusCode 200 아님❌")
+//                  }
+//                  
+//               }
             }
          } else {
             // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달

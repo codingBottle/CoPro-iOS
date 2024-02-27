@@ -284,6 +284,7 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
             print("현재 : channel.senderEmail : \(channel.senderEmail)")
             print("현재 : channel.receiverEmail : \(channel.receiverEmail)")
             let viewController = ChatViewController(currentUserNickName: self.currentUserNickName, channel: channel, titleName: channel.receiver)
+            viewController.channelId = [channel.senderEmail, channel.receiverEmail].sorted().joined(separator: "-")
             viewController.chatAvatarImage.image = profileImage
             viewController.targetEmail = channel.receiverEmail
             viewController.hidesBottomBarWhenPushed = true
@@ -295,6 +296,7 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
             print("현재 : channel.senderEmail : \(channel.senderEmail)")
             print("현재 : channel.receiverEmail : \(channel.receiverEmail)")
             let viewController = ChatViewController(currentUserNickName: channel.receiver, channel: channel, titleName: channel.sender)
+            viewController.channelId = [channel.senderEmail, channel.receiverEmail].sorted().joined(separator: "-")
             viewController.chatAvatarImage.image = profileImage
             viewController.targetEmail = channel.senderEmail
             print("🌊\n",viewController.chatAvatarImage.image as Any)

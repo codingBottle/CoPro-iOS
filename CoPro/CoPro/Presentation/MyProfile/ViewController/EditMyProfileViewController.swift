@@ -23,6 +23,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    private let keychain = KeychainSwift()
    weak var profileUpdateDelegate: ProfileUpdateDelegate?
    
+   var loginVC = LoginViewController()
    var beforeEditMyProfileData: MyProfileDataModel?
    let container = UIView()
    var languageStackView: UIStackView?
@@ -214,18 +215,20 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                           self.keychain.set(data.data.occupation, forKey: "currentUserOccupation")
                          self.keychain.set(data.data.email, forKey: "currentUserEmail")
                          
-                         
-                          // 현재 뷰 컨트롤러를 닫습니다.
-                          self.dismiss(animated: true) { [weak self] in
-                              guard let self = self else { return }
-                              // 그 후에 새로운 뷰 컨트롤러를 엽니다.
-                              let alertVC = EditGithubModalViewController()
-//                              alertVC.isFirstLoginUserName = self.editMyProfileBody.nickName
-                              alertVC.activeModalType = .FirstLogin
-                              if let topViewController = self.getTopViewController() {
-                                  topViewController.present(alertVC, animated: true, completion: nil)
-                              }
-                          }
+                        self.postFcmToken()
+                        print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin true / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+                        self.dismiss(animated: true) { [weak self] in
+                            let loginViewController = LoginViewController()
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                let delegate = windowScene.delegate as? SceneDelegate,
+                                let window = delegate.window {
+                                window.rootViewController = loginViewController
+                                window.makeKeyAndVisible()
+                                let alertVC = EditGithubModalViewController()
+                                alertVC.activeModalType = .FirstLogin
+                                loginViewController.present(alertVC, animated: true, completion: nil)
+                            }
+                        }
                       }
                   case .requestErr(let message):
                       print("Error : \(message)")
@@ -272,6 +275,36 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
           }
           return nil
       }
+   
+   func postFcmToken() {
+      print("🔥")
+      
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      
+      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
+           switch result {
+           case .success(_):
+              print("FcmToken 보내기 성공")
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+               
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
+   }
 
    
    
