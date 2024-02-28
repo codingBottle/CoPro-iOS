@@ -197,7 +197,7 @@ extension BoardAPI {
     }
     
     public func editProjectPost(token: String, boardId: Int, title: String, category: String, contents: String, imageId: [Int], tag: String, part: String,                         completion: @escaping(NetworkResult<Any>) -> Void) {
-        AFManager.request(BoardRouter.addProjectPost(token: token, title: title, category: category, contents: contents, part: part, tag: tag, imageid: imageId)).responseData { response in
+        AFManager.request(BoardRouter.editProjectPost(token: token, boardId: boardId, title: title, Category: category, Content: contents, part: part, tag: tag, imageId: imageId)).responseData { response in
             if let statusCode = response.response?.statusCode {
                         if statusCode == 401 {
                             // 토큰 재요청 함수 호출
@@ -207,7 +207,7 @@ extension BoardAPI {
                                     print("토큰 재발급 성공: \(loginDTO)")
                                     
                                     DispatchQueue.main.async {
-                                        self.AFManager.request(BoardRouter.editProjectPost(token: loginDTO.data.accessToken, boardId: boardId, title: title, category: category, contents: contents, part: part, tag: tag, imageid: imageId)).responseData { response in
+                                        self.AFManager.request(BoardRouter.editProjectPost(token: token, boardId: boardId, title: title, Category: category, Content: contents, part: part, tag: tag, imageId: imageId)).responseData { response in
                                             self.disposeNetwork(response,
                                                                 dataModel: DetailBoardDTO.self,
                                                                 completion: completion)

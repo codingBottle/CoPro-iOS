@@ -17,7 +17,7 @@ enum BoardRouter {
     case addPhoto(token: String, images: [UIImage])
     case addPost(token: String, title: String, category: String, contents: String, imageid: [Int])
     case addProjectPost(token: String, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
-    case editProjectPost(token: String, boardId: Int, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
+    case editProjectPost(token: String, boardId: Int, title: String, Category: String, Content: String, part: String, tag: String, imageId: [Int])
     case editBoard(token: String, boardId: Int, title: String, Category: String, Content: String, part: String, tag: String, imageId: [Int])
     case deleteBoard(token: String, boardId: Int)
     case requestWritePage(token: String, category: String)
@@ -47,14 +47,14 @@ extension BoardRouter: BaseTargetType {
             return .get
         case .editBoard:
             return .put
+        case .editProjectPost:
+            return .put
         case .addPhoto:
             return .post
         case .addPost:
             return .post
         case .addProjectPost:
             return .post
-        case .editProjectPost:
-            return .put
         case .deleteBoard:
             return .delete
         case .requestWritePage:
@@ -92,13 +92,13 @@ extension BoardRouter: BaseTargetType {
             return "/api/board"
         case .editBoard:
             return "/api/board"
+        case .editProjectPost:
+            return "/api/board"
         case .addPhoto:
             return "/api/v1/images"
         case .addPost:
             return "/api/board"
         case .addProjectPost:
-            return "/api/board"
-        case .editProjectPost:
             return "/api/board"
         case .deleteBoard:
             return "/api/board"
@@ -141,6 +141,11 @@ extension BoardRouter: BaseTargetType {
 
             let requestModel2 = EditPostDTO(title: title, category: Category, contents: Content, part: part, tag: tag, imageID: imageId)
             return .both(requestModel1, _parameter: requestModel2)
+        case .editProjectPost(_, let boardId, let title, let Category, let Content, let part, let tag, let imageId):
+            let requestModel1 = DetailBoardRequestBody(boardID: boardId)
+
+            let requestModel2 = EditPostDTO(title: title, category: Category, contents: Content, part: part, tag: tag, imageID: imageId)
+            return .both(requestModel1, _parameter: requestModel2)
         case .addPhoto(_, let images):
             let base64Images = images.compactMap { $0.jpegData(compressionQuality: 1.0)?.base64EncodedString() }
             let requestModel = uploadImageRequestBody(files: base64Images)
@@ -151,9 +156,6 @@ extension BoardRouter: BaseTargetType {
         case .addProjectPost(_, let title, let category, let contents, let part,let tag, let imageId):
             let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: part, tag: tag, imageID: imageId)
             return .body(requestBody)
-        case .editProjectPost(_, let boardId, let title, let category, let contents, let part, let tag, let imageId):
-            let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: part, tag: tag, imageID: imageId)
-            return .both(boardId, _parameter: requestBody)
         case .deleteBoard(_, let boardId):
             let requestModel = heartRequestBody(boardID: boardId)
             return .query(requestModel)
