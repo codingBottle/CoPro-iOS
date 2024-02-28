@@ -223,7 +223,6 @@ class AddPostViewController: UIViewController, SendStringData {
     }
     @objc private func addButtonTapped() {
         addPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: contentTextField.text, image: imageUrls)
-        self.delegate?.didPostArticle()
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -324,7 +323,7 @@ extension AddPostViewController {
             BoardAPI.shared.addPost(token: token, title: titleTextField.text ?? "", category: category, contents: contentTextField.text, imageId: imageUrls) { result in
                 switch result {
                 case .success:
-                    print("success")
+                    self.delegate?.didPostArticle()
                     self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
                     print("Request error: \(message)")
