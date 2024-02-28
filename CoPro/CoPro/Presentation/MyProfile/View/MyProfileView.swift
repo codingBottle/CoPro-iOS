@@ -26,6 +26,7 @@ class MyProfileView: BaseView {
          $0.register(ProfileImageTableViewCell.self, forCellReuseIdentifier: "ProfileImageTableViewCell")
          $0.register(MyProfileTableViewCell.self, forCellReuseIdentifier: "MyProfileTableViewCell")
          $0.register(CardTypeSettingsTableViewCell.self, forCellReuseIdentifier: "CardTypeSettingsTableViewCell")
+          $0.register(MemberStatusTableViewCell.self, forCellReuseIdentifier: "MemberStatusTableViewCell")
          $0.showsVerticalScrollIndicator = false
          $0.showsHorizontalScrollIndicator = false
       }

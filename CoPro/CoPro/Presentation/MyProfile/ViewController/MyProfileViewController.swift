@@ -387,5 +387,25 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
 
         self.present(alertController, animated: true, completion: nil)
     }
+    //MARK: - 로그아웃
+    func didTapEditMemberStatusButtonTapped(in cell: CardTypeSettingsTableViewCell) {
+        print("현재 뷰컨에서 didTapEditMemberStatusButtonTapped 눌림")
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        let action1 = UIAlertAction(title: "로그 아웃", style: .default) { (action) in
+            print("로그 아웃 호출")
+            self.signOut()
+        }
+        alertController.addAction(action1)
+
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+    func signOut()  {
+        keychain.clear()
+        navigationController?.popToRootViewController(animated: true)
+    }
     
 }

@@ -210,6 +210,7 @@
 		B5D3E54F2B0213370021DDA0 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E54E2B0213370021DDA0 /* KeychainSwift */; };
 		B5D3E5512B06127C0021DDA0 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5D3E5502B06127C0021DDA0 /* Image.xcassets */; };
 		B5D3E56F2B172A150021DDA0 /* DropDown in Frameworks */ = {isa = PBXBuildFile; productRef = B5D3E56E2B172A150021DDA0 /* DropDown */; };
+		B5EAD5A72B8F8AB90030F2DD /* MemberStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EAD5A62B8F8AB90030F2DD /* MemberStatusTableViewCell.swift */; };
 		B5F1C26A2B82009100791595 /* LikeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C2692B82009100791595 /* LikeProfileViewController.swift */; };
 		B5F1C26C2B820A6500791595 /* LikeProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */; };
 		B5F1C2702B83BDCE00791595 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */; };
@@ -403,6 +404,7 @@
 		B5D3E5312AFB7C2E0021DDA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B5D3E53E2AFE7AC50021DDA0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B5D3E5502B06127C0021DDA0 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
+		B5EAD5A62B8F8AB90030F2DD /* MemberStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberStatusTableViewCell.swift; sourceTree = "<group>"; };
 		B5F1C2692B82009100791595 /* LikeProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileViewController.swift; sourceTree = "<group>"; };
 		B5F1C26B2B820A6500791595 /* LikeProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProfileDTO.swift; sourceTree = "<group>"; };
 		B5F1C26F2B83BDCE00791595 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -961,6 +963,7 @@
 				9E0B9CAE2B6C2DE100A5EACB /* RelatedPostsToMeTavleViewCell.swift */,
 				9E0B9CB02B6C336C00A5EACB /* MyCommentsTableViewCell.swift */,
 				9E98F2F62B4FC64600A6756A /* CardTypeSettingsTableViewCell.swift */,
+				B5EAD5A62B8F8AB90030F2DD /* MemberStatusTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1566,6 +1569,7 @@
 				E3E2B83B2B7DFC650022E5D0 /* SearchResultViewController.swift in Sources */,
 				9E5C369A2B83902E0091884C /* FcmTokenRequestBody.swift in Sources */,
 				9E8FB6F22B5CF5AE00C02028 /* MyProfileRouter.swift in Sources */,
+				B5EAD5A72B8F8AB90030F2DD /* MemberStatusTableViewCell.swift in Sources */,
 				9E0B9CA72B6A09FB00A5EACB /* EditCardTypeDTO.swift in Sources */,
 				E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */,
 				9E7401E12B3C18A60030C8EC /* ChatFirestoreStream.swift in Sources */,
