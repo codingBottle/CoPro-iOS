@@ -115,6 +115,19 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
             getNotificationListData(page: currentPage)
         }
     }
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("선택된 셀의 인덱스 패스: \(indexPath.row)")
+        if contents[indexPath.row].boardID != nil {
+            print("BoardId 있음")
+            let detailVC = DetailBoardViewController()
+            detailVC.postId = contents[indexPath.row].boardID
+            let navigationController = UINavigationController(rootViewController: detailVC)
+            navigationController.modalPresentationStyle = .overFullScreen
+            self.present(navigationController, animated: true, completion: nil)
+        }else{
+            print("BoardId 없음")
+        }
+        
+    }
     
 }
