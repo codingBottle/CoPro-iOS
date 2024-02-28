@@ -58,12 +58,9 @@ extension LoginAPI {
                                     print("나는야 첫 로그인")
                                     DispatchQueue.main.async {
                                        let alertVC = EditMyProfileViewController()
-                                       if self.loginVC.isViewLoaded && self.loginVC.view.window != nil {
-                                          alertVC.activeViewType = .FirstLogin
-                                          self.loginVC.present(alertVC, animated: true, completion: nil)
-                                       } else {
-                                          print("LoginViewController의 뷰가 윈도우 계층에 없습니다.")
-                                       }
+                                       alertVC.activeViewType = .FirstLogin
+                                       print("지금 activeViewType : FirstLogin")
+                                       self.loginVC.present(alertVC, animated: true, completion: nil)
                                     }
                                  }
                                  else {
