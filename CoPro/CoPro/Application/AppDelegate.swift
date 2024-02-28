@@ -91,6 +91,28 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.list, .banner])
     }
+    // 사용자가 알림을 탭했을 때 호출됩니다.
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        // 알림을 탭했을 때의 동작 정의
+        if let boardId = response.notification.request.content.userInfo["boardId"] as? String {
+            // 특정 뷰 컨트롤러를 표시하는 코드
+            let bottomTabController = BottomTabController()
+            // 현재 활성화된 UINavigationController의 루트 뷰 컨트롤러로 설정합니다.
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let delegate = windowScene.delegate as? SceneDelegate,
+               let window = delegate.window {
+                window.rootViewController = bottomTabController
+                let detailVC = DetailBoardViewController()
+                detailVC.postId = Int(boardId)
+                let navigationController = UINavigationController(rootViewController: detailVC)
+                navigationController.modalPresentationStyle = .overFullScreen
+                window.rootViewController?.present(navigationController, animated: true, completion: nil)
+                window.makeKeyAndVisible()
+            }
+        }
+        
+        completionHandler()
+    }
 }
 
 extension AppDelegate: MessagingDelegate {
