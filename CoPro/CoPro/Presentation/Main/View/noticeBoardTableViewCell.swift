@@ -123,7 +123,7 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.top.equalTo(postTitleLabel.snp.bottom).offset(8)
         }
         likeCountIcon.snp.makeConstraints {
-            $0.leading.equalTo(postTitleLabel.snp.leading)
+            $0.leading.equalTo(sawPostLabel.snp.trailing).offset(16)
             $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
         likeCountLabel.snp.makeConstraints {
@@ -131,15 +131,15 @@ class noticeBoardTableViewCell: UITableViewCell {
             $0.centerY.equalTo(likeCountIcon.snp.centerY)
         }
         sawPostIcon.snp.makeConstraints {
-            $0.leading.equalTo(likeCountLabel.snp.trailing).offset(16)
+            $0.leading.equalTo(postTitleLabel.snp.leading)
             $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
         sawPostLabel.snp.makeConstraints {
             $0.leading.equalTo(sawPostIcon.snp.trailing).offset(4)
-            $0.centerY.equalTo(likeCountIcon.snp.centerY)
+            $0.centerY.equalTo(sawPostIcon.snp.centerY)
         }
         commentCountIcon.snp.makeConstraints {
-            $0.leading.equalTo(sawPostLabel.snp.trailing).offset(16)
+            $0.leading.equalTo(likeCountLabel.snp.trailing).offset(16)
             $0.top.equalTo(writerNameLabel.snp.bottom).offset(6)
         }
         commentCountLabel.snp.makeConstraints {
@@ -165,6 +165,8 @@ class noticeBoardTableViewCell: UITableViewCell {
     }
     
     func hideComment() {
+        likeCountIcon.isHidden = true
+        likeCountLabel.isHidden = true
         commentCountIcon.isHidden = true
         commentCountLabel.isHidden = true
     }

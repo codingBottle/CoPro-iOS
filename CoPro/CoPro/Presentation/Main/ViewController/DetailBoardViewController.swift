@@ -545,7 +545,7 @@ func getTopMostViewController() -> UIViewController? {
                         let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email ?? "" , picture: data.data.picture ?? "")
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
-                        self.isMyPost = data.data.nickName == self.keychain.get("currentUserNickName")
+                        self.isMyPost = data.data.nickName == self.keychain.get("currentUserEmail")
 //                        if #available(iOS 14.0, *) {
 //                            var menuItems : [UIAction] = [UIAction(title: "신고", attributes: .destructive) { action in
 //                                guard let boardId = self.postId else { return }
@@ -795,8 +795,10 @@ func getTopMostViewController() -> UIViewController? {
                     imageView.do {
                         $0.layer.cornerRadius = 10
                         $0.clipsToBounds = true
+                        $0.isUserInteractionEnabled = true
                     }
-                    
+//                    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
+//                    imageView.addGestureRecognizer(tapGestureRecognizer)
                     xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
                     
                     // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
