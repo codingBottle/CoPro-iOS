@@ -13,7 +13,7 @@ import KeychainSwift
 class MyProfileViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
     
     enum CellType {
-        case profile, cardChange, myTrace
+        case profile, cardChange, myTrace, logout
     }
     
     private let keychain = KeychainSwift()
@@ -26,9 +26,9 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+          myProfileView.tableView.delegate = self
+          myProfileView.tableView.dataSource = self
        
-       myProfileView.tableView.delegate = self
-       myProfileView.tableView.dataSource = self
        getMyProfile()
        view.backgroundColor = UIColor.White()
     }
@@ -121,6 +121,8 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             return .profile
         case 9:
             return .cardChange
+        case 10:
+           return .logout
         default:
             return .myTrace
         }
@@ -134,12 +136,14 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             return 70
         case .myTrace:
             return 50
+        case .logout:
+           return 70
         }
     }
     
     //불러올 테이블 셀 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return 11
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -225,6 +229,11 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             }
             
             return cell
+        case .logout:
+           let cell = tableView.dequeueReusableCell(withIdentifier: "MemberStatusTableViewCell", for: indexPath) as! MemberStatusTableViewCell
+           cell.delegate = self
+           cell.selectionStyle = .none
+           return cell
         }
     }
    
@@ -233,6 +242,22 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
       switch indexPath.row {
       case 1, 3:
           print("")
+         
+      case 10:
+            print("현재 뷰컨에서 didTapEditMemberStatusButtonTapped 눌림")
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+            let action1 = UIAlertAction(title: "로그아웃", style: .default) { (action) in
+                print("로그아웃 호출")
+                self.signOut()
+            }
+            alertController.addAction(action1)
+
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+
+            self.present(alertController, animated: true, completion: nil)
+         
           
       case 2:
          print("현재 뷰컨에서 깃헙 눌림")
@@ -298,7 +323,8 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
 
 }
 
-extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate, GithubUrlUpdateDelegate{
+extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate, GithubUrlUpdateDelegate, EditMemberStatusButtonDelegate{
+   
     func didUpdateProfile() {
        print("✅✅✅✅✅✅✅✅✅✅✅✅")
         getMyProfile()
@@ -387,25 +413,39 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
 
         self.present(alertController, animated: true, completion: nil)
     }
+   
     //MARK: - 로그아웃
-    func didTapEditMemberStatusButtonTapped(in cell: CardTypeSettingsTableViewCell) {
-        print("현재 뷰컨에서 didTapEditMemberStatusButtonTapped 눌림")
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+   
+   func didTapEditMemberStatusButtonTapped(in cell: MemberStatusTableViewCell) {
+      print("현재 뷰컨에서 didTapEditMemberStatusButtonTapped 눌림")
+      let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
-        let action1 = UIAlertAction(title: "로그 아웃", style: .default) { (action) in
-            print("로그 아웃 호출")
-            self.signOut()
-        }
-        alertController.addAction(action1)
+      let action1 = UIAlertAction(title: "로그아웃", style: .default) { (action) in
+          print("로그 아웃 호출")
+          self.signOut()
+      }
+      alertController.addAction(action1)
 
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
+      let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+      alertController.addAction(cancelAction)
 
-        self.present(alertController, animated: true, completion: nil)
-    }
+      self.present(alertController, animated: true, completion: nil)
+   }
+   
     func signOut()  {
+       print("로그아웃 시작")
         keychain.clear()
         navigationController?.popToRootViewController(animated: true)
+       DispatchQueue.main.async {
+               let loginVC = LoginViewController()
+
+               if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first {
+                   UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                       window.rootViewController = loginVC
+                   }, completion: nil)
+               }
+           }
     }
     
 }
