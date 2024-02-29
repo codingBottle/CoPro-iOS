@@ -222,8 +222,17 @@ class AddPostViewController: UIViewController, SendStringData {
         }
     }
     @objc private func addButtonTapped() {
-        addPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: contentTextField.text, image: imageUrls)
-        self.dismiss(animated: true, completion: nil)
+        if titleTextField.text == "" || contentTextField.text == "" {
+                let alertController = UIAlertController(title: nil, message: "내용을 입력하세요", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                
+                present(alertController, animated: true, completion: nil)
+            }
+        else {
+            addPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: contentTextField.text, image: imageUrls)
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc func receiveImages(_ notification: Notification) {

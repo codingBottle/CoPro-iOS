@@ -193,9 +193,17 @@ class EditPostViewController: UIViewController {
         }
     }
     @objc private func editButtonTapped() {
-
-        self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "자유", content: contentTextField.text, image: imageUrls, tag: "수익창출", part: "AI")
-        self.dismiss(animated: true, completion: nil)
+        if titleTextField.text == "" || contentTextField.text == "" {
+                let alertController = UIAlertController(title: nil, message: "내용을 입력하세요", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                
+                present(alertController, animated: true, completion: nil)
+            }
+        else {
+            self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "자유", content: contentTextField.text, image: imageUrls, tag: "수익창출", part: "AI")
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc func receiveImages(_ notification: Notification) {

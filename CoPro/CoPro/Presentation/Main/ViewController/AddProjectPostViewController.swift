@@ -340,9 +340,32 @@ class AddProjectPostViewController: UIViewController {
                 }
             }
         }
-        print("\(checkedTexts)")
-        addProjectPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: recruitContentTextField.text, image: imageUrls, tag: tagRadioButton.getSelectedText() ?? "", part: checkedTexts)
-        self.dismiss(animated: true, completion: nil)
+        var tagLabel = tagRadioButton.getSelectedText() ?? ""
+        if titleTextField.text == "" || recruitContentTextField.text == "" {
+                let alertController = UIAlertController(title: nil, message: "내용을 입력하세요", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                
+                present(alertController, animated: true, completion: nil)
+            }
+        else if checkedTexts == "" {
+            let alertController = UIAlertController(title: nil, message: "모집 분야를 선택해주세요", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
+        else if tagLabel == "" {
+            let alertController = UIAlertController(title: nil, message: "프로젝트 목적을 선택해주세요", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
+        else {
+            addProjectPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: recruitContentTextField.text, image: imageUrls, tag: tagLabel ?? "", part: checkedTexts)
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc func receiveImages(_ notification: Notification) {
