@@ -25,7 +25,7 @@ class Checkbox: UIView {
         }
         checkbox.image = UIImage(systemName: "square")
         checkbox.contentMode = .scaleAspectFit
-        checkbox.tintColor = .Black()
+        checkbox.tintColor = .P2()
             
         addSubview(checkbox)
         checkbox.snp.makeConstraints { make in

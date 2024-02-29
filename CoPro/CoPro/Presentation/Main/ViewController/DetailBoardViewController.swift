@@ -512,7 +512,9 @@ func getTopMostViewController() -> UIViewController? {
             print("project Button")
             let editVC = EditProjectPostViewController()
             editVC.delegate = self
-            editVC.editProjectVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "", defaultRadio: tagLabel.text ?? "")
+            editVC.editProjectVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "")
+            editVC.checkTmp = partContentLabel.text ?? ""
+            editVC.radioTmp = tagContentLabel.text ?? ""
             let navigationController = UINavigationController(rootViewController: editVC)
             navigationController.modalPresentationStyle = .overFullScreen
             self.getTopMostViewController()?.present(navigationController, animated: true, completion: nil)

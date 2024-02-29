@@ -11,6 +11,8 @@ import Photos
 
 class EditProjectPostViewController: UIViewController {
 
+    var radioTmp = String()
+    var checkTmp = String()
     weak var delegate: editPostViewControllerDelegate?
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
@@ -79,19 +81,31 @@ class EditProjectPostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let options = ["수익창출", "포트폴리오"]
+        tagRadioButton.set(options, defaultSelection: radioTmp)
+        checkCheckBoxes(with: checkTmp, in: checkboxes)
         tagRadioButton.delegate = self
         setNavigate()
         setUI()
         setLayout()
         addKeyboardObserver()
     }
-    
-    func editProjectVC (title: String, content: String, defaultRadio: String) {
+    func checkCheckBoxes(with checkedTexts: String, in checkboxes: [Checkbox]) {
+        // ',' 단위로 문자열을 분리하여 배열 생성
+        let checkedTextArray = checkedTexts.components(separatedBy: ",")
+        
+        // 체크박스 순회
+        for checkbox in checkboxes {
+            // 체크박스의 텍스트가 배열에 포함되는 경우 isChecked를 true로 설정
+            if let checkBoxText = checkbox.label.text, checkedTextArray.contains(checkBoxText) {
+                checkbox.isChecked = true
+                checkbox.checkbox.image = UIImage(systemName: "checkmark.square.fill")
+            }
+        }
+    }
+    func editProjectVC (title: String, content: String) {
         titleTextField.text = title
         recruitContentTextField.text = content
-        let options = ["수익창출", "포트폴리오"]
-        tagRadioButton.set(options, defaultSelection: defaultRadio)
     }
     override func viewWillDisappear(_ animated: Bool) {
         removeKeyBoardObserver()
