@@ -546,34 +546,6 @@ func getTopMostViewController() -> UIViewController? {
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
                         self.isMyPost = data.data.nickName == self.keychain.get("currentUserEmail")
-//                        if #available(iOS 14.0, *) {
-//                            var menuItems : [UIAction] = [UIAction(title: "신고", attributes: .destructive) { action in
-//                                guard let boardId = self.postId else { return }
-//                                let bottomSheetVC = ReportBottomSheetViewController()
-//                                bottomSheetVC.postId = boardId
-//                                self.present(bottomSheetVC, animated: true, completion: nil)
-//                            }]
-//                            
-//                            if self.isMyPost {
-//                                let editAction = UIAction(title: "수정") { action in
-//                                    self.presentEditVC()
-//                                }
-//                                menuItems.append(editAction)
-//                                let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
-//                                    self.presentDeleteConfirmationAlert()
-//                                }
-//                                menuItems.append(deleteAction)
-//                            }
-//                            else {
-//                                print("😫this is not my post")
-//                            }
-//                            
-//                            let menu = UIMenu(title: "", children: menuItems)
-//
-//                            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
-//                            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
-//                            
-//                        }
                         if self.isMyPost {
                             self.chatButton.isHidden = true
                         }
