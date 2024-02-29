@@ -68,39 +68,39 @@ final class DetailBoardViewController: BaseViewController {
         addTarget()
         setNavigate()
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        setupMenu()
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        setupMenu()
+//    }
 
-    func setupMenu() {
-        if #available(iOS 14.0, *) {
-            var menuItems : [UIAction] = [UIAction(title: "신고", attributes: .destructive) { action in
-                guard let boardId = self.postId else { return }
-                let bottomSheetVC = ReportBottomSheetViewController()
-                bottomSheetVC.postId = boardId
-                self.present(bottomSheetVC, animated: true, completion: nil)
-            }]
-            
-            if self.isMyPost {
-                let editAction = UIAction(title: "수정") { action in
-                    self.presentEditVC()
-                }
-                menuItems.append(editAction)
-                let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
-                    self.presentDeleteConfirmationAlert()
-                }
-                menuItems.append(deleteAction)
-            }
-            else {
-                print("😫this is not my post")
-            }
-            
-            let menu = UIMenu(title: "", children: menuItems)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
-        }
-    }
+//    func setupMenu() {
+//        if #available(iOS 14.0, *) {
+//            var menuItems : [UIAction] = [UIAction(title: "신고", attributes: .destructive) { action in
+//                guard let boardId = self.postId else { return }
+//                let bottomSheetVC = ReportBottomSheetViewController()
+//                bottomSheetVC.postId = boardId
+//                self.present(bottomSheetVC, animated: true, completion: nil)
+//            }]
+//            
+//            if self.isMyPost {
+//                let editAction = UIAction(title: "수정") { action in
+//                    self.presentEditVC()
+//                }
+//                menuItems.append(editAction)
+//                let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
+//                    self.presentDeleteConfirmationAlert()
+//                }
+//                menuItems.append(deleteAction)
+//            }
+//            else {
+//                print("😫this is not my post")
+//            }
+//            
+//            let menu = UIMenu(title: "", children: menuItems)
+//            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
+//            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
+//        }
+//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
@@ -450,7 +450,46 @@ final class DetailBoardViewController: BaseViewController {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeButtonTapped))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
+        let rightButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(rightButtonTapped))
+        rightButton.tintColor = UIColor.G6()
+        self.navigationItem.rightBarButtonItem = rightButton
     }
+    @objc func rightButtonTapped() {
+    let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        let action1 = UIAlertAction(title: "신고", style: .destructive) { _ in
+            guard let boardId = self.postId else { return }
+            let bottomSheetVC = ReportBottomSheetViewController()
+            bottomSheetVC.postId = boardId
+            self.getTopMostViewController()?.present(bottomSheetVC, animated: true, completion: nil)
+        }
+        let action2 = UIAlertAction(title: "수정", style: .default) { _ in
+            self.presentEditVC()
+        }
+        let action3 = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            self.presentDeleteConfirmationAlert()
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+        alertController.addAction(action1)
+        if self.isMyPost {
+            alertController.addAction(action2)
+            alertController.addAction(action3)
+        }
+        alertController.addAction(cancelAction)
+
+    getTopMostViewController()?.present(alertController, animated: true, completion: nil)
+}
+func getTopMostViewController() -> UIViewController? {
+    var topMostViewController = UIApplication.shared.keyWindow?.rootViewController
+
+    while let presentedViewController = topMostViewController?.presentedViewController {
+        topMostViewController = presentedViewController
+    }
+
+    return topMostViewController
+}
+
     func presentDeleteConfirmationAlert() {
         let alertController = UIAlertController(title: nil, message: "게시물을 삭제하시겠습니까?", preferredStyle: .alert)
         
@@ -476,7 +515,7 @@ final class DetailBoardViewController: BaseViewController {
             editVC.editProjectVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "", defaultRadio: tagLabel.text ?? "")
             let navigationController = UINavigationController(rootViewController: editVC)
             navigationController.modalPresentationStyle = .overFullScreen
-            self.present(navigationController, animated: true, completion: nil)
+            self.getTopMostViewController()?.present(navigationController, animated: true, completion: nil)
         case "자유":
             let editVC = EditPostViewController()
             editVC.delegate = self

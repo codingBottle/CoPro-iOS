@@ -278,7 +278,6 @@ extension BoardCommentViewController {
             BoardAPI.shared.deleteComment(token: token, boardId: boardId) { result in
                 switch result {
                 case .success:
-                    print("🐖🐖🐖🐖🐖🐖🐖🐖🐖🐖 success")
                         self.offset = 1
                         self.comments.removeAll()
                         self.filteredComments.removeAll()
@@ -473,7 +472,16 @@ extension BoardCommentViewController: CustomCellDelegate {
 //                popoverController.sourceRect = sender.bounds
 //            }
 
-            self.present(alertController, animated: true, completion: nil)
+        getTopMostViewController()?.present(alertController, animated: true, completion: nil)
+    }
+    func getTopMostViewController() -> UIViewController? {
+        var topMostViewController = UIApplication.shared.keyWindow?.rootViewController
+
+        while let presentedViewController = topMostViewController?.presentedViewController {
+            topMostViewController = presentedViewController
+        }
+
+        return topMostViewController
     }
     
     func buttonTapped(commentId: Int) {
