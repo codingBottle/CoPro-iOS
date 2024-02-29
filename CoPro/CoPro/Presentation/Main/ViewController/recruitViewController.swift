@@ -182,14 +182,27 @@ extension recruitViewController: UITableViewDelegate, UITableViewDataSource {
         return 88
     }
     
+    func getTopMostViewController() -> UIViewController? {
+        var topMostViewController = UIApplication.shared.keyWindow?.rootViewController
+
+        while let presentedViewController = topMostViewController?.presentedViewController {
+            topMostViewController = presentedViewController
+        }
+
+        return topMostViewController
+    }
+    
     // MARK: - @objc Method
     
-    @objc func addButtonDidTapped() {
-        let addPostVC = AddProjectPostViewController()
-        addPostVC.delegate = self
-        let navigationController = UINavigationController(rootViewController: addPostVC)
-        navigationController.modalPresentationStyle = .overFullScreen
-        self.present(navigationController, animated: true, completion: nil)
+    @objc func addButtonDidTapped() {    
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            let addPostVC = AddProjectPostViewController()
+            addPostVC.delegate = self
+            let navigationController = UINavigationController(rootViewController: addPostVC)
+            navigationController.modalPresentationStyle = .overFullScreen
+            self!.getTopMostViewController()?.present(navigationController, animated: true, completion: nil)
+//            self?.present(navigationController, animated: true, completion: nil)
+        }
     }
 
     

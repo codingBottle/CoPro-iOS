@@ -11,6 +11,8 @@ import Photos
 
 class EditProjectPostViewController: UIViewController {
 
+    var radioTmp = String()
+    var checkTmp = String()
     weak var delegate: editPostViewControllerDelegate?
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
@@ -79,19 +81,31 @@ class EditProjectPostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let options = ["수익창출", "포트폴리오"]
+        tagRadioButton.set(options, defaultSelection: radioTmp)
+        checkCheckBoxes(with: checkTmp, in: checkboxes)
         tagRadioButton.delegate = self
         setNavigate()
         setUI()
         setLayout()
         addKeyboardObserver()
     }
-    
-    func editProjectVC (title: String, content: String, defaultRadio: String) {
+    func checkCheckBoxes(with checkedTexts: String, in checkboxes: [Checkbox]) {
+        // ',' 단위로 문자열을 분리하여 배열 생성
+        let checkedTextArray = checkedTexts.components(separatedBy: ",")
+        
+        // 체크박스 순회
+        for checkbox in checkboxes {
+            // 체크박스의 텍스트가 배열에 포함되는 경우 isChecked를 true로 설정
+            if let checkBoxText = checkbox.label.text, checkedTextArray.contains(checkBoxText) {
+                checkbox.isChecked = true
+                checkbox.checkbox.image = UIImage(systemName: "checkmark.square.fill")
+            }
+        }
+    }
+    func editProjectVC (title: String, content: String) {
         titleTextField.text = title
         recruitContentTextField.text = content
-        let options = ["수익창출", "포트폴리오"]
-        tagRadioButton.set(options, defaultSelection: defaultRadio)
     }
     override func viewWillDisappear(_ animated: Bool) {
         removeKeyBoardObserver()
@@ -269,8 +283,32 @@ class EditProjectPostViewController: UIViewController {
                 }
             }
         }
-        self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "프로젝트", content: recruitContentTextField.text, image: imageUrls, tag: tagRadioButton.getSelectedText() ?? "", part: checkedTexts)
-        self.dismiss(animated: true, completion: nil)
+        var tagLabel = tagRadioButton.getSelectedText() ?? ""
+        if titleTextField.text == "" || recruitContentTextField.text == "" {
+                let alertController = UIAlertController(title: nil, message: "내용을 입력하세요", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                
+                present(alertController, animated: true, completion: nil)
+            }
+        else if checkedTexts == "" {
+            let alertController = UIAlertController(title: nil, message: "모집 분야를 선택해주세요", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
+        else if tagLabel == "" {
+            let alertController = UIAlertController(title: nil, message: "프로젝트 목적을 선택해주세요", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
+        else {
+            self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "프로젝트", content: recruitContentTextField.text, image: imageUrls, tag: tagLabel, part: checkedTexts)
+            self.dismiss(animated: true, completion: nil)
+        }
 //        self.delegate?.didPostArticle()
     }
 }
