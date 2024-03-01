@@ -135,8 +135,6 @@ class AddPostViewController: UIViewController, SendStringData {
             $0.height.equalTo(144)
         }
         sortStackView.snp.makeConstraints {
-//            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-//            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(57)
         }
         sortStackView.addSubviews(sortLabel)
@@ -146,28 +144,16 @@ class AddPostViewController: UIViewController, SendStringData {
         }
 
         lineView1.snp.makeConstraints {
-//            $0.top.equalTo(sortStackView.snp.bottom)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(0.5)
         }
         titleTextField.snp.makeConstraints {
-//            $0.top.equalTo(lineView1.snp.bottom)
-//            $0.leading.equalToSuperview().offset(16)
-//            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(57)
         }
         lineView2.snp.makeConstraints {
-//            $0.top.equalTo(titleTextField.snp.bottom)
-//            $0.leading.equalToSuperview().offset(16)
-//            $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(0.5)
         }
-//        contentTextField.snp.makeConstraints {
-//            $0.top.equalTo(lineView2.snp.bottom)
-//            $0.trailing.leading.equalToSuperview()
-//            $0.height.equalTo(420)
-//        }
         warnView.snp.makeConstraints {
             $0.height.equalTo(50)
         }
@@ -229,6 +215,13 @@ class AddPostViewController: UIViewController, SendStringData {
                 
                 present(alertController, animated: true, completion: nil)
             }
+        else if imageUrls.count >= 5 {
+            let alertController = UIAlertController(title: nil, message: "사진은 5개 이하로만 첨부 가능합니다.", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
         else {
             addPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: contentTextField.text, image: imageUrls)
             self.dismiss(animated: true, completion: nil)
@@ -237,15 +230,14 @@ class AddPostViewController: UIViewController, SendStringData {
 
     @objc func receiveImages(_ notification: Notification) {
         print("receiveImagebuttontapped")
-        
+
         // userInfo에서 PHAsset 배열을 가져옴
         if let assets = notification.userInfo?["images"] as? [PHAsset] {
-            // 기존의 모든 이미지 뷰 제거
-            imageViews.forEach { $0.removeFromSuperview() }
-            imageViews.removeAll()
-            
-            // 받은 모든 PHAsset을 UIImageView로 생성하여 UIScrollView에 추가
             var xOffset: CGFloat = 0
+            if let lastImageView = imageViews.last {
+                xOffset = lastImageView.frame.origin.x + lastImageView.frame.width + 12
+            }
+            
             for asset in assets {
                 // 비동기적으로 이미지 로드
                 photoService.fetchImage(
@@ -264,6 +256,13 @@ class AddPostViewController: UIViewController, SendStringData {
                                 $0.clipsToBounds = true
                             }
                             
+                            // 삭제 버튼 생성 및 추가
+                            let deleteButton = UIButton(frame: CGRect(x: xOffset + 144 - 20, y: 0, width: 20, height: 20))
+                            deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+                            deleteButton.tintColor = .L2()
+                            deleteButton.addTarget(self, action: #selector(self?.deleteImageView(_:)), for: .touchUpInside)
+                            self?.imageScrollView.addSubview(deleteButton)
+                            
                             xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
                             
                             // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
@@ -273,6 +272,26 @@ class AddPostViewController: UIViewController, SendStringData {
                 )
             }
         }
+    }
+
+    @objc func deleteImageView(_ sender: UIButton) {
+        // 이미지 뷰와 삭제 버튼을 제거
+        if let index = imageViews.firstIndex(where: { $0.frame.origin.x == sender.frame.origin.x - 144 + 20 }) {
+            imageViews[index].removeFromSuperview()
+            imageViews.remove(at: index)
+            sender.removeFromSuperview()
+            imageUrls.remove(at: index)
+            print("\(imageUrls)")
+        }
+        
+        // 나머지 이미지 뷰와 삭제 버튼 재배치
+        var xOffset: CGFloat = 0
+        for (index, imageView) in imageViews.enumerated() {
+            imageView.frame.origin.x = xOffset
+            imageScrollView.subviews.filter { $0 is UIButton }[index].frame.origin.x = xOffset + 144 - 20
+            xOffset += 156
+        }
+        imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
     }
 }
 
@@ -355,7 +374,7 @@ extension AddPostViewController {
 
 extension AddPostViewController: ImageUploaderDelegate {
     func didUploadImages(with urls: [Int]) {
-        self.imageUrls = urls
+        self.imageUrls += urls
     }
     // keyboard action control
     

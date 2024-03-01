@@ -4,12 +4,13 @@
 //
 //  Created by 문인호 on 2/29/24.
 //
-    import UIKit
+import UIKit
 
 class DetailPhotoCollectionViewCell: UICollectionViewCell {
     
     let imageView = UIImageView()
     private let identifier = "DetailPhotoCollectionViewCell"
+    
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,7 +25,8 @@ class DetailPhotoCollectionViewCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
     

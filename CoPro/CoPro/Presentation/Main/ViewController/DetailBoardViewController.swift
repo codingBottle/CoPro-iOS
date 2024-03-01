@@ -545,7 +545,7 @@ func getTopMostViewController() -> UIViewController? {
                         let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email ?? "" , picture: data.data.picture ?? "")
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
-                        self.isMyPost = data.data.nickName == self.keychain.get("currentUserEmail")
+                        self.isMyPost = data.data.email == self.keychain.get("currentUserEmail")
                         if self.isMyPost {
                             self.chatButton.isHidden = true
                         }
@@ -769,15 +769,34 @@ func getTopMostViewController() -> UIViewController? {
                         $0.clipsToBounds = true
                         $0.isUserInteractionEnabled = true
                     }
-//                    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
-//                    imageView.addGestureRecognizer(tapGestureRecognizer)
                     xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
-                    
+                    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
+                                    imageView.addGestureRecognizer(tapGestureRecognizer)
                     // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
                     self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
                 }
             }
         }
+    }
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        
+        guard let tappedImageView = tapGestureRecognizer.view as? UIImageView,
+              let index = imageViews.firstIndex(of: tappedImageView) else { return }
+        
+        let layout = UICollectionViewFlowLayout()
+        let width = UIScreen.main.bounds.width
+        let height = UIScreen.main.bounds.height
+        
+        layout.itemSize = CGSize(width: width, height: width)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) // 섹션 인셋 설정
+        layout.scrollDirection = .horizontal
+        let nextVC = DetailPhotoViewController(collectionViewLayout: layout)
+        nextVC.images = imageViews.compactMap { $0.image }
+        nextVC.initialIndex = index
+        
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
     @objc private func closeButtonTapped() {
             dismiss(animated: true, completion: nil)
