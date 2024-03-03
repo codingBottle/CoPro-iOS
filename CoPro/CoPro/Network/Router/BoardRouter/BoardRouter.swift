@@ -15,6 +15,7 @@ enum BoardRouter {
     case getAllBoard(token: String, category: String, page: Int, standard: String)
     case getDetailBoard(token: String, boardId: Int)
     case addPhoto(token: String, images: [UIImage])
+    case deletePhoto(token: String, boardId: Int?,images: [Int])
     case addPost(token: String, title: String, category: String, contents: String, imageid: [Int])
     case addProjectPost(token: String, title: String, category: String, contents: String, part: String ,tag: String, imageid: [Int])
     case editProjectPost(token: String, boardId: Int, title: String, Category: String, Content: String, part: String, tag: String, imageId: [Int])
@@ -50,6 +51,8 @@ extension BoardRouter: BaseTargetType {
         case .editProjectPost:
             return .put
         case .addPhoto:
+            return .post
+        case .deletePhoto:
             return .post
         case .addPost:
             return .post
@@ -96,6 +99,8 @@ extension BoardRouter: BaseTargetType {
             return "/api/board"
         case .addPhoto:
             return "/api/v1/images"
+        case .deletePhoto:
+            return "/api/v1/images/delete"
         case .addPost:
             return "/api/board"
         case .addProjectPost:
@@ -150,6 +155,16 @@ extension BoardRouter: BaseTargetType {
             let base64Images = images.compactMap { $0.jpegData(compressionQuality: 1.0)?.base64EncodedString() }
             let requestModel = uploadImageRequestBody(files: base64Images)
             return .body(requestModel)
+        case .deletePhoto(_, let boardId, let images):
+            if let boardId {
+                let queryModel = heartRequestBody(boardID: boardId)
+                let bodyModel = deleteImageRequestBody(imageIds: images)
+                return .both(queryModel, _parameter:  bodyModel)
+            }
+            else {
+                let bodyModel = deleteImageRequestBody(imageIds: images)
+                return .body(bodyModel)
+            }
         case .addPost(_, let title, let category, let contents, let imageId):
             let requestBody = CreatePostRequestBody(title: title, category: category, contents: contents, part: "프론트엔드", tag: "수익창출", imageID: imageId)
             return .body(requestBody)
@@ -204,6 +219,8 @@ extension BoardRouter: BaseTargetType {
         case .editBoard(let token, _, _, _, _, _, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .addPhoto(let token, _):
+            return ["Authorization": "Bearer \(token)"]
+        case .deletePhoto(let token, _, _):
             return ["Authorization": "Bearer \(token)"]
         case .addPost(let token, _, _, _, _):
             return ["Authorization": "Bearer \(token)"]

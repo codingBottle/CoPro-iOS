@@ -68,39 +68,6 @@ final class DetailBoardViewController: BaseViewController {
         addTarget()
         setNavigate()
     }
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        setupMenu()
-//    }
-
-//    func setupMenu() {
-//        if #available(iOS 14.0, *) {
-//            var menuItems : [UIAction] = [UIAction(title: "신고", attributes: .destructive) { action in
-//                guard let boardId = self.postId else { return }
-//                let bottomSheetVC = ReportBottomSheetViewController()
-//                bottomSheetVC.postId = boardId
-//                self.present(bottomSheetVC, animated: true, completion: nil)
-//            }]
-//            
-//            if self.isMyPost {
-//                let editAction = UIAction(title: "수정") { action in
-//                    self.presentEditVC()
-//                }
-//                menuItems.append(editAction)
-//                let deleteAction = UIAction(title: "삭제", attributes: .destructive) { action in
-//                    self.presentDeleteConfirmationAlert()
-//                }
-//                menuItems.append(deleteAction)
-//            }
-//            else {
-//                print("😫this is not my post")
-//            }
-//            
-//            let menu = UIMenu(title: "", children: menuItems)
-//            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), primaryAction: nil, menu: menu)
-//            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.G6()
-//        }
-//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
@@ -512,7 +479,7 @@ func getTopMostViewController() -> UIViewController? {
             print("project Button")
             let editVC = EditProjectPostViewController()
             editVC.delegate = self
-            editVC.editProjectVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "")
+            editVC.editProjectVC(title: titleLabel.text ?? "", content: recruitContentLabel.text ?? "", imageId: imageId, imageUrl: imageUrl)
             editVC.checkTmp = partContentLabel.text ?? ""
             editVC.radioTmp = tagContentLabel.text ?? ""
             let navigationController = UINavigationController(rootViewController: editVC)
@@ -522,6 +489,8 @@ func getTopMostViewController() -> UIViewController? {
             let editVC = EditPostViewController()
             editVC.delegate = self
             editVC.editFreeVC(title: titleLabel.text ?? "", content: contentLabel.text ?? "", imageId: imageId, imageUrl: imageUrl)
+            print("imageurl = \(imageUrl)")
+            print("imageId = \(imageId)")
             let navigationController = UINavigationController(rootViewController: editVC)
             navigationController.modalPresentationStyle = .overFullScreen
             self.present(navigationController, animated: true, completion: nil)
@@ -545,6 +514,7 @@ func getTopMostViewController() -> UIViewController? {
                         let mappedItem = DetailBoardDataModel(boardId: data.data.boardId, title: data.data.title, createAt: data.data.createAt, category: data.data.category ?? "nil", contents: data.data.contents ?? "nil" , tag: data.data.tag ?? nil, count: data.data.count, heart: data.data.heart, imageUrl: data.data.imageUrl, nickName: data.data.nickName ?? "nil", occupation: data.data.occupation ?? "nil", isHeart: data.data.isHeart, isScrap: data.data.isScrap, commentCount: data.data.commentCount, part: data.data.part ?? "nil", email: data.data.email ?? "" , picture: data.data.picture ?? "")
                         self.isHeart = data.data.isHeart
                         self.isScrap = data.data.isScrap
+                        self.imageUrl = data.data.imageUrl ?? []
                         self.isMyPost = data.data.email == self.keychain.get("currentUserEmail")
                         if self.isMyPost {
                             self.chatButton.isHidden = true
@@ -917,14 +887,24 @@ func getTopMostViewController() -> UIViewController? {
 }
 
 extension DetailBoardViewController: editPostViewControllerDelegate {
-    func didEditPost(title: String, category: String, content: String, image: [Int], tag: String, part: String) {
+    func didEditPost(title: String, category: String, content: String, image: [Int], tag: String, part: String, originImages: [Int]?) {
         switch category {
         case "프로젝트":
             editProjectPost(title: title, boardId: postId ?? 1, category: category, content: content, image: image, tag: tag, part: part)
-            
+            if let originImages {
+                deleteOriginPhoto(boardId: postId ?? 1, imageIds: originImages)
+            }
+            else {
+                return
+            }
         case "자유":
             editPost(title: title, boardId: postId!, category: category, content: content, image: image, tag: tag, part: part)
-            
+            if let originImages {
+                deleteOriginPhoto(boardId: postId ?? 1, imageIds: originImages)
+            }
+            else {
+                return
+            }
         default:
             break
         }
@@ -934,7 +914,30 @@ extension DetailBoardViewController: editPostViewControllerDelegate {
     func didPostArticle() {
         print("post completed")
     }
-    
+    func deleteOriginPhoto (boardId: Int ,imageIds: [Int]) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.deleteImage(token: token, boardId: boardId, imageIds: imageIds){ result in
+                switch result {
+                case .success:
+                    self.dismiss(animated: true, completion: nil)
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
     func editProjectPost( title: String, boardId: Int,category: String, content: String, image: [Int], tag: String, part: String) {
         if let token = self.keychain.get("accessToken") {
             print("\(token)")
@@ -971,6 +974,7 @@ extension DetailBoardViewController: editPostViewControllerDelegate {
             BoardAPI.shared.editPost(token: token, boardId: boardId, title: title, category: category, contents: content, imageId: image, tag: tag, part: part){ result in
                 switch result {
                 case .success(let data):
+                    
                     print("🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷")
                     if let data = data as? DetailBoardDTO{
                         let serverData = data.data

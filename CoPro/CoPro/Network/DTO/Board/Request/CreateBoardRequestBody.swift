@@ -22,6 +22,10 @@ struct uploadImageRequestBody: Codable {
     let files: [String]
 }
 
+struct deleteImageRequestBody: Codable {
+    let imageIds: [Int]
+}
+
 // MARK: - ImageUploadDTO
 struct EditPostDTO: Codable {
     let title, category, contents, part: String

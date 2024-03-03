@@ -39,6 +39,7 @@ class AddPostViewController: UIViewController, SendStringData {
     private let lineView1 = UIView()
     private let lineView2 = UIView()
     private var imageUrls = [Int]()
+    private var deleteImages = [Int]()
     let textViewPlaceHolder = "내용을 입력하세요"
     private let warnView = UIView()
     lazy var remainCountLabel = UILabel()
@@ -189,6 +190,7 @@ class AddPostViewController: UIViewController, SendStringData {
         }
 
     @objc private func closeButtonTapped() {
+        deletePhoto(imageIds: deleteImages)
             dismiss(animated: true, completion: nil)
         }
     @objc private func attachButtonTapped() {
@@ -351,6 +353,7 @@ extension AddPostViewController {
             BoardAPI.shared.addPost(token: token, title: titleTextField.text ?? "", category: category, contents: contentTextField.text, imageId: imageUrls) { result in
                 switch result {
                 case .success:
+                    let result = self.deleteImages.filter { !self.imageUrls.contains($0) }
                     self.delegate?.didPostArticle()
                     self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
@@ -375,6 +378,32 @@ extension AddPostViewController {
 extension AddPostViewController: ImageUploaderDelegate {
     func didUploadImages(with urls: [Int]) {
         self.imageUrls += urls
+        self.deleteImages += urls
+    }
+    
+    func deletePhoto ( imageIds: [Int]) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.deleteImage(token: token, boardId: nil, imageIds: imageIds){ result in
+                switch result {
+                case .success:
+                    self.dismiss(animated: true, completion: nil)
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
     }
     // keyboard action control
     
