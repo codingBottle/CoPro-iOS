@@ -217,7 +217,7 @@ class AddPostViewController: UIViewController, SendStringData {
                 
                 present(alertController, animated: true, completion: nil)
             }
-        else if imageUrls.count >= 5 {
+        else if imageUrls.count > 5 {
             let alertController = UIAlertController(title: nil, message: "사진은 5개 이하로만 첨부 가능합니다.", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
             alertController.addAction(cancelAction)
