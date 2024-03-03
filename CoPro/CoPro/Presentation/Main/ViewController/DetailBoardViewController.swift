@@ -891,19 +891,23 @@ extension DetailBoardViewController: editPostViewControllerDelegate {
         switch category {
         case "프로젝트":
             editProjectPost(title: title, boardId: postId ?? 1, category: category, content: content, image: image, tag: tag, part: part)
-            if let originImages {
-                deleteOriginPhoto(boardId: postId ?? 1, imageIds: originImages)
-            }
-            else {
-                return
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if let originImages {
+                    self.deleteOriginPhoto(boardId: self.postId ?? 1, imageIds: originImages)
+                }
+                else {
+                    return
+                }
             }
         case "자유":
             editPost(title: title, boardId: postId!, category: category, content: content, image: image, tag: tag, part: part)
-            if let originImages {
-                deleteOriginPhoto(boardId: postId ?? 1, imageIds: originImages)
-            }
-            else {
-                return
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if let originImages {
+                    self.deleteOriginPhoto(boardId: self.postId ?? 1, imageIds: originImages)
+                }
+                else {
+                    return
+                }
             }
         default:
             break

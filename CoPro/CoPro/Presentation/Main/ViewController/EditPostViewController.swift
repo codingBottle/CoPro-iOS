@@ -240,7 +240,7 @@ class EditPostViewController: UIViewController {
                 
                 present(alertController, animated: true, completion: nil)
             }
-        else if imageUrls.count + originImages.count >= 5 {
+        else if imageUrls.count + originImages.count > 5 {
             let alertController = UIAlertController(title: nil, message: "사진은 5개 이하로만 첨부 가능합니다.", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
             alertController.addAction(cancelAction)
@@ -250,7 +250,7 @@ class EditPostViewController: UIViewController {
         else {
             let result = self.deletingImages.filter { !self.imageUrls.contains($0) }
             self.deletePhoto(imageIds: result)
-            print("result: \(result)") 
+            print("result: \(result)")
             self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "자유", content: contentTextField.text, image: imageUrls, tag: "수익창출", part: "AI", originImages: deleteImages)
             self.dismiss(animated: true, completion: nil)
         }

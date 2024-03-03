@@ -364,6 +364,13 @@ class AddProjectPostViewController: UIViewController {
             
             present(alertController, animated: true, completion: nil)
         }
+        else if imageUrls.count > 5 {
+            let alertController = UIAlertController(title: nil, message: "사진은 5개 이하로만 첨부 가능합니다.", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
         else {
             addProjectPost(title: titleTextField.text ?? "", category: sortLabel.text!, content: recruitContentTextField.text, image: imageUrls, tag: tagLabel ?? "", part: checkedTexts)
             self.dismiss(animated: true, completion: nil)
