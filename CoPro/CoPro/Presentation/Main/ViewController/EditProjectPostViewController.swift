@@ -11,6 +11,14 @@ import Photos
 
 class EditProjectPostViewController: UIViewController {
 
+    private enum Const {
+        static let numberOfColumns = 3.0
+        static let cellSpace = 1.0
+        static let length = (UIScreen.main.bounds.size.width - cellSpace * (numberOfColumns - 1)) / numberOfColumns
+        static let cellSize = CGSize(width: length, height: length)
+        static let scale = UIScreen.main.scale
+    }
+    private let authService: PhotoAuthManager = MyPhotoAuthManager()
     var radioTmp = String()
     var checkTmp = String()
     weak var delegate: editPostViewControllerDelegate?
@@ -23,6 +31,9 @@ class EditProjectPostViewController: UIViewController {
     private let lineView1 = UIView()
     private let lineView2 = UIView()
     private var imageUrls = [Int]()
+    private var deletingImages = [Int]()
+    private var originImages = [Int]()
+    private var deleteImages = [Int]()
     private let warnView = UIView()
     lazy var remainCountLabel = UILabel()
     private let warnLabel = UILabel()
@@ -88,6 +99,8 @@ class EditProjectPostViewController: UIViewController {
         setNavigate()
         setUI()
         setLayout()
+        view.bringSubviewToFront(attachButton)
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveImages(_:)), name: NSNotification.Name("SelectedImages"), object: nil)
         addKeyboardObserver()
     }
     func checkCheckBoxes(with checkedTexts: String, in checkboxes: [Checkbox]) {
@@ -103,9 +116,45 @@ class EditProjectPostViewController: UIViewController {
             }
         }
     }
-    func editProjectVC (title: String, content: String) {
+    func editProjectVC (title: String, content: String, imageId: [Int]?, imageUrl: [String]?) {
         titleTextField.text = title
         recruitContentTextField.text = content
+        originImages = imageId ?? []
+        if let assets = imageUrl {
+            var xOffset: CGFloat = 0
+            if let lastImageView = imageViews.last {
+                xOffset = lastImageView.frame.origin.x + lastImageView.frame.width + 12
+            }
+            if let imageUrl = imageUrl {
+                for url in imageUrl {
+                    // 비동기적으로 이미지 로드
+                    let imageView = UIImageView()
+                    imageView.kf.indicatorType = .activity
+                    imageView.kf.setImage(with: URL(string:url), placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
+                    DispatchQueue.main.async {
+                        // 이미지 뷰 생성 및 추가
+                        imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
+                        self.imageScrollView.addSubview(imageView)
+                        self.imageViews.append(imageView)
+                        imageView.do {
+                            $0.layer.cornerRadius = 10
+                            $0.clipsToBounds = true
+                        }
+                        // 삭제 버튼 생성 및 추가
+                        let deleteButton = UIButton(frame: CGRect(x: xOffset + 144 - 20, y: 0, width: 20, height: 20))
+                        deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+                        deleteButton.tintColor = .L2()
+                        deleteButton.addTarget(self, action: #selector(self.deleteImageView(_:)), for: .touchUpInside)
+                        self.imageScrollView.addSubview(deleteButton)
+                        
+                        xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
+                        
+                        // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
+                        self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
+                    }
+                }
+            }
+        }
     }
     override func viewWillDisappear(_ animated: Bool) {
         removeKeyBoardObserver()
@@ -176,7 +225,14 @@ class EditProjectPostViewController: UIViewController {
             $0.isScrollEnabled = false
             $0.sizeToFit()
         }
-
+        attachButton.do {
+            $0.setImage(UIImage(systemName: "camera.fill"), for: .normal)
+            attachButton.addTarget(self, action: #selector(attachButtonTapped), for: .touchUpInside)
+            $0.setPreferredSymbolConfiguration(.init(scale: .large), forImageIn: .normal)
+            $0.backgroundColor = .lightGray
+            $0.tintColor = .white
+            $0.layer.cornerRadius = 45 / 2
+        }
         imageScrollView.do {
             $0.showsHorizontalScrollIndicator = false
         }
@@ -268,7 +324,24 @@ class EditProjectPostViewController: UIViewController {
         let barButtonItem = UIBarButtonItem(customView: button)
         self.navigationItem.rightBarButtonItem = barButtonItem
         }
+    @objc private func attachButtonTapped() {
+        authService.requestAuthorization { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success:
+                let vc = PhotoViewController().then {
+                    $0.modalPresentationStyle = .fullScreen
+                }
+                vc.delegate = self
+                present(vc, animated: true)
+            case .failure:
+                return
+            }
+        }
+    }
     @objc private func closeButtonTapped() {
+        deletePhoto(imageIds: deletingImages)
             dismiss(animated: true, completion: nil)
         }
     @objc private func addButtonTapped() {
@@ -306,10 +379,12 @@ class EditProjectPostViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
         }
         else {
-            self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "프로젝트", content: recruitContentTextField.text, image: imageUrls, tag: tagLabel, part: checkedTexts)
+            let result = self.deletingImages.filter { !self.imageUrls.contains($0) }
+            self.deletePhoto(imageIds: result)
+            print("result: \(result)")
+            self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "프로젝트", content: recruitContentTextField.text, image: imageUrls, tag: tagLabel, part: checkedTexts, originImages: deleteImages )
             self.dismiss(animated: true, completion: nil)
         }
-//        self.delegate?.didPostArticle()
     }
 }
 
@@ -338,39 +413,83 @@ extension EditProjectPostViewController: UITextViewDelegate {
         }
 }
 
-extension EditProjectPostViewController {
-    func addProjectPost( title: String, category: String, content: String, image: [Int], tag: String, part: String) {
-        if let token = self.keychain.get("accessToken") {
-            print("\(token)")
-            BoardAPI.shared.addProjectPost(token: token, title: title, category: category, contents: content, imageId: image, tag: tag, part: part) { result in
-                switch result {
-                case .success:
-                    print("success")
-                    self.dismiss(animated: true, completion: nil)
-                case .requestErr(let message):
-                    print("Request error: \(message)")
-                case .pathErr:
-                    print("Path error")
-                    
-                case .serverErr:
-                    print("Server error")
-                    
-                case .networkFail:
-                    print("Network failure")
-                    
-                default:
-                    break
-                }
+extension EditProjectPostViewController: ImageUploaderDelegate, SendStringData, UIGestureRecognizerDelegate {
+    func didUploadImages(with urls: [Int]) {
+        self.imageUrls += urls
+        self.deletingImages += urls
+    }
+    @objc func receiveImages(_ notification: Notification) {
+        print("receiveImagebuttontapped")
+
+        // userInfo에서 PHAsset 배열을 가져옴
+        if let assets = notification.userInfo?["images"] as? [PHAsset] {
+            var xOffset: CGFloat = 0
+            if let lastImageView = imageViews.last {
+                xOffset = lastImageView.frame.origin.x + lastImageView.frame.width + 12
+            }
+            
+            for asset in assets {
+                // 비동기적으로 이미지 로드
+                photoService.fetchImage(
+                    phAsset: asset,
+                    size: CGSize(width: 144 * Const.scale, height: 144 * Const.scale),
+                    contentMode: .aspectFit,
+                    completion: { [weak self] image in
+                        DispatchQueue.main.async {
+                            // 이미지 뷰 생성 및 추가
+                            let imageView = UIImageView(image: image)
+                            imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
+                            self?.imageScrollView.addSubview(imageView)
+                            self?.imageViews.append(imageView)
+                            imageView.do {
+                                $0.layer.cornerRadius = 10
+                                $0.clipsToBounds = true
+                            }
+                            
+                            // 삭제 버튼 생성 및 추가
+                            let deleteButton = UIButton(frame: CGRect(x: xOffset + 144 - 20, y: 0, width: 20, height: 20))
+                            deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+                            deleteButton.tintColor = .L2()
+                            deleteButton.addTarget(self, action: #selector(self?.deleteImageView(_:)), for: .touchUpInside)
+                            self?.imageScrollView.addSubview(deleteButton)
+                            
+                            xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
+                            
+                            // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
+                            self?.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
+                        }
+                    }
+                )
             }
         }
     }
-}
-
-extension EditProjectPostViewController: ImageUploaderDelegate, SendStringData, UIGestureRecognizerDelegate {
-    func didUploadImages(with urls: [Int]) {
-        self.imageUrls = urls
+    @objc func deleteImageView(_ sender: UIButton) {
+        // 이미지 뷰와 삭제 버튼을 제거
+        if let index = imageViews.firstIndex(where: { $0.frame.origin.x == sender.frame.origin.x - 144 + 20 }) {
+            imageViews[index].removeFromSuperview()
+            imageViews.remove(at: index)
+            sender.removeFromSuperview()
+            if index < originImages.count {
+                deleteImages.append(originImages[index])
+                originImages.remove(at: index)
+                print("delete Images = \(deleteImages)")
+                print("origin Images = \(originImages)")
+            }
+            else {
+                imageUrls.remove(at: index - originImages.count)
+                print("imageUrls = \(imageUrls)")
+            }
+        }
+        
+        // 나머지 이미지 뷰와 삭제 버튼 재배치
+        var xOffset: CGFloat = 0
+        for (index, imageView) in imageViews.enumerated() {
+            imageView.frame.origin.x = xOffset
+            imageScrollView.subviews.filter { $0 is UIButton }[index].frame.origin.x = xOffset + 144 - 20
+            xOffset += 156
+        }
+        imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
     }
-    
     func sendData(mydata: String, groupId: Int) {
         print("\(mydata)")
     }
@@ -404,7 +523,30 @@ extension EditProjectPostViewController: ImageUploaderDelegate, SendStringData, 
                        animations: { self.view.layoutIfNeeded()},
                        completion: nil)
     }
-    
+    func deletePhoto ( imageIds: [Int]) {
+        if let token = self.keychain.get("accessToken") {
+            print("\(token)")
+            BoardAPI.shared.deleteImage(token: token, boardId: nil, imageIds: imageIds){ result in
+                switch result {
+                case .success:
+                    self.dismiss(animated: true, completion: nil)
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
     @objc private func keyboardWillHide(_ notification: NSNotification) {
         
         scrollView.contentInset = .zero

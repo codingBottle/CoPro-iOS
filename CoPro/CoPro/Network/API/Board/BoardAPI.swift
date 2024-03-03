@@ -622,5 +622,72 @@ extension BoardAPI {
                     }
         }
     }
+    public func deleteImage(token: String, boardId: Int?, imageIds: [Int], completion: @escaping(NetworkResult<Any>) -> Void) {
+        if let boardId {
+            AFManager.request(BoardRouter.deletePhoto(token: token, boardId: boardId, images: imageIds)).responseData { response in
+                if let statusCode = response.response?.statusCode {
+                    if statusCode == 401 {
+                        // 토큰 재요청 함수 호출
+                        LoginAPI.shared.refreshAccessToken { result in
+                            switch result {
+                            case .success(let loginDTO):
+                                print("토큰 재발급 성공: \(loginDTO)")
+                                
+                                DispatchQueue.main.async {
+                                    self.AFManager.request(BoardRouter.deletePhoto(token: loginDTO.data.accessToken, boardId: boardId, images: imageIds)).responseData { response in
+                                        self.disposeNetwork(response,
+                                                            dataModel: VoidDTO.self,
+                                                            completion: completion)
+                                        
+                                    }
+                                }
+                            case .failure(let error):
+                                print("토큰 재발급 실패: \(error)")
+                            }
+                        }
+                    } else {
+                        // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                    }
+                } else {
+                    // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                    self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                }
+            }
+        }
+        else {
+            
+            AFManager.request(BoardRouter.deletePhoto(token: token, boardId: nil, images: imageIds)).responseData { response in
+                if let statusCode = response.response?.statusCode {
+                    if statusCode == 401 {
+                        // 토큰 재요청 함수 호출
+                        LoginAPI.shared.refreshAccessToken { result in
+                            switch result {
+                            case .success(let loginDTO):
+                                print("토큰 재발급 성공: \(loginDTO)")
+                                
+                                DispatchQueue.main.async {
+                                    self.AFManager.request(BoardRouter.deletePhoto(token: loginDTO.data.accessToken, boardId: boardId, images: imageIds)).responseData { response in
+                                        self.disposeNetwork(response,
+                                                            dataModel: VoidDTO.self,
+                                                            completion: completion)
+                                        
+                                    }
+                                }
+                            case .failure(let error):
+                                print("토큰 재발급 실패: \(error)")
+                            }
+                        }
+                    } else {
+                        // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                        self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                    }
+                } else {
+                    // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+                    self.disposeNetwork(response, dataModel: VoidDTO.self, completion: completion)
+                }
+            }
+        }
+    }
 }
 

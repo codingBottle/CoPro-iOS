@@ -10,7 +10,7 @@ import KeychainSwift
 import Photos
 
 protocol editPostViewControllerDelegate: AnyObject{
-    func didEditPost(title: String, category: String, content: String, image: [Int], tag: String, part: String)
+    func didEditPost(title: String, category: String, content: String, image: [Int], tag: String, part: String, originImages: [Int]?)
 }
 
 class EditPostViewController: UIViewController {
@@ -40,6 +40,9 @@ class EditPostViewController: UIViewController {
     private let lineView1 = UIView()
     private let lineView2 = UIView()
     private var imageUrls = [Int]()
+    private var deletingImages = [Int]()
+    private var originImages = [Int]()
+    private var deleteImages = [Int]()
     private let warnView = UIView()
     lazy var remainCountLabel = UILabel()
     private let warnLabel = UILabel()
@@ -65,6 +68,42 @@ class EditPostViewController: UIViewController {
     func editFreeVC (title: String, content: String, imageId: [Int]?, imageUrl: [String]?) {
         titleTextField.text = title
         contentTextField.text = content
+        originImages = imageId ?? []
+        if let assets = imageUrl {
+            var xOffset: CGFloat = 0
+            if let lastImageView = imageViews.last {
+                xOffset = lastImageView.frame.origin.x + lastImageView.frame.width + 12
+            }
+            if let imageUrl = imageUrl {
+                for url in imageUrl {
+                    // 비동기적으로 이미지 로드
+                    let imageView = UIImageView()
+                    imageView.kf.indicatorType = .activity
+                    imageView.kf.setImage(with: URL(string:url), placeholder: nil, options: [.transition(.fade(0.7))], progressBlock: nil)
+                    DispatchQueue.main.async {
+                        // 이미지 뷰 생성 및 추가
+                        imageView.frame = CGRect(x: xOffset, y: 0, width: 144, height: 144)
+                        self.imageScrollView.addSubview(imageView)
+                        self.imageViews.append(imageView)
+                        imageView.do {
+                            $0.layer.cornerRadius = 10
+                            $0.clipsToBounds = true
+                        }
+                        // 삭제 버튼 생성 및 추가
+                        let deleteButton = UIButton(frame: CGRect(x: xOffset + 144 - 20, y: 0, width: 20, height: 20))
+                        deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+                        deleteButton.tintColor = .L2()
+                        deleteButton.addTarget(self, action: #selector(self.deleteImageView(_:)), for: .touchUpInside)
+                        self.imageScrollView.addSubview(deleteButton)
+                        
+                        xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
+                        
+                        // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
+                        self.imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
+                    }
+                }
+            }
+        }
     }
     private func setUI() {
         self.view.backgroundColor = UIColor.systemBackground
@@ -174,6 +213,7 @@ class EditPostViewController: UIViewController {
         }
 
     @objc private func closeButtonTapped() {
+        deletePhoto(imageIds: deletingImages)
             dismiss(animated: true, completion: nil)
         }
     @objc private func attachButtonTapped() {
@@ -200,23 +240,54 @@ class EditPostViewController: UIViewController {
                 
                 present(alertController, animated: true, completion: nil)
             }
+        else if imageUrls.count + originImages.count >= 5 {
+            let alertController = UIAlertController(title: nil, message: "사진은 5개 이하로만 첨부 가능합니다.", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
         else {
-            self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "자유", content: contentTextField.text, image: imageUrls, tag: "수익창출", part: "AI")
+            let result = self.deletingImages.filter { !self.imageUrls.contains($0) }
+            self.deletePhoto(imageIds: result)
+            print("result: \(result)") 
+            self.delegate?.didEditPost(title: titleTextField.text ?? "", category: "자유", content: contentTextField.text, image: imageUrls, tag: "수익창출", part: "AI", originImages: deleteImages)
             self.dismiss(animated: true, completion: nil)
         }
     }
-
+    func deletePhoto ( imageIds: [Int]) {
+        if let token = self.keychain.get("accessToken") {
+            BoardAPI.shared.deleteImage(token: token, boardId: nil, imageIds: imageIds){ result in
+                switch result {
+                case .success:
+                    self.dismiss(animated: true, completion: nil)
+                case .requestErr(let message):
+                    print("Request error: \(message)")
+                case .pathErr:
+                    print("Path error")
+                    
+                case .serverErr:
+                    print("Server error")
+                    
+                case .networkFail:
+                    print("Network failure")
+                    
+                default:
+                    break
+                }
+            }
+        }
+    }
     @objc func receiveImages(_ notification: Notification) {
         print("receiveImagebuttontapped")
-        
+
         // userInfo에서 PHAsset 배열을 가져옴
         if let assets = notification.userInfo?["images"] as? [PHAsset] {
-            // 기존의 모든 이미지 뷰 제거
-            imageViews.forEach { $0.removeFromSuperview() }
-            imageViews.removeAll()
-            
-            // 받은 모든 PHAsset을 UIImageView로 생성하여 UIScrollView에 추가
             var xOffset: CGFloat = 0
+            if let lastImageView = imageViews.last {
+                xOffset = lastImageView.frame.origin.x + lastImageView.frame.width + 12
+            }
+            
             for asset in assets {
                 // 비동기적으로 이미지 로드
                 photoService.fetchImage(
@@ -235,6 +306,13 @@ class EditPostViewController: UIViewController {
                                 $0.clipsToBounds = true
                             }
                             
+                            // 삭제 버튼 생성 및 추가
+                            let deleteButton = UIButton(frame: CGRect(x: xOffset + 144 - 20, y: 0, width: 20, height: 20))
+                            deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+                            deleteButton.tintColor = .L2()
+                            deleteButton.addTarget(self, action: #selector(self?.deleteImageView(_:)), for: .touchUpInside)
+                            self?.imageScrollView.addSubview(deleteButton)
+                            
                             xOffset += 156 // 다음 이미지 뷰의 x 좌표 오프셋
                             
                             // 스크롤 뷰의 contentSize를 설정하여 모든 이미지 뷰가 보이도록 함
@@ -244,6 +322,33 @@ class EditPostViewController: UIViewController {
                 )
             }
         }
+    }
+    @objc func deleteImageView(_ sender: UIButton) {
+        // 이미지 뷰와 삭제 버튼을 제거
+        if let index = imageViews.firstIndex(where: { $0.frame.origin.x == sender.frame.origin.x - 144 + 20 }) {
+            imageViews[index].removeFromSuperview()
+            imageViews.remove(at: index)
+            sender.removeFromSuperview()
+            if index < originImages.count {
+                deleteImages.append(originImages[index])
+                originImages.remove(at: index)
+                print("delete Images = \(deleteImages)")
+                print("origin Images = \(originImages)")
+            }
+            else {
+                imageUrls.remove(at: index - originImages.count)
+                print("imageUrls = \(imageUrls)")
+            }
+        }
+        
+        // 나머지 이미지 뷰와 삭제 버튼 재배치
+        var xOffset: CGFloat = 0
+        for (index, imageView) in imageViews.enumerated() {
+            imageView.frame.origin.x = xOffset
+            imageScrollView.subviews.filter { $0 is UIButton }[index].frame.origin.x = xOffset + 144 - 20
+            xOffset += 156
+        }
+        imageScrollView.contentSize = CGSize(width: xOffset, height: 144)
     }
 }
 
@@ -273,7 +378,8 @@ extension EditPostViewController: UITextViewDelegate {
 
 extension EditPostViewController: ImageUploaderDelegate {
     func didUploadImages(with urls: [Int]) {
-        self.imageUrls = urls
+        self.imageUrls += urls
+        self.deletingImages += urls
     }
     // keyboard action control
     
