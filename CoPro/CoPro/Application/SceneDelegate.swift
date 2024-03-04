@@ -42,26 +42,69 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     }
                     return
                 }
+               
                 LoginAPI.shared.refreshAccessToken { result in
                     switch result {
                     case .success(let loginDTO):
                         print("토큰 재발급 성공: \(loginDTO)")
-                       LoginAPI.shared.getLoginUserData {
-                          DispatchQueue.main.async {
-                             let bottomtabVC = BottomTabController()
-                             bottomtabVC.modalPresentationStyle = .custom
-                             bottomtabVC.view.alpha = 0.0
-                             bottomtabVC.modalPresentationStyle = .fullScreen
-                             
-                             self.window?.rootViewController?.present(bottomtabVC, animated: false) {
-                                UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
-                                   bottomtabVC.view.alpha = 1.0 // fade-in 애니메이션
-                                }, completion: nil)
+                       let accessToken = loginDTO.data.accessToken
+                       LoginAPI.shared.getCheckInitialLogin(token: accessToken) { result in
+                          switch result {
+                          case .success(let data):
+                             DispatchQueue.main.async {
+                                if let data = data as? CheckInitialLoginDTO {
+                                   if data.data == true {
+                                      let loginVC = LoginViewController()
+                                      loginVC.modalPresentationStyle = .custom
+                                      loginVC.view.alpha = 0.0
+                                      loginVC.modalPresentationStyle = .fullScreen
+                                      
+                                      self.window?.rootViewController?.present(loginVC, animated: false) {
+                                          UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
+                                              loginVC.view.alpha = 1.0 // fade-in 애니메이션
+                                          }, completion: nil)
+                                          LoginAPI.shared.loginVC = loginVC
+                                      }
+                                   } else {
+                                      LoginAPI.shared.getLoginUserData {
+                                         DispatchQueue.main.async {
+                                            let bottomtabVC = BottomTabController()
+                                            bottomtabVC.modalPresentationStyle = .custom
+                                            bottomtabVC.view.alpha = 0.0
+                                            bottomtabVC.modalPresentationStyle = .fullScreen
+                                            
+                                            self.window?.rootViewController?.present(bottomtabVC, animated: false) {
+                                               UIView.animate(withDuration: 1, delay: 0.0, options: .curveEaseOut, animations: {
+                                                  bottomtabVC.view.alpha = 1.0 // fade-in 애니메이션
+                                               }, completion: nil)
+                                            }
+                                         }
+                                      }
+                                   }
+                                }
+                                
+                                else {
+                                   print("Failed to decode the response.")
+                                }
                              }
+                          case .requestErr(let message):
+                              // Handle request error here.
+                              print("Request error: \(message)")
+                          case .pathErr:
+                              // Handle path error here.
+                              print("Path error")
+                          case .serverErr:
+                              // Handle server error here.
+                              print("Server error")
+                          case .networkFail:
+                              // Handle network failure here.
+                              print("Network failure")
+                          default:
+                              break
                           }
-                       }
-                       
-                    case .failure(let error):
+                          
+                      }                       
+                    case .failure(_):
                         let loginVC = LoginViewController()
                         loginVC.modalPresentationStyle = .custom
                         loginVC.view.alpha = 0.0

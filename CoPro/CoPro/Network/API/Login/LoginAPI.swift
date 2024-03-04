@@ -59,6 +59,7 @@ extension LoginAPI {
                                     DispatchQueue.main.async {
                                        let alertVC = EditMyProfileViewController()
                                        alertVC.activeViewType = .FirstLogin
+                                       alertVC.isModalInPresentation = true
                                        print("지금 activeViewType : FirstLogin")
                                        self.loginVC.present(alertVC, animated: true, completion: nil)
                                     }

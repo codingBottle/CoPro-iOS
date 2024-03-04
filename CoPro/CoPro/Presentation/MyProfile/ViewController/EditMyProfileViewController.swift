@@ -221,12 +221,13 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                             let loginViewController = LoginViewController()
                             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                                 let delegate = windowScene.delegate as? SceneDelegate,
-                                let window = delegate.window {
-                                window.rootViewController = loginViewController
-                                window.makeKeyAndVisible()
-                                let alertVC = EditGithubModalViewController()
-                                alertVC.activeModalType = .FirstLogin
-                                loginViewController.present(alertVC, animated: true, completion: nil)
+                               let window = delegate.window {
+                               window.rootViewController = loginViewController
+                               window.makeKeyAndVisible()
+                               let alertVC = EditGithubModalViewController()
+                               alertVC.activeModalType = .FirstLogin
+                               alertVC.isModalInPresentation = true
+                               loginViewController.present(alertVC, animated: true, completion: nil)
                             }
                         }
                       }
