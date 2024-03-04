@@ -255,9 +255,9 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
             MyProfileAPI.shared.postEditGitHubURL(token: token, requestBody: editGitHubURLBody ,checkFirstlogin: true) { result in
                switch result {
                case .success(_):
-                  
                   DispatchQueue.main.async { [weak self] in
                      guard let self = self else { return }
+                     
                      self.showAlert(title: "🥳회원가입이 성공적으로 완료되었습니다🥳",
                                     message: "다양한 기능을 체험해보세요",
                                     confirmButtonName: "확인",
