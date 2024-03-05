@@ -27,16 +27,24 @@ struct CommentData {
         self.writer = writer
         self.children = children
         let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
-                formatter.locale = Locale(identifier: "en_US_POSIX")
-//                formatter.timeZone = TimeZone(secondsFromGMT: 9 * 60 * 60)
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        //                formatter.timeZone = TimeZone(secondsFromGMT: 9 * 60 * 60)
         formatter.timeZone = TimeZone(abbreviation: "KST")
-                
-                if let date = formatter.date(from: createAt) {
-                    self.createAt = date
-                } else {
-                    fatalError("Invalid date format")
-                }
+        
+        let zeroFormatter = DateFormatter()
+        zeroFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        zeroFormatter.locale = Locale(identifier: "en_US_POSIX")
+        zeroFormatter.timeZone = TimeZone(abbreviation: "KST")
+        
+        if let date = formatter.date(from: createAt) {
+            self.createAt = date
+        } else if let date = zeroFormatter.date(from: createAt) {
+            self.createAt = date
+        }else {
+            print("date error => \(createAt)")
+            self.createAt = Date()
+        }
     }
     
     func getDateString() -> String {

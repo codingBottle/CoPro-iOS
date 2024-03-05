@@ -151,6 +151,9 @@
 		9EF2EE2C2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE2B2B8BCE1A00C87DDC /* OppositeInfoRequestBody.swift */; };
 		9EF2EE2E2B8BD58100C87DDC /* OppositeInfoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF2EE2D2B8BD58100C87DDC /* OppositeInfoCardView.swift */; };
 		B517514E2B427161003453B5 /* CardDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B517514D2B427161003453B5 /* CardDTO.swift */; };
+		B5584B9C2B96C6D200DBBAAA /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = B5584B9B2B96C6D200DBBAAA /* Markdown */; };
+		B5584B9F2B96C7B200DBBAAA /* MarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = B5584B9E2B96C7B200DBBAAA /* MarkdownView */; };
+		B5584BA12B96C7E100DBBAAA /* MarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = B5584BA02B96C7E100DBBAAA /* MarkdownView */; };
 		B58A4A632B68F82C00793160 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5A2B68F82C00793160 /* Pretendard-Light.otf */; };
 		B58A4A642B68F82C00793160 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5B2B68F82C00793160 /* Pretendard-Bold.otf */; };
 		B58A4A652B68F82C00793160 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B58A4A5C2B68F82C00793160 /* Pretendard-Medium.otf */; };
@@ -505,6 +508,7 @@
 				9E5C367A2B822D010091884C /* FirebaseFunctions in Frameworks */,
 				9E5C36542B822C570091884C /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				9E5C36222B8218C10091884C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				B5584BA12B96C7E100DBBAAA /* MarkdownView in Frameworks */,
 				B5D3E5292AFB76250021DDA0 /* FirebaseStorage in Frameworks */,
 				9E05D2E22AD50A0600F4CA43 /* Alamofire in Frameworks */,
 				B5D3E4F72AFB76250021DDA0 /* FirebaseAnalytics in Frameworks */,
@@ -542,6 +546,7 @@
 				B5D3E5252AFB76250021DDA0 /* FirebaseRemoteConfig in Frameworks */,
 				9E5C36742B822D010091884C /* FirebaseFirestore in Frameworks */,
 				9E5C363A2B8218C10091884C /* FirebaseFunctions in Frameworks */,
+				B5584B9F2B96C7B200DBBAAA /* MarkdownView in Frameworks */,
 				9E5C36582B822C570091884C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				9E5C364C2B8218C10091884C /* FirebaseRemoteConfigSwift in Frameworks */,
 				9E5C36682B822D010091884C /* FirebaseAuth in Frameworks */,
@@ -577,6 +582,7 @@
 				9E5C361C2B8218C10091884C /* FirebaseAnalytics in Frameworks */,
 				9E5C36842B822D010091884C /* FirebaseMLModelDownloader in Frameworks */,
 				9E05D2E52AD50A1600F4CA43 /* Kingfisher in Frameworks */,
+				B5584B9C2B96C6D200DBBAAA /* Markdown in Frameworks */,
 				9E5C362E2B8218C10091884C /* FirebaseDatabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1468,6 +1474,9 @@
 				9E5C368B2B822D010091884C /* FirebaseRemoteConfigSwift */,
 				9E5C368D2B822D010091884C /* FirebaseStorage */,
 				9E5C368F2B822D010091884C /* FirebaseStorageCombine-Community */,
+				B5584B9B2B96C6D200DBBAAA /* Markdown */,
+				B5584B9E2B96C7B200DBBAAA /* MarkdownView */,
+				B5584BA02B96C7E100DBBAAA /* MarkdownView */,
 			);
 			productName = CoPro;
 			productReference = 9E05D2AA2AD508B200F4CA43 /* CoPro.app */;
@@ -1508,6 +1517,8 @@
 				B5D3E54D2B0213370021DDA0 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				B5D3E56D2B172A150021DDA0 /* XCRemoteSwiftPackageReference "DropDown" */,
 				9E7401BE2B3BE1C80030C8EC /* XCRemoteSwiftPackageReference "MessageKit" */,
+				B5584B9A2B96C6D100DBBAAA /* XCRemoteSwiftPackageReference "swift-markdown" */,
+				B5584B9D2B96C7B100DBBAAA /* XCRemoteSwiftPackageReference "MarkdownView" */,
 			);
 			productRefGroup = 9E05D2AB2AD508B200F4CA43 /* Products */;
 			projectDirPath = "";
@@ -1969,6 +1980,22 @@
 				minimumVersion = 4.2.0;
 			};
 		};
+		B5584B9A2B96C6D100DBBAAA /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-markdown";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
+		B5584B9D2B96C7B100DBBAAA /* XCRemoteSwiftPackageReference "MarkdownView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/keitaoouchi/MarkdownView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.1;
+			};
+		};
 		B5D3E4F52AFB76250021DDA0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -2275,6 +2302,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9E7401BE2B3BE1C80030C8EC /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
+		};
+		B5584B9B2B96C6D200DBBAAA /* Markdown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5584B9A2B96C6D100DBBAAA /* XCRemoteSwiftPackageReference "swift-markdown" */;
+			productName = Markdown;
+		};
+		B5584B9E2B96C7B200DBBAAA /* MarkdownView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5584B9D2B96C7B100DBBAAA /* XCRemoteSwiftPackageReference "MarkdownView" */;
+			productName = MarkdownView;
+		};
+		B5584BA02B96C7E100DBBAAA /* MarkdownView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5584B9D2B96C7B100DBBAAA /* XCRemoteSwiftPackageReference "MarkdownView" */;
+			productName = MarkdownView;
 		};
 		B5D3E4F62AFB76250021DDA0 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
