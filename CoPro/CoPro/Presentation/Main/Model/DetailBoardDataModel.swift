@@ -35,11 +35,19 @@ struct DetailBoardDataModel {
       //                formatter.timeZone = TimeZone(secondsFromGMT: 9 * 60 * 60)
       formatter.timeZone = TimeZone(abbreviation: "KST")
       
-      if let date = formatter.date(from: createAt) {
-         self.createAt = date
-      } else {
-         fatalError("Invalid date format")
-      }
+       let zeroFormatter = DateFormatter()
+       zeroFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+       zeroFormatter.locale = Locale(identifier: "en_US_POSIX")
+       zeroFormatter.timeZone = TimeZone(abbreviation: "KST")
+               
+       if let date = formatter.date(from: createAt) {
+           self.createAt = date
+       } else if let date = zeroFormatter.date(from: createAt) {
+           self.createAt = date
+       }else {
+           print("date error => \(title)\(createAt)")
+           self.createAt = Date()
+       }
       self.category = category
       self.contents = contents
       self.tag = tag
