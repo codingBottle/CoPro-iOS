@@ -14,16 +14,17 @@ struct EditGitHubURLDTO: Codable {
 }
 
 struct EditGitHubURLDataClass: Codable {
-    let memberID, career: Int
-    let name, email, picture, occupation: String
-    let language, gitHubURL, nickName: String
-    let likeMembersCount: Int
-    let isLikeMembers: Bool
-
-    enum CodingKeys: String, CodingKey {
-        case memberID = "memberId"
-        case name, email, picture, occupation, language, career
-        case gitHubURL = "gitHubUrl"
-        case nickName, likeMembersCount, isLikeMembers
-    }
+   let memberID, career: Int
+   let email, picture, occupation: String
+   let name: String?
+   let language, gitHubURL, nickName: String
+   let likeMembersCount: Int
+   let isLikeMembers: Bool
+   
+   enum CodingKeys: String, CodingKey {
+      case memberID = "memberId"
+      case name, email, picture, occupation, language, career
+      case gitHubURL = "gitHubUrl"
+      case nickName, likeMembersCount, isLikeMembers
+   }
 }

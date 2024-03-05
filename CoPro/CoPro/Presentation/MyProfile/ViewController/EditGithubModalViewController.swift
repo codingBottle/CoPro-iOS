@@ -222,7 +222,7 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
             if githubURLtextFieldLabel.text == initialUserURL {
                self.dismiss(animated: true, completion: nil)
             } else {
-               let regex = "^https://github\\.com/[a-zA-Z0-9]*$"
+               let regex = "^https://github\\.com/[a-zA-Z0-9\\-]*$"
                let testStr = githubURLtextFieldLabel.text ?? ""
                if testStr.count > 19 {
                   let testPredicate = NSPredicate(format:"SELF MATCHES %@", regex)
