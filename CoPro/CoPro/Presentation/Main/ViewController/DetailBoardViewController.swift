@@ -12,6 +12,7 @@ import Then
 import KeychainSwift
 import Kingfisher
 import MarkdownView
+import SafariServices
 
 protocol DetailViewControllerDelegate: AnyObject {
     func didDeletePost()
@@ -68,6 +69,19 @@ final class DetailBoardViewController: BaseViewController {
         getDetailBoard( boardId: postId!)
         addTarget()
         setNavigate()
+        markdownView.onTouchLink = { request in
+          guard let url = request.url else { return false }
+            
+          if url.scheme == "file" {
+            return false
+          } else if url.scheme == "https" {
+              print(url)
+              UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            return false
+          } else {
+            return false
+          }
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
