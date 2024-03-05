@@ -17,8 +17,8 @@ struct EditMyProfileDTO: Codable {
 // MARK: - DataClass
 struct EditMyProfileDataClass: Codable {
     let memberID: Int
-    let name, email, picture, occupation: String
-    let gitHubURL: String?
+    let email, picture, occupation: String
+    let gitHubURL, name: String?
     let career: Int
     let language, nickName: String
     let likeMembersCount: Int
