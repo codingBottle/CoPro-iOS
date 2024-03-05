@@ -11,6 +11,7 @@ import SnapKit
 import Then
 import KeychainSwift
 import Kingfisher
+import MarkdownView
 
 protocol DetailViewControllerDelegate: AnyObject {
     func didDeletePost()
@@ -59,7 +60,7 @@ final class DetailBoardViewController: BaseViewController {
     private var category: String?
     private var imageUrl = [String]()
     private var imageId = [Int]()
-
+    private let markdownView = MarkdownView()
     weak var delegate: DetailViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -363,6 +364,7 @@ final class DetailBoardViewController: BaseViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
+    
     private func setNoticeLayout() {
         view.addSubviews(scrollView,lineView2)
         scrollView.snp.makeConstraints {
@@ -380,7 +382,7 @@ final class DetailBoardViewController: BaseViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        stackView.addArrangedSubviews(titleLabel,infoView,contentLabel,imageScrollView)
+        stackView.addArrangedSubviews(titleLabel,infoView,markdownView,imageScrollView)
         infoView.addSubviews(nicknameLabel, jobLabel, dateLabel, timeLabel, viewCountLabel, lineView1)
         infoView.snp.makeConstraints {
             $0.height.equalTo(28)
@@ -516,6 +518,7 @@ func getTopMostViewController() -> UIViewController? {
                         self.isScrap = data.data.isScrap
                         self.imageUrl = data.data.imageUrl ?? []
                         self.isMyPost = data.data.email == self.keychain.get("currentUserEmail")
+                        self.markdownView.load(markdown: data.data.contents ?? "")
                         if self.isMyPost {
                             self.chatButton.isHidden = true
                         }
