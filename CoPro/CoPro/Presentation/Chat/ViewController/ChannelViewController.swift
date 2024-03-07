@@ -12,7 +12,7 @@ import Firebase
 import KeychainSwift
 
 class ChannelViewController: BaseViewController {
-   
+   let keychain = KeychainSwift()
     lazy var channelTableView: UITableView = {
         let view = UITableView()
         view.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.className)
@@ -23,7 +23,7 @@ class ChannelViewController: BaseViewController {
     }()
     
     var channels = [Channel]()
-    private let currentUserNickName: String
+   private var currentUserNickName: String
     private let channelStream = ChannelFirestoreStream()
     private var currentChannelAlertController: UIAlertController?
     
@@ -279,9 +279,12 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       if let cell = tableView.cellForRow(at: indexPath) as? ChannelTableViewCell {
          guard let profileImage = cell.loadedImage else {return print("엑시던트")}
+         guard let currentUser = self.keychain.get("currentUserNickName") else {return print("channel tableview 안에서 실패")}
+         print("🔥\(self.currentUserNickName)")
+         self.currentUserNickName = currentUser
          // 채널 정보를 가져옵니다. 수정해야함!
          let channel = channels[indexPath.row]
-         print("🔥\(self.currentUserNickName)")
+         print("🌊\(self.currentUserNickName)")
          
          //sender, receiver 둘 중 currentUserNickName이 어떤거든 간에 일단 채팅방 상대를 titlename에 넣어야함.
          

@@ -21,6 +21,7 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    }
    var activeViewType: EditMyProfileViewType = .NotFirstLogin
    private let keychain = KeychainSwift()
+   private let channelStream = ChannelFirestoreStream()
    weak var profileUpdateDelegate: ProfileUpdateDelegate?
    
    var loginVC = LoginViewController()
@@ -249,6 +250,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
                           self.showAlert(title: "프로필 수정을 완료하였습니다",
                                          confirmButtonName: "확인",
                                          confirmButtonCompletion: { [self] in
+                             keychain.set(editMyProfileBody.nickName, forKey: "currentUserNickName")
+                             //여기
+                             guard let beforeNickName = initialUserName else {return print("이전 닉네임을 불러오지 못했습니다.")}
+                             self.channelStream.updateFirestoreNickname(beforeNickName: beforeNickName, afterNickName: editMyProfileBody.nickName)
                               self.profileUpdateDelegate?.didUpdateProfile()
                               self.dismiss(animated: true)
                           })
