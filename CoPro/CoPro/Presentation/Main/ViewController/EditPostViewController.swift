@@ -116,6 +116,8 @@ class EditPostViewController: UIViewController {
             $0.text = "0/500"
             $0.font = .pretendard(size: 11, weight: .regular)
             $0.textColor = .G4()
+            let characterCount = contentTextField.text?.count ?? 0
+                updateCountLabel(characterCount: characterCount)
             $0.textAlignment = .center
         }
         warnLabel.do {
