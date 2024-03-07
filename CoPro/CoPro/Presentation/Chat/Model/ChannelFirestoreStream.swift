@@ -53,6 +53,55 @@ class ChannelFirestoreStream {
            }
        }
    }
+   
+   func updateFirestoreNickname(beforeNickName: String, afterNickName: String) {
+       let db = Firestore.firestore()
+
+       db.collection("channels").getDocuments { (querySnapshot, err) in
+           if let err = err {
+               print("Error getting documents: \(err)")
+           } else {
+               for document in querySnapshot!.documents {
+                   if document.data()["sender"] as? String == beforeNickName || document.data()["receiver"] as? String == beforeNickName {
+                       db.collection("channels").document(document.documentID).updateData([
+                           "sender": document.data()["sender"] as? String == beforeNickName ? afterNickName : document.data()["sender"],
+                           "receiver": document.data()["receiver"] as? String == beforeNickName ? afterNickName : document.data()["receiver"]
+                       ]) { err in
+                           if let err = err {
+                               print("Error updating document: \(err)")
+                           } else {
+                               print("Document successfully updated")
+                           }
+                       }
+                   }
+
+                   // Now update the senderId in the thread subcollection
+                   let threadRef = db.collection("channels").document(document.documentID).collection("thread")
+                   threadRef.getDocuments { (threadSnapshot, threadErr) in
+                       if let threadErr = threadErr {
+                           print("Error getting thread documents: \(threadErr)")
+                       } else {
+                           for threadDocument in threadSnapshot!.documents {
+                               if threadDocument.data()["senderId"] as? String == beforeNickName {
+                                   threadRef.document(threadDocument.documentID).updateData([
+                                       "senderId": afterNickName
+                                   ]) { err in
+                                       if let err = err {
+                                           print("Error updating thread document: \(err)")
+                                       } else {
+                                           print("Thread document successfully updated")
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
+   }
+
+
 
 
    

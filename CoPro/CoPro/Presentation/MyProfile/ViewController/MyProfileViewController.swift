@@ -21,6 +21,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     var myProfileData: MyProfileDataModel?
     var languageArr: Array<Substring>?
    var githubURL: String?
+   var beforeNickName: String?
     let bottomTabBarView = UIView()
    
     
@@ -84,6 +85,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                break
            }
        }
+      print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\(keychain.get("currentUserNickName") ?? "")")
    }
     
    func postEditCardViewType(CardViewType: Int) {
