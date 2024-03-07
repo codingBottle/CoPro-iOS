@@ -121,11 +121,15 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
     }
     @objc func submitButtonTapped() {
             // NotificationCenter를 사용하여 선택된 이미지들을 전달
-        NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": selectedImages])
+        submitButton.isEnabled = false
         loadImages(from: selectedImages) { images in
                 self.uploadImages(images: images) { urls in
+                    NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": self.selectedImages])
                     self.delegate?.didUploadImages(with: urls)
-                    self.dismiss(animated: true, completion: nil)
+                    self.dismiss(animated: true, completion: {
+                                    // 모든 작업이 완료된 후에 버튼을 다시 활성화합니다.
+                                    self.submitButton.isEnabled = true
+                                })
                 }
             }
         }
@@ -151,19 +155,26 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
             let headers : HTTPHeaders = [
                         "Content-Type" : "multipart/form-data",
                         "Authorization": "Bearer \(token)" ]
+            for (index, image) in images.enumerated() {
+                    guard let imageData = image.jpegData(compressionQuality: 1.0) else {
+                        print("Could not get JPEG representation of UIImage")
+                        return
+                    }
+                    let sizeInMB = Double(imageData.count) / 1024.0 / 1024.0
+                    if sizeInMB > 10.0 { // 크기가 10MB를 초과할 경우
+                        let alertController = UIAlertController(title: "업로드 오류", message: "10MB를 초과하는 이미지는 업로드할 수 없습니다.", preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                        self.present(alertController, animated: true, completion: nil)
+                        submitButton.isEnabled = true
+                        return // 10MB 이상의 이미지가 있을 경우 바로 return하여 함수를 종료합니다.
+                    }
+                }
             AF.upload(multipartFormData: { multipartFormData in
                 for (index, image) in images.enumerated() {
                     guard let imageData = image.jpegData(compressionQuality: 1.0) else {
                         print("Could not get JPEG representation of UIImage")
                         return
                     }
-                    let sizeInMB = Double(imageData.count) / 1024.0 / 1024.0
-                                if sizeInMB > 10.0 { // 크기가 10MB를 초과할 경우
-                                    let alertController = UIAlertController(title: "업로드 오류", message: "10MB를 초과하는 이미지는 업로드할 수 없습니다.", preferredStyle: .alert)
-                                    alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-                                    self.present(alertController, animated: true, completion: nil)
-                                    return
-                                }
                     print("\(imageData)")
                     multipartFormData.append(imageData, withName: "files", fileName: "image\(index).jpeg", mimeType: "image/jpeg")
                 }

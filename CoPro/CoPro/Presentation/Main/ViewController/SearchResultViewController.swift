@@ -129,7 +129,9 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
             let detailVC = DetailBoardViewController()
             detailVC.postId = filteredPosts[indexPath.row].boardId
             print("hello")
-            navigationController?.pushViewController(detailVC, animated: true)
+            let navigationController = UINavigationController(rootViewController: detailVC)
+            navigationController.modalPresentationStyle = .overFullScreen
+            self.present(navigationController, animated: true, completion: nil)
         } else {
             print("Invalid index")
             detailVC.postId = posts[indexPath.row].boardId

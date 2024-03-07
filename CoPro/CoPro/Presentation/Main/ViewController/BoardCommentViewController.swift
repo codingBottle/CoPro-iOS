@@ -485,8 +485,17 @@ extension BoardCommentViewController: CustomCellDelegate {
     }
     
     func buttonTapped(commentId: Int) {
-        self.commentId = commentId
-        print("data received")
+        let alertController = UIAlertController(title: nil, message: "대댓글을 작성하시겠습니가?", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "확인", style: .default) { _ in
+            self.commentId = commentId
+            print("data received")
+            self.commentTextField.becomeFirstResponder()
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alertController.addAction(action1)
+        alertController.addAction(cancelAction)
+        getTopMostViewController()?.present(alertController, animated: true, completion: nil)
+        
     }
 }
 
