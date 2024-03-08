@@ -105,6 +105,7 @@ class SlideCardView: BaseView {
         $0.setPretendardFont(text: "", size: 14, weight: .regular, letterSpacing: 1.26)
         $0.textColor = UIColor.Black()
     }
+    // userPartStackView
     let userPartStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fill
