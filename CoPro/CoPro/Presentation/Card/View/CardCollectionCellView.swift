@@ -148,7 +148,18 @@ class CardCollectionCellView: UICollectionViewCell {
       slideCardView.userPartLabel.text = occupation
       slideCardView.userLangLabel.text = language
       slideCardView.likeLabel.text = String(likeCount)
-   
+       switch occupation{
+       case "Mobile":
+           slideCardView.userPartImage.image = UIImage(named: "mobileIcon")
+       case "Frontend":
+           slideCardView.userPartImage.image = UIImage(named: "frontendIcon")
+       case "Backend":
+           slideCardView.userPartImage.image = UIImage(named: "backendIcon")
+       case "AI":
+           slideCardView.userPartImage.image = UIImage(named: "aiIcon")
+       default:
+           slideCardView.userPartImage.backgroundColor = .clear
+       }
       self.likeCount = likeCount
       self.likeMemberId = memberId
       self.isLike = isLike

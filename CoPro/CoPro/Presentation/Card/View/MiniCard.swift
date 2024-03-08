@@ -76,7 +76,7 @@ class MiniCard: BaseView {
     
     let userCareerLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "hi", size: 11, weight: .regular, letterSpacing: 1.0)
+        $0.setPretendardFont(text: "hi", size: 12, weight: .regular, letterSpacing: 1.0)
         $0.textColor = UIColor.Black()
     }
     
@@ -94,7 +94,7 @@ class MiniCard: BaseView {
     
     let chatLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.setPretendardFont(text: "채팅하기", size: 8, weight: .regular, letterSpacing: 1.15)
+        $0.setPretendardFont(text: "채팅하기", size: 10, weight: .regular, letterSpacing: 1.15)
         $0.textColor = UIColor.Black()
     }
     
@@ -103,7 +103,7 @@ class MiniCard: BaseView {
         let gitImage = UIImage(named: "github_SignInButton")?.withRenderingMode(.alwaysTemplate)
         var container = AttributeContainer()
         
-        container.font = .systemFont(ofSize: 8, weight: .regular)
+        container.font = .systemFont(ofSize: 10, weight: .regular)
         let resizedImage = gitImage?.resized(to: CGSize(width: 16, height: 16)) // 이미지 크기 조절
         
         config.imagePadding = 5
