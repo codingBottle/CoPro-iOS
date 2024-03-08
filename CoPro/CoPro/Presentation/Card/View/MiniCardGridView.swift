@@ -156,6 +156,19 @@ class MiniCardGridView: UICollectionViewCell {
         default:
             miniCardView.userCareerLabel.text = "신입"
         }
+       //직군에 따른 아이콘 변경
+       switch occupation{
+       case "Mobile":
+           miniCardView.userPartImage.image = UIImage(named: "mobileIcon_blue")
+       case "Frontend":
+           miniCardView.userPartImage.image = UIImage(named: "frontendIcon_blue")
+       case "Backend":
+           miniCardView.userPartImage.image = UIImage(named: "backendIcon_blue")
+       case "AI":
+           miniCardView.userPartImage.image = UIImage(named: "aiIcon_blue")
+       default:
+           miniCardView.userPartImage.backgroundColor = .clear
+       }
         miniCardView.likeLabel.text = String(likeCount)
         self.likeCount = likeCount
         self.likeMemberId = memberId

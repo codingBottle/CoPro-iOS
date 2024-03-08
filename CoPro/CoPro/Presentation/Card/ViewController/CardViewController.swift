@@ -255,7 +255,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
         view.backgroundColor = UIColor.White()
         //        setDropDownText()
         setupDropDown(dropDown: partDropDown, anchorView: cardView.partContainerView, button: cardView.partButton, items: ["전체","Frontend", "Backend", "Mobile", "AI"])
-        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN","Spring", "Django", "Flask", "Node.js", "Go","React.js", "Vue.js", "Angular.js", "TypeScript", "TensorFlow", "Keras", "PyTorch"])
+        setupDropDown(dropDown: langDropDown, anchorView: cardView.langContainerView, button: cardView.langButton, items: ["전체","SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN","Spring", "Django", "Flask", "Node.js", "Go","React.js", "Vue.js", "Angular.js", "TypeScript", "TensorFlow", "Keras", "PyTorch"])
         setupDropDown(dropDown: oldDropDown, anchorView: cardView.oldContainerView, button: cardView.oldButton, items: ["전체","신입", "3년 미만", "3년 이상", "5년 이상", "10년 이상"])
         setupCollectionView()
         
@@ -371,7 +371,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
     
     //DropDown button동작 설정
     func setupDropDown(dropDown: DropDown, anchorView: UIView, button: UIButton, items: [String]) {
-        
+        dropDown.dismissMode = .automatic
         dropDown.anchorView = anchorView
         dropDown.dataSource = items
         dropDown.direction = .bottom
@@ -400,6 +400,7 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.cardView.oldButton.tintColor = UIColor.G3()
                 print(self.cardView.partLabel.text!)
                 self.page = 0
+                self.oldIndex = 0
                 updateLangDropDown(part: item)
                 
             } else if dropDown == self.langDropDown {
@@ -442,41 +443,52 @@ class CardViewController: BaseViewController, UICollectionViewDataSource, UIColl
                 self.collectionView.reloadData()}
         }
         
-        button.addTarget(self, action: #selector(showDropDown(sender:)), for: .touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(showDropdown(sender:)))
+            anchorView.addGestureRecognizer(tapGestureRecognizer)
+        button.addTarget(self, action: #selector(showDropdownButton(sender:)), for: .touchUpInside)
         
+    }
+    // MARK: - DropdownShow
+    @objc func showDropdownButton(sender: UIButton){
+        if sender == cardView.partButton {
+            partDropDown.show()
+        } else if sender == cardView.langButton {
+            langDropDown.show()
+        } else if sender == cardView.oldButton {
+            oldDropDown.show()
+        }
+    }
+    
+    @objc func showDropdown(sender: UITapGestureRecognizer) {
+        if sender.view == cardView.partContainerView {
+            partDropDown.show()
+        } else if sender.view == cardView.langContainerView {
+            langDropDown.show()
+        } else if sender.view == cardView.oldContainerView {
+            oldDropDown.show()
+        }
     }
     // 두 번째 드롭다운 내용 업데이트 메서드
     func updateLangDropDown(part: String) {
         var langItems: [String] = []
         // 첫 번째 드롭다운 선택값에 따라 두 번째 드롭다운 내용 설정
         if part == "Mobile" {
-            langItems = ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN"]
+            langItems = ["전체","SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN"]
         } else if part == "Backend" {
-            langItems = ["Spring", "Django", "Flask", "Node.js", "Go"]
+            langItems = ["전체","Spring", "Django", "Flask", "Node.js", "Go"]
         } else if part == "Frontend" {
-            langItems = ["React.js", "Vue.js", "Angular.js", "TypeScript"]
+            langItems = ["전체","React.js", "Vue.js", "Angular.js", "TypeScript"]
         } else if part == "AI"{
-            langItems = ["TensorFlow", "Keras", "PyTorch"]
+            langItems = ["전체","TensorFlow", "Keras", "PyTorch"]
         } else if part == "전체"{
-            langItems = ["SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN","Spring", "Django", "Flask", "Node.js", "Go","React.js", "Vue.js", "Angular.js", "TypeScript", "TensorFlow", "Keras", "PyTorch"]
+            langItems = ["전체","SwiftUI", "UIKit", "Flutter", "Kotlin", "Java", "RN","Spring", "Django", "Flask", "Node.js", "Go","React.js", "Vue.js", "Angular.js", "TypeScript", "TensorFlow", "Keras", "PyTorch"]
         }
         
         // 두 번째 드롭다운 업데이트
         langDropDown.dataSource = langItems
         langDropDown.reloadAllComponents()
     }
+   
     
-    //Dropdown show function
-    @objc func showDropDown(sender: UIButton) {
-        if sender == cardView.partButton {
-            partDropDown.bottomOffset = CGPoint(x: 0, y:(partDropDown.anchorView?.plainView.bounds.height)!)
-            partDropDown.show()
-        } else if sender == cardView.langButton {
-            langDropDown.bottomOffset = CGPoint(x: 0, y:(langDropDown.anchorView?.plainView.bounds.height)!)
-            langDropDown.show()
-        } else if sender == cardView.oldButton {
-            oldDropDown.bottomOffset = CGPoint(x: 0, y:(oldDropDown.anchorView?.plainView.bounds.height)!)
-            oldDropDown.show()
-        }
-    }
+
 }
