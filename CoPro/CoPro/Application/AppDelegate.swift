@@ -42,7 +42,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         return true
     }
-   
+    // MARK: - 화면 세로모드 고정
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+      return .portrait
+    }
+
    //소셜 로그인 관련
       
    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
