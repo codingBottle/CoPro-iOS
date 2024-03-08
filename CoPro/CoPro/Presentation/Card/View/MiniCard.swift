@@ -61,13 +61,21 @@ class MiniCard: BaseView {
         $0.spacing = 1
         $0.alignment = .center
     }
-    
+    // userPartStackView
+    let userPartStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.spacing = 4
+        $0.alignment = .center
+    }
     let userPartLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.0)
         $0.textColor = UIColor.Black()
     }
-    
+    let userPartImage = UIImageView().then{
+        $0.contentMode = .scaleAspectFit
+    }
     let userLangLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 17, weight: .bold, letterSpacing: 1.23)
@@ -135,7 +143,8 @@ class MiniCard: BaseView {
     
     override func setUI() {
         addSubviews(profileArea,profile, userNameLabel, lineView, infoStackView )
-        infoStackView.addArrangedSubviews(userPartLabel,userLangLabel,userCareerLabel)
+        userPartStackView.addArrangedSubviews(userPartLabel,userPartImage)
+        infoStackView.addArrangedSubviews(userPartStackView,userLangLabel,userCareerLabel)
         addSubviews(buttonStackView)
         buttonStackView.addArrangedSubviews( gitButton,chatButton)
         chatButton.addSubview(chatLabel)

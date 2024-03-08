@@ -1,0 +1,12 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 13C7 14.8856 7 15.8284 7.58579 16.4142C8.17157 17 9.11438 17 11 17H13C14.8856 17 15.8284 17 16.4142 16.4142C17 15.8284 17 14.8856 17 13V11C17 9.11438 17 8.17157 16.4142 7.58579C15.8284 7 14.8856 7 13 7H11C9.11438 7 8.17157 7 7.58579 7.58579C7 8.17157 7 9.11438 7 11V13Z" stroke="#2577FE" stroke-width="2"/>
+<rect width="4" height="4" rx="1" transform="matrix(1 0 0 -1 10 14)" fill="#2577FE"/>
+<path d="M10 17V20" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+<path d="M14 17V20" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+<path d="M17 14L20 14" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+<path d="M17 10L20 10" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+<path d="M10 4V7" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+<path d="M14 4V7" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+<path d="M4 14L7 14" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+<path d="M4 10L7 10" stroke="#2577FE" stroke-width="2" stroke-linecap="round"/>
+</svg>
