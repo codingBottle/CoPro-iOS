@@ -148,6 +148,7 @@ class CardCollectionCellView: UICollectionViewCell {
       slideCardView.userPartLabel.text = occupation
       slideCardView.userLangLabel.text = language
       slideCardView.likeLabel.text = String(likeCount)
+       //직군에 따른 아이콘 변경
        switch occupation{
        case "Mobile":
            slideCardView.userPartImage.image = UIImage(named: "mobileIcon")
