@@ -24,6 +24,7 @@ final class DetailBoardViewController: BaseViewController {
     var isScrap = Bool()
     var email: String?
     var picture: String?
+    var isProcessing: Bool = false
     private let channelStream = ChannelFirestoreStream()
     private let keychain = KeychainSwift()
     private let scrollView = UIScrollView()
@@ -586,6 +587,7 @@ func getTopMostViewController() -> UIViewController? {
                             self.heartButton.tintColor = UIColor.G5()
                         }
                         self.isHeart = true
+                        self.isProcessing = false
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
@@ -617,6 +619,7 @@ func getTopMostViewController() -> UIViewController? {
                             self.heartButton.tintColor = UIColor.G4()
                         }
                         self.isHeart = false
+                        self.isProcessing = false
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
@@ -795,6 +798,11 @@ func getTopMostViewController() -> UIViewController? {
     
     @objc func heartButtonTapped(_ sender: UIButton) {
         guard let postId = postId else { return }
+        if isProcessing {
+            showAlert(title: "처리중", message: "이전 요청이 아직 처리 중입니다. 잠시 후 다시 시도해주세요.", confirmButtonName: "확인" )
+                return
+            }
+        isProcessing = true
         if isHeart {
             deleteHeart(boardId: postId)
         }
