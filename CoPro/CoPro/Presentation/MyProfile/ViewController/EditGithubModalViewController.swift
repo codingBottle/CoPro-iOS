@@ -194,6 +194,9 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    override func setUpKeyboard() {
       NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
       NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+      let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+          tapGesture.cancelsTouchesInView = false
+          view.addGestureRecognizer(tapGesture)
    }
    
    internal func textFieldDidEndEditing(_ textField: UITextField) {
@@ -327,6 +330,9 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
       }
    }
    
+   @objc override func dismissKeyboard() {
+       view.endEditing(true)
+   }
    
    @objc func keyboardWillShow(notification: NSNotification) {
       if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
