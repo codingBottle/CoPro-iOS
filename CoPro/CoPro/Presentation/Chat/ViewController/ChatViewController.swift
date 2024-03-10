@@ -59,6 +59,8 @@ class ChatViewController: MessagesViewController {
     deinit {
         chatFirestoreStream.removeListener()
         navigationController?.navigationBar.prefersLargeTitles = true
+       NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+       NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
    override func viewDidLoad() {
@@ -70,7 +72,21 @@ class ChatViewController: MessagesViewController {
       removeOutgoingMessageAvatars()
       removeincomingMessageAvatars()
       listenToMessages()
+      DispatchQueue.main.async {
+         self.messagesCollectionView.scrollToLastItem(animated: false)
+      }
+      
+//      let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+//          // 제스처 인식기가 콜렉션 뷰의 다른 터치 이벤트를 방해하지 않도록 설정합니다.
+//          tapGesture.cancelsTouchesInView = false
+//          view.addGestureRecognizer(tapGesture)
    }
+   
+//   @objc func handleTap() {
+//      if inputAccessoryView?.isFirstResponder ?? false {
+//              view.endEditing(true)
+//          }
+//   }
 
     private func confirmDelegates() {
         messagesCollectionView.messagesDataSource = self
@@ -241,6 +257,39 @@ class ChatViewController: MessagesViewController {
         }
         present(picker, animated: true)
     }
+   
+   func setUpKeyboard() {
+      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+      // 키보드 외의 영역을 탭했을 때 키보드를 숨기기 위한 탭 제스처 리코그나이저를 추가합니다.
+          let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+          tapGesture.cancelsTouchesInView = false
+          view.addGestureRecognizer(tapGesture)
+   }
+   
+   
+   @objc override func dismissKeyboard() {
+       view.endEditing(true)
+   }
+   
+   @objc func keyboardWillShow(notification: NSNotification) {
+      if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+         
+         if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            
+            UIView.animate(withDuration: 0.3) {
+               self.view.layoutIfNeeded()
+            }
+         }
+      }
+   }
+   
+   @objc func keyboardWillHide(notification: NSNotification) {
+      
+      UIView.animate(withDuration: 0.3) {
+         self.view.layoutIfNeeded()
+      }
+   }
    
    
 }
