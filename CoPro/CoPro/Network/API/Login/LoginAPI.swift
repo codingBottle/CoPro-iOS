@@ -67,7 +67,8 @@ extension LoginAPI {
                                  else {
                                     print("나는야 non 첫 로그인")
                                     self.getLoginUserData() {
-                                       print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+                                       self.postFcmToken()
+                                       print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin false / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
                                        DispatchQueue.main.async {
                                           guard keychain.get("currentUserNickName") != nil else {return print("getLoginUserData 안에 currentUserNickName 설정 에러")}
                                           let bottomTabController = BottomTabController()
@@ -175,6 +176,8 @@ extension LoginAPI {
                     let keychain = KeychainSwift()
                     keychain.set(loginDTO.data.accessToken, forKey: "accessToken")
                     keychain.set(loginDTO.data.refreshToken, forKey: "refreshToken")
+                   self.postFcmToken()
+                   print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin false / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
                     completion(.success(loginDTO))
                 case .failure(let error):
                     if let statusCode = response.response?.statusCode {
@@ -262,4 +265,34 @@ extension LoginAPI {
             }
         }
     }
+   
+   func postFcmToken() {
+      print("🔥")
+      
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      
+      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
+           switch result {
+           case .success(_):
+              print("FcmToken 보내기 성공")
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+               
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
+   }
 }

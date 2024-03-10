@@ -20,7 +20,7 @@ class MyContributionsViewController: BaseViewController {
     
     var activeCellType: CellType = .post
     // 처음에 post 타입으로 설정해두자. 왜냐 초기값 설정 안해, nil 값일 경우도 고려하는 것이 더 코드가 복잡해 지기 때문.
-    
+   
     private let keychain = KeychainSwift()
     private var myPostsData: [WritebyMeDataModel]?
     private var myCommentData: [MyWrittenCommentDataModel]?
@@ -121,8 +121,8 @@ class MyContributionsViewController: BaseViewController {
                 switch result {
                 case .success(let data):
                     if let data = data as? WritebyMeDTO {
-                        self.myPostsData = data.data.boards.map {
-                           return WritebyMeDataModel(id: $0.id, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL ?? "", commentCount: $0.commentCount)
+                       self.myPostsData = data.data.content.map {
+                          return WritebyMeDataModel(boardId: $0.boardId, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL ?? "", commentCount: $0.commentCount, category: $0.category)
                         }
                        print("🌊🌊🌊🌊🌊🌊🌊🌊myPostsData?.count : \(String(describing: self.myPostsData?.count))🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
                         
@@ -249,7 +249,7 @@ class MyContributionsViewController: BaseViewController {
                 case .success(let data):
                     if let data = data as? ScrapPostDTO {
                         self.scrapPostData = data.data.content.map {
-                           return ScrapPostDataModel(boardID: $0.boardID, title: $0.title, count: $0.count, createAt: $0.createAt, heart: $0.heart, imageURL: $0.imageURL ?? "", nickName: $0.nickName, commentCount: $0.commentCount)
+                           return ScrapPostDataModel(boardID: $0.boardID, title: $0.title, count: $0.count, createAt: $0.createAt, heart: $0.heart, imageURL: $0.imageURL ?? "", nickName: $0.nickName, commentCount: $0.commentCount, category: $0.category)
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
@@ -332,6 +332,24 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
               let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
               let post = myPostsData?[reverseIndex]
               cell.configureCellWritebyMe(post!)
+           var postCategoryType = post?.category
+           if postCategoryType == "프로젝트" {
+              cell.commentCountIcon.removeFromSuperview()
+              cell.commentCountLabel.removeFromSuperview()
+              cell.likeCountIcon.removeFromSuperview()
+              cell.likeCountLabel.removeFromSuperview()
+              cell.sawPostIcon.snp.remakeConstraints {
+                 $0.top.equalTo(cell.writerNameLabel.snp.bottom).offset(6)
+                 $0.leading.equalTo(cell.postTitleLabel.snp.leading)
+                 $0.bottom.equalToSuperview()
+                 $0.width.equalTo(20)
+                 $0.height.equalTo(20)
+              }
+              cell.sawPostLabel.snp.remakeConstraints {
+                 $0.leading.equalTo(cell.sawPostIcon.snp.trailing).offset(4)
+                 $0.centerY.equalTo(cell.sawPostIcon.snp.centerY)
+              }
+           }
               cell.selectionStyle = .none
            
             
@@ -346,6 +364,24 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
             let reverseIndex = (scrapPostData?.count ?? 0) - 1 - indexPath.row
             let scrapPost = scrapPostData?[reverseIndex]
             cell.configureCellScrapPost(scrapPost!)
+           var postCategoryType = scrapPost?.category
+           if postCategoryType == "프로젝트" {
+              cell.commentCountIcon.removeFromSuperview()
+              cell.commentCountLabel.removeFromSuperview()
+              cell.likeCountIcon.removeFromSuperview()
+              cell.likeCountLabel.removeFromSuperview()
+              cell.sawPostIcon.snp.remakeConstraints {
+                 $0.top.equalTo(cell.writerNameLabel.snp.bottom).offset(6)
+                 $0.leading.equalTo(cell.postTitleLabel.snp.leading)
+                 $0.bottom.equalToSuperview()
+                 $0.width.equalTo(20)
+                 $0.height.equalTo(20)
+              }
+              cell.sawPostLabel.snp.remakeConstraints {
+                 $0.leading.equalTo(cell.sawPostIcon.snp.trailing).offset(4)
+                 $0.centerY.equalTo(cell.sawPostIcon.snp.centerY)
+              }
+           }
             cell.selectionStyle = .none
             return cell
             
@@ -370,7 +406,7 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
           let detailVC = DetailBoardViewController()
         detailVC.delegate = self
          let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
-         if let id = self.myPostsData?[reverseIndex].id {
+         if let id = self.myPostsData?[reverseIndex].boardId {
             detailVC.postId = id
              let navigationController = UINavigationController(rootViewController: detailVC)
              navigationController.modalPresentationStyle = .overFullScreen

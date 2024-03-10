@@ -367,6 +367,10 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
    override func setUpKeyboard() {
       NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
       NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+      // 키보드 외의 영역을 탭했을 때 키보드를 숨기기 위한 탭 제스처 리코그나이저를 추가합니다.
+          let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+          tapGesture.cancelsTouchesInView = false
+          view.addGestureRecognizer(tapGesture)
    }
    
    deinit {
@@ -577,9 +581,11 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
             }
          }
          sheetPresentationController?.animateChanges { [self] in
+//            alertVC.isModalInPresentation = false
             self.sheetPresentationController?.detents = [.custom {context in
                return self.returnEditMyProfileUIHeight(type: "Secound")
             }]
+            self.isModalInPresentation = true
          }
          
          addLanguageButtonsForJobType(jobType: jobType)
@@ -765,20 +771,24 @@ class EditMyProfileViewController: BaseViewController, UITextFieldDelegate {
       })
    }
    
-   @objc func keyboardWillShow(notification: NSNotification) {
-      if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-         readyForNextButton = false
-         UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-         }
-      }
+   @objc override func dismissKeyboard() {
+       view.endEditing(true)
    }
    
+   @objc func keyboardWillShow(notification: NSNotification) {
+       if ((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+           readyForNextButton = false
+           UIView.animate(withDuration: 0.3) {
+               self.view.layoutIfNeeded()
+           }
+       }
+   }
+
    @objc func keyboardWillHide(notification: NSNotification) {
-      readyForNextButton = true
-      UIView.animate(withDuration: 0.3) {
-         self.view.layoutIfNeeded()
-      }
+       readyForNextButton = true
+       UIView.animate(withDuration: 0.3) {
+           self.view.layoutIfNeeded()
+       }
    }
    
    

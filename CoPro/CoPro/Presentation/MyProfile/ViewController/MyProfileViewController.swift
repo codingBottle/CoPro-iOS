@@ -339,8 +339,8 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         alertVC.beforeEditMyProfileData = myProfileData
         alertVC.initialUserName = myProfileData?.nickName
         alertVC.activeViewType = .NotFirstLogin
+       alertVC.isModalInPresentation = false
         alertVC.profileUpdateDelegate = self
-       alertVC.isModalInPresentation = true
         present(alertVC, animated: true, completion: nil)
     }
     
@@ -352,7 +352,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
       alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
        alertVC.initialUserURL = self.githubURL
       alertVC.activeModalType = .NotFirstLogin
-      alertVC.isModalInPresentation = true
+       alertVC.isModalInPresentation = true
        present(alertVC, animated: true, completion: nil)
     }
     
