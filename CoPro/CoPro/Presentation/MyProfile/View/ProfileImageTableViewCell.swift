@@ -44,9 +44,9 @@ class ProfileImageTableViewCell: UITableViewCell {
        }
    }
 
-   lazy var nickname = createLabel(text: "테스트", size: 30, weight: .bold)
-   lazy var developmentJobLabel = createLabel(text: "테스트", size: 24, weight: .medium)
-   lazy var usedLanguageLabel = createLabel(text: "테스트", size: 24, weight: .medium)
+   lazy var nickname = createLabel(text: "", size: 30, weight: .bold)
+   lazy var developmentJobLabel = createLabel(text: "", size: 24, weight: .medium)
+   lazy var usedLanguageLabel = createLabel(text: "", size: 24, weight: .medium)
    
    var editButton = UIButton().then {
       let symbolConfiguration = UIImage.SymbolConfiguration(scale: .large)
@@ -70,7 +70,7 @@ class ProfileImageTableViewCell: UITableViewCell {
    
    func loadProfileImage(url: String) {
       guard !url.isEmpty, let imageURL = URL(string: url) else {
-         profileImage.backgroundColor = .red
+         profileImage.backgroundColor = .white
          return
       }
       profileImage.kf.indicatorType = .none
