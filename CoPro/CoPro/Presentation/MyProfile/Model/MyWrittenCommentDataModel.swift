@@ -29,7 +29,7 @@ struct MyWrittenCommentDataModel: Codable {
     
     func getMyWrittenCommentDateString() -> String {
         let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSS"
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         inputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 8601 format
 
         if let date = inputFormatter.date(from: createAt) {

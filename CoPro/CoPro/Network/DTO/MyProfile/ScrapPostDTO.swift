@@ -24,6 +24,7 @@ struct ScrapPostDataClass: Codable {
     let last, empty: Bool
     let totalElements: Int
     let first: Bool
+   
 }
 
 // MARK: - ScrapPostContent
@@ -36,10 +37,11 @@ struct ScrapPostContent: Codable {
     let imageURL: String?
     let nickName: String
     let commentCount: Int
+   let category: String
 
     enum CodingKeys: String, CodingKey {
         case boardID = "boardId"
-        case title, count, createAt, heart
+        case title, count, createAt, heart, category
         case imageURL = "imageUrl"
         case nickName, commentCount
     }
