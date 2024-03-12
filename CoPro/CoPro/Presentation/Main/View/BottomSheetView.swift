@@ -18,7 +18,7 @@ final class BottomSheetView: PassThroughView {
     static let duration = 0.5
     static let cornerRadius = 12.0
     static let barViewTopSpacing = 5.0
-    static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.2, height: 10.0)
+    static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.2, height: 5.0)
     static let bottomSheetRatio: (Mode) -> Double = { mode in
       switch mode {
       case .tip:
@@ -90,9 +90,10 @@ final class BottomSheetView: PassThroughView {
     }
       self.barView.snp.makeConstraints {
         $0.centerX.equalToSuperview()
-        $0.top.equalToSuperview()
+        $0.top.equalToSuperview().inset(Const.barViewTopSpacing)
         $0.size.equalTo(Const.barViewSize)
       }
+      self.barView.layer.cornerRadius = 3
   }
   
   // MARK: Methods
