@@ -22,7 +22,7 @@ final class MainViewController: UIViewController {
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
         view.bottomSheetColor = UIColor.systemBackground
-        view.barViewColor = .clear
+        view.barViewColor = .G2()
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 1)
         view.layer.shadowOpacity = 0.3

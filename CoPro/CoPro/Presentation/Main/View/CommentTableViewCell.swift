@@ -43,6 +43,12 @@ final class commentTableViewCell: UITableViewCell, UICollectionViewDelegate {
         super.init(coder: coder)
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // menuButton을 숨기는 등의 초기화 코드 추가
+        menuButton.isHidden = true // 이 메서드는 실제 구현에 따라 다를 수 있습니다. 적절한 UI 초기화 코드로 대체하세요.
+    }
+    
     // MARK: - UI Components Property
     
     private func setStyle() {

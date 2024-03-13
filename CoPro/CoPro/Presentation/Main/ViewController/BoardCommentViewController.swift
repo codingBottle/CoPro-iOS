@@ -63,16 +63,12 @@ class BoardCommentViewController: UIViewController, UIGestureRecognizerDelegate 
         lineView1.do {
             $0.backgroundColor = UIColor.G1()
         }
-//        bottomView.do {
-////            self.view.backgroundColor = UIColor.systemBackground
-//            $0.layer.shadowColor = UIColor.black.cgColor
-//            $0.layer.shadowOffset = CGSize(width: 0, height: -2)
-//            $0.layer.shadowOpacity = 0.3
-//            $0.layer.shadowRadius = 2
-//        }
+
         commentTextField.do {
             $0.placeholder = "댓글을 남겨보세요"
             $0.setPlaceholderColor(placeholderColor: .G3())
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            $0.leftViewMode = .always
             $0.rightView = sendButton
             $0.rightViewMode = .always
             $0.layer.cornerRadius = 10
@@ -80,14 +76,9 @@ class BoardCommentViewController: UIViewController, UIGestureRecognizerDelegate 
             $0.backgroundColor = .L1()
         }
         sendButton.do {
-            $0.setTitle("등록", for: .normal)
-            $0.titleLabel?.font = .pretendard(size: 13, weight: .regular)
-            $0.layer.cornerRadius = 10
-            $0.titleEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-            $0.titleLabel?.adjustsFontSizeToFitWidth = true
-            $0.titleLabel?.numberOfLines = 1
-            $0.backgroundColor = UIColor(hex: "EBEBEB")
-            $0.setTitleColor(.G4(), for: .normal)
+            $0.setImage(UIImage(systemName: "paperplane"), for: .normal)
+            $0.tintColor = .G4()
+            $0.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
             $0.addTarget(self, action: #selector(sendButtonTapped(_: )), for: .touchUpInside)
         }
     }

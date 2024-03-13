@@ -48,7 +48,7 @@ final class freeViewController: UIViewController, SendStringData,AddPostViewCont
         
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 91, height: 37))
         btn.backgroundColor = UIColor.P2()
-        btn.layer.cornerRadius = 20
+        btn.layer.cornerRadius = 18
         btn.setImage(UIImage(systemName: "plus"), for: .normal)
         btn.titleLabel?.font = .pretendard(size: 17, weight: .bold)
         btn.setTitle("글쓰기", for: .normal)
