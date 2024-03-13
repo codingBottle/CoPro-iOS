@@ -356,7 +356,14 @@ class EditGithubModalViewController: BaseViewController, UITextFieldDelegate {
    }
    
    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+      let currentText = textField.text ?? ""
+      let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
       
-       return true
+      if updatedText != initialUserURL {
+         self.isModalInPresentation = true
+      } else {
+         self.isModalInPresentation = false
+      }
+      return true
    }
 }

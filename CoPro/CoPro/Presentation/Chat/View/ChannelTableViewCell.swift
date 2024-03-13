@@ -92,18 +92,6 @@ class ChannelTableViewCell: UITableViewCell {
               $0.centerY.equalToSuperview()
            }
         
-//          projectChipContainer.snp.makeConstraints {
-//             $0.leading.equalTo(chatRoomLabel.snp.trailing).offset(8)
-//             $0.bottom.equalTo(chatRoomLabel)
-//             $0.top.equalToSuperview().offset(5)
-//             $0.trailing.equalToSuperview().offset(-185)
-//          }
-//         
-//       projectChip.snp.makeConstraints {
-//          $0.centerX.equalToSuperview()
-//          $0.centerY.equalToSuperview()
-//       }
-        
         detailButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()

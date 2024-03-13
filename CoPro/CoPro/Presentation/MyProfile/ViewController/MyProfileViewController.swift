@@ -268,7 +268,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          alertVC.githubUrlUpdateDelegate = self
          alertVC.initialUserURL = self.githubURL
         alertVC.activeModalType = .NotFirstLogin
-        alertVC.isModalInPresentation = true
+        alertVC.isModalInPresentation = false
          present(alertVC, animated: true, completion: nil)
           
       case 4:
@@ -352,7 +352,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
       alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
        alertVC.initialUserURL = self.githubURL
       alertVC.activeModalType = .NotFirstLogin
-       alertVC.isModalInPresentation = true
+       alertVC.isModalInPresentation = false
        present(alertVC, animated: true, completion: nil)
     }
     

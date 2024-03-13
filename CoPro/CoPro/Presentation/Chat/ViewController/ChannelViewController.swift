@@ -31,6 +31,29 @@ class ChannelViewController: BaseViewController {
       $0.setPretendardFont(text: "채팅", size: 25, weight: .bold, letterSpacing: 1.25)
    }
    
+   private lazy var editButton = UIButton().then {
+      $0.addTarget(self, action: #selector(didDoneButton), for: .touchUpInside)
+      $0.setTitle("편집", for: .normal) // 여기를 "편집"으로 변경했습니다.
+      $0.setTitleColor(UIColor.lightGray, for: .normal)
+      $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20) // 폰트 설정 예시입니다.
+      $0.isEnabled = true
+   }
+   
+   private var isEditingMode = false {
+           didSet {
+               configureEditingMode()
+           }
+       }
+   
+   @objc func didDoneButton() {
+      print("눌림")
+      isEditingMode.toggle()
+   }
+   
+   private func configureEditingMode() {
+           channelTableView.reloadData()
+       }
+   
    private var topContainerView = UIView().then {
       $0.isUserInteractionEnabled = true
    }
@@ -78,8 +101,6 @@ class ChannelViewController: BaseViewController {
        view.backgroundColor = .white
         addToolBarItems()
        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-//       
-//       navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)
        navigationController?.navigationBar.prefersLargeTitles = false
        navigationController?.isToolbarHidden = false // 툴바 보이게 설정
         setupListener()
@@ -88,31 +109,27 @@ class ChannelViewController: BaseViewController {
    private func configureViews() {
           view.addSubview(topContainerView)
       topContainerView.isUserInteractionEnabled = true
-//          topContainerView.addSubview(toggleLabel)
-//          topContainerView.addSubview(projectToggleSwitch)
-      topContainerView.addSubview(titleLabel)
+      topContainerView.addSubviews(titleLabel, editButton)
       
       topContainerView.isHidden = false
 
           topContainerView.snp.makeConstraints {
               $0.top.equalTo(view.safeAreaLayoutGuide).offset(0)
               $0.trailing.leading.equalToSuperview().inset(10)
-             $0.height.equalTo(50)  // 높이 제약 추가
+             $0.height.equalTo(40)
           }
       
       titleLabel.snp.makeConstraints {
          $0.leading.equalToSuperview().offset(10)
+         $0.width.equalTo(50)
+         $0.centerY.equalToSuperview()
       }
-
-//          toggleLabel.snp.makeConstraints {
-//              $0.trailing.equalTo(projectToggleSwitch.snp.leading).offset(-10)
-//              $0.centerY.equalToSuperview()
-//          }
-//
-//          projectToggleSwitch.snp.makeConstraints {
-//              $0.trailing.equalToSuperview()
-//              $0.centerY.equalToSuperview()
-//          }
+      
+      editButton.snp.makeConstraints {
+         $0.trailing.equalToSuperview().offset(-10)
+//         $0.bottom.equalToSuperview()
+         $0.width.equalTo(40)
+      }
 
       switch channels.count {
       case 0:
@@ -180,6 +197,21 @@ class ChannelViewController: BaseViewController {
             }
         }
     }
+   
+   @objc func tapExitButton(_ gestureRecognizer: UITapGestureRecognizer) {
+       let touchPoint = gestureRecognizer.location(in: channelTableView)
+       if let indexPath = channelTableView.indexPathForRow(at: touchPoint) {
+           // 채널 삭제를 확인하는 alert를 표시합니다.
+           let alert = UIAlertController(title: "채널 삭제", message: "해당 채팅방을 나가시겠습니까?", preferredStyle: .alert)
+           alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+           alert.addAction(UIAlertAction(title: "채팅방 나가기", style: .destructive, handler: { _ in
+               // 채널을 삭제합니다.
+               let channel = self.channels[indexPath.row]
+               self.channelStream.deleteChannel(channel)
+           }))
+           present(alert, animated: true)
+       }
+   }
     
     @objc private func didToggleSwitch(_ sender: UISwitch) {
         isProjectEnabled = sender.isOn
@@ -232,13 +264,6 @@ class ChannelViewController: BaseViewController {
         channelTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
     }
    
-   func returnChannelTableCellHeight() -> CGFloat {
-      let screenHeight = UIScreen.main.bounds.height
-      let heightRatio = 82.0 / 852.0
-      let cellHeight = screenHeight * heightRatio
-      return cellHeight
-   }
-    
 }
 
 extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
@@ -261,6 +286,22 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
          }
       }
       
+      if isEditingMode {
+         self.editButton.setTitleColor(UIColor.red, for: .normal)
+         cell.detailButton.setImage(UIImage(systemName: "rectangle.portrait.and.arrow.forward"), for: .normal)
+         cell.detailButton.tintColor = .red
+         cell.detailButton.isUserInteractionEnabled = true
+         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapExitButton(_:)))
+         cell.detailButton.addGestureRecognizer(tapGestureRecognizer)
+      }
+      else {
+         self.editButton.setTitleColor(UIColor.lightGray, for: .normal)
+         cell.detailButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+         cell.detailButton.tintColor = UIColor.P4()
+         cell.detailButton.isUserInteractionEnabled = false
+         cell.detailButton.gestureRecognizers?.removeAll()
+      }
+      
       
       cell.projectChipContainer.isHidden = true
       
@@ -273,7 +314,7 @@ extension ChannelViewController: UITableViewDataSource, UITableViewDelegate {
    }
    
    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-      return returnChannelTableCellHeight()
+      return 85
    }
    
    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
