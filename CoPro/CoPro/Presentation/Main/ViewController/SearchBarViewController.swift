@@ -39,6 +39,18 @@ final class SearchBarViewController: UIViewController, UISearchControllerDelegat
         setLayout()
         setNavigate()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // UserDefaults에서 최근 검색어 목록을 로드합니다.
+        if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
+            items1 = savedItems
+        }
+
+        // 최근 검색어 목록이 변경되었으므로 테이블 뷰를 리로드합니다.
+        recentSearchTableView.reloadData()
+    }
 }
 
 extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
@@ -282,9 +294,9 @@ extension SearchBarViewController: UITextFieldDelegate {
     func onSearchTextCleared() {
         // UserDefaults에서 데이터를 다시 불러와서 테이블뷰를 갱신합니다.
         if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
-//            items = savedItems
-            recentSearchTableView.reloadData()
+            items1 = savedItems
         }
+        recentSearchTableView.reloadData()
     }
 }
 
