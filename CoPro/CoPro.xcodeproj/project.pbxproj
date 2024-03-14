@@ -166,6 +166,7 @@
 		B58A4A6E2B6907E300793160 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A4A6D2B6907E300793160 /* Color.swift */; };
 		B58B8D332B4D3E2100FB98F9 /* CardAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58B8D322B4D3E2100FB98F9 /* CardAPI.swift */; };
 		B58B8D372B4D3F0900FB98F9 /* CardRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58B8D362B4D3F0900FB98F9 /* CardRouter.swift */; };
+		B5A3A32C2BA3339D00552303 /* EasyTipView in Frameworks */ = {isa = PBXBuildFile; productRef = B5A3A32B2BA3339D00552303 /* EasyTipView */; };
 		B5B511002B74CA1000A1B74D /* BottomTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B510FF2B74CA1000A1B74D /* BottomTabController.swift */; };
 		B5B511092B74CCE400A1B74D /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B511022B74CCE400A1B74D /* CardViewController.swift */; };
 		B5B5110A2B74CCE400A1B74D /* MiniCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B511042B74CCE400A1B74D /* MiniCard.swift */; };
@@ -542,6 +543,7 @@
 				B5D3E5192AFB76250021DDA0 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				B5D3E5232AFB76250021DDA0 /* FirebasePerformance in Frameworks */,
 				B5D3E5052AFB76250021DDA0 /* FirebaseAuthCombine-Community in Frameworks */,
+				B5A3A32C2BA3339D00552303 /* EasyTipView in Frameworks */,
 				9E5C36562B822C570091884C /* FirebaseAnalyticsSwift in Frameworks */,
 				B5D3E4FB2AFB76250021DDA0 /* FirebaseAnalyticsSwift in Frameworks */,
 				9E5C36822B822D010091884C /* FirebaseInstallations in Frameworks */,
@@ -1483,6 +1485,7 @@
 				B5584B9E2B96C7B200DBBAAA /* MarkdownView */,
 				B5584BA02B96C7E100DBBAAA /* MarkdownView */,
 				E34B2BC62BA1DBC4000949EC /* FloatingPanel */,
+				B5A3A32B2BA3339D00552303 /* EasyTipView */,
 			);
 			productName = CoPro;
 			productReference = 9E05D2AA2AD508B200F4CA43 /* CoPro.app */;
@@ -1526,6 +1529,7 @@
 				B5584B9A2B96C6D100DBBAAA /* XCRemoteSwiftPackageReference "swift-markdown" */,
 				B5584B9D2B96C7B100DBBAAA /* XCRemoteSwiftPackageReference "MarkdownView" */,
 				E34B2BC52BA1DBC3000949EC /* XCRemoteSwiftPackageReference "FloatingPanel" */,
+				B5A3A32A2BA3339D00552303 /* XCRemoteSwiftPackageReference "EasyTipView" */,
 			);
 			productRefGroup = 9E05D2AB2AD508B200F4CA43 /* Products */;
 			projectDirPath = "";
@@ -2004,6 +2008,14 @@
 				minimumVersion = 1.9.1;
 			};
 		};
+		B5A3A32A2BA3339D00552303 /* XCRemoteSwiftPackageReference "EasyTipView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/teodorpatras/EasyTipView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
 		B5D3E4F52AFB76250021DDA0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -2333,6 +2345,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B5584B9D2B96C7B100DBBAAA /* XCRemoteSwiftPackageReference "MarkdownView" */;
 			productName = MarkdownView;
+		};
+		B5A3A32B2BA3339D00552303 /* EasyTipView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5A3A32A2BA3339D00552303 /* XCRemoteSwiftPackageReference "EasyTipView" */;
+			productName = EasyTipView;
 		};
 		B5D3E4F62AFB76250021DDA0 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
