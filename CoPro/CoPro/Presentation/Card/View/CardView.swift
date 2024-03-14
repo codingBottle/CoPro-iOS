@@ -103,34 +103,31 @@ class CardView: BaseView{
             $0.height.equalTo(40)
         }
         partLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(30)
             $0.centerY.equalToSuperview()
         }
 
         partButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
-            $0.trailing.equalTo(langLabel.snp.trailing).offset(20)
             $0.centerY.equalToSuperview()
         }
 
         langLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(30)
             $0.centerY.equalToSuperview()
         }
         
         langButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
-            $0.trailing.equalTo(langLabel.snp.trailing).offset(20)
             $0.centerY.equalToSuperview()
         }
         oldLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(30)
             $0.centerY.equalToSuperview()
         }
         
         oldButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
-            $0.trailing.equalTo(oldLabel.snp.trailing).offset(20)
             $0.centerY.equalToSuperview()
         }
         scrollView.snp.makeConstraints{
