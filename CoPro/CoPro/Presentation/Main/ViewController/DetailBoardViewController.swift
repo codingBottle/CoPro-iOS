@@ -703,7 +703,8 @@ func getTopMostViewController() -> UIViewController? {
                 case .success:
                     print("delete success")
                     self.delegate?.didDeletePost()
-                    self.dismiss(animated: true, completion: nil)
+                    self.navigationController?.popViewController(animated: true)
+//                    self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
                     print("Request error: \(message)")
                 case .pathErr:
