@@ -18,7 +18,7 @@ protocol DetailViewControllerDelegate: AnyObject {
     func didDeletePost()
 }
 
-final class DetailBoardViewController: BaseViewController {
+final class DetailBoardViewController: BaseViewController, UIGestureRecognizerDelegate {
     var postId: Int?
     var isHeart = Bool()
     var isScrap = Bool()
@@ -67,6 +67,7 @@ final class DetailBoardViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         getDetailBoard( boardId: postId!)
         addTarget()
         setNavigate()
@@ -431,7 +432,7 @@ final class DetailBoardViewController: BaseViewController {
         }
     }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeButtonTapped))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(closeButtonTapped))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(rightButtonTapped))
@@ -790,7 +791,8 @@ func getTopMostViewController() -> UIViewController? {
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     @objc private func closeButtonTapped() {
-            dismiss(animated: true, completion: nil)
+//            dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
         }
     @objc
     func pushToCommentViewController() {
