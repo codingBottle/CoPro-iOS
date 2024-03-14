@@ -160,6 +160,7 @@ extension MainFloatingViewController: RecruitVCDelegate, DetailViewControllerDel
         detailVC.postId = id
         detailVC.delegate = self
         print("hello")
+        detailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
