@@ -162,12 +162,14 @@ extension MainViewController: UIPageViewControllerDelegate, UIScrollViewDelegate
     // NotificationViewController로 이동
     @objc func pushToNotificationViewController() {
         let secondViewController = NotificationListViewController()
-        self.navigationController?.pushViewController(secondViewController, animated: true)
+        secondViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(secondViewController, animated: true)
     }
     // SearchBarViewController로 이동
     @objc func pushToSearchBarViewController() {
         let secondViewController = SearchBarViewController()
-        self.navigationController?.pushViewController(secondViewController, animated: true)
+        secondViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(secondViewController, animated: true)
     }
 }
     
