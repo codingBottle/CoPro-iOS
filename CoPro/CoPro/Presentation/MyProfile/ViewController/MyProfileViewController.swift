@@ -275,23 +275,27 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
          let vc = MyContributionsViewController()
          vc.activeCellType = .post
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+          vc.hidesBottomBarWhenPushed = true
          self.navigationController?.pushViewController(vc, animated: true)
           
       case 5:
          let vc = MyContributionsViewController()
          vc.activeCellType = .comment
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+          vc.hidesBottomBarWhenPushed = true
          self.navigationController?.pushViewController(vc, animated: true)
           
       case 6:
          let vc = MyContributionsViewController()
          vc.activeCellType = .scrap
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+          vc.hidesBottomBarWhenPushed = true
          self.navigationController?.pushViewController(vc, animated: true)
           
       case 7:
          let vc = LikeProfileViewController()
          self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+          vc.hidesBottomBarWhenPushed = true
          self.navigationController?.pushViewController(vc, animated: true)
           
       case 9:
@@ -361,6 +365,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         print("작성한 게시물 클릭")
         let vc = MyContributionsViewController()
         vc.activeCellType = .post
+        vc.hidesBottomBarWhenPushed = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -370,6 +375,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         print("작성한 댓글 클릭")
         let vc = MyContributionsViewController()
         vc.activeCellType = .comment
+        vc.hidesBottomBarWhenPushed = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -380,6 +386,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
         print("스크랩 클릭")
         let vc = MyContributionsViewController()
         vc.activeCellType = .scrap
+        vc.hidesBottomBarWhenPushed = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -388,6 +395,7 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
     func didTapInterestedProfileButtonTapped(in cell: MyProfileTableViewCell) {
         print("관심 프로필 클릭")
         let vc = LikeProfileViewController()
+        vc.hidesBottomBarWhenPushed = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -449,5 +457,28 @@ extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableView
                }
            }
     }
+    // MARK: - NavgaitonBar Custom
+    func setupNavigationBar() {
+        // NavigationBar 설정 관련 코드
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont(name: "Pretendard-Regular", size: 17)!,
+            .kern: 1.25,
+            .foregroundColor: UIColor.black
+        ]
+        navigationController?.navigationBar.titleTextAttributes = attributes
+        
+        let backButton = UIButton(type: .custom)
+        guard let originalImage = UIImage(systemName: "chevron.left") else {
+            return
+        }
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24)
+        let boldImage = originalImage.withConfiguration(symbolConfiguration)
+        backButton.setImage(boldImage, for: .normal)
+        backButton.contentMode = .scaleAspectFit
+        backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+    }
+
     
 }
