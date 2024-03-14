@@ -54,9 +54,11 @@ extension MainViewController: UIPageViewControllerDelegate, UIScrollViewDelegate
     private func setNavigate() {
         let logoImage = UIImage(named: "logo_navigation")?.withRenderingMode(.alwaysOriginal)
         let leftButton = UIBarButtonItem(image: logoImage, style: .plain, target: self, action: #selector(popToWriteViewController))
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(pushToSearchBarViewController))
-        rightButton.tintColor = UIColor.systemGray
-        self.navigationItem.rightBarButtonItem = rightButton
+        let notiButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(pushToNotificationViewController))
+        let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(pushToSearchBarViewController))
+        notiButton.tintColor = UIColor.systemGray
+        searchButton.tintColor = UIColor.systemGray
+        self.navigationItem.rightBarButtonItems = [searchButton,notiButton]
         self.navigationItem.leftBarButtonItem = leftButton
     }
     private func setLayout() {
@@ -157,7 +159,12 @@ extension MainViewController: UIPageViewControllerDelegate, UIScrollViewDelegate
     @objc func popToWriteViewController() {
         // 'Button 1'이 눌렸을 때의 동작을 여기에 작성합니다.
     }
-
+    // NotificationViewController로 이동
+    @objc func pushToNotificationViewController() {
+        let secondViewController = NotificationListViewController()
+        self.navigationController?.pushViewController(secondViewController, animated: true)
+    }
+    // SearchBarViewController로 이동
     @objc func pushToSearchBarViewController() {
         let secondViewController = SearchBarViewController()
         self.navigationController?.pushViewController(secondViewController, animated: true)
