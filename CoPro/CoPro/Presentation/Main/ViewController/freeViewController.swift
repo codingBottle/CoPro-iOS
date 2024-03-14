@@ -163,9 +163,7 @@ extension freeViewController: UITableViewDelegate, UITableViewDataSource {
             print(filteredPosts[indexPath.row].title)
             print("\(filteredPosts[indexPath.row].boardId)")
             detailVC.postId = filteredPosts[indexPath.row].boardId
-            let navigationController = UINavigationController(rootViewController: detailVC)
-            navigationController.modalPresentationStyle = .overFullScreen
-            self.present(navigationController, animated: true, completion: nil)
+            delegate?.didSelectItem(withId: filteredPosts[indexPath.row].boardId)
         } else {
             print("Invalid index")
             detailVC.postId = posts[indexPath.row].boardId

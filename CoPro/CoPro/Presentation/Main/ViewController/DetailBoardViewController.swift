@@ -18,7 +18,7 @@ protocol DetailViewControllerDelegate: AnyObject {
     func didDeletePost()
 }
 
-final class DetailBoardViewController: BaseViewController {
+final class DetailBoardViewController: BaseViewController, UIGestureRecognizerDelegate {
     var postId: Int?
     var isHeart = Bool()
     var isScrap = Bool()
@@ -67,6 +67,7 @@ final class DetailBoardViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         getDetailBoard( boardId: postId!)
         addTarget()
         setNavigate()
@@ -88,7 +89,6 @@ final class DetailBoardViewController: BaseViewController {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
     }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
@@ -431,7 +431,7 @@ final class DetailBoardViewController: BaseViewController {
         }
     }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeButtonTapped))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(closeButtonTapped))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(rightButtonTapped))
@@ -703,7 +703,8 @@ func getTopMostViewController() -> UIViewController? {
                 case .success:
                     print("delete success")
                     self.delegate?.didDeletePost()
-                    self.dismiss(animated: true, completion: nil)
+                    self.navigationController?.popViewController(animated: true)
+//                    self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
                     print("Request error: \(message)")
                 case .pathErr:
@@ -789,7 +790,8 @@ func getTopMostViewController() -> UIViewController? {
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     @objc private func closeButtonTapped() {
-            dismiss(animated: true, completion: nil)
+//            dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
         }
     @objc
     func pushToCommentViewController() {

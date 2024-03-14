@@ -408,9 +408,7 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
          let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
          if let id = self.myPostsData?[reverseIndex].boardId {
             detailVC.postId = id
-             let navigationController = UINavigationController(rootViewController: detailVC)
-             navigationController.modalPresentationStyle = .overFullScreen
-             self.present(navigationController, animated: true, completion: nil)
+             navigationController?.pushViewController(detailVC, animated: true)
          }
           
       case .scrap:

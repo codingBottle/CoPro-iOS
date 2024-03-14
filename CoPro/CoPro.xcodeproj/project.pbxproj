@@ -241,6 +241,8 @@
 		E33379A72B4543920097ED0D /* recentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */; };
 		E33379A92B45439D0097ED0D /* popularSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */; };
 		E33379AB2B468D790097ED0D /* popularSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */; };
+		E34B2BC72BA1DBC4000949EC /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = E34B2BC62BA1DBC4000949EC /* FloatingPanel */; };
+		E34B2BC92BA2A092000949EC /* MainFloatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34B2BC82BA2A092000949EC /* MainFloatingViewController.swift */; };
 		E363D5C22B5FA71700FE6A9C /* DetailBoardRequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363D5C12B5FA71700FE6A9C /* DetailBoardRequestBody.swift */; };
 		E363D5C42B60D8B100FE6A9C /* CommentDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E363D5C32B60D8B100FE6A9C /* CommentDataModel.swift */; };
 		E36717AB2B70A2B800CBCD8B /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36717AA2B70A2B800CBCD8B /* PhotoViewController.swift */; };
@@ -437,6 +439,7 @@
 		E33379A62B4543920097ED0D /* recentSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recentSearchTableViewCell.swift; sourceTree = "<group>"; };
 		E33379A82B45439D0097ED0D /* popularSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchTableViewCell.swift; sourceTree = "<group>"; };
 		E33379AA2B468D790097ED0D /* popularSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = popularSearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		E34B2BC82BA2A092000949EC /* MainFloatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFloatingViewController.swift; sourceTree = "<group>"; };
 		E363D5C12B5FA71700FE6A9C /* DetailBoardRequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailBoardRequestBody.swift; sourceTree = "<group>"; };
 		E363D5C32B60D8B100FE6A9C /* CommentDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDataModel.swift; sourceTree = "<group>"; };
 		E36717AA2B70A2B800CBCD8B /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
@@ -486,6 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5D3E5212AFB76250021DDA0 /* FirebaseMessaging in Frameworks */,
+				E34B2BC72BA1DBC4000949EC /* FloatingPanel in Frameworks */,
 				B5D3E5112AFB76250021DDA0 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				9E5C36482B8218C10091884C /* FirebasePerformance in Frameworks */,
 				9E5C36402B8218C10091884C /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
@@ -1325,6 +1329,7 @@
 				E3E2B8422B7F9B040022E5D0 /* noticeViewController.swift */,
 				E3FCFC0A2B90ACC000D47B7E /* DetailPhotoViewController.swift */,
 				E37AE7FF2B3C27D0002ABDCD /* MainViewController.swift */,
+				E34B2BC82BA2A092000949EC /* MainFloatingViewController.swift */,
 				E3C64F922B634F87000BB5D6 /* AddPostViewController.swift */,
 				E3E2B8482B8258DD0022E5D0 /* AddProjectPostViewController.swift */,
 				E33379A42B4402DA0097ED0D /* SearchBarViewController.swift */,
@@ -1477,6 +1482,7 @@
 				B5584B9B2B96C6D200DBBAAA /* Markdown */,
 				B5584B9E2B96C7B200DBBAAA /* MarkdownView */,
 				B5584BA02B96C7E100DBBAAA /* MarkdownView */,
+				E34B2BC62BA1DBC4000949EC /* FloatingPanel */,
 			);
 			productName = CoPro;
 			productReference = 9E05D2AA2AD508B200F4CA43 /* CoPro.app */;
@@ -1519,6 +1525,7 @@
 				9E7401BE2B3BE1C80030C8EC /* XCRemoteSwiftPackageReference "MessageKit" */,
 				B5584B9A2B96C6D100DBBAAA /* XCRemoteSwiftPackageReference "swift-markdown" */,
 				B5584B9D2B96C7B100DBBAAA /* XCRemoteSwiftPackageReference "MarkdownView" */,
+				E34B2BC52BA1DBC3000949EC /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 			);
 			productRefGroup = 9E05D2AB2AD508B200F4CA43 /* Products */;
 			projectDirPath = "";
@@ -1565,6 +1572,7 @@
 				9E05D2F02AD5222300F4CA43 /* UIStackView++.swift in Sources */,
 				E36717BD2B70B3F700CBCD8B /* AlbumInfo.swift in Sources */,
 				9E5C369F2B83F1A40091884C /* ChattingNotificationRequestBody.swift in Sources */,
+				E34B2BC92BA2A092000949EC /* MainFloatingViewController.swift in Sources */,
 				E37AE7FE2B3C27B1002ABDCD /* recruitViewController.swift in Sources */,
 				E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */,
 				E314AD192B5E735300BDB6AD /* DetailBoardDataModel.swift in Sources */,
@@ -2044,6 +2052,14 @@
 				kind = branch;
 			};
 		};
+		E34B2BC52BA1DBC3000949EC /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scenee/FloatingPanel.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2482,6 +2498,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B5D3E56D2B172A150021DDA0 /* XCRemoteSwiftPackageReference "DropDown" */;
 			productName = DropDown;
+		};
+		E34B2BC62BA1DBC4000949EC /* FloatingPanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E34B2BC52BA1DBC3000949EC /* XCRemoteSwiftPackageReference "FloatingPanel" */;
+			productName = FloatingPanel;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
