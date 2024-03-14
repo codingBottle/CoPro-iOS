@@ -105,12 +105,11 @@ class CardView: BaseView{
         partLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.centerY.equalToSuperview()
-            $0.centerX.equalToSuperview()
         }
 
         partButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
-            $0.trailing.equalTo(partLabel.snp.trailing).offset(20)
+            $0.trailing.equalTo(langLabel.snp.trailing).offset(20)
             $0.centerY.equalToSuperview()
         }
 
