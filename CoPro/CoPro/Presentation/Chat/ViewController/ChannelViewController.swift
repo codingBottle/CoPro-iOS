@@ -10,6 +10,7 @@ import SnapKit
 import FirebaseAuth
 import Firebase
 import KeychainSwift
+import EasyTipView
 
 class ChannelViewController: BaseViewController {
    let keychain = KeychainSwift()
@@ -30,7 +31,13 @@ class ChannelViewController: BaseViewController {
    private let titleLabel = UILabel().then {
       $0.setPretendardFont(text: "채팅", size: 25, weight: .bold, letterSpacing: 1.25)
    }
-   
+    private let hintIcon = UIImageView().then {
+        $0.image = UIImage(systemName: "info.bubble.fill")
+        $0.tintColor = UIColor.P2()
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showTooltip(_:)))
+//        $0.isUserInteractionEnabled = true
+//        $0.addGestureRecognizer(tapGesture)
+    }
    private lazy var editButton = UIButton().then {
       $0.addTarget(self, action: #selector(didDoneButton), for: .touchUpInside)
       $0.setTitle("편집", for: .normal) // 여기를 "편집"으로 변경했습니다.
@@ -104,20 +111,27 @@ class ChannelViewController: BaseViewController {
        navigationController?.navigationBar.prefersLargeTitles = false
        navigationController?.isToolbarHidden = false // 툴바 보이게 설정
         setupListener()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showTooltip(_:)))
+        hintIcon.isUserInteractionEnabled = true
+        hintIcon.addGestureRecognizer(tapGesture)
     }
    
    private func configureViews() {
-          view.addSubview(topContainerView)
-      topContainerView.isUserInteractionEnabled = true
-      topContainerView.addSubviews(titleLabel, editButton)
-      
-      topContainerView.isHidden = false
-
-          topContainerView.snp.makeConstraints {
-              $0.top.equalTo(view.safeAreaLayoutGuide).offset(0)
-              $0.trailing.leading.equalToSuperview().inset(10)
-             $0.height.equalTo(40)
-          }
+       view.addSubview(topContainerView)
+       topContainerView.isUserInteractionEnabled = true
+       topContainerView.addSubviews(titleLabel,hintIcon, editButton)
+       
+       topContainerView.isHidden = false
+       
+       topContainerView.snp.makeConstraints {
+           $0.top.equalTo(view.safeAreaLayoutGuide).offset(0)
+           $0.trailing.leading.equalToSuperview().inset(10)
+           $0.height.equalTo(40)
+       }
+       hintIcon.snp.makeConstraints {
+          $0.leading.equalTo(titleLabel.snp.trailing).offset(5)
+          $0.centerY.equalToSuperview()
+       }
       
       titleLabel.snp.makeConstraints {
          $0.leading.equalToSuperview().offset(10)
@@ -217,6 +231,19 @@ class ChannelViewController: BaseViewController {
         isProjectEnabled = sender.isOn
         print("토글버튼 눌림! : \(isProjectEnabled)")
         channelTableView.reloadData()
+    }
+    // MARK: - Show Tooltip
+    @objc private func showTooltip(_ gesture: UITapGestureRecognizer) {
+        print("Tap ToolTip!")
+        var preferences = EasyTipView.Preferences()
+        preferences.drawing.font = UIFont(name: "Pretendard-Bold", size: 13)!
+        preferences.drawing.foregroundColor = UIColor.White()
+        preferences.drawing.backgroundColor = UIColor.P2()
+        preferences.animating.showDuration = 1.0
+        preferences.animating.dismissDuration = 1.0
+        preferences.drawing.arrowPosition = EasyTipView.ArrowPosition.left
+        let tooltip = EasyTipView(text: "A가 방을 나가면 B한테도 사라저요!", preferences: preferences)
+        tooltip.show(forView: hintIcon, withinSuperview: hintIcon.superview)
     }
    
           
