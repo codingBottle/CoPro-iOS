@@ -121,9 +121,7 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
             print("BoardId 있음")
             let detailVC = DetailBoardViewController()
             detailVC.postId = contents[indexPath.row].boardID
-            let navigationController = UINavigationController(rootViewController: detailVC)
-            navigationController.modalPresentationStyle = .overFullScreen
-            self.present(navigationController, animated: true, completion: nil)
+            navigationController?.pushViewController(detailVC, animated: true)
         }else{
             print("BoardId 없음")
         }
