@@ -34,7 +34,7 @@ extension LoginAPI {
          let parameters: Parameters = [
             "authCode" : authCode!,
          ]
-         AF.request("https://dev.copro.shop/api/\(provider)/token", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
+         AF.request("\(baseURL)/api/\(provider)/token", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
             .responseDecodable(of: LoginDTO.self) { response in
                switch response.result {
                case .success(let loginDTO):
@@ -166,7 +166,7 @@ extension LoginAPI {
         let parameters: Parameters = [
             "refreshToken" : refreshToken,
         ]
-        AF.request("https://dev.copro.shop/api/token/access", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
+        AF.request("\(baseURL)/api/token/access", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
             .responseDecodable(of: LoginDTO.self) { response in
                 switch response.result {
                 case .success(let loginDTO):
