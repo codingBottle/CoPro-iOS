@@ -238,11 +238,11 @@ class ChannelViewController: BaseViewController {
         var preferences = EasyTipView.Preferences()
         preferences.drawing.font = UIFont(name: "Pretendard-Bold", size: 13)!
         preferences.drawing.foregroundColor = UIColor.White()
-        preferences.drawing.backgroundColor = UIColor.P2()
+        preferences.drawing.backgroundColor = UIColor.P3()
         preferences.animating.showDuration = 1.0
         preferences.animating.dismissDuration = 1.0
         preferences.drawing.arrowPosition = EasyTipView.ArrowPosition.left
-        let tooltip = EasyTipView(text: "A가 방을 나가면 B한테도 사라저요!", preferences: preferences)
+        let tooltip = EasyTipView(text: "'나' 혹은 '상대방'이 나가면\n채팅방이 사라저요!", preferences: preferences)
         tooltip.show(forView: hintIcon, withinSuperview: hintIcon.superview)
     }
    
