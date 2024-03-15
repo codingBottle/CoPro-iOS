@@ -85,14 +85,7 @@ final class DetailBoardViewController: BaseViewController, UIGestureRecognizerDe
           }
         }
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
-    }
+
     private func addTarget() {
         heartButton.addTarget(self, action: #selector(heartButtonTapped(_: )), for: .touchUpInside)
         scrapButton.addTarget(self, action: #selector(scrapButtonTapped(_: )), for: .touchUpInside)
@@ -824,6 +817,7 @@ func getTopMostViewController() -> UIViewController? {
     @objc func commentButtonTapped(_ sender: UIButton) {
         let boardCommentVC = BoardCommentViewController()
         // 필요한 경우 여기에서 boardCommentVC의 프로퍼티를 설정x
+        boardCommentVC.hidesBottomBarWhenPushed = true
         boardCommentVC.postId = postId
         self.navigationController?.pushViewController(boardCommentVC, animated: true)
     }

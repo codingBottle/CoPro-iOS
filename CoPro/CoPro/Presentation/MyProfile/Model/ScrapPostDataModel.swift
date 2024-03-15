@@ -38,16 +38,26 @@ struct ScrapPostDataModel: Codable {
    }
    
    func getScrapPostDateString() -> String {
-      let inputFormatter = DateFormatter()
-      inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
-      inputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 8601 format
-      
-      if let date = inputFormatter.date(from: createAt) {
-         let outputFormatter = DateFormatter()
-         outputFormatter.dateFormat = "MM/dd HH:mm"
-         return outputFormatter.string(from: date)
-      } else {
-         return "Invalid date format"
-      }
+       let inputFormatter = DateFormatter()
+       inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+       inputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 8601 format
+        let zeroFormatter = DateFormatter()
+        zeroFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        zeroFormatter.locale = Locale(identifier: "en_US_POSIX")
+        zeroFormatter.timeZone = TimeZone(abbreviation: "KST")
+       if let date = inputFormatter.date(from: createAt) {
+          let outputFormatter = DateFormatter()
+          outputFormatter.dateFormat = "MM/dd HH:mm"
+          return outputFormatter.string(from: date)
+       } else if let date = zeroFormatter.date(from: createAt) {
+           let outputFormatter = DateFormatter()
+           outputFormatter.dateFormat = "MM/dd HH:mm"
+           return outputFormatter.string(from: date)
+       }else{
+           let date = Date()
+           let outputFormatter = DateFormatter()
+           outputFormatter.dateFormat = "MM/dd HH:mm"
+           return outputFormatter.string(from: date)
+       }
    }
 }

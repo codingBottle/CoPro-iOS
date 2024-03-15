@@ -1,4 +1,5 @@
 {
+  "originHash" : "6574589d501a79ec61473bb7ce5d255fc4b97ddb1a0245264739682e36c8ef39",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -52,6 +53,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "2ab6f6ce19f0117d1a76ea043ef8f57722c65d16"
+      }
+    },
+    {
+      "identity" : "easytipview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/teodorpatras/EasyTipView",
+      "state" : {
+        "revision" : "1cba0e75f745da03773cd7092480c5fa8cde4a72",
+        "version" : "2.1.0"
       }
     },
     {
@@ -307,5 +317,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

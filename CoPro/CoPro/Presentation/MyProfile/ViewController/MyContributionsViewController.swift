@@ -42,35 +42,15 @@ class MyContributionsViewController: BaseViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
        view.backgroundColor = UIColor.White()
        // MARK: NavigationBar Custom Settings
-               let attributes: [NSAttributedString.Key: Any] = [
-                   .font: UIFont(name: "Pretendard-Regular", size: 17)!, // Pretendard 폰트 적용
-                   .kern: 1.25, // 자간 조절
-                   .foregroundColor: UIColor.black // 폰트 색상
-               ]
-               self.navigationController?.navigationBar.titleTextAttributes = attributes
+               
                self.navigationItem.title = "관심 프로필"
                
                self.navigationController?.setNavigationBarHidden(false, animated: true)
                
                self.navigationController?.navigationBar.tintColor = UIColor.Black()
-               let backButton = UIButton(type: .custom)
-               guard let originalImage = UIImage(systemName: "chevron.left") else {
-                   return
-               }
-               let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24) // 이미지 크기 설정
-               let boldImage = originalImage.withConfiguration(symbolConfiguration)
                
-               backButton.setImage(boldImage, for: .normal)
-               backButton.contentMode = .scaleAspectFit
-               backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24) // 버튼의 크기설정
-               backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
                
-               let backBarButtonItem = UIBarButtonItem(customView: backButton)
-               self.navigationItem.leftBarButtonItem = backBarButtonItem
-               
-               let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-               spacer.width = 8 // 왼쪽 여백의 크기
-               self.navigationItem.leftBarButtonItems?.insert(spacer, at: 0) // 왼쪽 여백 추가
+               // 왼쪽 여백 추가
         
        tableView.rowHeight = UITableView.automaticDimension
            
@@ -92,16 +72,6 @@ class MyContributionsViewController: BaseViewController {
         
         setDelegate()
     }
-   
-   override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-           self.tabBarController?.tabBar.isHidden = true
-       }
-       
-   override func viewWillDisappear(_ animated: Bool) {
-      super.viewWillDisappear(animated)
-      self.tabBarController?.tabBar.isHidden = false
-   }
         
     // Navigation Controller
     func popViewController() {
