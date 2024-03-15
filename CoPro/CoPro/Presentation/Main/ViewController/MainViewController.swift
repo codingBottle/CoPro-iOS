@@ -163,6 +163,7 @@ extension MainViewController: UIPageViewControllerDelegate, UIScrollViewDelegate
     @objc func pushToNotificationViewController() {
         let secondViewController = NotificationListViewController()
         secondViewController.hidesBottomBarWhenPushed = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         navigationController?.pushViewController(secondViewController, animated: true)
     }
     // SearchBarViewController로 이동
