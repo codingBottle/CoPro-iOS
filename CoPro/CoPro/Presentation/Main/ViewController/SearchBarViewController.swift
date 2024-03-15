@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class SearchBarViewController: UIViewController, UISearchControllerDelegate {
+final class SearchBarViewController: UIViewController, UISearchControllerDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UI Components
 //    private let searchController = UISearchController(searchResultsController: nil)
@@ -35,6 +35,7 @@ final class SearchBarViewController: UIViewController, UISearchControllerDelegat
         if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
                 items1 = savedItems
             }
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         setUI()
         setLayout()
         setNavigate()
