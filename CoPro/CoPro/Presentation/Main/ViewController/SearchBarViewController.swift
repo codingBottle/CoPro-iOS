@@ -33,7 +33,7 @@ final class SearchBarViewController: UIViewController, UISearchControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
-                items1 = savedItems
+            items1 = savedItems
             }
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         setUI()
@@ -189,7 +189,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     func saveSearchKeyword(keyword: String) {
         let defaults = UserDefaults.standard
         var searches: [String] = defaults.array(forKey: "recentSearches") as? [String] ?? []
-        searches.append(keyword)
+        searches.insert(keyword, at: 0)
         defaults.set(searches, forKey: "recentSearches")
     }
 
@@ -286,18 +286,7 @@ extension SearchBarViewController: UITextFieldDelegate {
         let currentText = textField.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-        if updatedText.isEmpty {
-            onSearchTextCleared()
-        }
         return true
-    }
-    
-    func onSearchTextCleared() {
-        // UserDefaults에서 데이터를 다시 불러와서 테이블뷰를 갱신합니다.
-        if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
-            items1 = savedItems
-        }
-        recentSearchTableView.reloadData()
     }
 }
 

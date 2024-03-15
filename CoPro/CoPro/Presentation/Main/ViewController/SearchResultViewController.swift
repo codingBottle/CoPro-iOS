@@ -11,26 +11,12 @@ import SnapKit
 import Then
 import KeychainSwift
 
-class SearchResultViewController: UIViewController, SendStringData {
-    func radioButtonDidSelect() {
-        print("라디오버튼눌림")
-    }
-    
-    func sendData(mydata: String, groupId: Int) {
-        sortButton.setTitle(mydata, for: .normal)
-        offset = 1
-        posts.removeAll()
-        filteredPosts.removeAll()
-        searchBoard(search: searchText ?? "", page: offset, standard: getStandard())
-    }
-    
+class SearchResultViewController: UIViewController {
     
     // MARK: - UI Components
     
     var searchText: String?
-    weak var delegate1: radioDelegate?
     weak var delegate: RecruitVCDelegate?
-    private let sortButton = UIButton()
     private lazy var tableView = UITableView()
     private let keychain = KeychainSwift()
     private var filteredPosts: [BoardDataModel]!
@@ -44,7 +30,6 @@ class SearchResultViewController: UIViewController, SendStringData {
         super.viewDidLoad()
         searchBoard(search: searchText ?? "", page: offset, standard: "create_at")
         setUI()
-        setLayout()
         setDelegate()
         setRegister()
         setAddTarget()
@@ -56,14 +41,6 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
     // MARK: - UI Components Property
     private func setUI() {
         self.view.backgroundColor = UIColor.systemBackground
-        sortButton.do {
-            $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-            $0.setTitle("최신순", for: .normal)
-            $0.titleLabel?.font = .pretendard(size: 15, weight: .regular)
-            $0.setTitleColor(.Black(), for: .normal)
-            $0.semanticContentAttribute = .forceRightToLeft  // 오른쪽에서 왼쪽으로 컨텐츠를 정렬
-            $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-        }
         tableView.do {
             $0.showsVerticalScrollIndicator = false
             $0.separatorStyle = .singleLine
@@ -76,16 +53,36 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     private func setLayout() {
-        view.addSubviews(sortButton,tableView)
-        
-        sortButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(5)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.height.equalTo(25)
-        }
+        view.addSubviews(tableView)
         tableView.snp.makeConstraints {
-            $0.top.equalTo(sortButton.snp.bottom).offset(5)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(5)
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    private func setNoDataLayout() {
+        let messageLabel = UILabel().then {
+            $0.setPretendardFont(text: "검색 결과가 없습니다.", size: 17, weight: .regular, letterSpacing: 1.25)
+            $0.textColor = .black
+            $0.textAlignment = .center
+        }
+        let messageLabel2 = UILabel().then {
+            $0.setPretendardFont(text: "검색어를 수정해보세요.", size: 17, weight: .regular, letterSpacing: 1.25)
+            $0.textColor = .black
+            $0.textAlignment = .center
+        }
+        
+        let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
+        imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
+        
+        let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel,messageLabel2]) // 이미지와 라벨을 포함하는 스택 뷰 생성
+        stackView.axis = .vertical // 세로 방향으로 정렬
+        stackView.alignment = .center // 가운데 정렬
+        stackView.spacing = 10 // 이미지와 라벨 사이의 간격 설정
+        view.addSubview(stackView) // 스택 뷰를 배경 뷰에 추가
+        
+        stackView.snp.makeConstraints {
+            $0.centerX.equalToSuperview() // 스택 뷰의 가로 중앙 정렬
+            $0.centerY.equalToSuperview() // 스택 뷰의 세로 중앙 정렬
         }
     }
     
@@ -95,7 +92,6 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     private func setAddTarget() {
-        sortButton.addTarget(self, action: #selector(sortButtonPressed), for: .touchUpInside)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -142,13 +138,6 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     // MARK: - @objc Method
-    
-    @objc func sortButtonPressed() {
-        let bottomSheetVC = SortBottomSheetViewController()
-        bottomSheetVC.delegate = self
-        bottomSheetVC.tmp = sortButton.titleLabel?.text ?? "최신순"
-            present(bottomSheetVC, animated: true, completion: nil)
-    }
 }
 extension SearchResultViewController {
     func searchBoard(search: String, page: Int, standard: String) {
@@ -160,7 +149,12 @@ extension SearchResultViewController {
                     if let data = data as? BoardDTO {
                         let serverData = data.data.boards
                         var mappedData: [BoardDataModel] = []
-                        
+                        if data.data.pageInfo.totalElements == 0 {
+                            self.setNoDataLayout()
+                        }
+                        else {
+                            self.setLayout()
+                        }
                         for serverItem in serverData {
                             let mappedItem = BoardDataModel (boardId: serverItem.id,title: serverItem.title ?? "", nickName: serverItem.nickName ?? "no_name", createAt: serverItem.createAt ?? "", heartCount: serverItem.heart, viewsCount: serverItem.count, imageUrl: serverItem.imageURL ?? "", commentCount: serverItem.commentCount)
                             mappedData.append(mappedItem)
@@ -199,19 +193,8 @@ extension SearchResultViewController {
                 if isInfiniteScroll {
                     isInfiniteScroll = false
                     offset += 1
-                    searchBoard(search: searchText ?? "", page: offset, standard: getStandard())
+                    searchBoard(search: searchText ?? "", page: offset, standard: "create_at")
                 }
             }
         }
-    
-    func getStandard() -> String {
-        switch sortButton.title(for: .normal) {
-        case "최신순":
-            return "create_at"
-        case "인기순":
-            return "count"
-        default:
-            return "create_at" // 기본값
-        }
-    }
 }
