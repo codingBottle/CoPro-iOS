@@ -103,32 +103,41 @@ class CardView: BaseView{
             $0.height.equalTo(40)
         }
         partLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(30)
+            $0.leading.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
+            $0.trailing.equalTo(partButton.snp.leading)
         }
 
         partButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
             $0.centerY.equalToSuperview()
+            $0.width.equalTo(24) // 버튼 너비 고정
+            $0.height.equalTo(24) // 버튼 높이 고정
         }
 
         langLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(30)
+            $0.leading.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
+            $0.trailing.equalTo(langButton.snp.leading)
         }
         
         langButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
             $0.centerY.equalToSuperview()
+            $0.width.equalTo(24) // 버튼 너비 고정
+            $0.height.equalTo(24) // 버튼 높이 고정
         }
         oldLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(30)
+            $0.leading.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
+            $0.trailing.equalTo(oldButton.snp.leading)
         }
         
         oldButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(10)
             $0.centerY.equalToSuperview()
+            $0.width.equalTo(24) // 버튼 너비 고정
+            $0.height.equalTo(24)
         }
         scrollView.snp.makeConstraints{
             $0.top.equalTo(buttonStackView.snp.bottom).offset(20)
