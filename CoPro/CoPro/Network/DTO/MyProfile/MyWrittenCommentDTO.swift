@@ -30,13 +30,14 @@ struct MyWrittenCommentData: Codable {
 
 // MARK: - Content
 struct MyWrittenCommentContent: Codable {
-    let parentID, commentID: Int
+    let parentID, commentID, boardID: Int
     let content, createAt: String
     let writer: MyWrittenCommentWriter
 
     enum CodingKeys: String, CodingKey {
         case parentID = "parentId"
         case commentID = "commentId"
+        case boardID = "boardId"
         case content, createAt, writer
     }
 }
