@@ -470,7 +470,7 @@ extension BoardCommentViewController: CustomCellDelegate {
     }
     
     func buttonTapped(commentId: Int) {
-        let alertController = UIAlertController(title: nil, message: "대댓글을 작성하시겠습니가?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: nil, message: "대댓글을 작성하시겠습니까?", preferredStyle: .alert)
         let action1 = UIAlertAction(title: "확인", style: .default) { _ in
             self.commentId = commentId
             print("data received")
