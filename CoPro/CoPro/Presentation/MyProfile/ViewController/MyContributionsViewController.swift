@@ -156,6 +156,7 @@ class MyContributionsViewController: BaseViewController {
                             return MyWrittenCommentDataModel(
                                 parentID: $0.parentID,
                                 commentID: $0.commentID,
+                                boardID: $0.boardID,
                                 content: $0.content,
                                 createAt: $0.createAt,
                                 writer: MyWrittenCommentDataModelWriter(from: $0.writer) // 수정된 부분
@@ -394,7 +395,14 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
          }
           
       case .comment:
-         print("댓글은 이동없음")
+         print("comment")
+         let detailVC = DetailBoardViewController()
+       detailVC.delegate = self
+        let reverseIndex = (myCommentData?.count ?? 0) - 1 - indexPath.row
+         if let id = self.myCommentData?[reverseIndex].boardID {
+           detailVC.postId = id
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
       }
    }
    
