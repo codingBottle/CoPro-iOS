@@ -224,6 +224,33 @@ extension LoginAPI {
            }
         }
     }
+   
+   public func postWithDrawal(token: String, completion: @escaping(NetworkResult<Any>) -> Void) {
+       AFManager.request(LoginRouter.postWithDrawal(token: token)).responseData { response in
+          if let statusCode = response.response?.statusCode {
+              if statusCode == 401 {
+                  // 토큰 재요청 함수 호출
+                  LoginAPI.shared.refreshAccessToken { result in
+                      switch result {
+                      case .success(let loginDTO):
+                          print("토큰 재발급 성공: \(loginDTO)")
+                          DispatchQueue.global().async {
+                             self.postWithDrawal(token: loginDTO.data.accessToken, completion: completion)
+                          }
+                      case .failure(let error):
+                          print("토큰 재발급 실패: \(error)")
+                      }
+                  }
+              } else {
+                  // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                  self.disposeNetwork(response, dataModel: WithDrawalDTO.self, completion: completion)
+              }
+          } else {
+              // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+              self.disposeNetwork(response, dataModel: WithDrawalDTO.self, completion: completion)
+          }
+       }
+   }
     
     // MARK: - 유저 정보 받아오기
     
@@ -240,6 +267,7 @@ extension LoginAPI {
                            keychain.set(data.data.occupation, forKey: "currentUserOccupation")
                            keychain.set(data.data.email, forKey: "currentUserEmail")
                            print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥현재 currentUserEmail",keychain.get("currentUserEmail"))
+                           print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥현재 currentUserProfileImage",keychain.get("currentUserProfileImage"))
                            keychain.set(data.data.gitHubURL ?? "지금 비어있엉~", forKey: "currentUserGithubURL")
                             completion()
                         } else {

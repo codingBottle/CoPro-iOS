@@ -11,11 +11,11 @@ import Then
 import KeychainSwift
 
 class MyProfileViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
-    
     enum CellType {
         case profile, cardChange, myTrace, logout
     }
-    
+   
+   private let authService: PhotoAuthManager = MyPhotoAuthManager()
     private let keychain = KeychainSwift()
     var myProfileView = MyProfileView()
     var myProfileData: MyProfileDataModel?
@@ -23,7 +23,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
    var githubURL: String?
    var beforeNickName: String?
     let bottomTabBarView = UIView()
-   
+   var profileImageUrl: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,12 +53,11 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
     }
     
    private func getMyProfile() {
-       // 액세스 토큰 가져오기
        guard let token = self.keychain.get("accessToken") else {
            print("No accessToken found in keychain.")
            return
        }
-       // MyProfileAPI를 사용하여 프로필 가져오기
+      
        MyProfileAPI.shared.getMyProfile(token: token) { result in
            switch result {
            case .success(let data):
@@ -71,6 +70,12 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                        let indexPath0 = IndexPath(row: 0, section: 0)
                        let indexPath1 = IndexPath(row: 1, section: 0)
                        self.myProfileView.tableView.reloadRows(at: [indexPath0, indexPath1], with: .none)
+                      self.profileImageUrl = self.myProfileData?.picture
+                      print("🌊🌊🌊\( self.profileImageUrl ?? "")🌊🌊🌊")
+//                      print("🔥🔥🔥\(self.myProfileData?.picture)🔥🔥🔥")
+//                      self.keychain.set(self.myProfileData?.picture ?? "", forKey: "ProfileImage")
+//                      print(self.keychain.get("ProfileImage") ?? "")
+                      
                    } else {
                        print("Failed to decode the response.")
                    }
@@ -86,6 +91,43 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
            }
        }
       print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\(keychain.get("currentUserNickName") ?? "")")
+   }
+   
+   func doWithDrawal() {
+      guard let token = self.keychain.get("accessToken") else {
+          print("No accessToken found in keychain.")
+          return
+      }
+      
+      LoginAPI.shared.postWithDrawal(token: token) { result in
+         switch result {
+         case .success(let data):
+            print("✅✅✅회원탈퇴 성공✅✅✅")
+            print(data)
+            self.keychain.clear()
+            self.navigationController?.popToRootViewController(animated: true)
+            DispatchQueue.main.async {
+               let loginVC = LoginViewController()
+               
+               if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first {
+                  UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                     window.rootViewController = loginVC
+                  }, completion: nil)
+               }
+            }
+            
+            
+         case .requestErr(let message):
+             // 요청 에러인 경우
+             print("Error : \(message)")
+         case .pathErr, .serverErr, .networkFail:
+             // 다른 종류의 에러인 경우
+             print("Another Error")
+         default:
+             break
+         }
+     }
    }
     
    func postEditCardViewType(CardViewType: Int) {
@@ -181,7 +223,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
             cell.delegate = self
             
             // 모든 셀에 대한 공통 설정
-            cell.titleLabel.setPretendardFont(text: "test", size: 17, weight: .regular, letterSpacing: 1.23)
+            cell.titleLabel.setPretendardFont(text: "", size: 17, weight: .regular, letterSpacing: 1.23)
             cell.heartContainer.isHidden = true
             cell.greaterthanContainer.isHidden = false
             cell.selectionStyle = .none
@@ -254,6 +296,21 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                 self.signOut()
             }
             alertController.addAction(action1)
+         
+         let action2 = UIAlertAction(title: "회원탈퇴", style: .default) { (action) in
+            print("회원탈퇴 호출")
+            DispatchQueue.main.async {
+               self.showAlert(title: "회원탈퇴를 진행하시겠습니까?",
+                         message: "이후 탈퇴를 취소하실 수 없습니다." ,
+                         cancelButtonName: "취소",
+                         confirmButtonName: "확인",
+                         confirmButtonCompletion: { [self] in
+                  doWithDrawal()
+               })
+            }
+         }
+         
+         alertController.addAction(action2)
 
             let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
             alertController.addAction(cancelAction)
@@ -329,156 +386,186 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
 
 }
 
-extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate, GithubUrlUpdateDelegate, EditMemberStatusButtonDelegate{
+extension MyProfileViewController: EditProfileButtonDelegate, MyProfileTableViewButtonDelegate, EditCardViewTypeButtonDelegate, ProfileUpdateDelegate, GithubUrlUpdateDelegate, EditMemberStatusButtonDelegate, ImageUploaderDelegate{
+   func didUploadImages(with urls: [Int]) {
+      print("")
+   }
    
-    func didUpdateProfile() {
-       print("✅✅✅✅✅✅✅✅✅✅✅✅")
-        getMyProfile()
-    }
-    
-    
-    // 프로필 수정
-    func didTapEditProfileButton(in cell: ProfileImageTableViewCell) {
-        let alertVC = EditMyProfileViewController()
-        alertVC.beforeEditMyProfileData = myProfileData
-        alertVC.initialUserName = myProfileData?.nickName
-        alertVC.activeViewType = .NotFirstLogin
-       alertVC.isModalInPresentation = false
-        alertVC.profileUpdateDelegate = self
-        present(alertVC, animated: true, completion: nil)
-    }
-    
-    // github url 수정
-    func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
-       print("현재 뷰컨에서 깃헙 눌림")
-       let alertVC = EditGithubModalViewController()
-       alertVC.githubUrlUpdateDelegate = self
+   
+   func updateProfileImage() {
+      print("✅✅✅✅✅✅✅✅✅✅✅✅")
+      getMyProfile()
+   }
+   
+   
+   func didUpdateProfile() {
+      print("✅✅✅✅✅✅✅✅✅✅✅✅")
+      getMyProfile()
+   }
+   
+   // 프로필 이미지 수정
+   func didTapEditProfileImageButton(in cell: ProfileImageTableViewCell) {
+      print("델리게이트 잘 넘어옴")
+      authService.requestAuthorization { [weak self] result in
+          guard let self else { return }
+          
+          switch result {
+          case .success:
+              let vc = PhotoViewController().then {
+                  $0.modalPresentationStyle = .fullScreen
+              }
+              vc.delegate = self
+             vc.beforeProfileImageUrl = profileImageUrl
+             vc.activeViewType = .NotPostType
+              present(vc, animated: true)
+          case .failure:
+              return
+          }
+      }
+   }
+   
+   // 프로필 수정
+   func didTapEditProfileButton(in cell: ProfileImageTableViewCell) {
+      let alertVC = EditMyProfileViewController()
+      alertVC.beforeEditMyProfileData = myProfileData
+      alertVC.initialUserName = myProfileData?.nickName
+      alertVC.activeViewType = .NotFirstLogin
+      alertVC.isModalInPresentation = false
+      alertVC.profileUpdateDelegate = self
+      present(alertVC, animated: true, completion: nil)
+   }
+   
+   // github url 수정
+   func didTapEditGitHubURLButton(in cell: MyProfileTableViewCell) {
+      print("현재 뷰컨에서 깃헙 눌림")
+      let alertVC = EditGithubModalViewController()
+      alertVC.githubUrlUpdateDelegate = self
       alertVC.githubURLtextFieldLabel.text = myProfileData?.gitHubURL
-       alertVC.initialUserURL = self.githubURL
+      alertVC.initialUserURL = self.githubURL
       alertVC.activeModalType = .NotFirstLogin
-       alertVC.isModalInPresentation = false
-       present(alertVC, animated: true, completion: nil)
-    }
-    
-    // 작성한 게시물
-    func didTapWritebyMeButtonTapped(in cell: MyProfileTableViewCell) {
-        print("작성한 게시물 클릭")
-        let vc = MyContributionsViewController()
-        vc.activeCellType = .post
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-
-    // 작성한 댓글
-    func didTapMyWrittenCommentButtonTapped(in cell: MyProfileTableViewCell) {
-        print("작성한 댓글 클릭")
-        let vc = MyContributionsViewController()
-        vc.activeCellType = .comment
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-
-    
-    // 스크랩
-    func didTapInterestedPostButtonTapped(in cell: MyProfileTableViewCell) {
-        print("스크랩 클릭")
-        let vc = MyContributionsViewController()
-        vc.activeCellType = .scrap
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    // 관심 프로필
-    func didTapInterestedProfileButtonTapped(in cell: MyProfileTableViewCell) {
-        print("관심 프로필 클릭")
-        let vc = LikeProfileViewController()
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
+      alertVC.isModalInPresentation = false
+      present(alertVC, animated: true, completion: nil)
+   }
+   
+   // 작성한 게시물
+   func didTapWritebyMeButtonTapped(in cell: MyProfileTableViewCell) {
+      print("작성한 게시물 클릭")
+      let vc = MyContributionsViewController()
+      vc.activeCellType = .post
+      vc.hidesBottomBarWhenPushed = true
+      self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+      self.navigationController?.pushViewController(vc, animated: true)
+   }
+   
+   // 작성한 댓글
+   func didTapMyWrittenCommentButtonTapped(in cell: MyProfileTableViewCell) {
+      print("작성한 댓글 클릭")
+      let vc = MyContributionsViewController()
+      vc.activeCellType = .comment
+      vc.hidesBottomBarWhenPushed = true
+      self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+      self.navigationController?.pushViewController(vc, animated: true)
+   }
+   
+   
+   // 스크랩
+   func didTapInterestedPostButtonTapped(in cell: MyProfileTableViewCell) {
+      print("스크랩 클릭")
+      let vc = MyContributionsViewController()
+      vc.activeCellType = .scrap
+      vc.hidesBottomBarWhenPushed = true
+      self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+      self.navigationController?.pushViewController(vc, animated: true)
+   }
+   
+   // 관심 프로필
+   func didTapInterestedProfileButtonTapped(in cell: MyProfileTableViewCell) {
+      print("관심 프로필 클릭")
+      let vc = LikeProfileViewController()
+      vc.hidesBottomBarWhenPushed = true
+      self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+      self.navigationController?.pushViewController(vc, animated: true)
+   }
+   
    // MARK: - 프로필 화면 카드/목록 설정하는 곳
    
-    func didTapEditCardTypeButtonTapped(in cell: CardTypeSettingsTableViewCell) {
-        print("현재 뷰컨에서 didTapEditCardTypeButtonTapped 눌림")
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-        let action1 = UIAlertAction(title: "카드로 보기", style: .default) { (action) in
-            print("카드로 보기 호출")
-            self.postEditCardViewType(CardViewType: 0)
-        }
-        alertController.addAction(action1)
-
-        let action2 = UIAlertAction(title: "목록으로 보기", style: .default) { (action) in
-            print("목록으로 보기 호출")
-            self.postEditCardViewType(CardViewType: 1)
-        }
-        alertController.addAction(action2)
-
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-
-        self.present(alertController, animated: true, completion: nil)
-    }
+   func didTapEditCardTypeButtonTapped(in cell: CardTypeSettingsTableViewCell) {
+      print("현재 뷰컨에서 didTapEditCardTypeButtonTapped 눌림")
+      let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+      
+      let action1 = UIAlertAction(title: "카드로 보기", style: .default) { (action) in
+         print("카드로 보기 호출")
+         self.postEditCardViewType(CardViewType: 0)
+      }
+      alertController.addAction(action1)
+      
+      let action2 = UIAlertAction(title: "목록으로 보기", style: .default) { (action) in
+         print("목록으로 보기 호출")
+         self.postEditCardViewType(CardViewType: 1)
+      }
+      alertController.addAction(action2)
+      
+      let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+      alertController.addAction(cancelAction)
+      
+      self.present(alertController, animated: true, completion: nil)
+   }
    
-    //MARK: - 로그아웃
+   //MARK: - 로그아웃
    
    func didTapEditMemberStatusButtonTapped(in cell: MemberStatusTableViewCell) {
       print("현재 뷰컨에서 didTapEditMemberStatusButtonTapped 눌림")
       let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
+      
       let action1 = UIAlertAction(title: "로그아웃", style: .default) { (action) in
-          print("로그 아웃 호출")
-          self.signOut()
+         print("로그 아웃 호출")
+         self.signOut()
       }
       alertController.addAction(action1)
-
+      
       let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
       alertController.addAction(cancelAction)
-
+      
       self.present(alertController, animated: true, completion: nil)
    }
    
-    func signOut()  {
-       print("로그아웃 시작")
-        keychain.clear()
-        navigationController?.popToRootViewController(animated: true)
-       DispatchQueue.main.async {
-               let loginVC = LoginViewController()
-
-               if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let window = windowScene.windows.first {
-                   UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
-                       window.rootViewController = loginVC
-                   }, completion: nil)
-               }
-           }
-    }
-    // MARK: - NavgaitonBar Custom
-    func setupNavigationBar() {
-        // NavigationBar 설정 관련 코드
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: "Pretendard-Regular", size: 17)!,
-            .kern: 1.25,
-            .foregroundColor: UIColor.black
-        ]
-        navigationController?.navigationBar.titleTextAttributes = attributes
-        
-        let backButton = UIButton(type: .custom)
-        guard let originalImage = UIImage(systemName: "chevron.left") else {
-            return
-        }
-        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24)
-        let boldImage = originalImage.withConfiguration(symbolConfiguration)
-        backButton.setImage(boldImage, for: .normal)
-        backButton.contentMode = .scaleAspectFit
-        backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-    }
-
-    
+   func signOut()  {
+      print("로그아웃 시작")
+      keychain.clear()
+      navigationController?.popToRootViewController(animated: true)
+      DispatchQueue.main.async {
+         let loginVC = LoginViewController()
+         
+         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first {
+            UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+               window.rootViewController = loginVC
+            }, completion: nil)
+         }
+      }
+   }
+   
+   // MARK: - NavgaitonBar Custom
+   func setupNavigationBar() {
+      // NavigationBar 설정 관련 코드
+      navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+      
+      let attributes: [NSAttributedString.Key: Any] = [
+         .font: UIFont(name: "Pretendard-Regular", size: 17)!,
+         .kern: 1.25,
+         .foregroundColor: UIColor.black
+      ]
+      navigationController?.navigationBar.titleTextAttributes = attributes
+      
+      let backButton = UIButton(type: .custom)
+      guard let originalImage = UIImage(systemName: "chevron.left") else {
+         return
+      }
+      let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24)
+      let boldImage = originalImage.withConfiguration(symbolConfiguration)
+      backButton.setImage(boldImage, for: .normal)
+      backButton.contentMode = .scaleAspectFit
+      backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+   }
+   
 }
