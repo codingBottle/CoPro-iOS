@@ -225,8 +225,8 @@ extension LoginAPI {
         }
     }
    
-   public func postWithDrawal(token: String, completion: @escaping(NetworkResult<Any>) -> Void) {
-       AFManager.request(LoginRouter.postWithDrawal(token: token)).responseData { response in
+   public func postDeleteAccount(token: String, completion: @escaping(NetworkResult<Any>) -> Void) {
+       AFManager.request(LoginRouter.postDeleteAccount(token: token)).responseData { response in
           if let statusCode = response.response?.statusCode {
               if statusCode == 401 {
                   // 토큰 재요청 함수 호출
@@ -235,7 +235,7 @@ extension LoginAPI {
                       case .success(let loginDTO):
                           print("토큰 재발급 성공: \(loginDTO)")
                           DispatchQueue.global().async {
-                             self.postWithDrawal(token: loginDTO.data.accessToken, completion: completion)
+                             self.postDeleteAccount(token: loginDTO.data.accessToken, completion: completion)
                           }
                       case .failure(let error):
                           print("토큰 재발급 실패: \(error)")
@@ -243,11 +243,11 @@ extension LoginAPI {
                   }
               } else {
                   // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
-                  self.disposeNetwork(response, dataModel: WithDrawalDTO.self, completion: completion)
+                  self.disposeNetwork(response, dataModel: DeleteAccountDTO.self, completion: completion)
               }
           } else {
               // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
-              self.disposeNetwork(response, dataModel: WithDrawalDTO.self, completion: completion)
+              self.disposeNetwork(response, dataModel: DeleteAccountDTO.self, completion: completion)
           }
        }
    }

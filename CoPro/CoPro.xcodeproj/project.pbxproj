@@ -41,7 +41,7 @@
 		9E0B9CB72B6C9E0E00A5EACB /* EditMyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */; };
 		9E0B9CB92B6DC6E000A5EACB /* ScrapPostDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CB82B6DC6DF00A5EACB /* ScrapPostDTO.swift */; };
 		9E0B9CBB2B6DC74200A5EACB /* ScrapPostDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B9CBA2B6DC74200A5EACB /* ScrapPostDataModel.swift */; };
-		9E51EBA32BA7F5A8001750C2 /* WithDrawalDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E51EBA22BA7F5A8001750C2 /* WithDrawalDTO.swift */; };
+		9E51EBA32BA7F5A8001750C2 /* DeleteAccountDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E51EBA22BA7F5A8001750C2 /* DeleteAccountDTO.swift */; };
 		9E51EBA52BA9A309001750C2 /* DeleteProfilePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E51EBA42BA9A309001750C2 /* DeleteProfilePhoto.swift */; };
 		9E51EBA72BA9A86D001750C2 /* AddProfilePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E51EBA62BA9A86D001750C2 /* AddProfilePhoto.swift */; };
 		9E5C36182B7F8E440091884C /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C36172B7F8E440091884C /* LoginRouter.swift */; };
@@ -337,7 +337,7 @@
 		9E0B9CB62B6C9E0E00A5EACB /* EditMyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileViewController.swift; sourceTree = "<group>"; };
 		9E0B9CB82B6DC6DF00A5EACB /* ScrapPostDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostDTO.swift; sourceTree = "<group>"; };
 		9E0B9CBA2B6DC74200A5EACB /* ScrapPostDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrapPostDataModel.swift; sourceTree = "<group>"; };
-		9E51EBA22BA7F5A8001750C2 /* WithDrawalDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawalDTO.swift; sourceTree = "<group>"; };
+		9E51EBA22BA7F5A8001750C2 /* DeleteAccountDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountDTO.swift; sourceTree = "<group>"; };
 		9E51EBA42BA9A309001750C2 /* DeleteProfilePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProfilePhoto.swift; sourceTree = "<group>"; };
 		9E51EBA62BA9A86D001750C2 /* AddProfilePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfilePhoto.swift; sourceTree = "<group>"; };
 		9E5C36172B7F8E440091884C /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
@@ -1140,7 +1140,7 @@
 			children = (
 				B5B511132B7B6D6800A1B74D /* LoginDTO.swift */,
 				9E5C36192B7F8F340091884C /* CheckInitialLoginDTO.swift */,
-				9E51EBA22BA7F5A8001750C2 /* WithDrawalDTO.swift */,
+				9E51EBA22BA7F5A8001750C2 /* DeleteAccountDTO.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1741,7 +1741,7 @@
 				B58B8D372B4D3F0900FB98F9 /* CardRouter.swift in Sources */,
 				9E7401E32B3C18A60030C8EC /* StreamError.swift in Sources */,
 				9E7462D92B755D38006693B6 /* EditMyProfileRequestBody.swift in Sources */,
-				9E51EBA32BA7F5A8001750C2 /* WithDrawalDTO.swift in Sources */,
+				9E51EBA32BA7F5A8001750C2 /* DeleteAccountDTO.swift in Sources */,
 				9E8FB6F52B5CF64A00C02028 /* MyProfileAPI.swift in Sources */,
 				9E5C361A2B7F8F340091884C /* CheckInitialLoginDTO.swift in Sources */,
 				E3D6D1582AEFACB6003269FF /* NetworkResult.swift in Sources */,
@@ -1889,7 +1889,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://dev.copro.shop";
+				BASE_URL = "https://copro.shop";
 				CODE_SIGN_ENTITLEMENTS = CoPro/CoProDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1922,7 +1922,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				BASE_URL = "https://dev.copro.shop";
+				BASE_URL = "https://copro.shop";
 				CODE_SIGN_ENTITLEMENTS = CoPro/CoProRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
