@@ -32,24 +32,25 @@ class ProfileImageTableViewCell: UITableViewCell {
        $0.spacing = 8
    }
    
-   lazy var nickname = createLabel(text: "", size: 30, weight: .bold)
-   lazy var developmentJobLabel = createLabel(text: "", size: 24, weight: .medium)
-   lazy var usedLanguageLabel = createLabel(text: "", size: 24, weight: .medium)
+   lazy var nickname = createLabel(text: "   ", size: 30, weight: .bold)
+   lazy var developmentJobLabel = createLabel(text: "   ", size: 24, weight: .medium)
+   lazy var usedLanguageLabel = createLabel(text: "   ", size: 24, weight: .medium)
 
    func createLabel(text: String, size: CGFloat, weight: UIFont.Weight) -> UILabel {
        let strokeTextAttributes: [NSAttributedString.Key: Any] = [
-           .strokeColor: UIColor.blue,
-           .foregroundColor: UIColor.red,
-           .strokeWidth: -2.0
+           .strokeColor: UIColor.black,
+           .foregroundColor: UIColor.white,
+           .strokeWidth: -2.0,
+           .font: UIFont.systemFont(ofSize: size, weight: weight),
+           .kern: 1.23 // letterSpacing 설정
        ]
        
-       let label = UILabel().then {
-           $0.setPretendardFont(text: text, size: size, weight: weight, letterSpacing: 1.23)
-           $0.attributedText = NSAttributedString(string: text, attributes: strokeTextAttributes) // attributedText를 먼저 설정
-       }
+       let label = UILabel()
+       label.attributedText = NSAttributedString(string: text, attributes: strokeTextAttributes) // 폰트와 색상을 여기서 모두 설정
        
        return label
    }
+
 
    
    
