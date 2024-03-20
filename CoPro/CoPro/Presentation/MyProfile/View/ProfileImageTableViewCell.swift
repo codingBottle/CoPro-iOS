@@ -12,6 +12,7 @@ import Kingfisher
 
 protocol EditProfileButtonDelegate: AnyObject {
     func didTapEditProfileButton(in cell: ProfileImageTableViewCell)
+    func didTapEditProfileImageButton(in cell: ProfileImageTableViewCell)
 }
 
 class ProfileImageTableViewCell: UITableViewCell {
@@ -30,28 +31,47 @@ class ProfileImageTableViewCell: UITableViewCell {
        $0.alignment = .fill
        $0.spacing = 8
    }
-
-   func createLabel(text: String, size: CGFloat, weight: UIFont.Weight) -> UILabel {
-       let strokeTextAttributes: [NSAttributedString.Key : Any] = [
-           .strokeColor : UIColor.black,
-           .foregroundColor : UIColor.white,
-           .strokeWidth : -2.0,
-       ]
-       return UILabel().then {
-           $0.setPretendardFont(text: text, size: size, weight: weight, letterSpacing: 1.23)
-           $0.textColor = UIColor.White()
-           $0.attributedText = NSAttributedString(string: text, attributes: strokeTextAttributes)
-       }
-   }
-
+   
    lazy var nickname = createLabel(text: "", size: 30, weight: .bold)
    lazy var developmentJobLabel = createLabel(text: "", size: 24, weight: .medium)
    lazy var usedLanguageLabel = createLabel(text: "", size: 24, weight: .medium)
+
+   func createLabel(text: String, size: CGFloat, weight: UIFont.Weight) -> UILabel {
+       let strokeTextAttributes: [NSAttributedString.Key: Any] = [
+           .strokeColor: UIColor.blue,
+           .foregroundColor: UIColor.red,
+           .strokeWidth: -2.0
+       ]
+       
+       let label = UILabel().then {
+           $0.setPretendardFont(text: text, size: size, weight: weight, letterSpacing: 1.23)
+           $0.attributedText = NSAttributedString(string: text, attributes: strokeTextAttributes) // attributedText를 먼저 설정
+       }
+       
+       return label
+   }
+
+   
    
    var editButton = UIButton().then {
       let symbolConfiguration = UIImage.SymbolConfiguration(scale: .large)
       let image = UIImage(systemName: "square.and.pencil", withConfiguration: symbolConfiguration)
       
+      var buttonConfiguration = UIButton.Configuration.gray()
+      buttonConfiguration.image = image
+      buttonConfiguration.imagePadding = 10
+      buttonConfiguration.background.backgroundColor = UIColor.white
+      buttonConfiguration.cornerStyle = .capsule
+      $0.configuration = buttonConfiguration
+      $0.layer.borderColor = UIColor.P2().cgColor
+      $0.layer.cornerRadius = 25
+      $0.layer.borderWidth = 1
+      $0.clipsToBounds = true
+   }
+   
+   var profileImageEditButton = UIButton().then {
+      let symbolConfiguration = UIImage.SymbolConfiguration(scale: .large)
+      let image = UIImage(systemName: "camera.fill", withConfiguration: symbolConfiguration)
       var buttonConfiguration = UIButton.Configuration.gray()
       buttonConfiguration.image = image
       buttonConfiguration.imagePadding = 10
@@ -96,7 +116,6 @@ class ProfileImageTableViewCell: UITableViewCell {
       super.init(style: style, reuseIdentifier: reuseIdentifier)
       setLayout()
       selectedBackgroundView = UIView()
-      
    }
    
    
@@ -111,11 +130,12 @@ class ProfileImageTableViewCell: UITableViewCell {
       
       contentView.addSubview(containerView)
       containerView.addSubview(profileImage)
-      profileImage.addSubviews(informationContainer, editButton)
+      profileImage.addSubviews(informationContainer, editButton, profileImageEditButton)
       informationContainer.addSubviews(nickname, developmentJobLabel, usedLanguageLabel)
       
       profileImage.isUserInteractionEnabled = true
       editButton.addTarget(self, action: #selector(didTapEditProfileButton), for: .touchUpInside)
+      profileImageEditButton.addTarget(self, action: #selector(didTapEditProfileImage), for: .touchUpInside)
       
       containerView.snp.makeConstraints {
          $0.top.bottom.leading.trailing.equalToSuperview()
@@ -126,11 +146,11 @@ class ProfileImageTableViewCell: UITableViewCell {
       }
       
       informationContainer.snp.makeConstraints {
-              $0.leading.equalToSuperview().offset(16)
-              $0.trailing.equalToSuperview().offset(-16)
-              $0.bottom.equalToSuperview().offset(-10)
-//              $0.height.equalTo(UIScreen.main.bounds.height/2/2.5)
-          }
+         $0.leading.equalToSuperview().offset(16)
+         $0.trailing.equalToSuperview().offset(-16)
+         $0.bottom.equalToSuperview().offset(-10)
+         //              $0.height.equalTo(UIScreen.main.bounds.height/2/2.5)
+      }
       
       nickname.snp.makeConstraints {
          $0.height.equalTo(90)
@@ -143,17 +163,29 @@ class ProfileImageTableViewCell: UITableViewCell {
       }
 
       editButton.snp.makeConstraints {
-              $0.width.equalTo(50)
-              $0.height.equalTo(50)
-              $0.bottom.equalToSuperview().offset(-10)
-              $0.trailing.equalToSuperview().offset(-10)
-          }
+         $0.width.equalTo(50)
+         $0.height.equalTo(50)
+         $0.bottom.equalToSuperview().offset(-10)
+         $0.trailing.equalToSuperview().offset(-10)
+      }
+      
+      profileImageEditButton.snp.makeConstraints {
+         $0.width.equalTo(50)
+         $0.height.equalTo(50)
+         $0.bottom.equalTo(editButton.snp.top).offset(-10)
+         $0.trailing.equalToSuperview().offset(-10)
+      }
       
    }
    
    @objc func didTapEditProfileButton(_ sender: UIButton) {
       print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
       delegate?.didTapEditProfileButton(in: self)
+   }
+   
+   @objc func didTapEditProfileImage(_ sender: UIButton) {
+      print("✳️✳️✳️✳️✳️✳️✳️✳️✳️✳️✳️✳️✳️✳️✳️")
+      delegate?.didTapEditProfileImageButton(in: self)
    }
    
 }

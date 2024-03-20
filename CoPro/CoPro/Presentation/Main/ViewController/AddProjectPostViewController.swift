@@ -515,6 +515,10 @@ extension AddProjectPostViewController {
 }
 
 extension AddProjectPostViewController: ImageUploaderDelegate, SendStringData, UIGestureRecognizerDelegate {
+   func updateProfileImage() {
+      print("")
+   }
+   
     func didUploadImages(with urls: [Int]) {
         self.imageUrls += urls
         self.deleteImages += urls

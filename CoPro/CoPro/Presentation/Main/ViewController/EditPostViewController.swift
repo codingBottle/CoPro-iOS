@@ -379,6 +379,10 @@ extension EditPostViewController: UITextViewDelegate {
 }
 
 extension EditPostViewController: ImageUploaderDelegate {
+   func updateProfileImage() {
+      print("")
+   }
+   
     func didUploadImages(with urls: [Int]) {
         self.imageUrls += urls
         self.deletingImages += urls

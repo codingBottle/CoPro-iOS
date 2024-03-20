@@ -376,6 +376,10 @@ extension AddPostViewController {
 }
 
 extension AddPostViewController: ImageUploaderDelegate {
+   func updateProfileImage() {
+      print("")
+   }
+   
     func didUploadImages(with urls: [Int]) {
         self.imageUrls += urls
         self.deleteImages += urls

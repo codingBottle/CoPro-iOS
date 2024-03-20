@@ -17,6 +17,8 @@ enum MyProfileRouter {
     case postEditGitHubURL(token: String, requestBody: EditGitHubURLRequestBody)
     case postEditCardType(token: String, requestBody: EditCardTypeRequestBody)
     case postEditMyProfile(token: String, requestBody: EditMyProfileRequestBody)
+   case addProfiePhoto(token: String, requestBody: AddProfilePhotoRequestBody)
+   case deleteProfiePhoto(token: String, requestBody: DeleteProfilePhotoRequestBody)
 }
 
 extension MyProfileRouter: BaseTargetType {
@@ -48,6 +50,12 @@ extension MyProfileRouter: BaseTargetType {
             
         case .postEditMyProfile:
             return .post
+           
+        case .addProfiePhoto:
+           return .post
+           
+        case .deleteProfiePhoto:
+           return .post
         }
     }
 
@@ -67,8 +75,6 @@ extension MyProfileRouter: BaseTargetType {
             
         case .getNickNameDuplication(_, _):
             return "/api/nickname"
-//        case .getNickNameDuplication(_, let nickname):
-//            return "/api/nickname/\(nickname)"
             
         case .postEditGitHubURL:
             return "/api/github-url"
@@ -78,6 +84,12 @@ extension MyProfileRouter: BaseTargetType {
             
         case .postEditMyProfile:
             return "/api/profile"
+           
+        case .addProfiePhoto:
+           return "/api/v1/images/profile"
+           
+        case .deleteProfiePhoto:
+           return "/api/v1/images/profile/delete"
         }
     }
 
@@ -97,12 +109,6 @@ extension MyProfileRouter: BaseTargetType {
           
         case .getNickNameDuplication(_, let nickname):
             return .query(["nickname": nickname])
-
-//        case .getNickNameDuplication:
-//            return .none
-            
-//        case .getNickNameDuplication(_, let nickname):
-//            return .query(nickname)
             
         case .postEditGitHubURL(_, let requestBody):
             return .body(requestBody)
@@ -112,6 +118,12 @@ extension MyProfileRouter: BaseTargetType {
             
         case .postEditMyProfile(_, let requestBody):
             return .body(requestBody)
+           
+        case .addProfiePhoto(_, let requestBody):
+           return .body(requestBody)
+           
+        case .deleteProfiePhoto(_, let requestBody):
+           return .body(requestBody)
         }
     }
 
@@ -129,9 +141,6 @@ extension MyProfileRouter: BaseTargetType {
         case .getScrapPost(let token):
             return ["Authorization": "Bearer \(token)"]
         
-            
-//        case .getNickNameDuplication(let token):
-//            return ["Authorization": "Bearer \(token)"]
         case .getNickNameDuplication(let token, _):
             return ["Authorization": "Bearer \(token)"]
             
@@ -143,6 +152,12 @@ extension MyProfileRouter: BaseTargetType {
             
         case .postEditMyProfile(let token, _):
             return ["Authorization": "Bearer \(token)"]
+           
+        case.addProfiePhoto(let token, _):
+           return ["Authorization": "Bearer \(token)"]
+           
+        case.deleteProfiePhoto(let token, _):
+           return ["Authorization": "Bearer \(token)"]
         }
     }
 }

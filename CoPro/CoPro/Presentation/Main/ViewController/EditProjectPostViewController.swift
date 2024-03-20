@@ -422,6 +422,10 @@ extension EditProjectPostViewController: UITextViewDelegate {
 }
 
 extension EditProjectPostViewController: ImageUploaderDelegate, SendStringData, UIGestureRecognizerDelegate {
+   func updateProfileImage() {
+      print("")
+   }
+   
     func didUploadImages(with urls: [Int]) {
         self.imageUrls += urls
         self.deletingImages += urls
