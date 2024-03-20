@@ -205,7 +205,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
                     print("\(imageData)")
                     multipartFormData.append(imageData, withName: "files", fileName: "image\(index).jpeg", mimeType: "image/jpeg")
                 }
-            }, to: url.appendingPathComponent("/api/v1/images"), headers: headers)
+            }, to: url.appendingPathComponent("/api/v1/images/board"), headers: headers)
             .responseJSON { response in
                 debugPrint(response)
                 switch response.result {
@@ -223,9 +223,9 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
                     } else {
                         print("Data is not of 'Data' type.")
                     }
-                    case .failure(let error):
-                        print("Error uploading images: \(error.localizedDescription)")
-                    }
+                case .failure(let error):
+                    print("Error uploading images: \(error.localizedDescription)")
+                }
             }
         }
     }
