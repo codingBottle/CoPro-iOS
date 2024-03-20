@@ -225,8 +225,8 @@ extension LoginAPI {
         }
     }
    
-   public func postDeleteAccount(token: String, completion: @escaping(NetworkResult<Any>) -> Void) {
-       AFManager.request(LoginRouter.postDeleteAccount(token: token)).responseData { response in
+   public func deleteAccount(accessToken: String, completion: @escaping(NetworkResult<Any>) -> Void) {
+       AFManager.request(LoginRouter.postDeleteAccount(token: accessToken)).responseData { response in
           if let statusCode = response.response?.statusCode {
               if statusCode == 401 {
                   // 토큰 재요청 함수 호출
@@ -235,7 +235,7 @@ extension LoginAPI {
                       case .success(let loginDTO):
                           print("토큰 재발급 성공: \(loginDTO)")
                           DispatchQueue.global().async {
-                             self.postDeleteAccount(token: loginDTO.data.accessToken, completion: completion)
+                             self.deleteAccount(accessToken: loginDTO.data.accessToken, completion: completion)
                           }
                       case .failure(let error):
                           print("토큰 재발급 실패: \(error)")

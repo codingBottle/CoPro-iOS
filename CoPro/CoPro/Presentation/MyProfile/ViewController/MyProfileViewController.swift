@@ -99,7 +99,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
           return
       }
       
-      LoginAPI.shared.postDeleteAccount(token: token) { result in
+      LoginAPI.shared.deleteAccount(accessToken: token) { result in
          switch result {
          case .success(let data):
             print("✅✅✅회원탈퇴 성공✅✅✅")
