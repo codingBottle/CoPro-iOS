@@ -93,13 +93,13 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
       print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\(keychain.get("currentUserNickName") ?? "")")
    }
    
-   func doWithDrawal() {
+   func doDeleteAccount() {
       guard let token = self.keychain.get("accessToken") else {
           print("No accessToken found in keychain.")
           return
       }
       
-      LoginAPI.shared.postWithDrawal(token: token) { result in
+      LoginAPI.shared.deleteAccount(accessToken: token) { result in
          switch result {
          case .success(let data):
             print("✅✅✅회원탈퇴 성공✅✅✅")
@@ -305,7 +305,7 @@ class MyProfileViewController: BaseViewController, UITableViewDataSource, UITabl
                          cancelButtonName: "취소",
                          confirmButtonName: "확인",
                          confirmButtonCompletion: { [self] in
-                  doWithDrawal()
+                  doDeleteAccount()
                })
             }
          }

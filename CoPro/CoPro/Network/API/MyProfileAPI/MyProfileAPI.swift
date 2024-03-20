@@ -103,7 +103,7 @@ extension MyProfileAPI {
                  }
               }
            } else {
-              print("프로필 이미지 삭제 성공")
+              print("프로필 이미지 삭제 시도 시작")
               self.disposeNetwork(response, dataModel: DeleteProfilePhotoDTO.self, completion: completion)
            }
         } else {

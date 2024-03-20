@@ -10,7 +10,7 @@ import Alamofire
 
 enum LoginRouter {
    case getCheckInitialLogin(token: String)
-   case postWithDrawal(token: String)
+   case postDeleteAccount(token: String)
 }
 
 extension LoginRouter: BaseTargetType {
@@ -20,7 +20,7 @@ extension LoginRouter: BaseTargetType {
       switch self {
       case .getCheckInitialLogin:
          return .get
-      case .postWithDrawal:
+      case .postDeleteAccount:
          return .post
       }
    }
@@ -29,8 +29,8 @@ extension LoginRouter: BaseTargetType {
       switch self {
       case .getCheckInitialLogin:
          return "/api/success"
-      case .postWithDrawal:
-         return "/api/withdrawal"
+      case .postDeleteAccount:
+         return "/api/delete-account"
       }
    }
    
@@ -38,7 +38,7 @@ extension LoginRouter: BaseTargetType {
       switch self {
       case .getCheckInitialLogin:
          return .none
-      case .postWithDrawal:
+      case .postDeleteAccount:
          return .none
       }
    }
@@ -47,7 +47,7 @@ extension LoginRouter: BaseTargetType {
       switch self{
       case .getCheckInitialLogin(let token):
          return ["Authorization": "Bearer \(token)"]
-      case .postWithDrawal(let token):
+      case .postDeleteAccount(let token):
          return ["Authorization": "Bearer \(token)"]
       }
    }

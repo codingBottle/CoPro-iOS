@@ -1,5 +1,5 @@
 //
-//  WithDrawalDTO.swift
+//  DeleteAccountDTO.swift
 //  CoPro
 //
 //  Created by 박신영 on 3/18/24.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-// MARK: - Temperatures
-struct WithDrawalDTO: Codable {
+// MARK: - DeleteAccountDTO
+struct DeleteAccountDTO: Codable {
     let statusCode: Int
     let message: String
-    let data: WithDrawalDataClass
+    let data: DeleteAccountDataClass
 }
 
 // MARK: - DataClass
-struct WithDrawalDataClass: Codable {
+struct DeleteAccountDataClass: Codable {
     let email: String
 }

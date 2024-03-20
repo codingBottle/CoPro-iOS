@@ -25,6 +25,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
    }
    var activeViewType: PhotoViewType = .PostType
    var beforeProfileImageUrl: String?
+   weak var alertController: UIAlertController?
    
     private enum Const {
         static let numberOfColumns = 3.0
@@ -95,6 +96,7 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
           print("현재 PostType")
        case .NotPostType:
           print("현재 NotPostType")
+          print(beforeProfileImageUrl)
        }
     }
     
@@ -154,8 +156,17 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
          }
       case .NotPostType:
          submitButton.isEnabled = false
-         
-         deleteProfileImage()
+         DispatchQueue.global(qos: .background).async { [self] in
+            loadImages(from: selectedImages) { images in
+               self.uploadProfileImage(images: images) { urls in
+                  NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": self.selectedImages])
+                  self.delegate?.updateProfileImage()
+                  self.dismiss(animated: true, completion: {
+                     self.submitButton.isEnabled = true
+                  })
+               }
+            }
+         }
       }
    }
    
@@ -237,23 +248,11 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
       }
       
       guard let currentImageUrl = self.beforeProfileImageUrl else {return print("") }
-      
-      // MyProfileAPI를 사용하여 프로필 타입 변경 요청 보내기
+      print("🔥🔥🔥🔥🔥🔥🔥\(currentImageUrl)🔥🔥🔥🔥🔥🔥🔥")
       MyProfileAPI.shared.deleteProfileImage(token: token, requestBody: DeleteProfilePhotoRequestBody(imageUrl: currentImageUrl)) { result in
          switch result {
          case .success(_):
-            DispatchQueue.global(qos: .background).async { [self] in
-               loadImages(from: selectedImages) { images in
-                  self.uploadProfileImage(images: images) { urls in
-                     NotificationCenter.default.post(name: NSNotification.Name("SelectedImages"), object: nil, userInfo: ["images": self.selectedImages])
-                     self.delegate?.updateProfileImage()
-                     self.dismiss(animated: true, completion: {
-                        // 모든 작업이 완료된 후에 버튼을 다시 활성화합니다.
-                        self.submitButton.isEnabled = true
-                     })
-                  }
-               }
-            }
+            print("성공적으로 삭제")
             
          case .requestErr(let message):
             // 요청 에러인 경우
@@ -284,40 +283,45 @@ final class PhotoViewController: UIViewController, UIImagePickerControllerDelega
                    }
 
                    let sizeInMB = Double(imageData.count) / 1024.0 / 1024.0
-                   if sizeInMB > 10.0 { // 크기가 10MB를 초과할 경우
-                       let alertController = UIAlertController(title: "업로드 오류", message: "10MB를 초과하는 이미지는 업로드할 수 없습니다.", preferredStyle: .alert)
-                       alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-                       self.present(alertController, animated: true, completion: nil)
-                       return // 10MB 이상의 이미지가 있을 경우 바로 return하여 함수를 종료합니다.
-                   }
+                  print("🐲🐲🐲🐲🐲🐲🐲🐲🐲\(sizeInMB)🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲")
 
                    multipartFormData.append(imageData, withName: "image", fileName: "image\(index).jpeg", mimeType: "image/jpeg")
                }
            }, to: url.appendingPathComponent("/api/v1/images/profile"), headers: headers)
            .responseJSON { response in
                debugPrint(response)
-
-               switch response.result {
-               case .success:
-                   if let data = response.data {
+              if let statusCode = response.response?.statusCode {
+                 if statusCode == 200 {
+                    self.deleteProfileImage()
+                    if let data = response.data {
                        do {
-                           let decoder = JSONDecoder()
-                           let imageData = try decoder.decode(ImageUploadResponse.self, from: data)
-                           let urls = imageData.data.map { $0.imageId }
-                           completion(urls)
-                           print(imageData)
+                          let decoder = JSONDecoder()
+                          let imageData = try decoder.decode(ImageUploadResponse.self, from: data)
+                          let urls = imageData.data.map { $0.imageId }
+                          completion(urls)
+                          print("☃️☃️☃️☃️☃️",imageData)
                        } catch {
-                           print("Error decoding data: \(error.localizedDescription)")
+                          print("Error decoding data: \(error.localizedDescription)")
                        }
-                   } else {
+                    } else {
                        print("Data is not of 'Data' type.")
-                   }
-                  DispatchQueue.main.async {
-                     self.dismiss(animated: true)
+                    }
+                    DispatchQueue.main.async {
+                       self.dismiss(animated: true)
+                    }
+                 }
+                 else {
+                      // 상태 코드가 401이 아닌 경우, 에러 alert 출동
+                    DispatchQueue.main.async {
+                       self.showAlert(title: "프로필 사진 수정 오류",
+                                      message: "10MB 초과 이미지는 업로드할 수 없습니다." ,
+                                      confirmButtonName: "확인",
+                                      confirmButtonCompletion: { [self] in
+                          self.submitButton.isEnabled = true
+                       })
+                    }
                   }
-               case .failure(let error):
-                   print("Error uploading images: \(error.localizedDescription)")
-               }
+              }
            }
        }
    }
@@ -347,54 +351,6 @@ extension PhotoViewController: UICollectionViewDataSource {
 }
 
 extension PhotoViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//       
-//       
-//        let info = dataSource[indexPath.item ]
-//        let updatingIndexPaths: [IndexPath]
-//        
-//        if case .selected = info.selectedOrder {
-//            dataSource[indexPath.item] = .init(phAsset: info.phAsset, image: info.image, selectedOrder: .none)
-//            if let index = selectedImages.firstIndex(of: info.phAsset) {
-//                        selectedImages.remove(at: index)
-//                    }
-//            selectedIndexArray
-//                .removeAll(where: { $0 == indexPath.item })
-//            
-//            selectedIndexArray
-//                .enumerated()
-//                .forEach { order, index in
-//                    let order = order + 1
-//                    let prev = dataSource[index]
-//                    dataSource[index] = .init(phAsset: prev.phAsset, image: prev.image, selectedOrder: .selected(order))
-//                }
-//            updatingIndexPaths = [indexPath] + selectedIndexArray
-//                .map { IndexPath(row: $0, section: 0) }
-//            print(info)
-//        } else {
-//            selectedIndexArray
-//                .append(indexPath.item)
-//            
-//            selectedIndexArray
-//                .enumerated()
-//                .forEach { order, selectedIndex in
-//                    let order = order + 1
-//                    let prev = dataSource[selectedIndex]
-//                    dataSource[selectedIndex] = .init(phAsset: prev.phAsset, image: prev.image, selectedOrder: .selected(order))
-//                }
-//            
-//            updatingIndexPaths = selectedIndexArray
-//                .map { IndexPath(row: $0, section: 0) }
-//            selectedImages.append(info.phAsset)
-//            print(info)
-//
-//        }
-////        selectedImages = selectedIndexArray.compactMap { dataSource[$0].phAsset }
-//        print(selectedImages)
-//        update(indexPaths: updatingIndexPaths)
-//       
-//       
-//    }
    
    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        switch activeViewType {
@@ -469,4 +425,57 @@ extension PhotoViewController: UICollectionViewDelegate {
             collectionView.reloadItems(at: indexPaths)
         }
     }
+}
+
+extension PhotoViewController {
+   
+   func showAlert(title: String? = nil,
+                  message: String? = nil,
+                  preferredStyle: UIAlertController.Style = .alert,
+                  cancelButtonName: String? = nil,
+                  confirmButtonName: String? = nil,
+                  isExistsTextField: Bool = false,
+                  cancelButtonCompletion: (() -> Void)? = nil,
+                  confirmButtonCompletion: (() -> Void)? = nil) {
+       let alertViewController = UIAlertController(title: title,
+                                                   message: message,
+                                                   preferredStyle: preferredStyle)
+       
+       if let cancelButtonName = cancelButtonName {
+           let cancelAction = UIAlertAction(title: cancelButtonName,
+                                            style: .cancel) { _ in
+               cancelButtonCompletion?()
+           }
+           alertViewController.addAction(cancelAction)
+       }
+       
+       if let confirmButtonName = confirmButtonName {
+           let confirmAction = UIAlertAction(title: confirmButtonName,
+                                             style: .default) { _ in
+               confirmButtonCompletion?()
+           }
+           alertViewController.addAction(confirmAction)
+       }
+       
+       if isExistsTextField {
+           alertViewController.addTextField { textField in
+               textField.addTarget(self, action: #selector(self.didInputTextField(field:)), for: .editingChanged)
+               textField.enablesReturnKeyAutomatically = true
+               textField.autocapitalizationType = .words
+               textField.clearButtonMode = .whileEditing
+               textField.placeholder = "Channel name"
+               textField.returnKeyType = .done
+               textField.tintColor = .primary
+           }
+       }
+       
+       alertController = alertViewController
+       present(alertViewController, animated: true)
+   }
+   
+   @objc private func didInputTextField(field: UITextField) {
+       if let alertController = alertController {
+           alertController.preferredAction?.isEnabled = field.hasText
+       }
+   }
 }
