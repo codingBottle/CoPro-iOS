@@ -20,7 +20,7 @@ class MyContributionsViewController: BaseViewController {
     
     var activeCellType: CellType = .post
     // 처음에 post 타입으로 설정해두자. 왜냐 초기값 설정 안해, nil 값일 경우도 고려하는 것이 더 코드가 복잡해 지기 때문.
-    
+   
     private let keychain = KeychainSwift()
     private var myPostsData: [WritebyMeDataModel]?
     private var myCommentData: [MyWrittenCommentDataModel]?
@@ -42,35 +42,15 @@ class MyContributionsViewController: BaseViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
        view.backgroundColor = UIColor.White()
        // MARK: NavigationBar Custom Settings
-               let attributes: [NSAttributedString.Key: Any] = [
-                   .font: UIFont(name: "Pretendard-Regular", size: 17)!, // Pretendard 폰트 적용
-                   .kern: 1.25, // 자간 조절
-                   .foregroundColor: UIColor.black // 폰트 색상
-               ]
-               self.navigationController?.navigationBar.titleTextAttributes = attributes
+               
                self.navigationItem.title = "관심 프로필"
                
                self.navigationController?.setNavigationBarHidden(false, animated: true)
                
                self.navigationController?.navigationBar.tintColor = UIColor.Black()
-               let backButton = UIButton(type: .custom)
-               guard let originalImage = UIImage(systemName: "chevron.left") else {
-                   return
-               }
-               let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24) // 이미지 크기 설정
-               let boldImage = originalImage.withConfiguration(symbolConfiguration)
                
-               backButton.setImage(boldImage, for: .normal)
-               backButton.contentMode = .scaleAspectFit
-               backButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24) // 버튼의 크기설정
-               backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
                
-               let backBarButtonItem = UIBarButtonItem(customView: backButton)
-               self.navigationItem.leftBarButtonItem = backBarButtonItem
-               
-               let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-               spacer.width = 8 // 왼쪽 여백의 크기
-               self.navigationItem.leftBarButtonItems?.insert(spacer, at: 0) // 왼쪽 여백 추가
+               // 왼쪽 여백 추가
         
        tableView.rowHeight = UITableView.automaticDimension
            
@@ -92,16 +72,6 @@ class MyContributionsViewController: BaseViewController {
         
         setDelegate()
     }
-   
-   override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-           self.tabBarController?.tabBar.isHidden = true
-       }
-       
-   override func viewWillDisappear(_ animated: Bool) {
-      super.viewWillDisappear(animated)
-      self.tabBarController?.tabBar.isHidden = false
-   }
         
     // Navigation Controller
     func popViewController() {
@@ -121,8 +91,8 @@ class MyContributionsViewController: BaseViewController {
                 switch result {
                 case .success(let data):
                     if let data = data as? WritebyMeDTO {
-                        self.myPostsData = data.data.boards.map {
-                           return WritebyMeDataModel(id: $0.id, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL ?? "", commentCount: $0.commentCount)
+                       self.myPostsData = data.data.content.map {
+                          return WritebyMeDataModel(boardId: $0.boardId, title: $0.title, nickName: $0.nickName, createAt: $0.createAt, count: $0.count, heart: $0.heart, imageURL: $0.imageURL ?? "", commentCount: $0.commentCount, category: $0.category)
                         }
                        print("🌊🌊🌊🌊🌊🌊🌊🌊myPostsData?.count : \(String(describing: self.myPostsData?.count))🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊")
                         
@@ -186,6 +156,7 @@ class MyContributionsViewController: BaseViewController {
                             return MyWrittenCommentDataModel(
                                 parentID: $0.parentID,
                                 commentID: $0.commentID,
+                                boardID: $0.boardID,
                                 content: $0.content,
                                 createAt: $0.createAt,
                                 writer: MyWrittenCommentDataModelWriter(from: $0.writer) // 수정된 부분
@@ -249,7 +220,7 @@ class MyContributionsViewController: BaseViewController {
                 case .success(let data):
                     if let data = data as? ScrapPostDTO {
                         self.scrapPostData = data.data.content.map {
-                           return ScrapPostDataModel(boardID: $0.boardID, title: $0.title, count: $0.count, createAt: $0.createAt, heart: $0.heart, imageURL: $0.imageURL ?? "", nickName: $0.nickName, commentCount: $0.commentCount)
+                           return ScrapPostDataModel(boardID: $0.boardID, title: $0.title, count: $0.count, createAt: $0.createAt, heart: $0.heart, imageURL: $0.imageURL ?? "", nickName: $0.nickName, commentCount: $0.commentCount, category: $0.category)
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
@@ -332,6 +303,24 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
               let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
               let post = myPostsData?[reverseIndex]
               cell.configureCellWritebyMe(post!)
+           var postCategoryType = post?.category
+           if postCategoryType == "프로젝트" {
+              cell.commentCountIcon.removeFromSuperview()
+              cell.commentCountLabel.removeFromSuperview()
+              cell.likeCountIcon.removeFromSuperview()
+              cell.likeCountLabel.removeFromSuperview()
+              cell.sawPostIcon.snp.remakeConstraints {
+                 $0.top.equalTo(cell.writerNameLabel.snp.bottom).offset(6)
+                 $0.leading.equalTo(cell.postTitleLabel.snp.leading)
+                 $0.bottom.equalToSuperview()
+                 $0.width.equalTo(20)
+                 $0.height.equalTo(20)
+              }
+              cell.sawPostLabel.snp.remakeConstraints {
+                 $0.leading.equalTo(cell.sawPostIcon.snp.trailing).offset(4)
+                 $0.centerY.equalTo(cell.sawPostIcon.snp.centerY)
+              }
+           }
               cell.selectionStyle = .none
            
             
@@ -346,6 +335,24 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
             let reverseIndex = (scrapPostData?.count ?? 0) - 1 - indexPath.row
             let scrapPost = scrapPostData?[reverseIndex]
             cell.configureCellScrapPost(scrapPost!)
+           var postCategoryType = scrapPost?.category
+           if postCategoryType == "프로젝트" {
+              cell.commentCountIcon.removeFromSuperview()
+              cell.commentCountLabel.removeFromSuperview()
+              cell.likeCountIcon.removeFromSuperview()
+              cell.likeCountLabel.removeFromSuperview()
+              cell.sawPostIcon.snp.remakeConstraints {
+                 $0.top.equalTo(cell.writerNameLabel.snp.bottom).offset(6)
+                 $0.leading.equalTo(cell.postTitleLabel.snp.leading)
+                 $0.bottom.equalToSuperview()
+                 $0.width.equalTo(20)
+                 $0.height.equalTo(20)
+              }
+              cell.sawPostLabel.snp.remakeConstraints {
+                 $0.leading.equalTo(cell.sawPostIcon.snp.trailing).offset(4)
+                 $0.centerY.equalTo(cell.sawPostIcon.snp.centerY)
+              }
+           }
             cell.selectionStyle = .none
             return cell
             
@@ -370,11 +377,9 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
           let detailVC = DetailBoardViewController()
         detailVC.delegate = self
          let reverseIndex = (myPostsData?.count ?? 0) - 1 - indexPath.row
-         if let id = self.myPostsData?[reverseIndex].id {
+         if let id = self.myPostsData?[reverseIndex].boardId {
             detailVC.postId = id
-             let navigationController = UINavigationController(rootViewController: detailVC)
-             navigationController.modalPresentationStyle = .overFullScreen
-             self.present(navigationController, animated: true, completion: nil)
+             navigationController?.pushViewController(detailVC, animated: true)
          }
           
       case .scrap:
@@ -383,14 +388,19 @@ extension MyContributionsViewController: UITableViewDelegate, UITableViewDataSou
         detailVC.delegate = self
          let reverseIndex = (scrapPostData?.count ?? 0) - 1 - indexPath.row
          if let id = self.scrapPostData?[reverseIndex].boardID {
-             detailVC.postId = id
-              let navigationController = UINavigationController(rootViewController: detailVC)
-              navigationController.modalPresentationStyle = .overFullScreen
-              self.present(navigationController, animated: true, completion: nil)
+            detailVC.postId = id
+             navigationController?.pushViewController(detailVC, animated: true)
          }
           
       case .comment:
-         print("댓글은 이동없음")
+         print("comment")
+         let detailVC = DetailBoardViewController()
+       detailVC.delegate = self
+        let reverseIndex = (myCommentData?.count ?? 0) - 1 - indexPath.row
+         if let id = self.myCommentData?[reverseIndex].boardID {
+           detailVC.postId = id
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
       }
    }
    

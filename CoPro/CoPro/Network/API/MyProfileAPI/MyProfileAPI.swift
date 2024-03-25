@@ -49,6 +49,69 @@ extension MyProfileAPI {
 
         }
     }
+   
+   /// MARK: - ProfileImage 수정
+  public func addProfileImage(token: String,
+                                       requestBody: AddProfilePhotoRequestBody,
+                                completion: @escaping(NetworkResult<Any>) -> Void) {
+     
+     AFManager.request(MyProfileRouter.addProfiePhoto(token: token, requestBody: requestBody)).responseData { response in
+        if let statusCode = response.response?.statusCode {
+           if statusCode == 401 {
+              // 토큰 재요청 함수 호출
+              LoginAPI.shared.refreshAccessToken { result in
+                 switch result {
+                 case .success(let loginDTO):
+                    print("토큰 재발급 성공: \(loginDTO)")
+                    DispatchQueue.main.async {
+                       self.addProfileImage(token: loginDTO.data.accessToken, requestBody: requestBody, completion: completion)
+                    }
+                 case .failure(let error):
+                    print("토큰 재발급 실패: \(error)")
+                 }
+              }
+           } else {
+              print("프로필 이미지 등록 성공")
+              self.disposeNetwork(response, dataModel: AddProfilePhotoDTO.self, completion: completion)
+           }
+        } else {
+           // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+           self.disposeNetwork(response, dataModel: AddProfilePhotoDTO.self, completion: completion)
+        }
+     }
+  }
+   
+   
+   /// MARK: - MyProfile 수정
+  public func deleteProfileImage(token: String,
+                                       requestBody: DeleteProfilePhotoRequestBody,
+                                completion: @escaping(NetworkResult<Any>) -> Void) {
+     
+     AFManager.request(MyProfileRouter.deleteProfiePhoto(token: token, requestBody: requestBody)).responseData { response in
+        if let statusCode = response.response?.statusCode {
+           if statusCode == 401 {
+              // 토큰 재요청 함수 호출
+              LoginAPI.shared.refreshAccessToken { result in
+                 switch result {
+                 case .success(let loginDTO):
+                    print("토큰 재발급 성공: \(loginDTO)")
+                    DispatchQueue.main.async {
+                       self.deleteProfileImage(token: loginDTO.data.accessToken, requestBody: requestBody, completion: completion)
+                    }
+                 case .failure(let error):
+                    print("토큰 재발급 실패: \(error)")
+                 }
+              }
+           } else {
+              print("프로필 이미지 삭제 시도 시작")
+              self.disposeNetwork(response, dataModel: DeleteProfilePhotoDTO.self, completion: completion)
+           }
+        } else {
+           // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+           self.disposeNetwork(response, dataModel: DeleteProfilePhotoDTO.self, completion: completion)
+        }
+     }
+  }
     
    
     /// MARK: - MyProfile 수정

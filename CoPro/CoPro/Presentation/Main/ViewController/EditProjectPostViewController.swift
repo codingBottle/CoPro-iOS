@@ -201,6 +201,8 @@ class EditProjectPostViewController: UIViewController {
             $0.font = .pretendard(size: 11, weight: .regular)
             $0.textColor = .G4()
             $0.textAlignment = .center
+            let characterCount = recruitContentTextField.text?.count ?? 0
+                updateCountLabel(characterCount: characterCount)
         }
         warnLabel.do {
             $0.text = "500자 이내로 간단히 입력해주세요."
@@ -416,11 +418,14 @@ extension EditProjectPostViewController: UITextViewDelegate {
 
         private func updateCountLabel(characterCount: Int) {
             remainCountLabel.text = "\(characterCount)/500"
-//            remainCountLabel.asColor(targetString: "\(characterCount)", color: characterCount == 0 ? .lightGray : .blue)
         }
 }
 
 extension EditProjectPostViewController: ImageUploaderDelegate, SendStringData, UIGestureRecognizerDelegate {
+   func updateProfileImage() {
+      print("")
+   }
+   
     func didUploadImages(with urls: [Int]) {
         self.imageUrls += urls
         self.deletingImages += urls

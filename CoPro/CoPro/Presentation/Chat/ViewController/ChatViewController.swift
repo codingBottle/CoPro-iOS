@@ -19,7 +19,6 @@ class ChatViewController: MessagesViewController {
    let alertVC = OppositeInfoCardViewController()
    let keychain = KeychainSwift()
    var channelId: String?
-//   var customAvatarView = CustomAvatarView()
    var avatarView: AvatarView?
    var targetEmail: String?
    
@@ -59,8 +58,9 @@ class ChatViewController: MessagesViewController {
     deinit {
         chatFirestoreStream.removeListener()
         navigationController?.navigationBar.prefersLargeTitles = true
+       NotificationCenter.default.removeObserver(self)
     }
-    
+   
    override func viewDidLoad() {
       super.viewDidLoad()
       view.backgroundColor = .white
@@ -70,7 +70,35 @@ class ChatViewController: MessagesViewController {
       removeOutgoingMessageAvatars()
       removeincomingMessageAvatars()
       listenToMessages()
+      let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+      tapGesture.cancelsTouchesInView = false
+      messagesCollectionView.addGestureRecognizer(tapGesture)
+      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
    }
+   
+   override func viewDidAppear(_ animated: Bool) {
+       super.viewDidAppear(animated)
+       self.messagesCollectionView.scrollToLastItem(animated: true)
+   }
+   
+   @objc func keyboardWillShow(_ notification: Notification) {
+      guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+         return
+      }
+      messagesCollectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
+      messagesCollectionView.scrollIndicatorInsets = messagesCollectionView.contentInset
+      messagesCollectionView.scrollToLastItem(animated: true)
+   }
+       
+   @objc func keyboardWillHide(_ notification: Notification) {
+      messagesCollectionView.contentInset = .zero
+      messagesCollectionView.scrollIndicatorInsets = .zero
+   }
+    
+   
+   
+   
 
     private func confirmDelegates() {
         messagesCollectionView.messagesDataSource = self
@@ -82,7 +110,6 @@ class ChatViewController: MessagesViewController {
     
     //채팅창 상단 이름
     private func configure() {
-//        title = nil
 
        let titleLabel = UILabel().then {
           $0.setPretendardFont(text: channel.sender, size: 17, weight: .bold, letterSpacing: 1.25)
@@ -115,7 +142,6 @@ class ChatViewController: MessagesViewController {
         subtitleLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(3)
             $0.centerX.equalToSuperview()
-//            $0.bottom.equalToSuperview().offset(0)
            $0.height.equalTo(13)
         }
        
@@ -149,12 +175,14 @@ class ChatViewController: MessagesViewController {
        layout.setMessageIncomingMessageTopLabelAlignment(incomingLabelAlignment)
    }
     
-   // 사진 직접 찍어 보내는 기능
-//    private func addCameraBarButtonToMessageInputBar() {
-//        messageInputBar.leftStackView.alignment = .center
-//        messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
-//        messageInputBar.setStackViewItems([cameraBarButtonItem], forStack: .left, animated: false)
-//    }
+   
+   //MARK: - 사진 직접 찍어 보내는 기능
+   
+   /* private func addCameraBarButtonToMessageInputBar() {
+        messageInputBar.leftStackView.alignment = .center
+        messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
+        messageInputBar.setStackViewItems([cameraBarButtonItem], forStack: .left, animated: false)
+    } */
     
     private func insertNewMessage(_ message: Message) {
         messages.append(message)
@@ -243,6 +271,14 @@ class ChatViewController: MessagesViewController {
     }
    
    
+   
+   @objc override func dismissKeyboard() {
+       view.endEditing(true)
+       messageInputBar.resignFirstResponder()
+   }
+   
+   
+   
 }
 
 extension ChatViewController: MessagesDataSource {
@@ -277,54 +313,6 @@ extension ChatViewController: MessagesLayoutDelegate {
       let cornerDirection: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
       return .bubbleTail(cornerDirection, .pointedEdge)
    }
-      /*
-      let isCurrentSender = isFromCurrentSender(message: message)
-       내가 보낸 메세지 일 떄
-      if isCurrentSender {
-         return .custom { view in
-            let maskLayer = CAShapeLayer()
-            // UIBezierPath를 사용하여 모서리에 반경을 적용
-            let path = UIBezierPath(roundedRect: view.bounds,
-                                    byRoundingCorners: [.topLeft, .bottomLeft, .bottomRight],
-                                    cornerRadii: CGSize(width: 10, height: 10))
-            
-            // 우측 상단 모서리에 2의 반경 적용
-            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
-                                     byRoundingCorners: .topRight,
-                                     cornerRadii: CGSize(width: 2, height: 2)))
-            
-            maskLayer.path = path.cgPath
-            view.layer.mask = maskLayer
-            
-            // 그림자 설정 (추후 해야함 현재 레이아웃 깨짐)
-         }
-      }
-      
-      // 상대가 보낸 메세지 일 떄
-      else {
-         return .custom { view in
-            // 상대 보낸 메시지의 스타일
-            let maskLayer = CAShapeLayer()
-            
-            // UIBezierPath를 사용하여 모서리에 반경을 적용
-            let path = UIBezierPath(roundedRect: view.bounds,
-                                    byRoundingCorners: [.topRight, .bottomLeft, .bottomRight],
-                                    cornerRadii: CGSize(width: 10, height: 10))
-            
-            // 우측 상단 모서리에 2의 반경 적용
-            path.append(UIBezierPath(roundedRect: CGRect(x: view.bounds.width - 2, y: 0, width: 2, height: 2),
-                                     byRoundingCorners: .topLeft,
-                                     cornerRadii: CGSize(width: 2, height: 2)))
-
-            
-            maskLayer.path = path.cgPath
-            view.layer.mask = maskLayer
-            
-            // 그림자 설정 (추후 해야함 현재 레이아웃 깨짐)
-         }
-      }
-      */
-   
     
     // 아래 여백
     func footerViewSize(for section: Int, in messagesCollectionView: MessagesCollectionView) -> CGSize {
@@ -356,6 +344,10 @@ extension ChatViewController: MessagesLayoutDelegate {
 
 // 상대방이 보낸 메시지, 내가 보낸 메시지를 구분하여 색상과 모양 지정
 extension ChatViewController: MessagesDisplayDelegate {
+   
+   func configureTapGesture(_ gestureRecognizer: UITapGestureRecognizer, for message: MessageType, at indexPath: IndexPath) {
+           gestureRecognizer.addTarget(self, action: #selector(dismissKeyboard))
+       }
     
     func isFirstMessageInTimeGroup(at indexPath: IndexPath) -> Bool {
         guard indexPath.section > 0 else {
@@ -376,13 +368,11 @@ extension ChatViewController: MessagesDisplayDelegate {
     
    // 아바타뷰 설정 (프로필 사진)
    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-      print("configureAvatarView is called")
       DispatchQueue.main.async {
          avatarView.frame.origin.y = 0 // 아바타뷰를 동일 시간대 메시지 맨 위에 배치
          
          let isFirstMessageInGroup = self.isFirstMessageInTimeGroup(at: indexPath)
          if isFirstMessageInGroup {
-//            avatarView.isHidden = false
             avatarView.isHidden = true
             avatarView.image = self.chatAvatarImage.image
          } else {
@@ -440,7 +430,6 @@ extension ChatViewController: MessagesDisplayDelegate {
 
 extension ChatViewController: InputBarAccessoryViewDelegate {
    func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-//      guard let currentUserNickName = self.currentUserNickName else {return print("inputBar 함수에서 user 에러")}
       let message = Message(user: currentUserNickName, content: text)
       
       //여기가 chat 넘기는 곳.
@@ -508,7 +497,6 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
         isSendingPhoto = true
         FirebaseStorageManager.uploadImage(image: image, channel: channel) { [weak self] url in
             self?.isSendingPhoto = false
-//            guard let user = self?.user, let url = url else { return }
            var message = Message(user: self?.currentUserNickName  ?? "", image: image)
             message.downloadURL = url
             self?.chatFirestoreStream.save(message)

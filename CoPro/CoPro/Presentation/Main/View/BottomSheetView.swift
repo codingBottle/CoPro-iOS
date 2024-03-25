@@ -93,6 +93,7 @@ final class BottomSheetView: PassThroughView {
         $0.top.equalToSuperview().inset(Const.barViewTopSpacing)
         $0.size.equalTo(Const.barViewSize)
       }
+      self.barView.layer.cornerRadius = 3
   }
   
   // MARK: Methods

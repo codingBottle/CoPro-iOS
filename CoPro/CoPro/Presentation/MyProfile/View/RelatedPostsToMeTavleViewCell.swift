@@ -14,17 +14,18 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     //MARK: - UI Components
     
    let containerView = UIView()
-    private let leftContainerView = UIView()
-    private let postImage = UIImageView()
-    private let postTitleLabel = UILabel()
-    private let writerNameLabel = UILabel()
-    private let postTimeLabel = UILabel()
-    private let likeCountIcon = UIImageView()
-    private let likeCountLabel = UILabel()
-    private let sawPostIcon = UIImageView()
-    private let sawPostLabel = UILabel()
-    private let commentCountIcon = UIImageView()
-    private let commentCountLabel = UILabel()
+   let leftContainerView = UIView()
+   let postImage = UIImageView()
+   let postTitleLabel = UILabel()
+   var postCategory: String?
+   let writerNameLabel = UILabel()
+   let postTimeLabel = UILabel()
+   let likeCountIcon = UIImageView()
+   let likeCountLabel = UILabel()
+   let sawPostIcon = UIImageView()
+   let sawPostLabel = UILabel()
+   let commentCountIcon = UIImageView()
+   let commentCountLabel = UILabel()
    
    var imageUrl: String?
    
@@ -194,6 +195,7 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     
     func configureCellWritebyMe(_ data: WritebyMeDataModel) {
 //        postImage.image = data.imageUrlself
+       self.postCategory = data.category
        loadProfileImage(url: data.imageURL ?? "")
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName
@@ -205,6 +207,7 @@ class RelatedPostsToMeTableViewCell: UITableViewCell {
     
     func configureCellScrapPost(_ data: ScrapPostDataModel) {
 //        postImage.image = data.imageUrl
+       self.postCategory = data.category
        loadProfileImage(url: data.imageURL ?? "")
         postTitleLabel.text = data.title
         writerNameLabel.text = data.nickName

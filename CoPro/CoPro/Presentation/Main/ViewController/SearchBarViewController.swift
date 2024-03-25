@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class SearchBarViewController: UIViewController, UISearchControllerDelegate {
+final class SearchBarViewController: UIViewController, UISearchControllerDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - UI Components
 //    private let searchController = UISearchController(searchResultsController: nil)
@@ -33,11 +33,24 @@ final class SearchBarViewController: UIViewController, UISearchControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
-                items1 = savedItems
+            items1 = savedItems
             }
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         setUI()
         setLayout()
         setNavigate()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // UserDefaults에서 최근 검색어 목록을 로드합니다.
+        if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
+            items1 = savedItems
+        }
+
+        // 최근 검색어 목록이 변경되었으므로 테이블 뷰를 리로드합니다.
+        recentSearchTableView.reloadData()
     }
 }
 
@@ -99,6 +112,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
             $0.setTitle("전체 삭제", for: .normal)
             $0.titleLabel?.font = .pretendard(size: 15, weight: .regular)
             $0.setTitleColor(.G3(), for: .normal)
+            $0.addTarget(self, action: #selector(deleteAllSearchKeywords), for: .touchUpInside)
         }
         recentSearchStackView.do {
             $0.axis = .horizontal
@@ -175,7 +189,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     func saveSearchKeyword(keyword: String) {
         let defaults = UserDefaults.standard
         var searches: [String] = defaults.array(forKey: "recentSearches") as? [String] ?? []
-        searches.append(keyword)
+        searches.insert(keyword, at: 0)
         defaults.set(searches, forKey: "recentSearches")
     }
 
@@ -187,9 +201,25 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     }
     
     // 모든 검색어를 UserDefaults에서 삭제하는 함수
-    func deleteAllSearchKeywords() {
-        let defaults = UserDefaults.standard
-        defaults.removeObject(forKey: "recentSearches")
+    @objc func deleteAllSearchKeywords() {
+        // UserDefaults에서 모든 검색어를 삭제합니다.
+        let alertController = UIAlertController(title: nil, message: "모든 검색어를 삭제하시겠습니까?", preferredStyle: .alert)
+
+        let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+               UserDefaults.standard.removeObject(forKey: "recentSearches")
+               
+               // 데이터 소스에서 모든 항목을 제거합니다.
+            self.items1.removeAll()
+               
+               // 테이블 뷰를 업데이트합니다.
+            self.recentSearchTableView.reloadData()
+            print("확인 버튼이 눌렸습니다.")
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 
     // 특정 검색어를 UserDefaults에서 삭제하는 함수
@@ -207,7 +237,7 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: recentSearchTableViewCell.id, for: indexPath) as! recentSearchTableViewCell
-        cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
+        cell.delegate = self
         // items 배열의 데이터를 셀에 표시합니다.
         cell.prepare(text: items1[indexPath.row])
         return cell
@@ -217,22 +247,6 @@ extension SearchBarViewController: UISearchBarDelegate, UITableViewDelegate, UIT
     }
 
     // MARK: - @objc Method
-    
-    @objc func deleteButtonTapped(_ sender: UIButton) {
-        guard let cell = sender.superview?.superview?.superview as? UITableViewCell,
-              let indexPath = recentSearchTableView.indexPath(for: cell) else { return }
-
-        if var savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
-            // 해당 항목을 삭제합니다.
-            savedItems.remove(at: indexPath.row)
-            
-            // 변경된 데이터를 다시 UserDefaults에 저장합니다.
-            UserDefaults.standard.set(savedItems, forKey: "recentSearches")
-        }
-        
-        // 테이블 뷰에서 해당 셀을 삭제합니다.
-        recentSearchTableView.deleteRows(at: [indexPath], with: .fade)
-    }
     
     @objc func keywordButtonTapped(_ sender: UIButton) {
         // 버튼의 타이틀을 가져와서 검색 바의 텍스트로 설정
@@ -272,18 +286,7 @@ extension SearchBarViewController: UITextFieldDelegate {
         let currentText = textField.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-        if updatedText.isEmpty {
-            onSearchTextCleared()
-        }
         return true
-    }
-    
-    func onSearchTextCleared() {
-        // UserDefaults에서 데이터를 다시 불러와서 테이블뷰를 갱신합니다.
-        if let savedItems = UserDefaults.standard.array(forKey: "recentSearches") as? [String] {
-//            items = savedItems
-            recentSearchTableView.reloadData()
-        }
     }
 }
 
@@ -295,7 +298,7 @@ extension SearchBarViewController: RecentSearchTableViewCellDelegate {
         
         // recentSearches에서 해당 데이터를 삭제합니다.
         recentSearches.remove(at: indexPath.row)
-        
+        items1.remove(at: indexPath.row)
         // 수정된 recentSearches를 다시 UserDefaults에 저장합니다.
         UserDefaults.standard.set(recentSearches, forKey: "recentSearches")
         

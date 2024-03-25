@@ -18,12 +18,13 @@ protocol DetailViewControllerDelegate: AnyObject {
     func didDeletePost()
 }
 
-final class DetailBoardViewController: BaseViewController {
+final class DetailBoardViewController: BaseViewController, UIGestureRecognizerDelegate {
     var postId: Int?
     var isHeart = Bool()
     var isScrap = Bool()
     var email: String?
     var picture: String?
+    var isProcessing: Bool = false
     private let channelStream = ChannelFirestoreStream()
     private let keychain = KeychainSwift()
     private let scrollView = UIScrollView()
@@ -66,6 +67,7 @@ final class DetailBoardViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         getDetailBoard( boardId: postId!)
         addTarget()
         setNavigate()
@@ -83,15 +85,7 @@ final class DetailBoardViewController: BaseViewController {
           }
         }
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
-    }
+
     private func addTarget() {
         heartButton.addTarget(self, action: #selector(heartButtonTapped(_: )), for: .touchUpInside)
         scrapButton.addTarget(self, action: #selector(scrapButtonTapped(_: )), for: .touchUpInside)
@@ -430,7 +424,7 @@ final class DetailBoardViewController: BaseViewController {
         }
     }
     private func setNavigate() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeButtonTapped))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(closeButtonTapped))
         leftButton.tintColor = UIColor.G6()
         self.navigationItem.leftBarButtonItem = leftButton
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(rightButtonTapped))
@@ -586,6 +580,7 @@ func getTopMostViewController() -> UIViewController? {
                             self.heartButton.tintColor = UIColor.G5()
                         }
                         self.isHeart = true
+                        self.isProcessing = false
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
@@ -617,6 +612,7 @@ func getTopMostViewController() -> UIViewController? {
                             self.heartButton.tintColor = UIColor.G4()
                         }
                         self.isHeart = false
+                        self.isProcessing = false
                     }
                 case .requestErr(let message):
                     print("Request error: \(message)")
@@ -700,7 +696,8 @@ func getTopMostViewController() -> UIViewController? {
                 case .success:
                     print("delete success")
                     self.delegate?.didDeletePost()
-                    self.dismiss(animated: true, completion: nil)
+                    self.navigationController?.popViewController(animated: true)
+//                    self.dismiss(animated: true, completion: nil)
                 case .requestErr(let message):
                     print("Request error: \(message)")
                 case .pathErr:
@@ -786,7 +783,8 @@ func getTopMostViewController() -> UIViewController? {
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     @objc private func closeButtonTapped() {
-            dismiss(animated: true, completion: nil)
+//            dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
         }
     @objc
     func pushToCommentViewController() {
@@ -795,6 +793,11 @@ func getTopMostViewController() -> UIViewController? {
     
     @objc func heartButtonTapped(_ sender: UIButton) {
         guard let postId = postId else { return }
+        if isProcessing {
+            showAlert(title: "처리중", message: "이전 요청이 아직 처리 중입니다. 잠시 후 다시 시도해주세요.", confirmButtonName: "확인" )
+                return
+            }
+        isProcessing = true
         if isHeart {
             deleteHeart(boardId: postId)
         }
@@ -814,6 +817,7 @@ func getTopMostViewController() -> UIViewController? {
     @objc func commentButtonTapped(_ sender: UIButton) {
         let boardCommentVC = BoardCommentViewController()
         // 필요한 경우 여기에서 boardCommentVC의 프로퍼티를 설정x
+        boardCommentVC.hidesBottomBarWhenPushed = true
         boardCommentVC.postId = postId
         self.navigationController?.pushViewController(boardCommentVC, animated: true)
     }

@@ -34,7 +34,7 @@ extension LoginAPI {
          let parameters: Parameters = [
             "authCode" : authCode!,
          ]
-         AF.request("https://copro.shop/api/\(provider)/token", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
+         AF.request("\(baseURL)/api/\(provider)/token", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
             .responseDecodable(of: LoginDTO.self) { response in
                switch response.result {
                case .success(let loginDTO):
@@ -67,7 +67,8 @@ extension LoginAPI {
                                  else {
                                     print("나는야 non 첫 로그인")
                                     self.getLoginUserData() {
-                                       print("🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎")
+                                       self.postFcmToken()
+                                       print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin false / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
                                        DispatchQueue.main.async {
                                           guard keychain.get("currentUserNickName") != nil else {return print("getLoginUserData 안에 currentUserNickName 설정 에러")}
                                           let bottomTabController = BottomTabController()
@@ -165,7 +166,7 @@ extension LoginAPI {
         let parameters: Parameters = [
             "refreshToken" : refreshToken,
         ]
-        AF.request("https://copro.shop/api/token/access", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
+        AF.request("\(baseURL)/api/token/access", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate(statusCode: 200..<300)
             .responseDecodable(of: LoginDTO.self) { response in
                 switch response.result {
                 case .success(let loginDTO):
@@ -175,6 +176,8 @@ extension LoginAPI {
                     let keychain = KeychainSwift()
                     keychain.set(loginDTO.data.accessToken, forKey: "accessToken")
                     keychain.set(loginDTO.data.refreshToken, forKey: "refreshToken")
+                   self.postFcmToken()
+                   print("🍎🍎🍎🍎🍎🍎🍎checkFirstlogin false / postFcmToken 성공🍎🍎🍎🍎🍎🍎🍎🍎🍎")
                     completion(.success(loginDTO))
                 case .failure(let error):
                     if let statusCode = response.response?.statusCode {
@@ -221,6 +224,33 @@ extension LoginAPI {
            }
         }
     }
+   
+   public func deleteAccount(accessToken: String, completion: @escaping(NetworkResult<Any>) -> Void) {
+       AFManager.request(LoginRouter.postDeleteAccount(token: accessToken)).responseData { response in
+          if let statusCode = response.response?.statusCode {
+              if statusCode == 401 {
+                  // 토큰 재요청 함수 호출
+                  LoginAPI.shared.refreshAccessToken { result in
+                      switch result {
+                      case .success(let loginDTO):
+                          print("토큰 재발급 성공: \(loginDTO)")
+                          DispatchQueue.global().async {
+                             self.deleteAccount(accessToken: loginDTO.data.accessToken, completion: completion)
+                          }
+                      case .failure(let error):
+                          print("토큰 재발급 실패: \(error)")
+                      }
+                  }
+              } else {
+                  // 상태 코드가 401이 아닌 경우, 결과를 컴플리션 핸들러로 전달
+                  self.disposeNetwork(response, dataModel: DeleteAccountDTO.self, completion: completion)
+              }
+          } else {
+              // 상태 코드를 가져오는데 실패한 경우, 결과를 컴플리션 핸들러로 전달
+              self.disposeNetwork(response, dataModel: DeleteAccountDTO.self, completion: completion)
+          }
+       }
+   }
     
     // MARK: - 유저 정보 받아오기
     
@@ -237,6 +267,7 @@ extension LoginAPI {
                            keychain.set(data.data.occupation, forKey: "currentUserOccupation")
                            keychain.set(data.data.email, forKey: "currentUserEmail")
                            print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥현재 currentUserEmail",keychain.get("currentUserEmail"))
+                           print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥현재 currentUserProfileImage",keychain.get("currentUserProfileImage"))
                            keychain.set(data.data.gitHubURL ?? "지금 비어있엉~", forKey: "currentUserGithubURL")
                             completion()
                         } else {
@@ -262,4 +293,34 @@ extension LoginAPI {
             }
         }
     }
+   
+   func postFcmToken() {
+      print("🔥")
+      
+       guard let token = self.keychain.get("accessToken") else {
+           print("No accessToken found in keychain.")
+           return
+       }
+      guard let fcmToken = keychain.get("FcmToken") else {return print("postFcmToken 안에 FcmToken 설정 에러")}
+      
+      NotificationAPI.shared.postFcmToken(token: token, requestBody: FcmTokenRequestBody(fcmToken: fcmToken)) { result in
+           switch result {
+           case .success(_):
+              print("FcmToken 보내기 성공")
+               
+           case .requestErr(let message):
+               // 요청 에러인 경우
+               print("Error : \(message)")
+              if (message as AnyObject).contains("401") {
+                   // 만료된 토큰으로 인해 요청 에러가 발생한 경우
+               }
+               
+           case .pathErr, .serverErr, .networkFail:
+               // 다른 종류의 에러인 경우
+               print("another Error")
+           default:
+               break
+           }
+       }
+   }
 }

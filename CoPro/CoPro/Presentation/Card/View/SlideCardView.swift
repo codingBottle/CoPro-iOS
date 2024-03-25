@@ -16,8 +16,6 @@ class SlideCardView: BaseView {
     }
     func loadImage(url: String) {
         guard !url.isEmpty, let imageURL = URL(string: url) else {
-            // URL이 빈 문자열일 때의 처리 (예: 빨간색 배경)
-            cardImage.backgroundColor = .red
             return
         }
         cardImage.kf.indicatorType = .activity
@@ -31,7 +29,18 @@ class SlideCardView: BaseView {
                 .scaleFactor(UIScreen.main.scale), // 이미지 스케일 지정
                 
             ],
-            completionHandler: nil
+            completionHandler: {
+                result in
+                //MARK: - 이미지 비율 확인
+                switch result {
+                case .success(let value):
+                    print("Task done for: \(value.source.url?.absoluteString ?? "")")
+                    let width = value.image.size.width
+                    print(width)
+                case .failure(let error):
+                    print("Job failed: \(error.localizedDescription)")
+                }
+            }
         )
     }
     let cardView = UIView().then {
@@ -96,11 +105,19 @@ class SlideCardView: BaseView {
         $0.setPretendardFont(text: "", size: 14, weight: .regular, letterSpacing: 1.26)
         $0.textColor = UIColor.Black()
     }
+    // userPartStackView
+    let userPartStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.spacing = 4
+        $0.alignment = .center
+    }
     let userPartLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 25, weight: .bold, letterSpacing: 1.24)
         $0.textColor = UIColor.Black()
     }
+    let userPartImage = UIImageView()
     let userLangLabel = UILabel().then {
         $0.textAlignment = .center
         $0.setPretendardFont(text: "", size: 25, weight: .bold, letterSpacing: 1.24)
@@ -141,7 +158,8 @@ class SlideCardView: BaseView {
         chatButton.addSubview(chatLabel)
         cardView.addSubview(infoView)
         infoView.addSubview(infoStackView)
-        infoStackView.addArrangedSubviews(userNameLabel,userPartLabel,userLangLabel)
+        userPartStackView.addArrangedSubviews(userPartLabel,userPartImage)
+        infoStackView.addArrangedSubviews(userNameLabel,userPartStackView,userLangLabel)
         
         infoView.addSubview(infoIconStackView)
         infoIconStackView.addArrangedSubviews(likeIcon,likeLabel)

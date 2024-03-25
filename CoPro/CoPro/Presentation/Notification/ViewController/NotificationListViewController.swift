@@ -45,8 +45,37 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
             switch result {
             case .success(let data):
                 self?.contents.append(contentsOf: data.data.content)
-                print(data.data.content)
-                print(self?.contents.count)
+                print("알림 데이터 \(data.data.content)")
+                if self?.contents.count == 0 {
+                    // contents가 비어있을 때 메시지 라벨을 추가합니다.
+                    let messageLabel = UILabel().then {
+                        $0.setPretendardFont(text: "새로운 소식이 도착할 때까지 기다려주세요!", size: 17, weight: .bold, letterSpacing: 1.15)
+                        $0.textColor = .black
+                        $0.textAlignment = .center
+                    }
+                    
+                    let imageView = UIImageView(image: UIImage(named: "card_coproLogo")) // 이미지 생성
+                    imageView.contentMode = .center // 이미지가 중앙에 위치하도록 설정
+                    
+                    let stackView = UIStackView(arrangedSubviews: [imageView, messageLabel]) // 이미지와 라벨을 포함하는 스택 뷰 생성
+                    stackView.axis = .vertical // 세로 방향으로 정렬
+                    stackView.alignment = .center // 가운데 정렬
+                    stackView.spacing = 15 // 이미지와 라벨 사이의 간격 설정
+                    
+                    self?.tableView.backgroundView = UIView() // 배경 뷰 생성
+                    
+                    if let backgroundView = self?.tableView.backgroundView {
+                        backgroundView.addSubview(stackView) // 스택 뷰를 배경 뷰에 추가
+                        
+                        stackView.snp.makeConstraints {
+                            $0.centerX.equalTo(backgroundView) // 스택 뷰의 가로 중앙 정렬
+                            $0.centerY.equalTo(backgroundView) // 스택 뷰의 세로 중앙 정렬
+                        }
+                    }
+                } else {
+                    // contents가 비어있지 않을 때 메시지 라벨을 제거합니다.
+                    self?.tableView.backgroundView = nil
+                }
                 self?.scrollLast = data.data.last
                 self?.tableView.reloadData()
             case .failure(let error):
@@ -97,7 +126,13 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // 각 셀의 높이를 지정해줌
-        return 60.0 // 적절한 높이로 수정
+        // 현재 화면의 높이를 가져옴
+        let screenHeight = UIScreen.main.bounds.height
+        
+        // 행의 높이를 화면 높이의 10분의 1 크기로 설정
+        let rowHeight = screenHeight / 10.0
+        
+        return rowHeight
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // 셀 하단에 구분선 추가
@@ -121,9 +156,7 @@ class NotificationListViewController: UIViewController, UITableViewDelegate, UIT
             print("BoardId 있음")
             let detailVC = DetailBoardViewController()
             detailVC.postId = contents[indexPath.row].boardID
-            let navigationController = UINavigationController(rootViewController: detailVC)
-            navigationController.modalPresentationStyle = .overFullScreen
-            self.present(navigationController, animated: true, completion: nil)
+            navigationController?.pushViewController(detailVC, animated: true)
         }else{
             print("BoardId 없음")
         }
